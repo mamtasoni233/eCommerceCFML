@@ -2,7 +2,7 @@ component {
     this.datasource="ecommerce";
     this.javaSettings = {
         loadPaths: [
-            "/lib/"
+            "../lib/"
         ],
         loadColdFusionClassPath: true,
         reloadOnChange: true
