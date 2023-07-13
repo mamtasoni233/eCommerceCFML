@@ -12,10 +12,8 @@
 <cfset session.user = {}>
 
 <cfif structKeyExists(url, 'formAction') AND url.formAction EQ 'login'>
-    <cfif structKeyExists(url,'saved') AND len(url.saved) GT 0>
+    <cfif structKeyExists(url,'saved') AND url.saved GT 0>
         <cfset saved = url.saved>
-    <cfelse>
-        <cfset saved = "0">
     </cfif>
     <cfif len(trim(email)) GT 0>
         <cfquery name="login">
@@ -41,12 +39,8 @@
         </cfif>
     </cfif>
 <cfelseif structKeyExists(url, 'formAction') AND url.formAction EQ 'signUp'>
-    <cfif structKeyExists(form, 'firstName') AND len(form.firstName) GT 0>
-        <cfset year = "#form.year#">
-        <cfset month = "#form.month#">
-        <cfset day = "#form.day#">
-        <cfset dateDob = "#year##month##day#">             
-        <cfset dob = dateFormat(CreateDate(year, month, day), 'yyyy-mm-dd')>
+    <cfif structKeyExists(form, 'firstName') AND len(form.firstName) GT 0>            
+        <cfset dob = dateFormat(CreateDate(form.year, form.month, form.day), 'yyyy-mm-dd')>
         <cfset hashPassword = bcrypt.hashpw(form.password,gensalt)>
         <!--- <cfquery>
             SELECT email, PkUserId FROM users WHERE email=<cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
@@ -71,6 +65,30 @@
         <cflocation url="login.cfm?saved=1" addtoken="false">
     </cfif>
 <cfelseif structKeyExists(url, 'formAction') AND url.formAction EQ 'forgotPass'>
+    <cfif structKeyExists(form, 'email') AND len(form.email) GT 0>  
+        <cfquery name="getMail">
+            SELECT PkUserId, firstName, lastName, email, dob, password, gender FROM users 
+            WHERE email = <cfqueryparam value="#trim(form.email)#" cfsqltype="cf_sql_varchar">
+        </cfquery>
+    </cfif>
+    <cfif getMail.recordCount EQ 1>
+        <!--- <cfset queryAddRow( getMail, { recipient = "recipient@example.com", lastname = "Doe", firstname = "John" }) /> --->
+        <cfset email = getMail.email> 
+        <cfset sendMail = getMail.email>
+        <cfmail to="#email#" 
+            from="mamta.s@lucidsolutions.in" 
+            subject="Hello from CFML" 
+            server="mail.example.com">
+
+        This is the body of the email.
+
+    </cfmail>
+        <!--- <cfmail to="#email#" from="mamta.s@lucidsolutions.in" subject="Example email">
+            Test Email Message!!
+        </cfmail> --->
+        <!--- Send --->
+    </cfif>
+    <cflocation url="auth-forgot-password.cfm" addtoken="false">
 
 <cfelseif structKeyExists(url, 'formAction') AND url.formAction EQ 'logOut'>
     <cfset StructDelete(session,'user')>

@@ -3,11 +3,11 @@
         <div class="sidebar-wrapper active">
             <div class="sidebar-header position-relative">
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="logo">
+                    <!---    <div class="logo">
                         <a href="/index.cfm">
-                            <img src="/assets/compiled/svg/logo.svg" alt="Logo" srcset=""/>
+                            <img src="../assets/compiled/svg/logo.svg" alt="Logo" srcset=""/>
                         </a>
-                    </div>
+                    </div> --->
                     <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

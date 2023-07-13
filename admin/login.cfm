@@ -1,6 +1,6 @@
 <cfoutput>
     <cfif structKeyExists(session, "user")>
-        <cflocation url="index.cfm" addtoken="false">
+        <cflocation url="index.cfm?pg=dashboard" addtoken="false">
     </cfif>
     <!DOCTYPE html>
     <html lang="en">
@@ -15,7 +15,7 @@
                                     <img src="assets/compiled/svg/logo.svg" alt="Logo"/>
                                 </a>
                             </div>
-                            <cfif structKeyExists(url,"saved") AND len(url.saved) EQ 1>
+                            <cfif structKeyExists(url,"saved") AND url.saved EQ 1>
                                 <div class="alert alert-success alert-dismissible show fade">
                                     <strong>User Succefully created!!!</strong> 
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
