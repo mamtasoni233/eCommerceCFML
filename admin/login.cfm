@@ -2,6 +2,41 @@
     <cfif structKeyExists(session, "user")>
         <cflocation url="index.cfm?pg=dashboard" addtoken="false">
     </cfif>
+
+    <cfparam name="firstName" default="" />
+    <cfparam name="lastName" default="" />
+    <cfparam name="email" default="" />
+    <cfparam name="gender" default="" />
+    <cfparam name="dob" default="" />
+    <!--- <cfparam name="saved" default=""/> --->
+    <cfset bcrypt = application.bcrypt>
+    <cfset gensalt = bcrypt.gensalt()>
+    <cfparam name="password" default="" />
+    <cfif len(trim(email)) GT 0>
+        <cfquery name="login">
+            SELECT PkUserId, firstName, lastName, email, dob, password, gender FROM users 
+            WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar">
+        </cfquery>
+        <cfif login.recordCount EQ 1>
+            <!--- <cfset hashPassword = bcrypt.hashpw(login.password, gensalt)> --->
+            <cfset checkPassword = bcrypt.checkpw(password, login.password)>
+            <cfif checkPassword EQ true>
+                <cfset session.user = {}>
+                <cfset session.user.isLoggedIn = login.PkUserId>
+                <cfset session.user.firstName = login.firstName>
+                <cfset session.user.lastName = login.lastName>
+                <cfset session.user.email = login.email>
+                <cfset session.user.gender = login.gender>
+                <cfset session.user.dob = login.dob>
+                <!--- <cfset saved = 2> --->
+                <cflocation url="index.cfm?pg=dashboard&saved=2" addtoken="false">
+            <cfelse>
+                <cflocation url="login.cfm?error=1" addtoken="false">
+            </cfif>
+        <cfelse>
+            <cflocation url="login.cfm" addtoken="false">
+        </cfif>
+    </cfif>
     <!DOCTYPE html>
     <html lang="en">
         <cfinclude template="common/login-head.cfm">
@@ -10,11 +45,20 @@
                 <div class="row h-100">
                     <div class="col-lg-5 col-12">
                         <div id="auth-left">
-                            <div class="auth-logo">
-                                <a href="index.html">
-                                    <img src="assets/compiled/svg/logo.svg" alt="Logo"/>
-                                </a>
-                            </div>
+                            <!--- <cfif structKeyExists(url,"saved") AND url.saved EQ 3>
+                                <div class="alert alert-success alert-dismissible show fade">
+                                    <strong>Your reset password link has been sent to your email address!!</strong> 
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    </button>
+                                </div>
+                            </cfif> --->
+                            <!--- <cfif structKeyExists(url,"saved") AND url.saved EQ 4>
+                                <div class="alert alert-success alert-dismissible show fade">
+                                    <strong>Your password is succesfully set!!</strong> 
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    </button>
+                                </div>
+                            </cfif> --->
                             <cfif structKeyExists(url,"saved") AND url.saved EQ 1>
                                 <div class="alert alert-success alert-dismissible show fade">
                                     <strong>User Succefully created!!!</strong> 
@@ -32,7 +76,7 @@
                             <p class="auth-subtitle mb-5">
                                 Log in with your data that you entered during registration.
                             </p>
-                            <form class="form" id="loginForm" method="POST" action="validate.cfm?formAction=login">
+                            <form class="form" id="loginForm" method="POST" action="">
                                 <div class="form-group position-relative has-icon-left mb-4">
                                     <input type="text" name="email" id="email" class="form-control form-control-xl" placeholder="Username" data-parsley-required="true" />
                                     <div class="form-control-icon">

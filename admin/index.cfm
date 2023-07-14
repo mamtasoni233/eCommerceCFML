@@ -28,7 +28,6 @@
                 <div id="main" class="layout-navbar navbar-fixed">
                     <!--- start header --->
                     <cfinclude template="./common/header.cfm">
-                    <cfdump var='#pg#'>
                     <!--- end header --->
                     <div id="main-content">
                         <cfswitch expression="#pg#">

@@ -1,5 +1,4 @@
 <div class="page-heading">
-    <cfdump var="vishal">
     <div class="page-title">
         <cfif structKeyExists(url,'saved') AND url.saved EQ 2>
             <div class="alert alert-success alert-dismissible show fade">

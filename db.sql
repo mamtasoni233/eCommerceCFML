@@ -7,3 +7,4 @@ CREATE TABLE `users` (
     `gender`bit(1) NOT NULL DEFAULT 1,
     `password` varchar(100) NOT NULL
 );
+ALTER TABLE `users` ADD `token` VARCHAR(255) NULL DEFAULT NULL AFTER `PkUserId`;

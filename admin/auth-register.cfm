@@ -1,4 +1,37 @@
 <cfoutput>
+
+    <cfparam name="firstName" default="" />
+    <cfparam name="lastName" default="" />
+    <cfparam name="email" default="" />
+    <cfparam name="gender" default="" />
+    <cfparam name="dob" default="" />
+    <!--- <cfparam name="saved" default=""/> --->
+    <cfset bcrypt = application.bcrypt>
+    <cfset gensalt = bcrypt.gensalt()>
+    <cfparam name="password" default="" />
+
+    <cfif structKeyExists(form, 'firstName') AND len(form.firstName) GT 0>            
+        <cfset dob = dateFormat(CreateDate(form.year, form.month, form.day), 'yyyy-mm-dd')>
+        <cfset hashPassword = bcrypt.hashpw(form.password,gensalt)>
+        <cfquery name="insertUserQuery">
+            INSERT INTO users (
+                firstName
+                , lastName
+                , email
+                , dob
+                , gender
+                , password
+            ) VALUES (
+                <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
+                , <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
+                , <cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
+                , <cfqueryparam value = "#dob#" cfsqltype = "cf_sql_date">
+                , <cfqueryparam value = "#form.gender#" cfsqltype = "cf_sql_bit">
+                , <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
+            )
+        </cfquery>
+        <cflocation url="login.cfm?saved=1" addtoken="false">
+    </cfif>
     <!DOCTYPE html>
     <html lang="en">
         <cfinclude template="common/login-head.cfm">
@@ -19,7 +52,7 @@
                             <p class="auth-subtitle mb-5">
                             Input your data to register to our website.
                             </p>
-                            <form class="form" id="register" method="POST" action="validate.cfm?formAction=signUp">
+                            <form class="form" id="register" method="POST" action="">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="firstName">First Name</lable>
@@ -116,8 +149,8 @@
                                                 <i class="bi bi-shield-lock"></i>
                                             </div>
                                         </div>
-                                        <div id="pswmeter" class="mt-3"></div>
-                                        <div id="pswmeter-message" class="mt-3"></div>
+                                        <div id="pswmeter" class="d-none"></div>
+                                        <div id="pswmeter-message" class="d-none mb-3"></div>
                                     </div>
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="confrimPassword">Confrim Password</lable>
@@ -127,8 +160,6 @@
                                                 <i class="bi bi-shield-lock"></i>
                                             </div>
                                         </div>
-                                        <div id="confrimpswmeter" class="mt-3"></div>
-                                        <div id="confrim-pswmeter-message" class="mt-3"></div>    
                                     </div>
                                     <!--- <div>
                                         <div class="form-check form-check-lg d-flex align-items-end">
@@ -173,6 +204,15 @@
             <script src="/assets/js/pswmeter.min.js"></script>
             <script>
                 $( document ).ready(function() {
+                    $('##password').on('keyup',function(){
+                        if ($(this).val().length > 0) {
+                            $("##pswmeter").removeClass('d-none');
+                            $("##pswmeter-message").removeClass('d-none');
+                        } else {
+                            $("##pswmeter").addClass('d-none');
+                            $("##pswmeter-message").addClass('d-none');
+                        }
+                    });
                     $("##register").validate({
                         rules: {
                             firstName: {
@@ -265,80 +305,33 @@
                             $(element).removeClass('is-invalid');
                         } 
                     });
-                    
+            
                 });
                 // Run pswmeter with options
-                    var pass = document.getElementById('password');
-                    const myPassMeter = passwordStrengthMeter({
-                        containerElement: '##pswmeter',
-                        passwordInput: '##password',
-                       /*  showMessage: false, */
-                        messageContainer: '##pswmeter-message',
-                        messagesList: [
-                            'Write your password...',
-                            'Easy peasy!',
-                            'That is a simple one',
-                            'That is better',
-                            'Yeah! that password rocks ;)'
-                        ],
-                        height: 6,
-                        borderRadius: 0,
-                        pswMinLength: 8,
-                        colorScore1: '##aaa',
-                        colorScore2: '##aaa',
-                        colorScore3: '##aaa',
-                        colorScore4: 'limegreen'
+                var pass = document.getElementById('password');
+                const myPassMeter = passwordStrengthMeter({
+                    containerElement: '##pswmeter',
+                    passwordInput: '##password',
+                    showMessage: true,
+                    messageContainer: '##pswmeter-message',
+                    messagesList: [
+                        'Write your password...',
+                        'Easy peasy!',
+                        'That is a simple one',
+                        'That is better',
+                        'Yeah! that password rocks ;)'
+                    ],
+                    height: 6,
+                    borderRadius: 0,
+                    pswMinLength: 8,
+                    colorScore1: '##aaa',
+                    colorScore2: '##aaa',
+                    colorScore3: '##aaa',
+                    colorScore4: 'limegreen'
                     
-                        if(pass.value.length > 0){
-                            showMessage: true,
-                        }
-                    });
+                });
 
-                    const myConfimPassMeter = passwordStrengthMeter({
-                        containerElement: '##confrimpswmeter',
-                        passwordInput: '##confrimPassword',
-                        /* showMessage: false, */
-                        messageContainer: '##confrim-pswmeter-message',
-                        messagesList: [
-                            'Write your password...',
-                            'Easy peasy!',
-                            'That is a simple one',
-                            'That is better',
-                            'Yeah! that password rocks ;)'
-                        ],
-                        height: 6,
-                        borderRadius: 0,
-                        pswMinLength: 8,
-                        colorScore1: '##aaa',
-                        colorScore2: '##aaa',
-                        colorScore3: '##aaa',
-                        colorScore4: 'limegreen'
-                        /*  if (passwordInput.length != '') {
-                            showMessage: true, 
-                        } */
-                        
-                    });
-
-                    /* const myConfrimPassMeter = passwordStrengthMeter({
-                        containerElement: '##pswmeter',
-                        passwordInput: '##confrimPassword',
-                        showMessage: true,
-                        messageContainer: '##pswmeter-message',
-                        messagesList: [
-                            'Write your password...',
-                            'Easy peasy!',
-                            'That is a simple one',
-                            'That is better',
-                            'Yeah! that password rocks ;)'
-                        ],
-                        height: 6,
-                        borderRadius: 0,
-                        pswMinLength: 8,
-                        colorScore1: '##aaa',
-                        colorScore2: '##aaa',
-                        colorScore3: '##aaa',
-                        colorScore4: 'limegreen'
-                    }); */
+                
     
             </script>
         </body>
