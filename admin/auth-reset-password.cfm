@@ -1,64 +1,65 @@
 <cfoutput>
 
     <cfparam name="url.email" default="" />
-    <cfparam name="url.token" default="" />
+    <cfparam name="token" default="" />
     <cfparam name="password" default="" />
-    <cfparam name="saved" default="" />
+    <!--- <cfparam name="saved" default="" /> --->
     <cfset bcrypt = application.bcrypt>
     <cfset gensalt = bcrypt.gensalt()>
-    <cfdump var="#bcrypt#">
-    <cfdump var="#url.token#">
 
-    <!--- <cfif structKeyExists(form, 'password') AND len(form.password) GT 0>   --->
+
+    <cfif structKeyExists(url, 'token') AND len(url.token) GT 0>  
         <cfquery name="getToken">
             SELECT email, PkUserId, token FROM users  
-            WHERE token= <cfqueryparam value="#url.token#" cfsqltype="cf_sql_varchar"> 
+            WHERE token = <cfqueryparam value="#url.token#" cfsqltype="cf_sql_varchar"> 
         </cfquery>
         <cfdump var="#getToken#">
-        <cfset checkToken = bcrypt.checkpw(token, getToken.token)>
-        <cfdump var="#checkToken#">
+        <!---   <cfdump var="#checkToken#"> --->
         <cfif getToken.recordCount EQ 1>
-            <cfset checkToken = bcrypt.checkpw(url.token, getToken.token)>
-            <cfif checkToken EQ true>
+            <cfif structKeyExists(form, 'password') AND len(form.password) GT 0> 
                 <cfset hashPassword = bcrypt.hashpw(form.password,gensalt)>
                 <cfquery result="updatePassword">
                     UPDATE users SET  
                     password = <cfqueryparam value="#hashPassword#" cfsqltype="cf_sql_varchar"> 
-                    token = <cfqueryparam null="true" cfsqltype="cf_sql_varchar"> 
+                    , token = <cfqueryparam null="true"> 
                     WHERE email= <cfqueryparam value="#trim(getToken.email)#" cfsqltype="cf_sql_varchar"> 
                 </cfquery>
-                <cfdump var="#updatePassword#" abort="true">
-                <cfset saved = 4>
+                <!---  <cfdump var="#updatePassword#">
+                <cfabort> --->
+                <cflocation url="login.cfm?saved=4" addtoken="false">
             </cfif>
+        <cfelse>
+            <cflocation url="http://127.0.0.1:50001/auth-reset-password.cfm?tokenExpire=1" addtoken="false">
         </cfif>
-    <!---   </cfif> --->
+    </cfif>
     <!DOCTYPE html>
     <html lang="en">
         <cfinclude template="common/login-head.cfm">
         <body>
+            <!---   <cfdump var="mamta"><cfabort> --->
             <div id="auth">
                 <div class="row h-100">
                     <div class="col-lg-5 col-12">
                         <div id="auth-left">
-                            <!--- <cfif structKeyExists(url,"error") AND url.error EQ 1>
+                            <cfif structKeyExists(url,"tokenExpire") AND url.tokenExpire EQ 1>
                                 <div class="alert alert-danger alert-dismissible show fade">
-                                    <strong>Invalid Password!!!</strong> 
+                                    <strong>Token Expired!!!</strong> 
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                     </button>
                                 </div>
-                            </cfif> --->
-                            <cfif saved EQ 4>
+                            </cfif>
+                            <!---  <cfif saved EQ 4>
                                 <div class="alert alert-success alert-dismissible show fade">
                                     <strong>Your password is succesfully set!!</strong> 
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                     </button>
                                 </div>
-                            </cfif>
+                            </cfif> --->
                             <h1 class="auth-title">Reset Password</h1>
                             <p class="auth-subtitle mb-5">
                                 Input your password and update your password.
                             </p>
-                            <form method="POST" action="" id="resetPassForm">
+                            <form method="POST" id="resetPassForm">
                                 <div class="form-group position-relative has-icon-left mb-4">
                                     <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Password" value=""/>
                                     <div class="form-control-icon">
@@ -161,8 +162,8 @@
                     borderRadius: 0,
                     pswMinLength: 8,
                     colorScore1: '##aaa',
-                    colorScore2: '##aaa',
-                    colorScore3: '##aaa',
+                    colorScore2: '##d91818',
+                    colorScore3: '##ffc107',
                     colorScore4: 'limegreen'
                     
                 });

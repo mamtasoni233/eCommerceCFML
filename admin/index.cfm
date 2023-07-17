@@ -34,6 +34,9 @@
                             <cfcase value="dashboard">
                                 <cfinclude template="/page/dashboard.cfm">
                             </cfcase>
+                            <cfcase value="profile">
+                                <cfinclude template="/page/profile.cfm">
+                            </cfcase>
                         </cfswitch>
                     </div>
                     <!--- start footer --->
@@ -42,10 +45,18 @@
                 </div>
             </div>
 
-            <!--- JS Script --->
+            <!--- JS Script --->   
+            <script src="./assets/compiled/js/app.js"></script>
             <script src="./assets/static/js/components/dark.js"></script>
             <script src="./assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-            <script src="./assets/compiled/js/app.js"></script>
+        
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="./assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+            <script src="./assets/static/js/pages/form-element-select.js"></script>
+            <!--- password meter --->
+            <script async defer src="https://buttons.github.io/buttons.js"></script>
+            <script src="./assets/js/pswmeter.min.js"></script>
 
             <!-- Need: Apexcharts -->
             <!--- <script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>

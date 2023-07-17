@@ -69,12 +69,32 @@
             <div class="sidebar-menu">
                 <ul class="menu">
                     <li class="sidebar-title">Menu</li>
-                    <li class="sidebar-item active">
-                        <a href="index.html" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
+                    <!---  <cfswitch expression="#pg#"> --->
+                            <!---   <cfcase value="dashboard"> --->
+                                <li class="sidebar-item active">
+                                    <a href="index.cfm?pg=dashboard" class="sidebar-link">
+                                        <i class="bi bi-grid-fill"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                            <!---  </cfcase> --->
+                            <!---   <cfcase value="category"> --->
+                                <li class="sidebar-item">
+                                    <a href="index.cfm?pg=category" class="sidebar-link">
+                                        <i class="bi bi-grid-fill"></i>
+                                        <span>Category</span>
+                                    </a>
+                                </li>
+                            <!---  </cfcase> --->
+                            <!---  <cfcase value="product"> --->
+                                <li class="sidebar-item ">
+                                <a href="index.cfm?pg=product" class="sidebar-link">
+                                    <i class="bi bi-grid-fill"></i>
+                                    <span>Product</span>
+                                </a>
+                            </li>
+                            <!---  </cfcase>
+                    </cfswitch> --->
                     
                 </ul>
             </div>

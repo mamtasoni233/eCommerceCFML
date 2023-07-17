@@ -10,7 +10,18 @@
     <cfset gensalt = bcrypt.gensalt()>
     <cfparam name="password" default="" />
 
-    <cfif structKeyExists(form, 'firstName') AND len(form.firstName) GT 0>            
+    <cfif structKeyExists(form, 'firstName') AND len(form.firstName) GT 0> 
+        <!--- <cfif structKeyExists(form, 'PkUserId') AND len(form.PkUserId) EQ 0>
+            <cfquery name="checkEmail">
+                SELECT PkUserId, email FROM users 
+                WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar"> AND 
+                PkUserId = <cfqueryparam value = "#form.PkUserId#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+            <cfif checkEmail.recordCount GT 0>
+                <cflocation url="auth-register.cfm?checkEmail=1" addtoken="false">
+            </cfif>     
+        </cfif> --->
+        
         <cfset dob = dateFormat(CreateDate(form.year, form.month, form.day), 'yyyy-mm-dd')>
         <cfset hashPassword = bcrypt.hashpw(form.password,gensalt)>
         <cfquery name="insertUserQuery">
@@ -30,7 +41,8 @@
                 , <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
             )
         </cfquery>
-        <cflocation url="login.cfm?saved=1" addtoken="false">
+        <cflocation url="auth-register.cfm?saved=2" addtoken="false">
+        <!---  <cflocation url="login.cfm?saved=1" addtoken="false"> --->
     </cfif>
     <!DOCTYPE html>
     <html lang="en">
@@ -50,9 +62,23 @@
                         <div id="auth-left">
                             <h1 class="auth-title mt-0">Sign Up</h1>
                             <p class="auth-subtitle mb-5">
-                            Input your data to register to our website.
+                                Input your data to register to our website.
                             </p>
+                            <cfif structKeyExists(url,"saved") AND url.saved EQ 2>
+                                <div class="alert alert-success alert-dismissible show fade">
+                                    <strong>User Succefully created!!!</strong> 
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    </button>
+                                </div>
+                            <cfelseif structKeyExists(url,"checkEmail") AND url.checkEmail EQ 1>
+                                <div class="alert alert-danger alert-dismissible show fade">
+                                    <strong>Email already exits!!!</strong> 
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    </button>
+                                </div>
+                            </cfif>
                             <form class="form" id="register" method="POST" action="">
+                                <input type="hidden" value="0" name="PkUserId">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="firstName">First Name</lable>
@@ -106,10 +132,6 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <!--- <label class="input-group-text pb-3" for="dob">
-                                                            <i class=" bi bi-calendar-date"></i>
-                                                            <!--- DOB --->
-                                                        </label> --->
                                                         <select name="year" class="form-select" id="year">
                                                             <option value="" selected class="opacity-100">Year</option>
                                                             <cfloop from="1995" to="2013" index="idx">
@@ -325,8 +347,8 @@
                     borderRadius: 0,
                     pswMinLength: 8,
                     colorScore1: '##aaa',
-                    colorScore2: '##aaa',
-                    colorScore3: '##aaa',
+                    colorScore2: '##d91818',
+                    colorScore3: '##ffc107',
                     colorScore4: 'limegreen'
                     
                 });

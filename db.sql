@@ -8,3 +8,4 @@ CREATE TABLE `users` (
     `password` varchar(100) NOT NULL
 );
 ALTER TABLE `users` ADD `token` VARCHAR(255) NULL DEFAULT NULL AFTER `PkUserId`;
+ALTER TABLE `users` ADD `image` VARCHAR(255) NULL DEFAULT NULL AFTER `password`;

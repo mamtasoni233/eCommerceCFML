@@ -28,8 +28,9 @@
                 <cfset session.user.email = login.email>
                 <cfset session.user.gender = login.gender>
                 <cfset session.user.dob = login.dob>
+                <cfset session.saved = 1>
                 <!--- <cfset saved = 2> --->
-                <cflocation url="index.cfm?pg=dashboard&saved=2" addtoken="false">
+                <cflocation url="index.cfm?pg=dashboard" addtoken="false">
             <cfelse>
                 <cflocation url="login.cfm?error=1" addtoken="false">
             </cfif>
@@ -52,19 +53,18 @@
                                     </button>
                                 </div>
                             </cfif> --->
-                            <!--- <cfif structKeyExists(url,"saved") AND url.saved EQ 4>
-                                <div class="alert alert-success alert-dismissible show fade">
-                                    <strong>Your password is succesfully set!!</strong> 
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                    </button>
-                                </div>
-                            </cfif> --->
-                            <cfif structKeyExists(url,"saved") AND url.saved EQ 1>
+                            <!--- <cfif structKeyExists(url,"saved") AND url.saved EQ 1>
                                 <div class="alert alert-success alert-dismissible show fade">
                                     <strong>User Succefully created!!!</strong> 
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                     </button>
-                                </div>
+                                </div> --->
+                            <cfif structKeyExists(url,"saved") AND url.saved EQ 4>
+                                    <div class="alert alert-success alert-dismissible show fade">
+                                        <strong>Your password is succesfully set!!</strong> 
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        </button>
+                                    </div>
                             <cfelseif structKeyExists(url,"error") AND url.error EQ 1>
                                 <div class="alert alert-danger alert-dismissible show fade">
                                     <strong>Invalid User Name/Password!!!</strong> 

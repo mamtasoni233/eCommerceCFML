@@ -21,7 +21,9 @@
                 WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar"> 
                 AND PkUserId = <cfqueryparam value="#userId#" cfsqltype="cf_sql_integer">
             </cfquery>
-            <cfset encryptToken = bcrypt.hashpw(token, gensalt)>
+            <!---  <cfdump var="#addToken#" abort="true"> --->
+            <!--- <cfset encryptToken = bcrypt.hashpw(token, gensalt)> --->
+            <!--- <cfset encryptToken = getMail.token> --->
             <cfmail to="#email#" 
                 from="mamta.s@lucidsolutions.in" 
                 subject="Hello from CFML" 
@@ -33,13 +35,12 @@
                         use the link below get started....  <br>
                     </div>
                     <button style="background: blue; padding: 10px; margin-top: 10px">
-                        <a style="text-decoration: none; color: white;" href="http://127.0.0.1:50001/auth-reset-password.cfm?token=#encryptToken#">Reset Your Password</a>
+                        <a style="text-decoration: none; color: white;" href="http://127.0.0.1:50001/auth-reset-password.cfm?token=#token#">Reset Your Password</a>
                     </button>
                 </cfmailpart>
             </cfmail>
         </cfif>
         <cfset saved = 3>
-        <!--- <cflocation url="auth-forgot-password.cfm" addtoken="false"> --->
     </cfif>
     <!DOCTYPE html>
     <html lang="en">
