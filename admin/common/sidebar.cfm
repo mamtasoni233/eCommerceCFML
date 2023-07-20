@@ -2,7 +2,7 @@
     <div id="sidebar">
         <div class="sidebar-wrapper active">
             <div class="sidebar-header position-relative">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-end align-items-center">
                     <!---    <div class="logo">
                         <a href="/index.cfm">
                             <img src="../assets/compiled/svg/logo.svg" alt="Logo" srcset=""/>
@@ -69,33 +69,24 @@
             <div class="sidebar-menu">
                 <ul class="menu">
                     <li class="sidebar-title">Menu</li>
-                    <!---  <cfswitch expression="#pg#"> --->
-                            <!---   <cfcase value="dashboard"> --->
-                                <li class="sidebar-item active">
-                                    <a href="index.cfm?pg=dashboard" class="sidebar-link">
-                                        <i class="bi bi-grid-fill"></i>
-                                        <span>Dashboard</span>
-                                    </a>
-                                </li>
-                            <!---  </cfcase> --->
-                            <!---   <cfcase value="category"> --->
-                                <li class="sidebar-item">
-                                    <a href="index.cfm?pg=category" class="sidebar-link">
-                                        <i class="bi bi-grid-fill"></i>
-                                        <span>Category</span>
-                                    </a>
-                                </li>
-                            <!---  </cfcase> --->
-                            <!---  <cfcase value="product"> --->
-                                <li class="sidebar-item ">
-                                <a href="index.cfm?pg=product" class="sidebar-link">
-                                    <i class="bi bi-grid-fill"></i>
-                                    <span>Product</span>
-                                </a>
-                            </li>
-                            <!---  </cfcase>
-                    </cfswitch> --->
-                    
+                    <li class="sidebar-item <cfif pg EQ 'dashboard'>active</cfif>">
+                        <a href="index.cfm?pg=dashboard" class="sidebar-link">
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item <cfif pg EQ 'category'>active</cfif>">
+                        <a href="index.cfm?pg=category&s=categoryList" class="sidebar-link">
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Category</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item <cfif pg EQ 'product'>active</cfif>">
+                        <a href="index.cfm?pg=product" class="sidebar-link">
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Product</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

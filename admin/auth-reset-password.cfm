@@ -42,19 +42,12 @@
                     <div class="col-lg-5 col-12">
                         <div id="auth-left">
                             <cfif structKeyExists(url,"tokenExpire") AND url.tokenExpire EQ 1>
-                                <div class="alert alert-danger alert-dismissible show fade">
-                                    <strong>Token Expired!!!</strong> 
+                                <div class="alert alert-light-danger alert-dismissible show fade">
+                                    <i class="bi bi-exclamation-circle"></i> Token Expired!!! 
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                     </button>
                                 </div>
                             </cfif>
-                            <!---  <cfif saved EQ 4>
-                                <div class="alert alert-success alert-dismissible show fade">
-                                    <strong>Your password is succesfully set!!</strong> 
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                    </button>
-                                </div>
-                            </cfif> --->
                             <h1 class="auth-title">Reset Password</h1>
                             <p class="auth-subtitle mb-5">
                                 Input your password and update your password.
@@ -161,11 +154,10 @@
                     height: 6,
                     borderRadius: 0,
                     pswMinLength: 8,
-                    colorScore1: '##aaa',
-                    colorScore2: '##d91818',
+                    colorScore1: '##d91818',
+                    colorScore2: '##c37b48',
                     colorScore3: '##ffc107',
                     colorScore4: 'limegreen'
-                    
                 });
                 
     

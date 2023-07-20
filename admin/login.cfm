@@ -8,13 +8,14 @@
     <cfparam name="email" default="" />
     <cfparam name="gender" default="" />
     <cfparam name="dob" default="" />
+    <!--- <cfset session.user.saved = 1> for login --->
     <!--- <cfparam name="saved" default=""/> --->
     <cfset bcrypt = application.bcrypt>
     <cfset gensalt = bcrypt.gensalt()>
     <cfparam name="password" default="" />
     <cfif len(trim(email)) GT 0>
         <cfquery name="login">
-            SELECT PkUserId, firstName, lastName, email, dob, password, gender FROM users 
+            SELECT PkUserId, firstName, lastName, email, dob, password, gender, image FROM users 
             WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar">
         </cfquery>
         <cfif login.recordCount EQ 1>
@@ -28,7 +29,8 @@
                 <cfset session.user.email = login.email>
                 <cfset session.user.gender = login.gender>
                 <cfset session.user.dob = login.dob>
-                <cfset session.saved = 1>
+                <cfset session.user.profile = login.image>
+                <cfset session.user.saved = 1>
                 <!--- <cfset saved = 2> --->
                 <cflocation url="index.cfm?pg=dashboard" addtoken="false">
             <cfelse>
@@ -46,28 +48,15 @@
                 <div class="row h-100">
                     <div class="col-lg-5 col-12">
                         <div id="auth-left">
-                            <!--- <cfif structKeyExists(url,"saved") AND url.saved EQ 3>
-                                <div class="alert alert-success alert-dismissible show fade">
-                                    <strong>Your reset password link has been sent to your email address!!</strong> 
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                    </button>
-                                </div>
-                            </cfif> --->
-                            <!--- <cfif structKeyExists(url,"saved") AND url.saved EQ 1>
-                                <div class="alert alert-success alert-dismissible show fade">
-                                    <strong>User Succefully created!!!</strong> 
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                    </button>
-                                </div> --->
                             <cfif structKeyExists(url,"saved") AND url.saved EQ 4>
-                                    <div class="alert alert-success alert-dismissible show fade">
-                                        <strong>Your password is succesfully set!!</strong> 
+                                    <div class="alert alert-light-success alert-dismissible show fade">
+                                        <i class="bi bi-check-circle"></i> Your password is succesfully set!!
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                         </button>
                                     </div>
                             <cfelseif structKeyExists(url,"error") AND url.error EQ 1>
-                                <div class="alert alert-danger alert-dismissible show fade">
-                                    <strong>Invalid User Name/Password!!!</strong> 
+                                <div class="alert alert-light-danger alert-dismissible show fade">
+                                    <i class="bi bi-exclamation-circle"></i> Invalid User Name/Password!!
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                     </button>
                                 </div>

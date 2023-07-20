@@ -1,21 +1,13 @@
 <cfoutput>
     <div class="page-heading">
         <div class="page-title">
-            <!--- <cfdump var="#session#">
-            <cfdump var="#session.user.firstName#"> --->
-            <cfif structKeyExists(session, "saved") AND session.saved EQ 1>
-                <div class="alert alert-success alert-dismissible show fade">
-                    <strong>User Succefully Login!!!</strong>
+            <cfif structKeyExists(session.user, "saved") AND session.user.saved EQ 1>
+                <div class="alert alert-light-success alert-dismissible show fade">
+                    <i class="bi bi-check-circle"></i> User Succefully Login!!!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <cfset StructDelete(session,'saved')>
+                <cfset StructDelete(session.user,'saved')>
             </cfif>
-            <!---  <cfif structKeyExists(url,'saved') AND url.saved EQ 2>
-                <div class="alert alert-success alert-dismissible show fade">
-                    <strong>User Succefully Login!!!</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </cfif> --->
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
                     <h3>Vertical Layout with Navbar</h3>
@@ -76,22 +68,8 @@
                         molestie ipsum. Nunc tincidunt tellus sed felis vulputate
                         euismod.
                     </p>
-                    <p>
-                        Proin accumsan nec arcu sit amet volutpat. Proin non risus
-                        luctus, tempus quam quis, volutpat orci. Phasellus commodo
-                        arcu dui, ut convallis quam sodales maximus. Aenean
-                        sollicitudin massa a quam fermentum, et efficitur metus
-                        convallis. Curabitur nec laoreet ipsum, eu congue sem. Nunc
-                        pellentesque quis erat at gravida. Vestibulum dapibus
-                        efficitur felis, vel luctus libero congue eget. Donec mollis
-                        pellentesque arcu, eu commodo nunc porta sit amet. In
-                        commodo augue id mauris tempor, sed dignissim nulla
-                        facilisis. Ut non mattis justo, ut placerat justo.
-                        Vestibulum scelerisque cursus facilisis. Suspendisse velit
-                        justo, scelerisque ac ultrices eu, consectetur ac odio.
-                    </p>
                 </div>
             </div>
         </section>
     </div>
-<cfoutput>
+</cfoutput>

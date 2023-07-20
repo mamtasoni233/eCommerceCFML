@@ -21,10 +21,6 @@
                 WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar"> 
                 AND PkUserId = <cfqueryparam value="#userId#" cfsqltype="cf_sql_integer">
             </cfquery>
-            <!---  <cfdump var="#addToken#" abort="true"> --->
-            <!--- <cfset encryptToken = bcrypt.hashpw(token, gensalt)> --->
-            <!--- <cfset encryptToken = getMail.token> --->
-            <cfmail to="#email#" 
                 from="mamta.s@lucidsolutions.in" 
                 subject="Hello from CFML" 
                 type="html">
@@ -50,9 +46,9 @@
                 <div class="row h-100">
                     <div class="col-lg-5 col-12">
                         <div id="auth-left">
-                            <cfif saved EQ 3>
-                                <div class="alert alert-success alert-dismissible show fade">
-                                    <strong>Your reset password link has been sent to your email address!!</strong> 
+                            <cfif url.saved EQ 3>
+                                <div class="alert alert alert-light-success alert-dismissible show fade">
+                                    <i class="bi bi-check-circle"></i> Your reset password link has been sent to your email address!!!
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                     </button>
                                 </div>

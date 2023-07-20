@@ -107,9 +107,9 @@ FilePond.create(document.querySelector(".imgbb-filepond"), {
 FilePond.create(document.querySelector(".image-preview-filepond"), {
   credits: null,
   allowImagePreview: true,
-  allowImageFilter: false,
-  allowImageExifOrientation: false,
-  allowImageCrop: false,
+  allowImageFilter: true,
+  allowImageExifOrientation: true,
+  allowImageCrop: true,
   acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
   fileValidateTypeDetectType: (source, type) =>
     new Promise((resolve, reject) => {

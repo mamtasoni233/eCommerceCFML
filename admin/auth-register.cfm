@@ -5,22 +5,22 @@
     <cfparam name="email" default="" />
     <cfparam name="gender" default="" />
     <cfparam name="dob" default="" />
-    <!--- <cfparam name="saved" default=""/> --->
     <cfset bcrypt = application.bcrypt>
     <cfset gensalt = bcrypt.gensalt()>
     <cfparam name="password" default="" />
+    <!--- <cfset saved = 2> for register --->
 
     <cfif structKeyExists(form, 'firstName') AND len(form.firstName) GT 0> 
-        <!--- <cfif structKeyExists(form, 'PkUserId') AND len(form.PkUserId) EQ 0>
+        <cfif structKeyExists(form, 'PkUserId') AND form.PkUserId EQ 0>
             <cfquery name="checkEmail">
                 SELECT PkUserId, email FROM users 
                 WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar"> AND 
-                PkUserId = <cfqueryparam value = "#form.PkUserId#" cfsqltype = "cf_sql_integer">
+                PkUserId != <cfqueryparam value = "#form.PkUserId#" cfsqltype = "cf_sql_integer">
             </cfquery>
             <cfif checkEmail.recordCount GT 0>
                 <cflocation url="auth-register.cfm?checkEmail=1" addtoken="false">
             </cfif>     
-        </cfif> --->
+        </cfif>
         
         <cfset dob = dateFormat(CreateDate(form.year, form.month, form.day), 'yyyy-mm-dd')>
         <cfset hashPassword = bcrypt.hashpw(form.password,gensalt)>
@@ -42,7 +42,6 @@
             )
         </cfquery>
         <cflocation url="auth-register.cfm?saved=2" addtoken="false">
-        <!---  <cflocation url="login.cfm?saved=1" addtoken="false"> --->
     </cfif>
     <!DOCTYPE html>
     <html lang="en">
@@ -65,14 +64,14 @@
                                 Input your data to register to our website.
                             </p>
                             <cfif structKeyExists(url,"saved") AND url.saved EQ 2>
-                                <div class="alert alert-success alert-dismissible show fade">
-                                    <strong>User Succefully created!!!</strong> 
+                                <div class="alert alert alert-light-success alert-dismissible show fade">
+                                    <i class="bi bi-check-circle"></i> User Succefully created!!!
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                     </button>
                                 </div>
                             <cfelseif structKeyExists(url,"checkEmail") AND url.checkEmail EQ 1>
-                                <div class="alert alert-danger alert-dismissible show fade">
-                                    <strong>Email already exits!!!</strong> 
+                                <div class="alert alert-light-danger alert-dismissible show fade">
+                                    <i class="bi bi-exclamation-circle"></i> Email already exist!!!
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                     </button>
                                 </div>
@@ -346,8 +345,8 @@
                     height: 6,
                     borderRadius: 0,
                     pswMinLength: 8,
-                    colorScore1: '##aaa',
-                    colorScore2: '##d91818',
+                    colorScore1: '##d91818',
+                    colorScore2: '##c37b48',
                     colorScore3: '##ffc107',
                     colorScore4: 'limegreen'
                     
