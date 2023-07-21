@@ -15,11 +15,10 @@
     </cfif>
 
     <cfif structKeyExists(form, "categoryName") AND len(form.categoryName )GT 0>
-        <cfdump var="#form.categoryName#">
-        <cfdump var="hiiii"><cfabort>
+
         <cfif structKeyExists(form, "categoryImage") AND len(form.categoryImage) GT 0>
-            <cfset categoryImagePath = ExpandPath('./assets/categoryImage/')>
             <cfset txtcategoryImage = "">
+            <cfset categoryImagePath = ExpandPath('./assets/categoryImage/')>
 
             <cffile action="upload" destination="#categoryImagePath#" fileField="form.categoryImage" nameconflict="makeunique" result="dataImage">
             <cfset txtcategoryImage = dataImage.serverfile>
@@ -37,7 +36,7 @@
                 PkCategoryId = <cfqueryparam value = "#form.PkCategoryId#" cfsqltype = "cf_sql_integer">
                 , categoryName = <cfqueryparam value = "#form.categoryName#" cfsqltype = "cf_sql_varchar">
                 , categoryImage = <cfqueryparam value = "#txtcategoryImage#" cfsqltype = "cf_sql_varchar">
-                , updtaedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 WHERE PkCategoryId = <cfqueryparam value = "#form.PkCategoryId#" cfsqltype = "cf_sql_integer">
             </cfquery> 
             <cfset session.user.categoryUpdate = 1>
@@ -95,7 +94,7 @@
                     <form class="form" id="addCategoryForm" method="POST" action="" enctype="multipart/form-data">
                         <input type="hidden" value="#PkCategoryId#" name="PkCategoryId">
                         <div class="row">
-                            <div class="col-md-6 mt-3">
+                            <div class="col-md-6">
                                 <lable class="fw-bold form-label" for="categoryName">Category Name</lable>
                                 <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                     <input type="text" class="form-control form-control-xl" id="categoryName" value="#categoryName#" name="categoryName"  placeholder="Category Name"/>
@@ -107,10 +106,15 @@
                             <div class="col-md-6">
                                 <lable class="fw-bold form-label text-center" for="categoryImage">Category Image</lable>
                                 <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                    <!--- <input type="file" class="form-control image-preview-filepond" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend" onchange="readURL(this)"> --->
+                                    <input type="file" class="form-control form-control-xl" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend" onchange="readURL(this)">
                                     <!-- File uploader with image preview -->
-                                    <input type="file" class="image-preview-filepond" name="categoryImage" id="categoryImage"/>
+                                    <!---  <input type="file" class="image-preview-filepond" name="categoryImage" id="categoryImage"/> --->
                                 </div>
+                                <cfif len(categoryImage) GT 0>
+                                    <img id="imgPreview" src="./assets/categoryImage/#categoryImage#" class="w-25 mt-2 mb-3"> 
+                                <cfelse>
+                                    <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
+                                </cfif> 
                             </div>
                         </div>
                         <div class="col-2 mx-auto">
@@ -160,15 +164,15 @@
                 $(element).removeClass('is-invalid');
             } 
         });
-    /*     $('#categoryImage').change(function(){
+        $('#categoryImage').change(function(){
             const file = this.files[0];
             if (file){
             let reader = new FileReader();
             reader.onload = function(event){
-                $('##imgPreview').attr('src', event.target.result);
+                $('#imgPreview').attr('src', event.target.result);
             }
             reader.readAsDataURL(file);
             }
-        }); */
+        });
     });
 </script>

@@ -86,10 +86,10 @@
                 <cflocation url="index.cfm?pg=profile" addtoken="false">
             </cfif>
         </cfif>
-        <cfif structKeyExists(form, 'PkUserId') AND len(form.PkUserId) GT 0> 
+        <cfif structKeyExists(form, 'PkUserId') AND form.PkUserId GT 0> 
             <cfset dob = dateFormat(CreateDate(form.year, form.month, form.day), 'yyyy-mm-dd')>
             <cfquery result="updateProfile">
-                UPDATE users SET  
+                UPDATE users SET
                 firstName = <cfqueryparam value="#form.firstName#" cfsqltype="cf_sql_varchar">
                 , lastName = <cfqueryparam value="#form.lastName#" cfsqltype="cf_sql_varchar">
                 , email = <cfqueryparam value="#form.email#" cfsqltype="cf_sql_varchar">
@@ -116,7 +116,7 @@
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="index.cfm?pg=profile">Profile</a>
+                                <a href="index.cfm?pg=profile">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
                                 Profile
@@ -134,6 +134,8 @@
                             <div class="img-container" id="OpenImgUpload">
                                 <cfif listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile)>
                                     <img src="../assets/compiled/jpg/#session.user.profile#" class="rounded-circle profileImg" alt="Profile">
+                                <cfelse>
+                                    <img src="../assets/compiled/jpg/1.jpg" class="rounded-circle profileImg" alt="Profile">
                                 </cfif>
                                 <cfif NOT listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile) AND structKeyExists(session.user, 'profile') AND len(session.user.profile) GT 0>
                                     <img src="../assets/profileImage/#session.user.profile#" class="rounded-circle profileImg" alt="Profile">
@@ -146,7 +148,7 @@
                                 <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header bg-primary">
-                                            <h5 class="modal-title white" id="myModalLabel160" >
+                                            <h5 class="modal-title white" id="myModalLabel160">
                                                 Profile Picture
                                             </h5>
                                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">

@@ -21,7 +21,7 @@
                 WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar"> 
                 AND PkUserId = <cfqueryparam value="#userId#" cfsqltype="cf_sql_integer">
             </cfquery>
-                from="mamta.s@lucidsolutions.in" 
+            <cfmail from="mamta.s@lucidsolutions.in" to="#email#"
                 subject="Hello from CFML" 
                 type="html">
                 <cfmailpart type="text/html">
@@ -46,7 +46,7 @@
                 <div class="row h-100">
                     <div class="col-lg-5 col-12">
                         <div id="auth-left">
-                            <cfif url.saved EQ 3>
+                            <cfif structKeyExists(variables, 'saved') AND saved EQ 3>
                                 <div class="alert alert alert-light-success alert-dismissible show fade">
                                     <i class="bi bi-check-circle"></i> Your reset password link has been sent to your email address!!!
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
