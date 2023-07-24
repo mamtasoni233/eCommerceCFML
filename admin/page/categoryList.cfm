@@ -4,12 +4,12 @@
     <cfparam name="categoryImage" default="" />
 <!---     <cfdump var="#form#"> --->
     <!--- <cfdump var="#url.PkCategoryId#"> --->
-    <cfquery name="getCategoryData">
+    <!---  <cfquery name="getCategoryData">
         SELECT C.PkCategoryId, C.categoryName, C.categoryImage, C.isActive, C.createdBy, C.updatedBy, C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
         FROM category C
         LEFT JOIN users U ON C.createdBy = U.PkUserId  
         WHERE isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
-    </cfquery>
+    </cfquery> --->
     <cfif structKeyExists(url, 'DelPkCategoryId') AND url.DelPkCategoryId GT 0>
         <cfquery name="removeImage" dbtype="query">
             SELECT PkCategoryId, categoryImage FROM getCategoryData 
@@ -70,7 +70,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-end">
                     <!---  <a href="<!--- index.cfm?pg=category&s=categoryAdd&PkCategoryId=0 --->" class="" > --->
-                        <button class="btn btn-primary" name="addCategory" data-bs-toggle="model" id="addCategory">
+                        <button class="btn btn-primary editCategory" <!--- onclick="editCategory()" ---> name="addCategory" data-bs-toggle="model" id="addCategory" data-id="0">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                     <!---    </a> --->
@@ -105,11 +105,19 @@
                                             <!-- File uploader with image preview -->
                                             <!---  <input type="file" class="image-preview-filepond" name="categoryImage" id="categoryImage"/> --->
                                         </div>
-                                        <cfif structKeyExists(form, categoryImage) AND len(categoryImage) GT 0>
-                                            <img id="imgPreview" src="./assets/categoryImage/#categoryImage#" class="w-25 mt-2 mb-3"> 
+                                        <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
+                                        <!--- <cfif structKeyExists(form, categoryImage) AND len(categoryImage) GT 0>
+                                            <img id="imgPreview" src="./assets/categoryImage/#categoryImage#" class="w-25 mt-2 mb-3">
                                         <cfelse>
                                             <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
-                                        </cfif> 
+                                        </cfif> --->
+                                    </div>
+                                    <div class="col-md-12 mb-2">
+                                        <label class="form-label text-dark font-weight-bold" for="isActive">Is Active :
+                                        </label>
+                                        <span class="mt-1">
+                                            <input type="checkbox" class="ms-2" id="isActive" checked name="isActive" value="1">
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -142,7 +150,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <cfloop query="getCategoryData">
+                                <!--- <cfloop query="getCategoryData">
                                     <cfset statusId = getCategoryData.isActive>
                                     <cfif statusId EQ 1>
                                         <cfset statusColor = "bg-success">
@@ -157,13 +165,13 @@
                                             <img id="" src="../assets/categoryImage/#getCategoryData.categoryImage#" width="50">
                                         </td>
                                         <td>#getCategoryData.userName#</td>
-                                        <td>#dateTimeFormat(getCategoryData.dateCreated, 'dd-mm-yyyy')#</td>
+                                        <td>#dateTimeFormat(getCategoryData.dateCreated, 'dd-mm-yyyy HH:nn:ss')#</td>
                                         <td>
                                             <cfif getCategoryData.updatedBy GT 0>
                                                 #getCategoryData.userName#
                                             </cfif>
                                         </td>
-                                        <td>#dateTimeFormat(getCategoryData.dateUpdated, 'dd-mm-yyyy')#</td>
+                                        <td>#dateTimeFormat(getCategoryData.dateUpdated, 'dd-mm-yyyy HH:nn:ss')#</td>
                                         <td>
                                             <span class="badge #statusColor#">#status#</span>
                                         </td>
@@ -178,7 +186,7 @@
                                             </a>
                                         </td>
                                     </tr>
-                                </cfloop>
+                                </cfloop> --->
                             </tbody>
                         </table>
                     </div>
@@ -197,12 +205,84 @@
             pagination: 'datatablePagination',
             order: [[0, 'asc']],
             responsive: true,
-        });
-        $("#addCategory").on("click", function () {
-            $("#addCategoryData").modal('show')
-            $('#PkCategoryId').val(0);
+            serverSide:true,
+            ajax: {
+                url: "../ajaxAddCategory.cfm?formAction=getRecord",
+                type :'post',
+                data: function(d){
+                    var sIdx = d.order[0].column;
+                    var m = {};
+                    m['draw'] = d.draw;
+                    m["start"] = d.start;
+                    m["length"] = d.length;
+                    m["search"] = d.search.value;
+                    m["order"] = d.columns[sIdx].data + ' ' + d.order[0].dir;
+                    return m;
+                }
+                
+            },
+            columns: [
+                { data: 'categoryname' },
+                { data: 'categoryimage',
+                    render: function(data, display, row) {
+                        if (data == "") {
+                            return '<img class="image" src="../assets/compiled/jpg/1.jpg" width="80">' 
+                        } else{
+                            return '<img class="image" src="../assets/categoryImage/'+data+'" width="80">' 
+                        }
+                    }
+                },
+                { data: 'userName',
+                    render: function (data,type,row) {
+                        var returnStr = '';
+                        if(row.createdby ==1){
+                            returnStr+= '<span>'+row.username+'</span>';
+                        }
+                        return returnStr;	
+                    }
+                },
+                { data: 'datecreated',
+                    /*  render: function (data, type,row) {
+                        moment(row.datecreated).format("YYYY-MM-DD hh:mm:ss");
+                    } */
+                    render: function (data, type,row) {
+                        dayjs(data).format('DD/MM/YYYY')
+                    }
+                },
+                { data: 'username',
+                    render: function (data,type,row) {
+                        var returnStr = '';
+                        if(row.updatedby ==1){
+                            returnStr+= '<span>'+row.username+'</span>';
+                        }
+                        return returnStr;	
+                    }
+                },
+                { data: 'dateupdated' },
+                { data: 'isActive',
+                    render: function (data,type,row) {
+                        if(row.isActive == 1){
+                            return '<span id="active"  class="badge bg-success text-white" >Active</span>';
+                        }else{
+                            return '<span id="inActive" class="badge bg-danger text-white" >Inactive</span>';
+                        }
+                    }
+                },
+                { data: 'PkCategoryId',
+                    render: function(data, type, row, meta)
+                    {
+                        return '<a data-id="'+row.pkcategoryid+'"  id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.pkcategoryid+'" " id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
+                    }
+                },
+                
+            ],
+            
         });
         // open add category model
+        $("#addCategory").on("click", function () {
+            $("#addCategoryData").modal('show');
+            $('#PkCategoryId').val(0);
+        });
         $("#addCategoryForm").validate({
             rules: {
                 categoryName: {
@@ -233,9 +313,8 @@
                 var formData = new FormData($('#addCategoryForm')[0]);
                 $.ajax({
                     type: "POST",
-                    url: "../ajaxAddCategory.cfm?PkCategoryId=0",
+                    url: "../ajaxAddCategory.cfm?PkCategoryId=" + $('#PkCategoryId').val(),
                     data: formData,
-                    // data: $('#addCategoryForm').serialize(),
                     contentType: false, //this is required please see answers above
                     processData: false, //this is required please see answers above
                     success: function(result) {
@@ -243,7 +322,6 @@
                         setTimeout(() => {
                             location.href = 'index.cfm?pg=category&s=categoryList';
                         }, 1000);
-                        $('#categoryDataTable').DataTable().ajax.reload();
                     }
                 });
             }, 
@@ -258,51 +336,94 @@
                 reader.readAsDataURL(file);
             }
         });
-        $("#categoryDataTable").on("click", "#editCategory", function () { 
+    
+        /* $('.editCategory').click(function() {
             var id = $(this).attr("data-id");
+            console.log(id);
             $("#addCategoryData").modal('show');
-            $('#PkCategoryId').val($(this).attr("data-id"));
-            console.log('getId', id);
+            $('#PkCategoryId').val(id);
+            if (id == 0) {
+                $(".modal-title").html("Add Category");
+                $("#addCategoryForm").trigger('reset');
+                $('#imgPreview').attr('src', '');
+            } else {
+                $(".modal-title").html("Update Category");
+                $.ajax({
+                    url:  "../ajaxAddCategory.cfm?PkCategoryId="+ id,
+                    type: 'GET',
+                    success: function(result) {
+                        if (result.success) {
+                            $("#PkCategoryId").val(result.json.PkCategoryId);
+                            $('#categoryName').val(result.json.categoryName);
+                            let imgSrc = '../assets/categoryImage/' + result.json.categoryImage;
+                            $('#imgPreview').attr('src', imgSrc);
+                            if(result.json.isActive == 1){ 
+                                $('#isActive').prop('checked', true);
+                            } else{
+                                $('#isActive').prop('checked', false);
+                            }
+                        }
+                    } 
+                });
+                //successToast("Category Updated!");
+            }
+        }); */
+        $("#categoryDataTable").on("click", ".editCategory", function () { 
+            var id = $(this).attr("data-id");
+            console.log(id);
+            $("#addCategoryData").modal('show');
+            $('#PkCategoryId').val(id);
             $(".modal-title").html("Update Category");
-            $.ajax({  
-                url:  "../ajaxAddCategory.cfm?PkCategoryId="+ id,
-                type: 'GET',
+            $.ajax({
+                type: "GET",
+                url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
                 success: function(result) {
-                    console.log(result);
-                    if(result){
-                        $("#PkCategoryId").val(result.PkCategoryId);
-                        $('#categoryName').val(result.categoryName);
-                        $('#categoryImage').val(result.categoryImage);
+                    $("#PkCategoryId").val(result.json.PkCategoryId);
+                    $('#categoryName').val(result.json.categoryName);
+                    let imgSrc = '../assets/categoryImage/' + result.json.categoryImage;
+                    $('#imgPreview').attr('src', imgSrc);
+                    if(result.json.isActive == 1){ 
+                        $('#isActive').prop('checked', true);
+                    } else{
+                        $('#isActive').prop('checked', false);
                     }
                     $('#addCategoryData').on('hidden.bs.modal', function () {
                         $("#addCategoryForm").trigger('reset');
-                        $(".modal-title").html("Add Permission");
+                        $('#imgPreview').attr('src', '');
                     });
-                } 
+                }   
             });
-        });
+        }); 
     });
-    /* function editCategory() {
-        var id = $(this).attr("data-id");
-        $("#addCategoryData").modal('show');
-        $('#PkCategoryId').val($(this).attr("data-id"));
-        console.log('getId', id);
-        $(".modal-title").html("Update Category");
-        $.ajax({  
-            url:  "../ajaxAddCategory.cfm?PkCategoryId="+ id  ,
-            type: 'GET',
-            success: function(result) {
-                console.log(result);
-                if(result){
-                    $("#PkCategoryId").val(result.PkCategoryId);
-                    $('#categoryName').val(result.categoryName);
-                    $('#categoryImage').val(result.categoryImage);
-                }
-                $('#addCategoryData').on('hidden.bs.modal', function () {
-                    $("#addCategoryForm").trigger('reset');
-                    $(".modal-title").html("Add Permission");
+    /* function editCategory(data) {
+            var id = $(this).attr("data-id");
+            console.log(id);
+            $("#addCategoryData").modal('show');
+            $('#PkCategoryId').val(id);
+            if (id == 0) {
+                $(".modal-title").html("Add Category");
+                $("#addCategoryForm").trigger('reset');
+                $('#imgPreview').attr('src', '');
+            } else {
+                $(".modal-title").html("Update Category");
+                $.ajax({
+                    url:  "../ajaxAddCategory.cfm?PkCategoryId="+ id,
+                    type: 'GET',
+                    success: function(result) {
+                        if (result.success) {
+                            $("#PkCategoryId").val(result.json.PkCategoryId);
+                            $('#categoryName').val(result.json.categoryName);
+                            let imgSrc = '../assets/categoryImage/' + result.json.categoryImage;
+                            $('#imgPreview').attr('src', imgSrc);
+                            if(result.json.isActive == 1){ 
+                                $('#isActive').prop('checked', true);
+                            } else{
+                                $('#isActive').prop('checked', false);
+                            }
+                        }
+                    } 
                 });
-            } 
-        });
-    } */
+                //successToast("Category Updated!");
+            }
+        } */
 </script>

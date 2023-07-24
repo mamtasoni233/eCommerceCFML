@@ -81,8 +81,8 @@
                                     <div class="avatar avatar-md">
                                         <cfif listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile)>
                                                 <img src="../assets/compiled/jpg/#session.user.profile#" alt="Profile">
-                                        <cfelse>
-                                            <img src="../assets/compiled/jpg/1.jpg" alt="Profile">
+                                        <!--- <cfelse>
+                                            <img src="../assets/compiled/jpg/1.jpg" alt="Profile"> --->
                                         </cfif>
                                         <cfif NOT listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile) AND structKeyExists(session.user, 'profile') AND len(session.user.profile) GT 0>
                                                 <img src="../assets/profileImage/#session.user.profile#" alt="Profile">

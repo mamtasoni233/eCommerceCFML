@@ -98,7 +98,9 @@
             <script src="./assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
             <script src="./assets/extensions/filepond-plugin-image-resize/filepond-plugin-image-resize.min.js"></script>
             <script src="./assets/extensions/filepond/filepond.js"></script>
-            <script src="./assets/static/js/pages/filepond.js"></script>
+            <script src="./assets/static/js/pages/filepond.js"></script>\
+            <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+            <script src="./assets/extensions/dayjs/plugin/advancedFormat.js"></script>
             <!--- tostify js --->
             <script src="./assets/extensions/toastify-js/src/toastify.js"></script>
 
