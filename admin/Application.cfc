@@ -1,6 +1,6 @@
 component {
 
-    this.datasource = 'ecommerce';
+    this.datasource = 'admin';
     this.javaSettings = {loadPaths: ['../lib/'], loadColdFusionClassPath: true, reloadOnChange: true};
 
     function onApplicationStart() {

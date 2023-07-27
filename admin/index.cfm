@@ -18,7 +18,9 @@
             <link rel="stylesheet" href="./assets/extensions/@fortawesome/fontawesome-free/css/all.min.css" />
             <!--- toast css --->
             <!--- <link href="./assets/css/jquery.toast.min.css" rel="stylesheet"> --->
-            <link rel="stylesheet" href="assets/extensions/toastify-js/src/toastify.css" />
+            <link rel="stylesheet" href="./assets/extensions/toastify-js/src/toastify.css" />
+            <!--- sweetalert css --->
+            <link rel="stylesheet" href="./assets/extensions/sweetalert2/sweetalert2.min.css"/>
             <!-- Datatables -->
             <!---  <link href="./assets/dataTable/css/jquery.dataTables.min.css">
             <link href="./assets/dataTable/css/dataTables.bootstrap5.min.css" rel="stylesheet"> --->
@@ -103,6 +105,8 @@
             <script src="./assets/extensions/dayjs/plugin/advancedFormat.js"></script>
             <!--- tostify js --->
             <script src="./assets/extensions/toastify-js/src/toastify.js"></script>
+            <!--- sweet alert js --->
+            <script src="./assets/extensions/sweetalert2/sweetalert2.min.js"></script>
 
             <!-- Need: Apexcharts -->
             <!--- <script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>

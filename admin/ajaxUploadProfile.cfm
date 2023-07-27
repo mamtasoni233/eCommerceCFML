@@ -26,7 +26,3 @@
 </cfquery>
 
 <cfset session.user.profile = txtIconImage>
-
-<!--- custom profile upload --->
-
-D:\Vishal Task\eCommerce\admin\assets\profileImage\avatar-3.jpg

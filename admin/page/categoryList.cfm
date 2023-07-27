@@ -2,14 +2,6 @@
     <cfparam name="PkCategoryId" default="" />
     <cfparam name="categoryName" default="" />
     <cfparam name="categoryImage" default="" />
-<!---     <cfdump var="#form#"> --->
-    <!--- <cfdump var="#url.PkCategoryId#"> --->
-    <!---  <cfquery name="getCategoryData">
-        SELECT C.PkCategoryId, C.categoryName, C.categoryImage, C.isActive, C.createdBy, C.updatedBy, C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
-        FROM category C
-        LEFT JOIN users U ON C.createdBy = U.PkUserId  
-        WHERE isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
-    </cfquery> --->
     <cfif structKeyExists(url, 'DelPkCategoryId') AND url.DelPkCategoryId GT 0>
         <cfquery name="removeImage" dbtype="query">
             SELECT PkCategoryId, categoryImage FROM getCategoryData 
@@ -69,11 +61,9 @@
         <section class="section">
             <div class="card">
                 <div class="card-header d-flex justify-content-end">
-                    <!---  <a href="<!--- index.cfm?pg=category&s=categoryAdd&PkCategoryId=0 --->" class="" > --->
-                        <button class="btn btn-primary editCategory" <!--- onclick="editCategory()" ---> name="addCategory" data-bs-toggle="model" id="addCategory" data-id="0">
-                            <i class="bi bi-plus-lg"></i>
-                        </button>
-                    <!---    </a> --->
+                    <button class="btn btn-primary editCategory"  name="addCategory" data-bs-toggle="model" id="addCategory" data-id="0">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
                 </div>
                 <div class="modal fade" id="addCategoryData" tabindex="-1" role="dialog" aria-labelledby="addCategoryData" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
@@ -150,43 +140,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!--- <cfloop query="getCategoryData">
-                                    <cfset statusId = getCategoryData.isActive>
-                                    <cfif statusId EQ 1>
-                                        <cfset statusColor = "bg-success">
-                                        <cfset status = "Active">
-                                    <cfelse>
-                                        <cfset statusColor = "bg-danger">
-                                        <cfset status = "Inactive">
-                                    </cfif>
-                                    <tr>
-                                        <td>#getCategoryData.categoryName#</td>
-                                        <td>
-                                            <img id="" src="../assets/categoryImage/#getCategoryData.categoryImage#" width="50">
-                                        </td>
-                                        <td>#getCategoryData.userName#</td>
-                                        <td>#dateTimeFormat(getCategoryData.dateCreated, 'dd-mm-yyyy HH:nn:ss')#</td>
-                                        <td>
-                                            <cfif getCategoryData.updatedBy GT 0>
-                                                #getCategoryData.userName#
-                                            </cfif>
-                                        </td>
-                                        <td>#dateTimeFormat(getCategoryData.dateUpdated, 'dd-mm-yyyy HH:nn:ss')#</td>
-                                        <td>
-                                            <span class="badge #statusColor#">#status#</span>
-                                        </td>
-                                        <td class="d-flex justify-content-between">
-                                            <a <!--- onclick="editCategory()" ---> data-id="#getCategoryData.PkCategoryId#" id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > 
-                                                <i class="bi bi-pen-fill"></i>
-                                            </a>
-                                            <a onclick="return confirm('Are you sure to delete category ?');" href="index.cfm?pg=category&s=categoryList&DelPkCategoryId=#getCategoryData.PkCategoryId#">
-                                                <button type="button" id="delete" class="border-none btn btn-sm btn-danger text-white ms-1 mt-1">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </cfloop> --->
                             </tbody>
                         </table>
                     </div>
@@ -198,7 +151,6 @@
 </cfoutput>
 <script>
     $(document).ready( function () {
-        /* $('#categoryDataTable').DataTable(); */
         $('#categoryDataTable').DataTable({
             processing: true,
             pageLength: 10,
@@ -206,10 +158,12 @@
             order: [[0, 'asc']],
             responsive: true,
             serverSide:true,
+            pagingType: "full_numbers",
             ajax: {
                 url: "../ajaxAddCategory.cfm?formAction=getRecord",
                 type :'post',
                 data: function(d){
+                    console.log(d);
                     var sIdx = d.order[0].column;
                     var m = {};
                     m['draw'] = d.draw;
@@ -219,62 +173,35 @@
                     m["order"] = d.columns[sIdx].data + ' ' + d.order[0].dir;
                     return m;
                 }
-                
             },
             columns: [
-                { data: 'categoryname' },
-                { data: 'categoryimage',
+                { data: 'categoryName' },
+                { data: 'categoryImage',
                     render: function(data, display, row) {
-                        if (data == "") {
-                            return '<img class="image" src="../assets/compiled/jpg/1.jpg" width="80">' 
-                        } else{
-                            return '<img class="image" src="../assets/categoryImage/'+data+'" width="80">' 
-                        }
+                        return '<img class="image" src="../assets/categoryImage/'+data+'" width="80">' 
                     }
                 },
-                { data: 'userName',
-                    render: function (data,type,row) {
-                        var returnStr = '';
-                        if(row.createdby ==1){
-                            returnStr+= '<span>'+row.username+'</span>';
-                        }
-                        return returnStr;	
-                    }
-                },
-                { data: 'datecreated',
-                    /*  render: function (data, type,row) {
-                        moment(row.datecreated).format("YYYY-MM-DD hh:mm:ss");
-                    } */
-                    render: function (data, type,row) {
-                        dayjs(data).format('DD/MM/YYYY')
-                    }
-                },
-                { data: 'username',
-                    render: function (data,type,row) {
-                        var returnStr = '';
-                        if(row.updatedby ==1){
-                            returnStr+= '<span>'+row.username+'</span>';
-                        }
-                        return returnStr;	
-                    }
-                },
-                { data: 'dateupdated' },
+                { data: 'userName' },
+                { data: 'dateCreated' },
+                { data: 'userNameUpdate' },
+                { data: 'dateUpdated' },
                 { data: 'isActive',
                     render: function (data,type,row) {
                         if(row.isActive == 1){
-                            return '<span id="active"  class="badge bg-success text-white" >Active</span>';
+                           /*  return '<span id="active" class="badge bg-success text-white" >Active</span>'; */
+                            return '<span id="deactive" data-id="'+row.PkCategoryId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
                         }else{
-                            return '<span id="inActive" class="badge bg-danger text-white" >Inactive</span>';
+                            return '<span id="active" data-id="'+row.PkCategoryId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
+                            /* return '<span id="inActive" class="badge bg-danger text-white" >Inactive</span>'; */
                         }
                     }
                 },
                 { data: 'PkCategoryId',
                     render: function(data, type, row, meta)
                     {
-                        return '<a data-id="'+row.pkcategoryid+'"  id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.pkcategoryid+'" " id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
+                        return '<a data-id="'+row.PkCategoryId+'"  id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkCategoryId+'" " id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
                     }
                 },
-                
             ],
             
         });
@@ -310,6 +237,7 @@
                 $(element).removeClass('is-invalid');
             },
             submitHandler: function (form) {
+                /* form.preventDefault(); */
                 var formData = new FormData($('#addCategoryForm')[0]);
                 $.ajax({
                     type: "POST",
@@ -318,7 +246,7 @@
                     contentType: false, //this is required please see answers above
                     processData: false, //this is required please see answers above
                     success: function(result) {
-                        successToast("Category Add!");
+                        successToast("Category Add!","Category Successfully Added");
                         setTimeout(() => {
                             location.href = 'index.cfm?pg=category&s=categoryList';
                         }, 1000);
@@ -370,7 +298,6 @@
         }); */
         $("#categoryDataTable").on("click", ".editCategory", function () { 
             var id = $(this).attr("data-id");
-            console.log(id);
             $("#addCategoryData").modal('show');
             $('#PkCategoryId').val(id);
             $(".modal-title").html("Update Category");
@@ -394,36 +321,54 @@
                 }   
             });
         }); 
-    });
-    /* function editCategory(data) {
+        $("#categoryDataTable").on("click", ".changeStatus", function () {
             var id = $(this).attr("data-id");
-            console.log(id);
-            $("#addCategoryData").modal('show');
-            $('#PkCategoryId').val(id);
-            if (id == 0) {
-                $(".modal-title").html("Add Category");
-                $("#addCategoryForm").trigger('reset');
-                $('#imgPreview').attr('src', '');
-            } else {
-                $(".modal-title").html("Update Category");
-                $.ajax({
-                    url:  "../ajaxAddCategory.cfm?PkCategoryId="+ id,
-                    type: 'GET',
-                    success: function(result) {
-                        if (result.success) {
-                            $("#PkCategoryId").val(result.json.PkCategoryId);
-                            $('#categoryName').val(result.json.categoryName);
-                            let imgSrc = '../assets/categoryImage/' + result.json.categoryImage;
-                            $('#imgPreview').attr('src', imgSrc);
-                            if(result.json.isActive == 1){ 
-                                $('#isActive').prop('checked', true);
-                            } else{
-                                $('#isActive').prop('checked', false);
-                            }
-                        }
-                    } 
+            var name = $(this).attr("data-name");
+            var status = $(this).attr('data-status');
+            if (status == "Active") {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to deactive ' + '"' +  name + '"',
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, Deactivate it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({  
+                            url: '../ajaxAddCategory.cfm?statusId='+id,  
+                            type: 'POST',  
+                            success: function(data) {
+                               /*  toast("Deactivated", "Permission Deactivated Successfully", "error"); */
+                                infoToast("Deactivated!","Category Deactivated Successfully");
+                                $('#categoryDataTable').DataTable().ajax.reload();                       
+                            }  
+                        });
+                    }
                 });
-                //successToast("Category Updated!");
             }
-        } */
+            else{
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to Active ' + '"' +  name + '"',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Active it!'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({  
+                            url: '../ajaxAddCategory.cfm?statusId='+id,  
+                            type: 'POST',  
+                            success: function(data) {
+                                successToast("Activated!","Category Activated Successfully");
+                                //toast("Activated", "Permission Activated Successfully", "success");
+                                $('#categoryDataTable').DataTable().ajax.reload();                       
+                            }  
+                        });
+                    }
+                });
+            }
+        });
+    });
+    
 </script>

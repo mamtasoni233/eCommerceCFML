@@ -1,3 +1,6 @@
+<!--- <cfheader statuscode="200" statustext="OK" />
+<cfcontent reset="true" type="application/json" /> --->
+<cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
 <cfcontent reset="true" type="application/json" />
 
@@ -56,35 +59,38 @@
 <cfset data['success'] = true>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
-    <!---  <cfquery name="getCategoryDataRows">
-        SELECT C.PkCategoryId, C.categoryName, C.categoryImage, C.isActive, C.createdBy, C.updatedBy, C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
+    <cfquery name="getCategoryDataRows">
+        SELECT C.PkCategoryId, C.categoryName, C.categoryImage, C.isActive, C.createdBy, C.updatedBy,/*  DATE_FORMAT("2017-06-15", "%Y") */  C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM category C
-        LEFT JOIN users U ON C.createdBy = U.PkUserId  
+        LEFT JOIN users U ON C.createdBy = U.PkUserId
+        LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
         WHERE isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
-            AND (
-                    U.firstName LIKE <cfqueryparam value="#trim(search)#"> 
-                    OR U.lastName LIKE <cfqueryparam value="#trim(search)#"> 
-                    OR C.categoryName LIKE <cfqueryparam value="#trim(search)#">
-                    OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="#trim(search)#"> 
+            AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
+                    OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
+                    OR C.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
         <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
             ORDER BY #form.order#
         </cfif>
-    </cfquery> --->
+    </cfquery>
     <cfquery name="getCategoryData">
-    
-        SELECT C.PkCategoryId, C.categoryName, C.categoryImage, C.isActive, C.createdBy, C.updatedBy,/*  DATE_FORMAT("2017-06-15", "%Y") */  C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
+        SELECT C.PkCategoryId, C.categoryName, C.categoryImage, C.isActive, C.createdBy, C.updatedBy,/*  DATE_FORMAT("2017-06-15", "%Y") */  C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM category C
-        LEFT JOIN users U ON C.createdBy = U.PkUserId  
+        LEFT JOIN users U ON C.createdBy = U.PkUserId
+        LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
         WHERE isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
 
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
-            AND ( U.firstName LIKE <cfqueryparam value="#trim(search)#"> 
-                    OR U.lastName LIKE <cfqueryparam value="#trim(search)#"> 
-                    OR C.categoryName LIKE <cfqueryparam value="#trim(search)#">
-                    OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="#trim(search)#"> 
+            AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
+                    OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
+                    OR C.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
         <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
@@ -94,15 +100,26 @@
             LIMIT #form.start#, #form.length#
         </cfif>
     </cfquery>
-    <!---  <cfset dta = dateTimeFormat(getCategoryData.ct, "d-m-yyyy HH:nn")>
-    <cfdump var="#dta#"><cfabort> --->
-    <!--- <cfoutput>  SELECT C.PkCategoryId, C.categoryName, C.categoryImage, C.isActive, C.createdBy, C.updatedBy, C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
-        FROM category C
-        LEFT JOIN users U ON C.createdBy = U.PkUserId  </cfoutput> --->
-    <!---   <cfset c_dt = DATE_FORMAT(dateCreated,"%Y/%m/%d %h:%i:%s %p")>
-    <cfdump var="#c_dt#" abort="true"> --->
-    
-    <cfset data['data'] = convertToObject(getCategoryData)>
+    <cfset data['data'] = []>
+    <cfset data['recordsFiltered'] = getCategoryDataRows.recordCount>
+    <cfset data['draw'] = form.draw>
+    <cfset data['recordsTotal'] = getCategoryDataRows.recordCount>
+    <cfloop query="getCategoryData">
+        <cfset dataRecord = {}>
+
+        <cfset dataRecord['PkCategoryId'] = getCategoryData.PkCategoryId>
+        <cfset dataRecord['categoryName'] = getCategoryData.categoryName>
+        <cfset dataRecord['categoryImage'] = getCategoryData.categoryImage>
+        <cfset dataRecord['isActive'] = getCategoryData.isActive>
+        <cfset dataRecord['createdBy'] = getCategoryData.createdBy>
+        <cfset dataRecord['dateCreated'] = dateTimeFormat(getCategoryData.dateCreated, 'dd-mm-yyyy hh:nn:ss tt')>
+        <cfset dataRecord['dateUpdated'] = dateTimeFormat(getCategoryData.dateUpdated, 'dd-mm-yyyy hh:nn:ss tt')>
+        <cfset dataRecord['updatedBy'] = getCategoryData.updatedBy>
+        <cfset dataRecord['PkUserId'] = getCategoryData.PkUserId>
+        <cfset dataRecord['userName'] = getCategoryData.userName>
+        <cfset dataRecord['userNameUpdate'] = getCategoryData.userNameUpdate>
+        <cfset arrayAppend(data['data'], dataRecord)>
+    </cfloop>
 </cfif>
 
 <cfif structKeyExists(url, "PkCategoryId") AND url.PkCategoryId GT 0>
@@ -118,57 +135,72 @@
     <cfset data['json']['isActive'] = editCategoryData.isActive>
 </cfif>
 
-<cfif structKeyExists(form, "categoryImage") AND len(form.categoryImage) GT 0>
-    <cfset txtcategoryImage = "">
-    <cfset categoryImagePath = ExpandPath('./assets/categoryImage/')>
 
-    <cffile action="upload" destination="#categoryImagePath#" fileField="categoryImage"  nameconflict="makeunique" result="dataImage">
-    <cfset txtcategoryImage = dataImage.serverfile>
-
-    <cfif fileExists("#categoryImagePath##categoryImage#")>
-        <cffile action="delete" file="#categoryImagePath##categoryImage#">
-    </cfif>
-<cfelse>
-    <cfset txtcategoryImage = "">
-</cfif>
 <cfif structKeyExists(form, "categoryName") AND len(form.categoryName) GT 0>
-
     <cfif NOT structKeyExists(form, "isActive")>
         <cfset isActive = 0>
     <cfelse>
         <cfset isActive = form.isActive>
     </cfif>
+    <cfset catId = 0>
+
     <cfif structKeyExists(url, "PkCategoryId") AND url.PkCategoryId GT 0>
+        <cfset catId = url.PkCategoryId>
         <cfquery name="updateCategoryData">
             UPDATE category SET
             categoryName = <cfqueryparam value = "#form.categoryName#" cfsqltype = "cf_sql_varchar">
-            , categoryImage = <cfqueryparam value = "#txtcategoryImage#" cfsqltype = "cf_sql_varchar">
             , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
             , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
             , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
             WHERE PkCategoryId = <cfqueryparam value = "#url.PkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
-        <cfset session.user.categoryUpdate = 1>
-        <!--- <cflocation url="index.cfm?pg=category&s=categoryList" addtoken="false"> --->
     <cfelse>
         <cfquery result="addCategoryData">
             INSERT INTO category (
                 categoryName
-                , categoryImage
                 , isActive
                 , createdBy
                 , dateCreated
             ) VALUES (
                 <cfqueryparam value = "#form.categoryName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#txtcategoryImage#" cfsqltype = "cf_sql_varchar">
                 , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
                 , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
             )
         </cfquery>
-        <cfset session.user.categorySave = 1>
-        <!--- <cflocation url="index.cfm?pg=category&s=categoryList" addtoken="false"> --->
-    </cfif> 
-</cfif>
+        <cfset catId = addCategoryData.generatedKey>
+    </cfif>
+    <cfif structKeyExists(form, "categoryImage") AND len(form.categoryImage) GT 0>
+        <cfset txtcategoryImage = "">
+        <cfset categoryImagePath = ExpandPath('./assets/categoryImage/')>
+        <cffile action="upload" destination="#categoryImagePath#" fileField="categoryImage"  nameconflict="makeunique" result="dataImage">
+        <cfset txtcategoryImage = dataImage.serverfile>
 
-<cfoutput>#serializeJSON(data)#</cfoutput>
+        <cfquery name="qryGetImageName">
+            SELECT categoryImage
+            FROM category
+            WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.categoryImage) GT 0>
+            <cfif fileExists("#categoryImagePath##categoryImage#")>
+                <cffile action="delete" file="#categoryImagePath##categoryImage#">
+            </cfif>
+        </cfif>
+        <cfif len(txtcategoryImage) GT 0>
+            <cfquery name="qryCategoryUpdateImg" result="qryResultCategoryUpdateImg">
+                UPDATE category SET
+                categoryImage = <cfqueryparam value="#txtcategoryImage#">
+                WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
+            </cfquery>
+        </cfif>
+    </cfif>
+</cfif>
+<cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
+    <cfquery name="changeStatus">
+        UPDATE category SET
+        isActive = !isActive
+        WHERE PkCategoryId = <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+</cfif>
+<cfset output = serializeJson(data) />
+<cfoutput>#rereplace(output,'//','')#</cfoutput>

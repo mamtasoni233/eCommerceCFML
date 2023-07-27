@@ -9,8 +9,9 @@
     });
 } */
 
-function successToast(text) {
+function successToast(heading, text) {
   Toastify({
+    heading: heading,
     text: text,
     duration: 3000,
     backgroundColor: 'linear-gradient(to right, #56ab2f, #a8e063)',
@@ -18,8 +19,9 @@ function successToast(text) {
   }).showToast();
 }
 
-function dangerToast(text) {
+function dangerToast(heading, text) {
   Toastify({
+    heading: heading,
     text: text,
     duration: 3000,
     backgroundColor: 'linear-gradient(to right, #ED213A, #93291E)',
@@ -27,8 +29,9 @@ function dangerToast(text) {
   }).showToast();
 }
 
-function infoToast(text) {
+function infoToast(heading, text) {
   Toastify({
+    heading: heading,
     text: text,
     duration: 3000,
     backgroundColor: 'linear-gradient(to right, #2193b0, #6dd5ed)',
@@ -36,8 +39,9 @@ function infoToast(text) {
   }).showToast();
 }
 
-function warnToast(text) {
+function warnToast(heading, text) {
   Toastify({
+    heading: heading,
     text: text,
     duration: 3000,
     backgroundColor: 'linear-gradient(to right, #CAC531, #F3F9A7)',
