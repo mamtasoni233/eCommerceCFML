@@ -335,7 +335,7 @@
                     }
                     if(result.json.parentCategoryId){ 
                         //$('#parentCategory').val(result.json.parentCategoryId).trigger("change");
-                        getParentCategory(result.json.parentCategoryId).attr('selected');
+                        getParentCategory(result.json.parentCategoryId);
                     } else{
                         getParentCategory(data);
                     }
@@ -396,12 +396,12 @@
             }
         });
     });
-    function getParentCategory(data) {
+    function getParentCategory(parentCatId=0) {
         $.ajax({    
                 type: "GET",
                 url: "../ajaxAddCategory.cfm?formAction=getCategory" /* + $('#PkCategoryId').val() */, 
                 dataType: "html",   
-               /*  data: { option: $(this).val() },   */        
+                data: parentCatId,          
                 success: function(result){
                     let dataRecord = JSON.parse(result);
                     if (dataRecord.success) {
