@@ -16,6 +16,9 @@
             <link rel="stylesheet" href="./assets/compiled/css/app-dark.css"/>
             <link rel="stylesheet" href="./assets/compiled/css/iconly.css"/>
             <link rel="stylesheet" href="./assets/extensions/@fortawesome/fontawesome-free/css/all.min.css" />
+            <!--- <link rel="stylesheet" href="../assets/extensions/choices.js/public/assets/styles/choices.css"/> --->
+            <!--- select 2 css --->
+            <link href="./assets/compiled/css/select2.min.css" rel="stylesheet" />
             <!--- toast css --->
             <!--- <link href="./assets/css/jquery.toast.min.css" rel="stylesheet"> --->
             <link rel="stylesheet" href="./assets/extensions/toastify-js/src/toastify.css" />
@@ -81,8 +84,10 @@
             <!--- jquery validation js --->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             
-            <script src="./assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
-            <script src="./assets/static/js/pages/form-element-select.js"></script>
+            <!--- <script src="./assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+            <script src="./assets/static/js/pages/form-element-select.js"></script> --->
+            <!--- select2 js --->
+            <script src="./assets/compiled/js/select2.min.js"></script>
             <!--- password meter --->
             <script async defer src="https://buttons.github.io/buttons.js"></script>
             <script src="./assets/js/pswmeter.min.js"></script>

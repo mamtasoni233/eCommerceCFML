@@ -36,3 +36,4 @@ CREATE TABLE `product` (
     `updatedBy` int(11) DEFAULT NULL,
     FOREIGN KEY (FkCategoryId) REFERENCES category(PkCategoryId)
 );
+ALTER TABLE `category` ADD `parentCategoryId` INT NOT NULL DEFAULT '0' AFTER `PkCategoryId`;

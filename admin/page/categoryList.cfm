@@ -80,11 +80,20 @@
                                 <input type="hidden" id="PkCategoryId" value="" name="PkCategoryId">
                                 <div class="row g-3">
                                     <div class="col-md-12">
+                                        <lable class="fw-bold form-label" for="parentCategory">Category Name</lable>
+                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                            <!--- <label class="input-group-text" for="parentCategory"><i class="bi bi-shop"></i></label> --->
+                                            <select name="parentCategory" id="parentCategory" class="form-control-xl" change="category()">
+                                                <!--- <option selected value='0'>Select As A Parent</option> --->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="categoryName">Category Name</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                             <input type="text" class="form-control form-control-xl" id="categoryName" value="" name="categoryName"  placeholder="Category Name"/>
                                             <div class="form-control-icon">
-                                                <i class="bi bi-person"></i>
+                                                <i class="bi bi-bag-heart-fill"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -92,15 +101,8 @@
                                         <lable class="fw-bold form-label text-center" for="categoryImage">Category Image</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                             <input type="file" class="form-control form-control-xl" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend">
-                                            <!-- File uploader with image preview -->
-                                            <!---  <input type="file" class="image-preview-filepond" name="categoryImage" id="categoryImage"/> --->
                                         </div>
                                         <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
-                                        <!--- <cfif structKeyExists(form, categoryImage) AND len(categoryImage) GT 0>
-                                            <img id="imgPreview" src="./assets/categoryImage/#categoryImage#" class="w-25 mt-2 mb-3">
-                                        <cfelse>
-                                            <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
-                                        </cfif> --->
                                     </div>
                                     <div class="col-md-12 mb-2">
                                         <label class="form-label text-dark font-weight-bold" for="isActive">Is Active :
@@ -129,7 +131,8 @@
                         <table class="table" id="categoryDataTable">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Category Name</th>
+                                    <th>Parent Category</th>
                                     <th>Image</th>
                                     <th>Create By</th>
                                     <th>Create Date</th>
@@ -151,11 +154,15 @@
 </cfoutput>
 <script>
     $(document).ready( function () {
+        $('#parentCategory').select2({
+            /* placeholder: "Select a parent category", */
+            width: '100%' 
+        });
         $('#categoryDataTable').DataTable({
             processing: true,
             pageLength: 10,
             pagination: 'datatablePagination',
-            order: [[0, 'asc']],
+            order: [[1, 'desc']],
             responsive: true,
             serverSide:true,
             pagingType: "full_numbers",
@@ -175,10 +182,16 @@
                 }
             },
             columns: [
-                { data: 'categoryName' },
+                { data: 'categoryName'},
+                { data: 'parentCategoryName' },
                 { data: 'categoryImage',
                     render: function(data, display, row) {
-                        return '<img class="image" src="../assets/categoryImage/'+data+'" width="80">' 
+                        // return '<img class="image" src="../assets/categoryImage/'+data+'" width="80">' 
+                        var returnStr = '';
+                        if (data !== "") {
+                            returnStr+=  '<img class="image" src="../assets/categoryImage/'+data+'" width="80">' 
+                        } 
+                        return returnStr;
                     }
                 },
                 { data: 'userName' },
@@ -188,11 +201,9 @@
                 { data: 'isActive',
                     render: function (data,type,row) {
                         if(row.isActive == 1){
-                           /*  return '<span id="active" class="badge bg-success text-white" >Active</span>'; */
                             return '<span id="deactive" data-id="'+row.PkCategoryId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
                         }else{
                             return '<span id="active" data-id="'+row.PkCategoryId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
-                            /* return '<span id="inActive" class="badge bg-danger text-white" >Inactive</span>'; */
                         }
                     }
                 },
@@ -209,6 +220,12 @@
         $("#addCategory").on("click", function () {
             $("#addCategoryData").modal('show');
             $('#PkCategoryId').val(0);
+            getParentCategory();
+            /*  $('#addCategoryData').on('hidden.bs.modal', function () {
+                $("#addCategoryForm").trigger('reset');
+                $('#imgPreview').attr('src', '');
+                $("#parentCategory").val(0).trigger("change"); 
+            }); */
         });
         $("#addCategoryForm").validate({
             rules: {
@@ -305,8 +322,10 @@
                 type: "GET",
                 url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
                 success: function(result) {
+                    console.log('result', result);
                     $("#PkCategoryId").val(result.json.PkCategoryId);
                     $('#categoryName').val(result.json.categoryName);
+                    //$('#parentCategory :selected').val(result.json.parentCategoryId).trigger("change");
                     let imgSrc = '../assets/categoryImage/' + result.json.categoryImage;
                     $('#imgPreview').attr('src', imgSrc);
                     if(result.json.isActive == 1){ 
@@ -314,9 +333,16 @@
                     } else{
                         $('#isActive').prop('checked', false);
                     }
+                    if(result.json.parentCategoryId){ 
+                        //$('#parentCategory').val(result.json.parentCategoryId).trigger("change");
+                        getParentCategory(result.json.parentCategoryId).attr('selected');
+                    } else{
+                        getParentCategory(data);
+                    }
                     $('#addCategoryData').on('hidden.bs.modal', function () {
                         $("#addCategoryForm").trigger('reset');
                         $('#imgPreview').attr('src', '');
+                        $("#parentCategory").val(0).trigger("change"); 
                     });
                 }   
             });
@@ -370,5 +396,24 @@
             }
         });
     });
+    function getParentCategory(data) {
+        $.ajax({    
+                type: "GET",
+                url: "../ajaxAddCategory.cfm?formAction=getCategory" /* + $('#PkCategoryId').val() */, 
+                dataType: "html",   
+               /*  data: { option: $(this).val() },   */        
+                success: function(result){
+                    let dataRecord = JSON.parse(result);
+                    if (dataRecord.success) {
+                        var html = "<option selected value='0'>Select As A Parent</option>";
+                        for (var i = 0; i < dataRecord.data.length; i++) {
+                            html += "<option value="+dataRecord.data[i].PkCategoryId+" >"+dataRecord.data[i].categoryName+"</option>";
+                            //html += "<option value="+dataRecord.data[i].PkCategoryId+" '+ (dataRecord.data[i].PkCategoryId == $('#PkCategoryId').val() ? ' selected ' : '') +' >"+dataRecord.data[i].categoryName+"</option>";
+                        }
+                        $('#parentCategory').append(html).trigger("change");
+                    }
+                }
+            }); 
+    }
     
 </script>

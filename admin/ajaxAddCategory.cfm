@@ -7,6 +7,7 @@
 <cfparam name="PkCategoryId" default="" />
 <cfparam name="categoryName" default="" />
 <cfparam name="categoryImage" default="" />
+<cfparam name="parentCategory" default="" />
 <cfparam name="formAction" default="" />
 
 <cffunction name="convertToObject" access="public" returntype="any" output="false"
@@ -60,16 +61,18 @@
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getCategoryDataRows">
-        SELECT C.PkCategoryId, C.categoryName, C.categoryImage, C.isActive, C.createdBy, C.updatedBy,/*  DATE_FORMAT("2017-06-15", "%Y") */  C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
-        FROM category C
-        LEFT JOIN users U ON C.createdBy = U.PkUserId
-        LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
-        WHERE isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+        SELECT C1.PkCategoryId, C1.categoryName, C1.parentCategoryId, C1.categoryImage, C1.isActive, C1.createdBy, C1.updatedBy, C1.dateCreated, C1.dateUpdated, C1.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, C2.categoryName AS parentCategoryName
+        FROM category C1
+        LEFT JOIN category C2 ON C1.parentCategoryId = C2.PkCategoryId
+        LEFT JOIN users U ON C1.createdBy = U.PkUserId
+        LEFT JOIN users userUpdate ON C1.updatedBy = userUpdate.PkUserId
+        WHERE C1.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
 
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR C.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR C2.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
@@ -79,16 +82,18 @@
         </cfif>
     </cfquery>
     <cfquery name="getCategoryData">
-        SELECT C.PkCategoryId, C.categoryName, C.categoryImage, C.isActive, C.createdBy, C.updatedBy,/*  DATE_FORMAT("2017-06-15", "%Y") */  C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
-        FROM category C
-        LEFT JOIN users U ON C.createdBy = U.PkUserId
-        LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
-        WHERE isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+        SELECT C1.PkCategoryId, C1.categoryName, C1.parentCategoryId, C1.categoryImage, C1.isActive, C1.createdBy, C1.updatedBy, C1.dateCreated, C1.dateUpdated, C1.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, C2.categoryName AS parentCategoryName
+        FROM category C1
+        LEFT JOIN category C2 ON C1.parentCategoryId = C2.PkCategoryId
+        LEFT JOIN users U ON C1.createdBy = U.PkUserId
+        LEFT JOIN users userUpdate ON C1.updatedBy = userUpdate.PkUserId
+        WHERE C1.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
 
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR C.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR C2.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
@@ -108,6 +113,8 @@
         <cfset dataRecord = {}>
 
         <cfset dataRecord['PkCategoryId'] = getCategoryData.PkCategoryId>
+        <cfset dataRecord['parentCategoryName'] = getCategoryData.parentCategoryName>
+        <cfset dataRecord['parentCategoryId'] = getCategoryData.parentCategoryId>
         <cfset dataRecord['categoryName'] = getCategoryData.categoryName>
         <cfset dataRecord['categoryImage'] = getCategoryData.categoryImage>
         <cfset dataRecord['isActive'] = getCategoryData.isActive>
@@ -124,12 +131,14 @@
 
 <cfif structKeyExists(url, "PkCategoryId") AND url.PkCategoryId GT 0>
     <cfquery name="editCategoryData">
-        SELECT PkCategoryId, categoryName, categoryImage, isActive 
-        FROM category WHERE PkCategoryId = <cfqueryparam value="#PkCategoryId#" cfsqltype="cf_sql_integer">
+        SELECT PkCategoryId, categoryName, categoryImage, isActive, parentCategoryId
+        FROM category 
+        WHERE PkCategoryId = <cfqueryparam value="#PkCategoryId#" cfsqltype="cf_sql_integer">
     </cfquery>
 
     <cfset data['json'] = {}>
     <cfset data['json']['PkCategoryId'] = editCategoryData.PkCategoryId>
+    <cfset data['json']['parentCategoryId'] = editCategoryData.parentCategoryId>
     <cfset data['json']['categoryName'] = editCategoryData.categoryName>
     <cfset data['json']['categoryImage'] = editCategoryData.categoryImage>
     <cfset data['json']['isActive'] = editCategoryData.isActive>
@@ -149,6 +158,7 @@
         <cfquery name="updateCategoryData">
             UPDATE category SET
             categoryName = <cfqueryparam value = "#form.categoryName#" cfsqltype = "cf_sql_varchar">
+            , parentCategoryId =  <cfqueryparam value = "#form.parentCategory#" cfsqltype = "cf_sql_integer">
             , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
             , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
             , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
@@ -158,11 +168,13 @@
         <cfquery result="addCategoryData">
             INSERT INTO category (
                 categoryName
+                , parentCategoryId
                 , isActive
                 , createdBy
                 , dateCreated
             ) VALUES (
                 <cfqueryparam value = "#form.categoryName#" cfsqltype = "cf_sql_varchar">
+                , <cfqueryparam value = "#form.parentCategory#" cfsqltype = "cf_sql_integer">
                 , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
                 , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
@@ -201,6 +213,21 @@
         isActive = !isActive
         WHERE PkCategoryId = <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
     </cfquery>
+</cfif>
+<cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
+    <cfquery name="getCategory">
+        SELECT categoryName, PkCategoryId FROM Category 
+        WHERE 
+            parentCategoryId = <cfqueryparam value="0" cfsqltype="cf_sql_integer"> 
+            AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+    </cfquery>
+    <cfset data['data'] = []>
+    <cfloop query="getCategory">
+        <cfset dataRecord = {}>
+        <cfset dataRecord['PkCategoryId'] = getCategory.PkCategoryId>
+        <cfset dataRecord['categoryName'] = getCategory.categoryName>
+        <cfset arrayAppend(data['data'], dataRecord)>
+    </cfloop>
 </cfif>
 <cfset output = serializeJson(data) />
 <cfoutput>#rereplace(output,'//','')#</cfoutput>
