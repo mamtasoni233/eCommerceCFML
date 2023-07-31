@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 28, 2023 at 03:02 PM
+-- Generation Time: Jul 31, 2023 at 01:31 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -54,9 +54,9 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 (7, 9, 'Mobile', 'avatar-3_1sojrdx0fndgj.jpg', b'1', b'0', '2023-07-24 18:32:19', 1, '2023-07-28 17:30:29', 1),
 (8, 0, 'Beauty & Health', '1_1ey1danqrstgp.jpg', b'1', b'0', '2023-07-27 15:30:15', 1, '2023-07-27 18:10:59', 1),
 (9, 0, 'Electronics', NULL, b'1', b'0', '2023-07-27 16:13:37', 1, '2023-07-28 17:29:50', 1),
-(10, 6, 'school bag', NULL, b'0', b'0', '2023-07-27 16:13:42', 1, '2023-07-28 17:35:16', 1),
-(11, 8, 'Face Cream', NULL, b'1', b'0', '2023-07-27 16:13:47', 1, '2023-07-28 17:31:24', 1),
-(12, 8, 'Home Decore12', NULL, b'0', b'0', '2023-07-28 15:03:24', 1, '2023-07-28 17:39:57', 1);
+(10, 0, 'school bag', '1_1e25zkoxyvd79.png', b'0', b'0', '2023-07-27 16:13:42', 1, '2023-07-31 10:38:33', 1),
+(11, 8, 'Face Cream', NULL, b'0', b'0', '2023-07-27 16:13:47', 1, '2023-07-31 12:16:16', 1),
+(12, 8, 'Home Decore12', NULL, b'0', b'1', '2023-07-28 15:03:24', 1, '2023-07-31 12:16:30', 1);
 
 -- --------------------------------------------------------
 
@@ -97,6 +97,7 @@ CREATE TABLE `product` (
   `PkProductId` int(11) UNSIGNED NOT NULL,
   `FkCategoryId` int(11) UNSIGNED NOT NULL,
   `productName` varchar(100) NOT NULL,
+  `productPrice` float NOT NULL,
   `productQty` int(11) NOT NULL,
   `productImage` varchar(255) DEFAULT NULL,
   `isActive` bit(1) NOT NULL DEFAULT b'1',
