@@ -1,5 +1,4 @@
-<!--- <cfheader statuscode="200" statustext="OK" />
-<cfcontent reset="true" type="application/json" /> --->
+
 <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
 <cfcontent reset="true" type="application/json" />
@@ -57,6 +56,33 @@
 			return loc.DataArray;
     </cfscript>
 </cffunction>
+
+<cffunction name="getCategoryResult" access="public" returntype="array">
+        <cfargument name="parentId" required="true" type="any"/>
+        <cfargument name="parentName" required="true" type="any"/>
+        <cfargument name="returnArray" required="true" type="any"/>
+
+        <cfset var qryGetCategory = "">
+        <cfquery name="qryGetCategory">
+            SELECT categoryName, PkCategoryId FROM Category 
+            WHERE parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+            AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfif qryGetCategory.recordCount GT 0>
+            <cfloop query="qryGetCategory">
+                <cfset var res = StructNew()>
+                <cfset res.catName = qryGetCategory.categoryName>
+                <cfset res.PkCategoryId = qryGetCategory.PkCategoryId>
+                <cfif len(arguments.parentName) GT 0>
+                    <cfset res.catName  = arguments.parentName & '->' & qryGetCategory.categoryName>
+                </cfif>       
+                <cfset arrayAppend(arguments.returnArray, res)>         
+                <cfset getCategoryResult(qryGetCategory.PkCategoryId, res.catName, arguments.returnArray)>
+            </cfloop>
+        </cfif>
+        <cfreturn arguments.returnArray>
+</cffunction>
+
 
 <cfset data = {}>
 <cfset data['success'] = true>
@@ -227,35 +253,13 @@
         WHERE PkProductId = <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
     </cfquery>
 </cfif>
-<!--- <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
-    <cffunction name="getCategory" access="public" returntype="any">
-        <cfargument name="parentId" required="false" type="numeric" default="0"/>
-        <cfargument name="parentName" required="false" type="string" default=""/>
-        <cfargument name="returnArray" required="false" type="array" default=""/>
-        <cfquery name="qryGetCategory">
-            SELECT categoryName, PkCategoryId FROM Category 
-            WHERE 
-                parentCategoryId = #arguments.parentId# 
-                AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-        </cfquery>
-        <!--- <cfdump var="#qryGetCategory#" abort="true"> --->
-        <cfloop query="qryGetCategory">
-            <cfset events = arraynew(1)>
-            <cfset events['catName'] = qryGetCategory.categoryName>
-            <cfset  events['subCat'] =   getCategory(qryGetCategory.PkCategoryId, events['catName'])>
-            <cfif arraylen(arguments.parentName)>
-                <cfset  events['catName']  = arguments.parentName & '->' & qryGetCategory.categoryName>
-            </cfif>
-            <!--- <cfset arrayAppend(getCategory.PkCategoryId,catName, arguments.returnArray)> --->
-            <cfset arrayAppend(arguments.returnArray,events)>
-            <!--- <cfset getCat = this.getCategory(getCategory.PkCategoryId,catName, arguments.returnArray) /> --->
-            <cfreturn arguments.returnArray>
-        </cfloop>
-    </cffunction>
-    <cfdump var="#getCategory#" abort="true">
-</cfif> --->
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
+ <cfset res = getCategoryResult(0,"",[])>
+    <!--- <cfdump var="#res#" abort="true"> --->
+</cfif>
+
+<!--- <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
     <cffunction name="getParentCategory" access="public" returntype="any">
         <cfquery name="getParentCategory">
             SELECT categoryName, PkCategoryId FROM Category 
@@ -305,7 +309,7 @@
         </cfloop> --->
     </cffunction>
     <cfdump var="#getCategory#" abort="true">
-</cfif>
+</cfif> --->
 <cfif structKeyExists(url, 'delPkProductId') AND url.delPkProductId GT 0>
         <cfquery name="removeImage">
             SELECT PkProductId, productImage FROM product 
