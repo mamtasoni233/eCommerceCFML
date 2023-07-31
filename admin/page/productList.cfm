@@ -384,11 +384,10 @@
         $.ajax({    
                 type: "GET",
                 url: "../ajaxAddProduct.cfm?formAction=getCategory", 
-                dataType: "html",   
-               /*  data: parentCatId,   */        
+                dataType: "html",           
                 success: function(result){
-                    console.log(result);
-                   // let dataRecord = JSON.parse(result);
+                    console.log("result", result);
+                    // let dataRecord = JSON.parse(result);
                     if (result.success) {
                         $('#category').html('');
                         var html = "";
