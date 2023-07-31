@@ -82,7 +82,7 @@
                         </a>
                     </li>
                     <li class="sidebar-item <cfif pg EQ 'product'>active</cfif>">
-                        <a href="index.cfm?pg=product" class="sidebar-link">
+                        <a href="index.cfm?pg=product&s=productList" class="sidebar-link">
                             <i class="bi bi-grid-fill"></i>
                             <span>Product</span>
                         </a>

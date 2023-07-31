@@ -1,5 +1,4 @@
-<!--- <cfheader statuscode="200" statustext="OK" />
-<cfcontent reset="true" type="application/json" /> --->
+
 <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
 <cfcontent reset="true" type="application/json" />
@@ -229,5 +228,20 @@
         <cfset arrayAppend(data['data'], dataRecord)>
     </cfloop>
 </cfif>
+<cfif structKeyExists(url, 'delPkCategoryId') AND url.delPkCategoryId GT 0>
+        <cfquery name="removeImage">
+            SELECT PkCategoryId, categoryImage FROM Category 
+            WHERE PkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+
+        <cfif fileExists("#ExpandPath('./assets/categoryImage/')##removeImage.categoryImage#")>
+            <cffile action="delete" file="#ExpandPath('./assets/categoryImage/')##removeImage.categoryImage#">
+        </cfif>
+        <cfquery result="deleteCategoryData">
+            UPDATE category SET
+            isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
+            WHERE PkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+    </cfif>
 <cfset output = serializeJson(data) />
 <cfoutput>#rereplace(output,'//','')#</cfoutput>
