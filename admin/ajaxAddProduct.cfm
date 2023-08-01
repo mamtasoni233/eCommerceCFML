@@ -89,7 +89,7 @@
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getProductDataRows">
-        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productName, P.productPrice, P.productImage, P.isActive, P.createdBy, P.updatedBy, P.dateCreated, P.dateUpdated, P.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
+        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName, P.productPrice, P.productImage, P.isActive, P.createdBy, P.updatedBy, P.dateCreated, P.dateUpdated, P.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM product P
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN users U ON P.createdBy = U.PkUserId
@@ -111,7 +111,7 @@
         </cfif>
     </cfquery>
     <cfquery name="getProductData">
-        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productName, P.productPrice, P.productImage, P.isActive, P.createdBy, P.updatedBy, P.dateCreated, P.dateUpdated, P.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
+        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productName,P.productQty, P.productPrice, P.productImage, P.isActive, P.createdBy, P.updatedBy, P.dateCreated, P.dateUpdated, P.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM product P
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN users U ON P.createdBy = U.PkUserId
@@ -144,7 +144,7 @@
 
         <cfset dataRecord['PkProductId'] = getProductData.PkProductId>
         <cfset dataRecord['productName'] = getProductData.productName>
-        <cfset dataRecord['FkCategoryId'] = getProductData.FkCategoryId>
+        <cfset dataRecord['categoryName'] = getProductData.categoryName>
         <cfset dataRecord['productQty'] = getProductData.productQty>
         <cfset dataRecord['productPrice'] = getProductData.productPrice>
         <cfset dataRecord['productImage'] = getProductData.productImage>
@@ -184,14 +184,15 @@
     <cfelse>
         <cfset isActive = form.isActive>
     </cfif>
-    <cfset catId = 0>
+    <cfset productId = 0>
 
     <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
-        <cfset catId = url.PkProductId>
+        
+        <cfset productId = url.PkProductId>
         <cfquery name="updateproductData">
             UPDATE product SET
             productName = <cfqueryparam value = "#form.productName#" cfsqltype = "cf_sql_varchar">
-            , FkCategoryId =  <cfqueryparam value = "#form.FkCategoryId#" cfsqltype = "cf_sql_integer">
+            , FkCategoryId =  <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
             , productPrice =  <cfqueryparam value = "#form.productPrice#" cfsqltype = "cf_sql_float">
             , productQty =  <cfqueryparam value = "#form.productQty#" cfsqltype = "cf_sql_integer">
             , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
@@ -200,8 +201,9 @@
             WHERE PkProductId = <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
         </cfquery>
     <cfelse>
+        <!--- <cfdump var="#form#" abort="true"> --->
         <cfquery result="addProductData">
-            INSERT INTO category (
+            INSERT INTO product (
                 productName
                 , FkCategoryId
                 , productPrice
@@ -211,7 +213,7 @@
                 , dateCreated
             ) VALUES (
                 <cfqueryparam value = "#form.productName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.FkCategoryId#" cfsqltype = "cf_sql_integer">
+                , <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
                 ,  <cfqueryparam value = "#form.productPrice#" cfsqltype = "cf_sql_float">
                 , <cfqueryparam value = "#form.productQty#" cfsqltype = "cf_sql_integer">
                 , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
@@ -255,61 +257,12 @@
 </cfif>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
- <cfset res = getCategoryResult(0,"",[])>
+    <cfset data = getCategoryResult(0,"",[])>
+    <!--- <cfset data = serializeJson(res) /> --->
+    <!--- <cfoutput>#serializeJson(res)#</cfoutput> --->
     <!--- <cfdump var="#res#" abort="true"> --->
 </cfif>
 
-<!--- <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
-    <cffunction name="getParentCategory" access="public" returntype="any">
-        <cfquery name="getParentCategory">
-            SELECT categoryName, PkCategoryId FROM Category 
-            WHERE 
-                parentCategoryId = <cfqueryparam value="0" cfsqltype="cf_sql_integer"> 
-                AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-        </cfquery>
-        <cfreturn getParentCategory />
-    </cffunction>
-    <cffunction name="getCategory" access="public" returntype="array">
-        <cfargument name="parentId" required="false" type="numeric" default="0"/>
-        <cfargument name="parentName" required="false" type="string" default=""/>
-        <cfargument name="returnArray" required="false" type="array" default=""/>
-        <cfquery name="getCategory">
-            SELECT categoryName, PkCategoryId FROM Category 
-            WHERE 
-                parentCategoryId = #arguments.parentId# 
-                AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-        </cfquery>
-       <!---  <cfset events = arraynew(1)>
-        <cfloop query="getCategory">
-            <cfset events[getCategory.currentrow] = structnew()>
-            <cfset events[getCategory.currentrow].catName = getCategory.category>
-            <cfif arraylen(arguments.parentName)>
-                <cfset catName = arguments.parentName & '->' & getCategory.categoryName>
-            </cfif>
-            <cfset arrayAppend(events, {id: getCategory.PkCategoryId, name: catName})>
-            <cfset events = getParentCategory(getCategory.PkCategoryId, catName, arguments.returnArray)>
-        </cfloop>
-
-        <cfreturn events> --->
-         <cfloop query="getCategory">
-            <cfset catName = getCategory.categoryName>
-            <cfif arraylen(arguments.parentName)>
-                <cfset catName = arguments.parentName & '->' & getCategory.categoryName>
-            </cfif>
-            <cfset arrayAppend(arguments.returnArray, {id: getCategory.PkCategoryId, name: catName})>
-            <cfset getCat = this.getParentCategory(getCategory.PkCategoryId,catName, arguments.returnArray) />
-        </cfloop>
-    <cfreturn arguments.returnArray>
-        <!---  <cfset data['data'] = []>
-        <cfloop query="getCategory">
-            <cfset dataRecord = {}>
-            <cfset dataRecord['PkCategoryId'] = getCategory.PkCategoryId>
-            <cfset dataRecord['categoryName'] = getCategory.categoryName>
-            <cfset arrayAppend(data['data'], dataRecord)>
-        </cfloop> --->
-    </cffunction>
-    <cfdump var="#getCategory#" abort="true">
-</cfif> --->
 <cfif structKeyExists(url, 'delPkProductId') AND url.delPkProductId GT 0>
         <cfquery name="removeImage">
             SELECT PkProductId, productImage FROM product 

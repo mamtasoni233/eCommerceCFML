@@ -63,7 +63,7 @@
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="category">Category Name</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <select name="category" id="category" class="form-control-xl" change="category()">
+                                            <select name="category" id="category" class="form-control-xl" >
                                             </select>
                                         </div>
                                     </div>
@@ -184,7 +184,7 @@
                 { data: 'productName'},
                 { data: 'categoryName' },
                 { data: 'productQty' },
-                { data: 'producPrice' },
+                { data: 'productPrice' },
                 { data: 'productImage',
                     render: function(data, display, row) {
                         var returnStr = '';
@@ -220,7 +220,7 @@
         $("#addProduct").on("click", function () {
             $("#addProductData").modal('show');
             $('#PkProductId').val(0);
-            getProduct();
+            getCategory();
         });
         $("#addProductForm").validate({
             rules: {
@@ -249,7 +249,7 @@
                 $(element).removeClass('is-invalid');
             },
             submitHandler: function (form) {
-                /* form.preventDefault(); */
+                event.preventDefault();
                 var formData = new FormData($('#addProductForm')[0]);
                 $.ajax({
                     type: "POST",
@@ -259,9 +259,13 @@
                     processData: false, //this is required please see answers above
                     success: function(result) {
                         successToast("Category Add!","Category Successfully Added");
-                        setTimeout(() => {
-                            location.href = 'index.cfm?pg=category&s=categoryList';
-                        }, 1000);
+                        $("#addProductData").modal('hide');
+                        $('#addProductData').on('hidden.bs.modal', function () {
+                            $("#addProductForm").trigger('reset');
+                            $('#imgPreview').attr('src', '');
+                            $("#category").val(''); 
+                        });
+                        $('#productDataTable').DataTable().ajax.reload();   
                     }
                 });
             }, 
@@ -289,6 +293,8 @@
                     if (result.success) {
                         $("#PkProductId").val(result.json.PkProductId);
                         $('#productName').val(result.json.productName);
+                        $('#productPrice').val(result.json.productPrice);
+                        $('#productQty').val(result.json.productQty);
                         let imgSrc = '../assets/productImage/' + result.json.productImage;
                         $('#imgPreview').attr('src', imgSrc);
                         if(result.json.isActive == 1){ 
@@ -296,8 +302,9 @@
                         } else{
                             $('#isActive').prop('checked', false);
                         }
-                        if(result.json.categoryId > 0){ 
-                            getProduct(result.json.categoryId);
+                        // $('#category').val(result.json.FkCategoryId);
+                        if(result.json.FkCategoryId > 0){ 
+                            getCategory(result.json.FkCategoryId);
                         }
                         $('#addProductData').on('hidden.bs.modal', function () {
                             $("#addProductForm").trigger('reset');
@@ -324,7 +331,7 @@
                         url: '../ajaxAddProduct.cfm?delPkProductId='+id, 
                         type: 'GET',  
                         success: function(data) {
-                            infoToast("Deleted!","Product Deleted Successfully");
+                            dangerToast("Deleted!","Product Deleted Successfully");
                             $('#productDataTable').DataTable().ajax.reload();               
                         }  
                     });
@@ -350,7 +357,7 @@
                             type: 'POST',  
                             success: function(data) {
                                /*  toast("Deactivated", "Permission Deactivated Successfully", "error"); */
-                                infoToast("Deactivated!","Product Deactivated Successfully");
+                                dangerToast("Deactivated!","Product Deactivated Successfully");
                                 $('#productDataTable').DataTable().ajax.reload();                       
                             }  
                         });
@@ -380,29 +387,32 @@
             }
         });
     });
-    function getProduct() {
+    function getCategory(catId=0) {
         $.ajax({    
                 type: "GET",
                 url: "../ajaxAddProduct.cfm?formAction=getCategory", 
-                dataType: "html",           
-                success: function(result){
-                    console.log("result", result);
-                    // let dataRecord = JSON.parse(result);
-                    if (result.success) {
+                dataType: "html",  
+                data: catId,         
+                success: function(data){
+                    // console.log("data", data);
+                    let dataRecord = JSON.parse(data);
+                    // console.log(dataRecord);
+                    // console.log( dataRecord.success);
+                    // if (dataRecord.success) {
                         $('#category').html('');
                         var html = "";
-                        var html = "<option value='0'>Select Category</option>";
-                        for (var i = 0; i < result.length; i++) {
-                            html += "<option value="+result[i].PkCategoryId+" >"+result[i].categoryName+"</option>";
+                        var html = "<option>Select Category</option>";
+                        for (var i = 0; i < dataRecord.length; i++) {
+                            html += "<option value="+dataRecord[i].PKCATEGORYID+" >"+dataRecord[i].CATNAME+"</option>";
                         }
                         $('#category').append(html);
-                        /* if (parentCatId > 0) {
-                            $('#category').val(parentCatId);
+                        
+                        if (catId > 0) {
+                            $('#category').val(catId);
                         } else {
-                            $('#category').val(0);
-
-                        } */
-                    }
+                            $('#category').val();
+                        }
+                    // }
                     
                 }
             }); 

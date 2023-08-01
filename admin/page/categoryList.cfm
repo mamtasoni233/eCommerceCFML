@@ -60,14 +60,13 @@
                                     <i data-feather="x"></i>
                                 </button>
                             </div>
-                            <form class="form p-3" id="addCategoryForm" method="POST" action="" enctype="multipart/form-data">
+                            <form class="form p-3" id="addCategoryForm" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" id="PkCategoryId" value="" name="PkCategoryId">
                                 <div class="row g-3">
                                     <div class="col-md-12">
-                                        <lable class="fw-bold form-label" for="parentCategory">Category Name</lable>
+                                        <lable class="fw-bold form-label" for="parentCategory">Parent Category Name</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <!--- <label class="input-group-text" for="parentCategory"><i class="bi bi-shop"></i></label> --->
-                                            <select name="parentCategory" id="parentCategory" class="form-control-xl" change="category()">
+                                            <select name="parentCategory" id="parentCategory" class="form-control-xl">
                                                 <!--- <option selected value='0'>Select As A Parent</option> --->
                                             </select>
                                         </div>
@@ -237,7 +236,8 @@
                 $(element).removeClass('is-invalid');
             },
             submitHandler: function (form) {
-                /* form.preventDefault(); */
+                // form.preventDefault();
+                event. preventDefault();
                 var formData = new FormData($('#addCategoryForm')[0]);
                 $.ajax({
                     type: "POST",
@@ -247,9 +247,16 @@
                     processData: false, //this is required please see answers above
                     success: function(result) {
                         successToast("Category Add!","Category Successfully Added");
-                        setTimeout(() => {
-                            location.href = 'index.cfm?pg=category&s=categoryList';
-                        }, 1000);
+                        // setTimeout(() => {
+                        //     location.href = 'index.cfm?pg=category&s=categoryList';
+                        // }, 1000);
+                        $("#addCategoryData").modal('hide');
+                        $('#addCategoryData').on('hidden.bs.modal', function () {
+                            $("#addCategoryForm").trigger('reset');
+                            $('#imgPreview').attr('src', '');
+                            $("#parentCategory").val(''); 
+                        });
+                        $('#categoryDataTable').DataTable().ajax.reload();    
                     }
                 });
             }, 
@@ -344,7 +351,7 @@
                         url: '../ajaxAddCategory.cfm?delPkCategoryId='+id, 
                         type: 'GET',  
                         success: function(data) {
-                            infoToast("Deleted!","Category Deleted Successfully");
+                            dangerToast("Deleted!","Category Deleted Successfully");
                             $('#categoryDataTable').DataTable().ajax.reload();               
                         }  
                     });
@@ -370,7 +377,7 @@
                             type: 'POST',  
                             success: function(data) {
                                /*  toast("Deactivated", "Permission Deactivated Successfully", "error"); */
-                                infoToast("Deactivated!","Category Deactivated Successfully");
+                                dangerToast("Deactivated!","Category Deactivated Successfully");
                                 $('#categoryDataTable').DataTable().ajax.reload();                       
                             }  
                         });
@@ -391,7 +398,6 @@
                             type: 'POST',  
                             success: function(data) {
                                 successToast("Activated!","Category Activated Successfully");
-                                //toast("Activated", "Permission Activated Successfully", "success");
                                 $('#categoryDataTable').DataTable().ajax.reload();                       
                             }  
                         });
@@ -401,7 +407,6 @@
         });
     });
     function getParentCategory(parentCatId=0) {
-        console.log("arguments", arguments);
         $.ajax({    
                 type: "GET",
                 url: "../ajaxAddCategory.cfm?formAction=getCategory", 
@@ -422,7 +427,6 @@
                             $('#parentCategory').val(parentCatId);
                         } else {
                             $('#parentCategory').val(0);
-
                         }
                     }
                     

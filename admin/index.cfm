@@ -37,6 +37,11 @@
             <script src="./assets/extensions/jquery/jquery.min.js"></script>
             <!--- js --->
             <script src="./assets/static/js/initTheme.js"></script>
+            <style>
+                .table.dataTable{
+                    width: 100% !important;
+                }
+            </style>
         </head>
         <body>
             <div id="app">

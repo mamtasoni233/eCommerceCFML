@@ -70,7 +70,7 @@
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
-                    OR C.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR C1.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR C2.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
@@ -91,7 +91,7 @@
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
-                    OR C.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR C1.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR C2.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
@@ -153,6 +153,7 @@
     <cfset catId = 0>
 
     <cfif structKeyExists(url, "PkCategoryId") AND url.PkCategoryId GT 0>
+        <!--- <cfdump var="#form#" abort="true"> --->
         <cfset catId = url.PkCategoryId>
         <cfquery name="updateCategoryData">
             UPDATE category SET
