@@ -86,13 +86,23 @@
                                             <input type="file" class="form-control form-control-xl" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend">
                                         </div>
                                         <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
+                                        <div class="form-check removeImageContainer d-none">
+                                            <div class="checkbox">
+                                                <input type="checkbox" id="removeImage" name="removeImage" class="form-check-input" value="1" />
+                                                <label class="form-label text-dark font-weight-bold" for="removeImage">
+                                                    Remove Image
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-12 mb-2">
-                                        <label class="form-label text-dark font-weight-bold" for="isActive">Is Active :
-                                        </label>
-                                        <span class="mt-1">
-                                            <input type="checkbox" class="ms-2" id="isActive" checked name="isActive" value="1">
-                                        </span>
+                                        <div class="form-check">
+                                            <div class="checkbox">
+                                                <label class="form-label text-dark font-weight-bold" for="isActive">Is Active
+                                                </label>
+                                                <input type="checkbox" class="form-check-input" id="isActive" checked name="isActive" value="1">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -203,11 +213,6 @@
             $("#addCategoryData").modal('show');
             $('#PkCategoryId').val(0);
             getParentCategory();
-            /*  $('#addCategoryData').on('hidden.bs.modal', function () {
-                $("#addCategoryForm").trigger('reset');
-                $('#imgPreview').attr('src', '');
-                $("#parentCategory").val(0).trigger("change"); 
-            }); */
         });
         $("#addCategoryForm").validate({
             rules: {
@@ -236,7 +241,6 @@
                 $(element).removeClass('is-invalid');
             },
             submitHandler: function (form) {
-                // form.preventDefault();
                 event. preventDefault();
                 var formData = new FormData($('#addCategoryForm')[0]);
                 $.ajax({
@@ -247,9 +251,6 @@
                     processData: false, //this is required please see answers above
                     success: function(result) {
                         successToast("Category Add!","Category Successfully Added");
-                        // setTimeout(() => {
-                        //     location.href = 'index.cfm?pg=category&s=categoryList';
-                        // }, 1000);
                         $("#addCategoryData").modal('hide');
                         $('#addCategoryData').on('hidden.bs.modal', function () {
                             $("#addCategoryForm").trigger('reset');
@@ -312,24 +313,26 @@
                 type: "GET",
                 url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
                 success: function(result) {
-                
                     if (result.success) {
+                        var image = result.json.categoryImage;
                         $("#PkCategoryId").val(result.json.PkCategoryId);
                         $('#categoryName').val(result.json.categoryName);
-                        let imgSrc = '../assets/categoryImage/' + result.json.categoryImage;
-                        $('#imgPreview').attr('src', imgSrc);
+                        getParentCategory(result.json.parentCategoryId);
+                        let imgSrc = '../assets/categoryImage//' + result.json.categoryImage;
+                        if (image.length > 0) {
+                            $('#imgPreview').attr('src', imgSrc);
+                            $('.removeImageContainer').removeClass('d-none')
+                        }
                         if(result.json.isActive == 1){ 
                             $('#isActive').prop('checked', true);
                         } else{
                             $('#isActive').prop('checked', false);
                         }
-                        if(result.json.parentCategoryId > 0){ 
-                            getParentCategory(result.json.parentCategoryId);
-                        }
                         $('#addCategoryData').on('hidden.bs.modal', function () {
                             $("#addCategoryForm").trigger('reset');
                             $('#imgPreview').attr('src', '');
                             $("#parentCategory").val(''); 
+                            $('.removeImageContainer').addClass('d-none')
                         });
                     }
                 }   

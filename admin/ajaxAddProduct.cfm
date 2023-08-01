@@ -74,7 +74,7 @@
                 <cfset res.catName = qryGetCategory.categoryName>
                 <cfset res.PkCategoryId = qryGetCategory.PkCategoryId>
                 <cfif len(arguments.parentName) GT 0>
-                    <cfset res.catName  = arguments.parentName & '->' & qryGetCategory.categoryName>
+                    <cfset res.catName  = arguments.parentName & ' -> ' & qryGetCategory.categoryName>
                 </cfif>       
                 <cfset arrayAppend(arguments.returnArray, res)>         
                 <cfset getCategoryResult(qryGetCategory.PkCategoryId, res.catName, arguments.returnArray)>
@@ -257,7 +257,7 @@
 </cfif>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
-    <cfset data = getCategoryResult(0,"",[])>
+    <cfset data['categoryList'] = getCategoryResult(0,"",[])>
     <!--- <cfset data = serializeJson(res) /> --->
     <!--- <cfoutput>#serializeJson(res)#</cfoutput> --->
     <!--- <cfdump var="#res#" abort="true"> --->

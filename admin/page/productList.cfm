@@ -289,22 +289,18 @@
                 type: "GET",
                 url: "../ajaxAddProduct.cfm?PkProductId="+ id,
                 success: function(result) {
-                
                     if (result.success) {
                         $("#PkProductId").val(result.json.PkProductId);
                         $('#productName').val(result.json.productName);
                         $('#productPrice').val(result.json.productPrice);
                         $('#productQty').val(result.json.productQty);
+                        getCategory(result.json.FkCategoryId);
                         let imgSrc = '../assets/productImage/' + result.json.productImage;
                         $('#imgPreview').attr('src', imgSrc);
                         if(result.json.isActive == 1){ 
                             $('#isActive').prop('checked', true);
                         } else{
                             $('#isActive').prop('checked', false);
-                        }
-                        // $('#category').val(result.json.FkCategoryId);
-                        if(result.json.FkCategoryId > 0){ 
-                            getCategory(result.json.FkCategoryId);
                         }
                         $('#addProductData').on('hidden.bs.modal', function () {
                             $("#addProductForm").trigger('reset');
@@ -356,7 +352,6 @@
                             url: '../ajaxAddProduct.cfm?statusId='+id,  
                             type: 'POST',  
                             success: function(data) {
-                               /*  toast("Deactivated", "Permission Deactivated Successfully", "error"); */
                                 dangerToast("Deactivated!","Product Deactivated Successfully");
                                 $('#productDataTable').DataTable().ajax.reload();                       
                             }  
@@ -378,7 +373,6 @@
                             type: 'POST',  
                             success: function(data) {
                                 successToast("Activated!","Category Activated Successfully");
-                                //toast("Activated", "Permission Activated Successfully", "success");
                                 $('#productDataTable').DataTable().ajax.reload();                       
                             }  
                         });
@@ -394,25 +388,21 @@
                 dataType: "html",  
                 data: catId,         
                 success: function(data){
-                    // console.log("data", data);
                     let dataRecord = JSON.parse(data);
-                    // console.log(dataRecord);
-                    // console.log( dataRecord.success);
-                    // if (dataRecord.success) {
+                    if (dataRecord.success) {
                         $('#category').html('');
                         var html = "";
                         var html = "<option>Select Category</option>";
-                        for (var i = 0; i < dataRecord.length; i++) {
-                            html += "<option value="+dataRecord[i].PKCATEGORYID+" >"+dataRecord[i].CATNAME+"</option>";
+                        for (var i = 0; i < dataRecord.categoryList.length; i++) {
+                            html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
                         }
                         $('#category').append(html);
-                        
                         if (catId > 0) {
                             $('#category').val(catId);
                         } else {
                             $('#category').val();
                         }
-                    // }
+                    }
                     
                 }
             }); 

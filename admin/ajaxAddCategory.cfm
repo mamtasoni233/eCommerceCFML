@@ -153,7 +153,6 @@
     <cfset catId = 0>
 
     <cfif structKeyExists(url, "PkCategoryId") AND url.PkCategoryId GT 0>
-        <!--- <cfdump var="#form#" abort="true"> --->
         <cfset catId = url.PkCategoryId>
         <cfquery name="updateCategoryData">
             UPDATE category SET
@@ -187,7 +186,6 @@
         <cfset categoryImagePath = ExpandPath('./assets/categoryImage/')>
         <cffile action="upload" destination="#categoryImagePath#" fileField="categoryImage"  nameconflict="makeunique" result="dataImage">
         <cfset txtcategoryImage = dataImage.serverfile>
-
         <cfquery name="qryGetImageName">
             SELECT categoryImage
             FROM category
@@ -201,7 +199,18 @@
         <cfif len(txtcategoryImage) GT 0>
             <cfquery name="qryCategoryUpdateImg" result="qryResultCategoryUpdateImg">
                 UPDATE category SET
-                categoryImage = <cfqueryparam value="#txtcategoryImage#">
+                categoryImage = <cfqueryparam value="#txtcategoryImage#" cfsqltype = "cf_sql_varchar">
+                WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
+            </cfquery>
+        </cfif>
+        <cfif  structKeyExists(form, "removeImage") AND len(form.removeImage) GT 0>
+            <cfset removeCategoryImage = "">
+            <cfif fileExists("#categoryImagePath##categoryImage#")>
+                <cffile action="delete" file="#categoryImagePath##categoryImage#">
+            </cfif>
+            <cfquery name="qryRemoveImage">
+                UPDATE category SET 
+                categoryImage = <cfqueryparam value = "#removeCategoryImage#" cfsqltype = "cf_sql_varchar">
                 WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
             </cfquery>
         </cfif>
@@ -243,6 +252,7 @@
             isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
             WHERE PkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
-    </cfif>
+</cfif>
+
 <cfset output = serializeJson(data) />
 <cfoutput>#rereplace(output,'//','')#</cfoutput>
