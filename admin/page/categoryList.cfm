@@ -120,6 +120,14 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="row justify-content-end mb-3">
+                        <div class="col-2 ">
+                            <select name="showCatecgory" id="showCatecgory" class="form-control" >
+                                <option value="0">Not Deleted</option>
+                                <option value="1">Deleted</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table" id="categoryDataTable">
                             <thead>
@@ -171,6 +179,7 @@
                     m["length"] = d.length;
                     m["search"] = d.search.value;
                     m["order"] = d.columns[sIdx].data + ' ' + d.order[0].dir;
+                    m["showCatecgory"] = $("#showCatecgory").val();
                     return m;
                 }
             },
@@ -208,6 +217,9 @@
             ],
             
         });
+        $('#showCatecgory').change(function reloadTable() {
+            $('#categoryDataTable').DataTable().ajax.reload();               
+        });
         // open add category model
         $("#addCategory").on("click", function () {
             $("#addCategoryData").modal('show');
@@ -242,24 +254,73 @@
             },
             submitHandler: function (form) {
                 event. preventDefault();
+                var id = $('#PkCategoryId').val();
+                console.log(id);
+                // var removeImageChecked = $('#removeImage').val();
+                var removeImageChecked = $('input:checkbox[name=removeImage]:checked');
                 var formData = new FormData($('#addCategoryForm')[0]);
-                $.ajax({
-                    type: "POST",
-                    url: "../ajaxAddCategory.cfm?PkCategoryId=" + $('#PkCategoryId').val(),
-                    data: formData,
-                    contentType: false, //this is required please see answers above
-                    processData: false, //this is required please see answers above
-                    success: function(result) {
-                        successToast("Category Add!","Category Successfully Added");
-                        $("#addCategoryData").modal('hide');
-                        $('#addCategoryData').on('hidden.bs.modal', function () {
-                            $("#addCategoryForm").trigger('reset');
-                            $('#imgPreview').attr('src', '');
-                            $("#parentCategory").val(''); 
-                        });
-                        $('#categoryDataTable').DataTable().ajax.reload();    
-                    }
-                });
+                if (removeImageChecked.length > 0) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You want to delete image ' ,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc3545',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (!result.isConfirmed == true) {
+                            $('#removeImage').prop('checked', false);
+                        } else{
+                            $('#removeImage').prop('checked', true);
+                            $.ajax({
+                                type: "POST",
+                                url: "../ajaxAddCategory.cfm?PkCategoryId=" + $('#PkCategoryId').val(),
+                                data: formData,
+                                contentType: false, //this is required please see answers above
+                                processData: false, //this is required please see answers above
+                                success: function(result) {
+                                    if (id > 0) {
+                                        successToast("Category Updated!","Category Successfully Updated");
+                                    } else{
+                                        successToast("Category Add!","Category Successfully Added");
+                                    }
+                                    
+                                    $("#addCategoryData").modal('hide');
+                                    $('#addCategoryData').on('hidden.bs.modal', function () {
+                                        $("#addCategoryForm").trigger('reset');
+                                        $('#imgPreview').attr('src', '');
+                                        $("#parentCategory").val(''); 
+                                    });
+                                    $('#categoryDataTable').DataTable().ajax.reload();
+                                }
+                            });
+                        }
+                    });
+                } else{
+
+                    $.ajax({
+                        type: "POST",
+                        url: "../ajaxAddCategory.cfm?PkCategoryId=" + $('#PkCategoryId').val(),
+                        data: formData,
+                        contentType: false, //this is required please see answers above
+                        processData: false, //this is required please see answers above
+                        success: function(result) {
+                            if (id > 0) {
+                                successToast("Category Updated!","Category Successfully Updated");
+                            } else{
+                                successToast("Category Add!","Category Successfully Added");
+                            }
+                            
+                            $("#addCategoryData").modal('hide');
+                            $('#addCategoryData').on('hidden.bs.modal', function () {
+                                $("#addCategoryForm").trigger('reset');
+                                $('#imgPreview').attr('src', '');
+                                $("#parentCategory").val(''); 
+                            });
+                            $('#categoryDataTable').DataTable().ajax.reload();
+                        }
+                    });
+                } 
             }, 
         });
         $('#categoryImage').change(function(){
@@ -379,7 +440,6 @@
                             url: '../ajaxAddCategory.cfm?statusId='+id,  
                             type: 'POST',  
                             success: function(data) {
-                               /*  toast("Deactivated", "Permission Deactivated Successfully", "error"); */
                                 dangerToast("Deactivated!","Category Deactivated Successfully");
                                 $('#categoryDataTable').DataTable().ajax.reload();                       
                             }  

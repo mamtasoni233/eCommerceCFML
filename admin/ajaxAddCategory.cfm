@@ -7,6 +7,7 @@
 <cfparam name="categoryName" default="" />
 <cfparam name="categoryImage" default="" />
 <cfparam name="parentCategory" default="" />
+<cfparam name="showCatecgory" default="" />
 <cfparam name="formAction" default="" />
 
 <cffunction name="convertToObject" access="public" returntype="any" output="false"
@@ -54,19 +55,19 @@
 			return loc.DataArray;
     </cfscript>
 </cffunction>
-
 <cfset data = {}>
 <cfset data['success'] = true>
+<cfset categoryImagePath = ExpandPath('./assets/categoryImage/')>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
+    <!--- <cfdump var="#form#" abort="true"> --->
     <cfquery name="getCategoryDataRows">
         SELECT C1.PkCategoryId, C1.categoryName, C1.parentCategoryId, C1.categoryImage, C1.isActive, C1.createdBy, C1.updatedBy, C1.dateCreated, C1.dateUpdated, C1.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, C2.categoryName AS parentCategoryName
         FROM category C1
         LEFT JOIN category C2 ON C1.parentCategoryId = C2.PkCategoryId
         LEFT JOIN users U ON C1.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON C1.updatedBy = userUpdate.PkUserId
-        WHERE C1.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
-
+        WHERE  C1.isDeleted = <cfqueryparam value="#form.showCatecgory#" cfsqltype = "cf_sql_integer">
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -86,8 +87,7 @@
         LEFT JOIN category C2 ON C1.parentCategoryId = C2.PkCategoryId
         LEFT JOIN users U ON C1.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON C1.updatedBy = userUpdate.PkUserId
-        WHERE C1.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
-
+        WHERE  C1.isDeleted = <cfqueryparam value="#form.showCatecgory#" cfsqltype = "cf_sql_integer">
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -97,6 +97,7 @@
                     OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
+        
         <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
             ORDER BY #form.order#
         </cfif>
@@ -183,7 +184,6 @@
     </cfif>
     <cfif structKeyExists(form, "categoryImage") AND len(form.categoryImage) GT 0>
         <cfset txtcategoryImage = "">
-        <cfset categoryImagePath = ExpandPath('./assets/categoryImage/')>
         <cffile action="upload" destination="#categoryImagePath#" fileField="categoryImage"  nameconflict="makeunique" result="dataImage">
         <cfset txtcategoryImage = dataImage.serverfile>
         <cfquery name="qryGetImageName">
@@ -191,6 +191,7 @@
             FROM category
             WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
         </cfquery>
+        
         <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.categoryImage) GT 0>
             <cfif fileExists("#categoryImagePath##categoryImage#")>
                 <cffile action="delete" file="#categoryImagePath##categoryImage#">
@@ -203,19 +204,19 @@
                 WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
             </cfquery>
         </cfif>
-        <cfif  structKeyExists(form, "removeImage") AND len(form.removeImage) GT 0>
-            <cfset removeCategoryImage = "">
-            <cfif fileExists("#categoryImagePath##categoryImage#")>
-                <cffile action="delete" file="#categoryImagePath##categoryImage#">
-            </cfif>
-            <cfquery name="qryRemoveImage">
-                UPDATE category SET 
-                categoryImage = <cfqueryparam value = "#removeCategoryImage#" cfsqltype = "cf_sql_varchar">
-                WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
-            </cfquery>
+    </cfif>
+    <cfif structKeyExists(form, "removeImage")>
+        <cfif fileExists("#categoryImagePath##categoryImage#")>
+            <cffile action="delete" file="#categoryImagePath##categoryImage#">
         </cfif>
+        <cfquery name="qryRemoveImage">
+            UPDATE category SET 
+            categoryImage = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
+            WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
+        </cfquery>
     </cfif>
 </cfif>
+
 <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
     <cfquery name="changeStatus">
         UPDATE category SET
@@ -243,7 +244,6 @@
             SELECT PkCategoryId, categoryImage FROM Category 
             WHERE PkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
-
         <cfif fileExists("#ExpandPath('./assets/categoryImage/')##removeImage.categoryImage#")>
             <cffile action="delete" file="#ExpandPath('./assets/categoryImage/')##removeImage.categoryImage#">
         </cfif>
@@ -251,6 +251,11 @@
             UPDATE category SET
             isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
             WHERE PkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+        <cfquery result="deleteParentCategoryData">
+            UPDATE category SET
+            isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
+            WHERE parentCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
 </cfif>
 

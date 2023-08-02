@@ -9,6 +9,7 @@
 <cfparam name="productQty" default="" />
 <cfparam name="productImage" default="" />
 <cfparam name="productPrice" default="" />
+<cfparam name="showProduct" default="" />
 <cfparam name="formAction" default="" />
 
 <cffunction name="convertToObject" access="public" returntype="any" output="false"
@@ -86,6 +87,7 @@
 
 <cfset data = {}>
 <cfset data['success'] = true>
+<cfset productImagePath = ExpandPath('./assets/productImage/')>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getProductDataRows">
@@ -94,7 +96,7 @@
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN users U ON P.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON P.updatedBy = userUpdate.PkUserId
-        WHERE P.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+        WHERE P.isDeleted = <cfqueryparam value="#form.showProduct#" cfsqltype = "cf_sql_integer">
 
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -116,7 +118,7 @@
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN users U ON P.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON P.updatedBy = userUpdate.PkUserId
-        WHERE P.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+        WHERE P.isDeleted = <cfqueryparam value="#form.showProduct#" cfsqltype = "cf_sql_integer">
 
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -201,7 +203,6 @@
             WHERE PkProductId = <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
         </cfquery>
     <cfelse>
-        <!--- <cfdump var="#form#" abort="true"> --->
         <cfquery result="addProductData">
             INSERT INTO product (
                 productName
@@ -225,7 +226,6 @@
     </cfif>
     <cfif structKeyExists(form, "productImage") AND len(form.productImage) GT 0>
         <cfset txtproductImage = "">
-        <cfset productImagePath = ExpandPath('./assets/productImage/')>
         <cffile action="upload" destination="#productImagePath#" fileField="productImage"  nameconflict="makeunique" result="dataImage">
         <cfset txtproductImage = dataImage.serverfile>
 
@@ -234,6 +234,7 @@
             FROM product
             WHERE PkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
         </cfquery>
+
         <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.productImage) GT 0>
             <cfif fileExists("#productImagePath##productImage#")>
                 <cffile action="delete" file="#productImagePath##productImage#">
@@ -247,6 +248,16 @@
             </cfquery>
         </cfif>
     </cfif>
+    <cfif structKeyExists(form, "removeImage")>
+        <cfif fileExists("#productImagePath##productImage#")>
+            <cffile action="delete" file="#productImagePath##productImage#">
+        </cfif>
+        <cfquery name="qryRemoveImage">
+            UPDATE product SET 
+            productImage = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
+            WHERE PkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+    </cfif>
 </cfif>
 <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
     <cfquery name="changeStatus">
@@ -258,9 +269,6 @@
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
     <cfset data['categoryList'] = getCategoryResult(0,"",[])>
-    <!--- <cfset data = serializeJson(res) /> --->
-    <!--- <cfoutput>#serializeJson(res)#</cfoutput> --->
-    <!--- <cfdump var="#res#" abort="true"> --->
 </cfif>
 
 <cfif structKeyExists(url, 'delPkProductId') AND url.delPkProductId GT 0>

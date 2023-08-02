@@ -100,6 +100,14 @@
                                             <input type="file" class="form-control form-control-xl" name="productImage" id="productImage"  aria-describedby="inputGroupPrepend">
                                         </div>
                                         <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
+                                        <div class="form-check removeImageContainer d-none">
+                                            <div class="checkbox">
+                                                <input type="checkbox" id="removeImage" name="removeImage" class="form-check-input" value="1" />
+                                                <label class="form-label text-dark font-weight-bold" for="removeImage">
+                                                    Remove Image
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-12 mb-2">
                                         <label class="form-label text-dark font-weight-bold" for="isActive">Is Active :
@@ -124,6 +132,14 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="row justify-content-end mb-3">
+                        <div class="col-2 ">
+                            <select name="showProduct" id="showProduct" class="form-control" >
+                                <option value="0">Not Deleted</option>
+                                <option value="1">Deleted</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table" id="productDataTable">
                             <thead>
@@ -177,6 +193,7 @@
                     m["length"] = d.length;
                     m["search"] = d.search.value;
                     m["order"] = d.columns[sIdx].data + ' ' + d.order[0].dir;
+                    m["showProduct"] = $("#showProduct").val();
                     return m;
                 }
             },
@@ -216,6 +233,9 @@
             ],
             
         });
+        $('#showProduct').change(function reloadTable() {
+            $('#productDataTable').DataTable().ajax.reload();               
+        });
         // open add category model
         $("#addProduct").on("click", function () {
             $("#addProductData").modal('show');
@@ -251,23 +271,67 @@
             submitHandler: function (form) {
                 event.preventDefault();
                 var formData = new FormData($('#addProductForm')[0]);
-                $.ajax({
-                    type: "POST",
-                    url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
-                    data: formData,
-                    contentType: false, //this is required please see answers above
-                    processData: false, //this is required please see answers above
-                    success: function(result) {
-                        successToast("Category Add!","Category Successfully Added");
-                        $("#addProductData").modal('hide');
-                        $('#addProductData').on('hidden.bs.modal', function () {
-                            $("#addProductForm").trigger('reset');
-                            $('#imgPreview').attr('src', '');
-                            $("#category").val(''); 
-                        });
-                        $('#productDataTable').DataTable().ajax.reload();   
-                    }
-                });
+                var id = $('#PkProductId').val();
+                var removeImageChecked = $('input:checkbox[name=removeImage]:checked');
+                if (removeImageChecked.length > 0) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You want to delete image ' ,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc3545',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (!result.isConfirmed == true) {
+                            $('#removeImage').prop('checked', false);
+                        } else{
+                            $('#removeImage').prop('checked', true);
+                            $.ajax({
+                                type: "POST",
+                                url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
+                                data: formData,
+                                contentType: false, //this is required please see answers above
+                                processData: false, //this is required please see answers above
+                                success: function(result) {
+                                    if (id > 0) {
+                                        successToast("Category Updated!","Category Successfully Updated");
+                                    } else{
+                                        successToast("Category Add!","Category Successfully Added");
+                                    }
+                                    $("#addProductData").modal('hide');
+                                    $('#addProductData').on('hidden.bs.modal', function () {
+                                        $("#addProductForm").trigger('reset');
+                                        $('#imgPreview').attr('src', '');
+                                        $("#category").val(''); 
+                                    });
+                                    $('#productDataTable').DataTable().ajax.reload();   
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
+                        data: formData,
+                        contentType: false, //this is required please see answers above
+                        processData: false, //this is required please see answers above
+                        success: function(result) {
+                            if (id > 0) {
+                                successToast("Category Updated!","Category Successfully Updated");
+                            } else{
+                                successToast("Category Add!","Category Successfully Added");
+                            }
+                            $("#addProductData").modal('hide');
+                            $('#addProductData').on('hidden.bs.modal', function () {
+                                $("#addProductForm").trigger('reset');
+                                $('#imgPreview').attr('src', '');
+                                $("#category").val(''); 
+                            });
+                            $('#productDataTable').DataTable().ajax.reload();   
+                        }
+                    });
+                }
             }, 
         });
         $('#productImage').change(function(){
@@ -290,13 +354,17 @@
                 url: "../ajaxAddProduct.cfm?PkProductId="+ id,
                 success: function(result) {
                     if (result.success) {
+                        var image = result.json.productImage;
                         $("#PkProductId").val(result.json.PkProductId);
                         $('#productName').val(result.json.productName);
                         $('#productPrice').val(result.json.productPrice);
                         $('#productQty').val(result.json.productQty);
                         getCategory(result.json.FkCategoryId);
                         let imgSrc = '../assets/productImage/' + result.json.productImage;
-                        $('#imgPreview').attr('src', imgSrc);
+                        if (image.length > 0) {
+                            $('#imgPreview').attr('src', imgSrc);
+                            $('.removeImageContainer').removeClass('d-none')
+                        }
                         if(result.json.isActive == 1){ 
                             $('#isActive').prop('checked', true);
                         } else{
