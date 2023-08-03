@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 31, 2023 at 01:31 PM
+-- Generation Time: Aug 03, 2023 at 09:02 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -45,18 +45,22 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `categoryImage`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 0, 'Home', '', b'1', b'0', '2023-07-24 12:14:41', 1, '2023-07-28 17:58:14', 1),
-(2, 9, 'TV', '', b'1', b'0', '2023-07-24 15:47:11', 1, '2023-07-28 17:30:05', 1),
-(3, 8, 'Beauty product', '', b'0', b'0', '2023-07-24 16:04:14', 1, '2023-07-28 17:14:44', 1),
-(4, 1, 'Furniture', 'avatar-4_1tigshcerrzl8.jpg', b'1', b'0', '2023-07-24 18:05:26', 1, '2023-07-28 17:30:46', 1),
-(5, 1, 'abcd', '1.png', b'1', b'0', '2023-07-24 18:11:42', 1, '2023-07-28 17:28:42', 1),
-(6, 0, 'School', '', b'1', b'0', '2023-07-24 18:27:35', 1, '2023-07-28 17:31:41', 1),
-(7, 9, 'Mobile', 'avatar-3_1sojrdx0fndgj.jpg', b'1', b'0', '2023-07-24 18:32:19', 1, '2023-07-28 17:30:29', 1),
-(8, 0, 'Beauty & Health', '1_1ey1danqrstgp.jpg', b'1', b'0', '2023-07-27 15:30:15', 1, '2023-07-27 18:10:59', 1),
-(9, 0, 'Electronics', NULL, b'1', b'0', '2023-07-27 16:13:37', 1, '2023-07-28 17:29:50', 1),
-(10, 0, 'school bag', '1_1e25zkoxyvd79.png', b'0', b'0', '2023-07-27 16:13:42', 1, '2023-07-31 10:38:33', 1),
-(11, 8, 'Face Cream', NULL, b'0', b'0', '2023-07-27 16:13:47', 1, '2023-07-31 12:16:16', 1),
-(12, 8, 'Home Decore12', NULL, b'0', b'1', '2023-07-28 15:03:24', 1, '2023-07-31 12:16:30', 1);
+(1, 0, 'Home', 'portfolio-1_oc0ov0wstuhp.jpg', b'1', b'0', '2023-07-24 12:14:41', 1, '2023-08-02 12:34:48', 1),
+(2, 9, 'TV', '12_o900z4cfhcl4.jpg', b'1', b'0', '2023-07-24 15:47:11', 1, '2023-08-02 15:25:07', 1),
+(3, 8, 'Beauty product', '', b'0', b'0', '2023-07-24 16:04:14', 1, '2023-08-03 10:25:25', 1),
+(4, 1, 'Furniture', '', b'1', b'0', '2023-07-24 18:05:26', 1, '2023-08-03 10:24:35', 1),
+(5, 6, 'abcd', '5_1x40qld4syum2.png', b'1', b'0', '2023-07-24 18:11:42', 1, '2023-08-02 12:33:26', 1),
+(6, 0, 'School', '', b'1', b'0', '2023-07-24 18:27:35', 1, '2023-08-02 12:49:42', 1),
+(7, 9, 'Mobile', '3_1ikjcira4aia3.jpg', b'1', b'1', '2023-07-24 18:32:19', 1, '2023-08-02 14:54:39', 1),
+(8, 0, 'Beauty & Health', '', b'1', b'0', '2023-07-27 15:30:15', 1, '2023-08-02 12:37:15', 1),
+(9, 0, 'Electronics', '1_1nf439uu5idfc.jpg', b'1', b'0', '2023-07-27 16:13:37', 1, '2023-08-03 10:24:52', 1),
+(10, 6, 'school bag', '', b'1', b'1', '2023-07-27 16:13:42', 1, '2023-08-03 10:31:15', 1),
+(11, 8, 'Face Cream', '13_1q9zoladypwvh.jpg', b'0', b'0', '2023-07-27 16:13:47', 1, '2023-08-03 10:25:12', 1),
+(12, 8, 'Home Decore12', NULL, b'1', b'0', '2023-07-28 15:03:24', 1, '2023-08-02 14:54:03', 1),
+(13, 1, 'Photo Frame', '6_le35filfgnfm.png', b'1', b'0', '2023-08-01 10:10:48', 1, '2023-08-02 12:33:34', 1),
+(14, 0, 'XYZ', '1_ykx6dpl6qte6.jpg', b'1', b'1', '2023-08-01 10:56:25', 1, '2023-08-02 14:54:49', 1),
+(15, 14, 'XYZ423453', NULL, b'1', b'1', '2023-08-02 14:53:01', 1, '2023-08-02 14:54:49', NULL),
+(16, 14, 'hikuyio', NULL, b'1', b'1', '2023-08-02 14:53:10', 1, '2023-08-02 14:54:49', NULL);
 
 -- --------------------------------------------------------
 
@@ -107,6 +111,16 @@ CREATE TABLE `product` (
   `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `updatedBy` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `productPrice`, `productQty`, `productImage`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(1, 13, 'Wooden Frame', 500, 10, '12.jpg', b'1', b'0', '2023-08-01 12:27:41', 1, '2023-08-01 12:47:26', 1),
+(2, 10, 'Red Color School Beg', 1000, 10, '1.png', b'1', b'1', '2023-08-01 12:43:49', 1, '2023-08-03 10:31:15', 1),
+(3, 3, 'Foundation', 3500, 2, NULL, b'1', b'0', '2023-08-01 12:44:18', 1, '2023-08-01 14:28:50', 1),
+(4, 2, 'Sony 4K Smart TV', 55000, 15, '1_srm5rwpq0qpx.png', b'1', b'0', '2023-08-01 12:45:31', 1, '2023-08-03 10:35:44', 1);
 
 -- --------------------------------------------------------
 
@@ -261,7 +275,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -273,7 +287,7 @@ ALTER TABLE `courses`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `publisher`
