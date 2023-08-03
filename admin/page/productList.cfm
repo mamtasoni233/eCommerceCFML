@@ -270,8 +270,6 @@
             },
             submitHandler: function (form) {
                 event.preventDefault();
-                var formData = new FormData($('#addProductForm')[0]);
-                var id = $('#PkProductId').val();
                 var removeImageChecked = $('input:checkbox[name=removeImage]:checked');
                 if (removeImageChecked.length > 0) {
                     Swal.fire({
@@ -286,51 +284,11 @@
                             $('#removeImage').prop('checked', false);
                         } else{
                             $('#removeImage').prop('checked', true);
-                            $.ajax({
-                                type: "POST",
-                                url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
-                                data: formData,
-                                contentType: false, //this is required please see answers above
-                                processData: false, //this is required please see answers above
-                                success: function(result) {
-                                    if (id > 0) {
-                                        successToast("Category Updated!","Category Successfully Updated");
-                                    } else{
-                                        successToast("Category Add!","Category Successfully Added");
-                                    }
-                                    $("#addProductData").modal('hide');
-                                    $('#addProductData').on('hidden.bs.modal', function () {
-                                        $("#addProductForm").trigger('reset');
-                                        $('#imgPreview').attr('src', '');
-                                        $("#category").val(''); 
-                                    });
-                                    $('#productDataTable').DataTable().ajax.reload();   
-                                }
-                            });
+                            submitProductData();
                         }
                     });
                 } else {
-                    $.ajax({
-                        type: "POST",
-                        url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
-                        data: formData,
-                        contentType: false, //this is required please see answers above
-                        processData: false, //this is required please see answers above
-                        success: function(result) {
-                            if (id > 0) {
-                                successToast("Category Updated!","Category Successfully Updated");
-                            } else{
-                                successToast("Category Add!","Category Successfully Added");
-                            }
-                            $("#addProductData").modal('hide');
-                            $('#addProductData').on('hidden.bs.modal', function () {
-                                $("#addProductForm").trigger('reset');
-                                $('#imgPreview').attr('src', '');
-                                $("#category").val(''); 
-                            });
-                            $('#productDataTable').DataTable().ajax.reload();   
-                        }
-                    });
+                    submitProductData();
                 }
             }, 
         });
@@ -451,29 +409,54 @@
     });
     function getCategory(catId=0) {
         $.ajax({    
-                type: "GET",
-                url: "../ajaxAddProduct.cfm?formAction=getCategory", 
-                dataType: "html",  
-                data: catId,         
-                success: function(data){
-                    let dataRecord = JSON.parse(data);
-                    if (dataRecord.success) {
-                        $('#category').html('');
-                        var html = "";
-                        var html = "<option>Select Category</option>";
-                        for (var i = 0; i < dataRecord.categoryList.length; i++) {
-                            html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
-                        }
-                        $('#category').append(html);
-                        if (catId > 0) {
-                            $('#category').val(catId);
-                        } else {
-                            $('#category').val();
-                        }
+            type: "GET",
+            url: "../ajaxAddProduct.cfm?formAction=getCategory", 
+            dataType: "html",  
+            data: catId,         
+            success: function(data){
+                let dataRecord = JSON.parse(data);
+                if (dataRecord.success) {
+                    $('#category').html('');
+                    var html = "";
+                    var html = "<option>Select Category</option>";
+                    for (var i = 0; i < dataRecord.categoryList.length; i++) {
+                        html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
                     }
-                    
+                    $('#category').append(html);
+                    if (catId > 0) {
+                        $('#category').val(catId);
+                    } else {
+                        $('#category').val();
+                    }
                 }
-            }); 
+                
+            }
+        }); 
+    }
+    function submitProductData() {
+        var formData = new FormData($('#addProductForm')[0]);
+        $.ajax({
+            type: "POST",
+            url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
+            data: formData,
+            contentType: false, //this is required please see answers above
+            processData: false, //this is required please see answers above
+            success: function(result) {
+                if ($('#PkProductId').val() > 0) {
+                    successToast("Category Updated!","Category Successfully Updated");
+                } else{
+                    successToast("Category Add!","Category Successfully Added");
+                }
+                $("#addProductData").modal('hide');
+                $('#addProductData').on('hidden.bs.modal', function () {
+                    $("#addProductForm").trigger('reset');
+                    $('#imgPreview').attr('src', '');
+                    $("#category").val(''); 
+                });
+                $('#productDataTable').DataTable().ajax.reload();   
+            }
+        });
+        
     }
     
 </script>

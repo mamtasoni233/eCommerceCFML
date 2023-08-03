@@ -30,6 +30,7 @@
             <!--- data table css --->
             <link rel="stylesheet" href="./assets/compiled/css/table-datatable-jquery.css"/>
             <link rel="stylesheet" href="./assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css"/>
+            <link rel="stylesheet" href="./assets/extensions/datatables.net-bs5/css/buttons.dataTables.min.css"/>
             <!--- image preview css --->
             <link rel="stylesheet" href="./assets/extensions/filepond/filepond.css" />
             <link rel="stylesheet" href="./assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css"/>
@@ -40,6 +41,23 @@
             <style>
                 .table.dataTable{
                     width: 100% !important;
+                }
+                div.dataTables_length{
+                    float: left !important;
+                    margin-left: 17px;
+                }
+                div.dataTables_wrapper div.dataTables_filter {
+                    float: right;
+                }
+                .dataTables_wrapper div.dt-buttons {
+                    float: right;
+                    margin-left:20px;
+                }
+                .dataTables_wrapper  div.dt-buttons > .dt-button{
+                    padding: 0.3em 1em;
+                    border: 1px solid ##829da34d;
+                    color: ##2b2c2c;
+                    background: rgb(255 255 255 / 0%);
                 }
             </style>
         </head>
@@ -98,6 +116,7 @@
             <script src="./assets/js/pswmeter.min.js"></script>
 
             <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+            <script src="./assets/extensions/datatables.net-bs5/js/dataTables.buttons.min.js"></script>
             <script src="./assets/static/js/pages/datatables.js"></script>
             <!--- <script src="./assets/js/jquery.toast.min.js"></script> --->
             <script src="./assets/js/common.js"></script>
@@ -110,7 +129,7 @@
             <script src="./assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
             <script src="./assets/extensions/filepond-plugin-image-resize/filepond-plugin-image-resize.min.js"></script>
             <script src="./assets/extensions/filepond/filepond.js"></script>
-            <script src="./assets/static/js/pages/filepond.js"></script>\
+            <script src="./assets/static/js/pages/filepond.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
             <script src="./assets/extensions/dayjs/plugin/advancedFormat.js"></script>
             <!--- tostify js --->

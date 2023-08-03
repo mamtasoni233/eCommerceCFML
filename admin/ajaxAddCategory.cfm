@@ -257,6 +257,11 @@
             isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
             WHERE parentCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
+        <cfquery result="deleteProductData">
+            UPDATE product SET
+            isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
+            WHERE FkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
 </cfif>
 
 <cfset output = serializeJson(data) />

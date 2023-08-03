@@ -159,7 +159,7 @@
             //placeholder: "Select a parent category",
             width: '100%' 
         });
-        $('#categoryDataTable').DataTable({
+        var table = $('#categoryDataTable').DataTable({
             processing: true,
             pageLength: 10,
             pagination: 'datatablePagination',
@@ -167,11 +167,36 @@
             responsive: true,
             serverSide:true,
             pagingType: "full_numbers",
+            dom: 'Blfrtip',
+            buttons: [
+                {
+                    extend: 'collection',
+                    text: 'Not Deleted',
+                    className: 'showCatecgory',
+                    buttons: [
+                        {
+                            text: 'Not Deleted',
+                            action: function ( e, dt, node, config ) {
+                                console.log(arguments);
+                                console.log('dt.row', dt.row());
+                                $('#categoryDataTable').DataTable().ajax.reload();    
+                            }
+                        },
+                        {
+                            text: 'Deleted',
+                            action: function ( e, dt, node, config ) {
+                                $('#categoryDataTable').DataTable().ajax.reload();    
+                            }
+                        },
+                    ]
+                }
+            ],
+    
             ajax: {
                 url: "../ajaxAddCategory.cfm?formAction=getRecord",
                 type :'post',
                 data: function(d){
-                    console.log(d);
+                    console.log('d', d);
                     var sIdx = d.order[0].column;
                     var m = {};
                     m['draw'] = d.draw;
@@ -254,11 +279,7 @@
             },
             submitHandler: function (form) {
                 event. preventDefault();
-                var id = $('#PkCategoryId').val();
-                console.log(id);
-                // var removeImageChecked = $('#removeImage').val();
                 var removeImageChecked = $('input:checkbox[name=removeImage]:checked');
-                var formData = new FormData($('#addCategoryForm')[0]);
                 if (removeImageChecked.length > 0) {
                     Swal.fire({
                         title: 'Are you sure?',
@@ -272,54 +293,12 @@
                             $('#removeImage').prop('checked', false);
                         } else{
                             $('#removeImage').prop('checked', true);
-                            $.ajax({
-                                type: "POST",
-                                url: "../ajaxAddCategory.cfm?PkCategoryId=" + $('#PkCategoryId').val(),
-                                data: formData,
-                                contentType: false, //this is required please see answers above
-                                processData: false, //this is required please see answers above
-                                success: function(result) {
-                                    if (id > 0) {
-                                        successToast("Category Updated!","Category Successfully Updated");
-                                    } else{
-                                        successToast("Category Add!","Category Successfully Added");
-                                    }
-                                    
-                                    $("#addCategoryData").modal('hide');
-                                    $('#addCategoryData').on('hidden.bs.modal', function () {
-                                        $("#addCategoryForm").trigger('reset');
-                                        $('#imgPreview').attr('src', '');
-                                        $("#parentCategory").val(''); 
-                                    });
-                                    $('#categoryDataTable').DataTable().ajax.reload();
-                                }
-                            });
+                            submitCategoryData();
                         }
                     });
                 } else{
 
-                    $.ajax({
-                        type: "POST",
-                        url: "../ajaxAddCategory.cfm?PkCategoryId=" + $('#PkCategoryId').val(),
-                        data: formData,
-                        contentType: false, //this is required please see answers above
-                        processData: false, //this is required please see answers above
-                        success: function(result) {
-                            if (id > 0) {
-                                successToast("Category Updated!","Category Successfully Updated");
-                            } else{
-                                successToast("Category Add!","Category Successfully Added");
-                            }
-                            
-                            $("#addCategoryData").modal('hide');
-                            $('#addCategoryData').on('hidden.bs.modal', function () {
-                                $("#addCategoryForm").trigger('reset');
-                                $('#imgPreview').attr('src', '');
-                                $("#parentCategory").val(''); 
-                            });
-                            $('#categoryDataTable').DataTable().ajax.reload();
-                        }
-                    });
+                    submitCategoryData()
                 } 
             }, 
         });
@@ -334,37 +313,6 @@
             }
         });
     
-        /* $('.editCategory').click(function() {
-            var id = $(this).attr("data-id");
-            console.log(id);
-            $("#addCategoryData").modal('show');
-            $('#PkCategoryId').val(id);
-            if (id == 0) {
-                $(".modal-title").html("Add Category");
-                $("#addCategoryForm").trigger('reset');
-                $('#imgPreview').attr('src', '');
-            } else {
-                $(".modal-title").html("Update Category");
-                $.ajax({
-                    url:  "../ajaxAddCategory.cfm?PkCategoryId="+ id,
-                    type: 'GET',
-                    success: function(result) {
-                        if (result.success) {
-                            $("#PkCategoryId").val(result.json.PkCategoryId);
-                            $('#categoryName').val(result.json.categoryName);
-                            let imgSrc = '../assets/categoryImage/' + result.json.categoryImage;
-                            $('#imgPreview').attr('src', imgSrc);
-                            if(result.json.isActive == 1){ 
-                                $('#isActive').prop('checked', true);
-                            } else{
-                                $('#isActive').prop('checked', false);
-                            }
-                        }
-                    } 
-                });
-                //successToast("Category Updated!");
-            }
-        }); */
         $("#categoryDataTable").on("click", ".editCategory", function () { 
             var id = $(this).attr("data-id");
             $("#addCategoryData").modal('show');
@@ -495,6 +443,31 @@
                     
                 }
             }); 
+    }
+    function submitCategoryData() {
+        var formData = new FormData($('#addCategoryForm')[0]);
+        $.ajax({
+            type: "POST",
+            url: "../ajaxAddCategory.cfm?PkCategoryId=" + $('#PkCategoryId').val(),
+            data: formData,
+            contentType: false, //this is required please see answers above
+            processData: false, //this is required please see answers above
+            success: function(result) {
+                if ($('#PkCategoryId').val() > 0) {
+                    successToast("Category Updated!","Category Successfully Updated");
+                } else{
+                    successToast("Category Add!","Category Successfully Added");
+                }
+                
+                $("#addCategoryData").modal('hide');
+                $('#addCategoryData').on('hidden.bs.modal', function () {
+                    $("#addCategoryForm").trigger('reset');
+                    $('#imgPreview').attr('src', '');
+                    $("#parentCategory").val(''); 
+                });
+                $('#categoryDataTable').DataTable().ajax.reload();
+            }
+        });
     }
     
 </script>
