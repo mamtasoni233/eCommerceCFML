@@ -242,8 +242,8 @@
         </cfquery>
 
         <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.productImage) GT 0>
-            <cfif fileExists("#productImagePath##productImage#")>
-                <cffile action="delete" file="#productImagePath##productImage#">
+            <cfif fileExists("#productImagePath##qryGetImageName.productImage#")>
+                <cffile action="delete" file="#productImagePath##qryGetImageName.productImage#">
             </cfif>
         </cfif>
         <cfif len(txtproductImage) GT 0>
@@ -255,8 +255,13 @@
         </cfif>
     </cfif>
     <cfif structKeyExists(form, "removeImage")>
-        <cfif fileExists("#productImagePath##productImage#")>
-            <cffile action="delete" file="#productImagePath##productImage#">
+        <cfquery name="qryGetImageNameForRemove">
+            SELECT productImage
+            FROM product
+            WHERE PkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfif fileExists("#productImagePath##qryGetImageNameForRemove.productImage#")>
+            <cffile action="delete" file="#productImagePath##qryGetImageNameForRemove.productImage#">
         </cfif>
         <cfquery name="qryRemoveImage">
             UPDATE product SET 
@@ -288,7 +293,8 @@
         </cfif>
         <cfquery result="deleteProductData">
             UPDATE product SET
-            isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
+            productImage = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
+            , isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
             WHERE PkProductId = <cfqueryparam value="#url.delPkProductId#" cfsqltype = "cf_sql_integer">
         </cfquery>
     </cfif>

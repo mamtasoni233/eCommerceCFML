@@ -1,6 +1,6 @@
-<!--- <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
+<cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
-<cfcontent reset="true" type="application/json" /> --->
+<cfcontent reset="true" type="application/json" />
 
 <cfparam name="PkCategoryId" default="" />
 <cfparam name="categoryName" default="" />
@@ -210,8 +210,13 @@
         </cfif>
     </cfif>
     <cfif structKeyExists(form, "removeImage")>
-        <cfif fileExists("#categoryImagePath##categoryImage#")>
-            <cffile action="delete" file="#categoryImagePath##categoryImage#">
+        <cfquery name="qryGetImageNameForRemove">
+            SELECT categoryImage
+            FROM category
+            WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfif fileExists("#categoryImagePath##qryGetImageNameForRemove.categoryImage#")>
+            <cffile action="delete" file="#categoryImagePath##qryGetImageNameForRemove.categoryImage#">
         </cfif>
         <cfquery name="qryRemoveImage">
             UPDATE category SET 
