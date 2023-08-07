@@ -1,6 +1,6 @@
-<cfsetting enablecfoutputonly="true" showdebugoutput="false" />
+<!--- <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
-<cfcontent reset="true" type="application/json" />
+<cfcontent reset="true" type="application/json" /> --->
 
 <cfparam name="PkCategoryId" default="" />
 <cfparam name="categoryName" default="" />
@@ -197,8 +197,8 @@
             WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
         </cfquery>
         <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.categoryImage) GT 0>
-            <cfif fileExists("#categoryImagePath##categoryImage#")>
-                <cffile action="delete" file="#categoryImagePath##categoryImage#">
+            <cfif fileExists("#categoryImagePath##qryGetImageName.categoryImage#")>
+                <cffile action="delete" file="#categoryImagePath##qryGetImageName.categoryImage#">
             </cfif>
         </cfif>
         <cfif len(txtcategoryImage) GT 0>
@@ -208,7 +208,6 @@
                 WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
             </cfquery>
         </cfif>
-        
     </cfif>
     <cfif structKeyExists(form, "removeImage")>
         <cfif fileExists("#categoryImagePath##categoryImage#")>
