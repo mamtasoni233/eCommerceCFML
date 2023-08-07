@@ -120,14 +120,14 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row justify-content-end mb-3">
+                    <!--- <div class="row justify-content-end mb-3">
                         <div class="col-2 ">
-                            <select name="showCatecgory" id="showCatecgory" class="form-control" >
+                            <select name="isDeleted" id="isDeleted" class="form-control" >
                                 <option value="0">Not Deleted</option>
                                 <option value="1">Deleted</option>
                             </select>
                         </div>
-                    </div>
+                    </div> --->
                     <div class="table-responsive">
                         <table class="table" id="categoryDataTable">
                             <thead>
@@ -165,21 +165,22 @@
             pagination: 'datatablePagination',
             order: [[1, 'desc']],
             responsive: true,
-            serverSide:true,
+            serverSide: true,
             pagingType: "full_numbers",
-            dom: 'Blfrtip',
-            buttons: [
+            // dom: 'Blfrtip',
+            dom: 'l<"toolbar">frtip',
+            /* buttons: [
+                // 'deleted', 'notDeleted'
                 {
                     extend: 'collection',
-                    text: 'Not Deleted',
-                    className: 'showCatecgory',
+                    text: 'View Deleted',
+                    // className: 'showCatecgory',
                     buttons: [
+                        'deleted', 'notDeleted'
                         {
                             text: 'Not Deleted',
                             action: function ( e, dt, node, config ) {
-                                console.log(arguments);
-                                console.log('dt.row', dt.row());
-                                $('#categoryDataTable').DataTable().ajax.reload();    
+                                dt.ajax.reload();
                             }
                         },
                         {
@@ -190,13 +191,12 @@
                         },
                     ]
                 }
-            ],
+            ], */
     
             ajax: {
                 url: "../ajaxAddCategory.cfm?formAction=getRecord",
                 type :'post',
                 data: function(d){
-                    console.log('d', d);
                     var sIdx = d.order[0].column;
                     var m = {};
                     m['draw'] = d.draw;
@@ -204,7 +204,12 @@
                     m["length"] = d.length;
                     m["search"] = d.search.value;
                     m["order"] = d.columns[sIdx].data + ' ' + d.order[0].dir;
-                    m["showCatecgory"] = $("#showCatecgory").val();
+                    if ($("#isDeleted").val() !== undefined) {
+                        m["isDeleted"] = $("#isDeleted").val();
+                    } else {
+                        m["isDeleted"] = 0;
+                    }
+                    console.log(m);
                     return m;
                 }
             },
@@ -216,7 +221,7 @@
                         var returnStr = '';
                         if (data !== "") {
                             returnStr+=  '<img class="image" src="../assets/categoryImage/'+data+'" width="80">' 
-                        } 
+                        }
                         return returnStr;
                     }
                 },
@@ -240,10 +245,17 @@
                     }
                 },
             ],
-            
+            rowCallback: function( row, data ) {
+                if ( data.isDeleted === 1 ) {
+                    $(row).addClass('text-danger');
+                }
+            }
         });
-        $('#showCatecgory').change(function reloadTable() {
-            $('#categoryDataTable').DataTable().ajax.reload();               
+
+        $('div.toolbar').after('<select id="isDeleted" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="2">Select All</option><option value="0" selected>Not Deleted</option><option value="1">Deleted</option></select>');
+        
+        $('#isDeleted').change(function () {
+            $('#categoryDataTable').DataTable().ajax.reload();
         });
         // open add category model
         $("#addCategory").on("click", function () {

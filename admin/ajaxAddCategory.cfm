@@ -67,7 +67,10 @@
         LEFT JOIN category C2 ON C1.parentCategoryId = C2.PkCategoryId
         LEFT JOIN users U ON C1.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON C1.updatedBy = userUpdate.PkUserId
-        WHERE  C1.isDeleted = <cfqueryparam value="#form.showCatecgory#" cfsqltype = "cf_sql_integer">
+        WHERE  1 = 1
+        <cfif structKeyExists(form, "isDeleted") AND form.isDeleted NEQ 2>
+            AND C1.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
+        </cfif>
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -87,7 +90,10 @@
         LEFT JOIN category C2 ON C1.parentCategoryId = C2.PkCategoryId
         LEFT JOIN users U ON C1.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON C1.updatedBy = userUpdate.PkUserId
-        WHERE  C1.isDeleted = <cfqueryparam value="#form.showCatecgory#" cfsqltype = "cf_sql_integer">
+        WHERE  1 = 1
+        <cfif structKeyExists(form, "isDeleted") AND form.isDeleted NEQ 2>
+            AND C1.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
+        </cfif>
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -118,6 +124,7 @@
         <cfset dataRecord['categoryName'] = getCategoryData.categoryName>
         <cfset dataRecord['categoryImage'] = getCategoryData.categoryImage>
         <cfset dataRecord['isActive'] = getCategoryData.isActive>
+        <cfset dataRecord['isDeleted'] = getCategoryData.isDeleted>
         <cfset dataRecord['createdBy'] = getCategoryData.createdBy>
         <cfset dataRecord['dateCreated'] = dateTimeFormat(getCategoryData.dateCreated, 'dd-mm-yyyy hh:nn:ss tt')>
         <cfset dataRecord['dateUpdated'] = dateTimeFormat(getCategoryData.dateUpdated, 'dd-mm-yyyy hh:nn:ss tt')>
