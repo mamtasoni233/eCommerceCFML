@@ -132,14 +132,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row justify-content-end mb-3">
-                        <div class="col-2 ">
-                            <select name="showProduct" id="showProduct" class="form-control" >
-                                <option value="0">Not Deleted</option>
-                                <option value="1">Deleted</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="table-responsive">
                         <table class="table" id="productDataTable">
                             <thead>
@@ -170,7 +162,6 @@
 <script>
     $(document).ready( function () {
         $('#category').select2({
-            //placeholder: "Select a parent category",
             width: '100%' 
         });
         $('#productDataTable').DataTable({
@@ -181,6 +172,7 @@
             responsive: true,
             serverSide:true,
             pagingType: "full_numbers",
+            dom: 'l<"toolbar">frtip',
             ajax: {
                 url: "../ajaxAddProduct.cfm?formAction=getRecord",
                 type :'post',
@@ -193,7 +185,11 @@
                     m["length"] = d.length;
                     m["search"] = d.search.value;
                     m["order"] = d.columns[sIdx].data + ' ' + d.order[0].dir;
-                    m["showProduct"] = $("#showProduct").val();
+                    if ($("#isDeleted").val() !== undefined) {
+                        m["isDeleted"] = $("#isDeleted").val();
+                    } else {
+                        m["isDeleted"] = 0;
+                    }
                     return m;
                 }
             },
@@ -231,10 +227,18 @@
                     }
                 },
             ],
-            
+            rowCallback: function( row, data ) {
+                console.log("dataaaaaa", data);
+                if ( data.isDeleted === 1 ) {
+                    $(row).addClass('text-danger');
+                }
+            }
         });
-        $('#showProduct').change(function reloadTable() {
-            $('#productDataTable').DataTable().ajax.reload();               
+
+        $('div.toolbar').after('<select id="isDeleted" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="2">Select All</option><option value="0" selected>Not Deleted</option><option value="1">Deleted</option></select>');
+        
+        $('#isDeleted').change(function () {
+            $('#productDataTable').DataTable().ajax.reload();
         });
         // open add category model
         $("#addProduct").on("click", function () {
@@ -439,8 +443,8 @@
             type: "POST",
             url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
             data: formData,
-            contentType: false, //this is required please see answers above
-            processData: false, //this is required please see answers above
+            contentType: false,
+            processData: false,
             success: function(result) {
                 if ($('#PkProductId').val() > 0) {
                     successToast("Category Updated!","Category Successfully Updated");

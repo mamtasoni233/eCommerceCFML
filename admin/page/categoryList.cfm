@@ -309,9 +309,8 @@
                         }
                     });
                 } else{
-
                     submitCategoryData()
-                } 
+                }
             }, 
         });
         $('#categoryImage').change(function(){
@@ -462,8 +461,8 @@
             type: "POST",
             url: "../ajaxAddCategory.cfm?PkCategoryId=" + $('#PkCategoryId').val(),
             data: formData,
-            contentType: false, //this is required please see answers above
-            processData: false, //this is required please see answers above
+            contentType: false,
+            processData: false,
             success: function(result) {
                 if ($('#PkCategoryId').val() > 0) {
                     successToast("Category Updated!","Category Successfully Updated");

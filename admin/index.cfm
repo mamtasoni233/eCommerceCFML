@@ -44,20 +44,10 @@
                 }
                 div.dataTables_length{
                     float: left !important;
-                    margin-left: 17px;
+                    margin-right: 17px;
                 }
                 div.dataTables_wrapper div.dataTables_filter {
                     float: right;
-                }
-                .dataTables_wrapper div.dt-buttons {
-                    float: right;
-                    margin-left:20px;
-                }
-                .dataTables_wrapper  div.dt-buttons > .dt-button{
-                    padding: 0.3em 1em;
-                    border: 1px solid ##829da34d;
-                    color: ##2b2c2c;
-                    background: rgb(255 255 255 / 0%);
                 }
             </style>
         </head>
@@ -100,17 +90,11 @@
             <script src="./assets/static/js/components/dark.js"></script>
             <script src="./assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
-            <!--Datatables -->
-            <!---   <script src="./assets/dataTable/js/jquery.dataTables.min.js"></script>
-            <script src="./assets/dataTable/js/dataTables.bootstrap5.min.js"></script> --->
-
             <!--- jquery validation js --->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            
-            <!--- <script src="./assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
-            <script src="./assets/static/js/pages/form-element-select.js"></script> --->
             <!--- select2 js --->
             <script src="./assets/compiled/js/select2.min.js"></script>
+
             <!--- password meter --->
             <script async defer src="https://buttons.github.io/buttons.js"></script>
             <script src="./assets/js/pswmeter.min.js"></script>
@@ -118,7 +102,6 @@
             <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
             <script src="./assets/extensions/datatables.net-bs5/js/dataTables.buttons.min.js"></script>
             <script src="./assets/static/js/pages/datatables.js"></script>
-            <!--- <script src="./assets/js/jquery.toast.min.js"></script> --->
             <script src="./assets/js/common.js"></script>
             <!--- file uploader js --->
             <script src="./assets/extensions/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js"></script>

@@ -71,7 +71,7 @@
                     <li class="sidebar-title">Menu</li>
                     <li class="sidebar-item <cfif pg EQ 'dashboard'>active</cfif>">
                         <a href="index.cfm?pg=dashboard" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="bi bi-house-door-fill"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>

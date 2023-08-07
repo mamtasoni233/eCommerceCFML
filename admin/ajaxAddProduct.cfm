@@ -1,4 +1,3 @@
-
 <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
 <cfcontent reset="true" type="application/json" />
@@ -96,7 +95,10 @@
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN users U ON P.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON P.updatedBy = userUpdate.PkUserId
-        WHERE P.isDeleted = <cfqueryparam value="#form.showProduct#" cfsqltype = "cf_sql_integer">
+        WHERE 1 = 1
+        <cfif structKeyExists(form, "isDeleted") AND form.isDeleted NEQ 2>
+            AND P.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
+        </cfif>
 
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -118,7 +120,10 @@
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN users U ON P.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON P.updatedBy = userUpdate.PkUserId
-        WHERE P.isDeleted = <cfqueryparam value="#form.showProduct#" cfsqltype = "cf_sql_integer">
+        WHERE 1 = 1
+        <cfif structKeyExists(form, "isDeleted") AND form.isDeleted NEQ 2>
+            AND P.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
+        </cfif>
 
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -151,6 +156,7 @@
         <cfset dataRecord['productPrice'] = getProductData.productPrice>
         <cfset dataRecord['productImage'] = getProductData.productImage>
         <cfset dataRecord['isActive'] = getProductData.isActive>
+        <cfset dataRecord['isDeleted'] = getProductData.isDeleted>
         <cfset dataRecord['createdBy'] = getProductData.createdBy>
         <cfset dataRecord['dateCreated'] = dateTimeFormat(getProductData.dateCreated, 'dd-mm-yyyy hh:nn:ss tt')>
         <cfset dataRecord['dateUpdated'] = dateTimeFormat(getProductData.dateUpdated, 'dd-mm-yyyy hh:nn:ss tt')>
