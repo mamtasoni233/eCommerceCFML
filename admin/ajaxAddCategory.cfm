@@ -56,7 +56,7 @@
 </cffunction>
 <cfset data = {}>
 <cfset data['success'] = true>
-<cfset categoryImagePath = ExpandPath('./assets/categoryImage/')>
+<cfset categoryImagePath = ExpandPath('.../../assets/categoryImage/')>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getCategoryDataRows">
@@ -253,8 +253,8 @@
             SELECT PkCategoryId, categoryImage FROM Category 
             WHERE PkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
-        <cfif fileExists("#ExpandPath('./assets/categoryImage/')##removeImage.categoryImage#")>
-            <cffile action="delete" file="#ExpandPath('./assets/categoryImage/')##removeImage.categoryImage#">
+        <cfif fileExists("#categoryImagePath##removeImage.categoryImage#")>
+            <cffile action="delete" file="#categoryImagePath##removeImage.categoryImage#">
         </cfif>
         <cfquery result="deleteCategoryData">
             UPDATE category SET

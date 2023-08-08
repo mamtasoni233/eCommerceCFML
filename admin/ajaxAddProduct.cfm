@@ -86,7 +86,7 @@
 
 <cfset data = {}>
 <cfset data['success'] = true>
-<cfset productImagePath = ExpandPath('./assets/productImage/')>
+<cfset productImagePath = ExpandPath('.../../assets/productImage/')>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getProductDataRows">
@@ -288,8 +288,8 @@
             WHERE PkProductId = <cfqueryparam value="#url.delPkProductId#" cfsqltype = "cf_sql_integer">
         </cfquery>
 
-        <cfif fileExists("#ExpandPath('./assets/productImage/')##removeImage.productImage#")>
-            <cffile action="delete" file="#ExpandPath('./assets/productImage/')##removeImage.productImage#">
+        <cfif fileExists("#productImagePath##removeImage.productImage#")>
+            <cffile action="delete" file="#productImagePath##removeImage.productImage#">
         </cfif>
         <cfquery result="deleteProductData">
             UPDATE product SET

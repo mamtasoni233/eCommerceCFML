@@ -88,7 +88,7 @@
                                                 <img src="../assets/profileImage/#session.user.profile#" alt="Profile">
                                         
                                         </cfif>
-                                        <!--- <img src="../assets/compiled/jpg/1.jpg"/> --->
+                                        <!--- <img src="../../assets/categoryImage/1_1al79zoyr0rtd.png"/> --->
                                     </div>
                                 </div>
                             </div>

@@ -209,7 +209,6 @@
                     } else {
                         m["isDeleted"] = 0;
                     }
-                    console.log(m);
                     return m;
                 }
             },
@@ -220,7 +219,7 @@
                     render: function(data, display, row) {
                         var returnStr = '';
                         if (data !== "") {
-                            returnStr+=  '<img class="image" src="../assets/categoryImage/'+data+'" width="80">' 
+                            returnStr+=  '<img class="image" src=".../../assets/categoryImage/'+data+'" width="80">' 
                         }
                         return returnStr;
                     }
@@ -303,13 +302,14 @@
                     }).then((result) => {
                         if (!result.isConfirmed == true) {
                             $('#removeImage').prop('checked', false);
+                            submitCategoryData();
                         } else{
                             $('#removeImage').prop('checked', true);
                             submitCategoryData();
                         }
                     });
                 } else{
-                    submitCategoryData()
+                    submitCategoryData();
                 }
             }, 
         });
@@ -334,11 +334,17 @@
                 url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
                 success: function(result) {
                     if (result.success) {
+                        console.log(result);
                         var image = result.json.categoryImage;
+                        /* if (result.json.parentCategoryId > 0) {
+                            getParentCategory(result.json.parentCategoryId);
+                        } else{
+                            getParentCategory(result.json.PkCategoryId);
+                        } */
+                        getParentCategory(result.json.parentCategoryId);
                         $("#PkCategoryId").val(result.json.PkCategoryId);
                         $('#categoryName').val(result.json.categoryName);
-                        getParentCategory(result.json.parentCategoryId);
-                        let imgSrc = '../assets/categoryImage//' + result.json.categoryImage;
+                        let imgSrc = '.../../assets/categoryImage/' + result.json.categoryImage;
                         if (image.length > 0) {
                             $('#imgPreview').attr('src', imgSrc);
                             $('.removeImageContainer').removeClass('d-none')
@@ -436,8 +442,9 @@
                 data: parentCatId,          
                 success: function(result){
                     let dataRecord = JSON.parse(result);
-                    console.log(dataRecord);
                     if (dataRecord.success) {
+                        console.log(parentCatId);
+                        console.log(dataRecord);
                         $('#parentCategory').html('');
                         var html = "";
                         var html = "<option value='0'>Select As A Parent</option>";
@@ -448,7 +455,7 @@
                         if (parentCatId > 0) {
                             $('#parentCategory').val(parentCatId);
                         } else {
-                            $('#parentCategory').val(0);
+                            $('#parentCategory').val(dataRecord.data.PkCategoryId);
                         }
                     }
                     
