@@ -443,7 +443,6 @@
                 success: function(result){
                     let dataRecord = JSON.parse(result);
                     if (dataRecord.success) {
-                        console.log(parentCatId);
                         console.log(dataRecord);
                         $('#parentCategory').html('');
                         var html = "";
@@ -455,7 +454,7 @@
                         if (parentCatId > 0) {
                             $('#parentCategory').val(parentCatId);
                         } else {
-                            $('#parentCategory').val(dataRecord.data.PkCategoryId);
+                            $('#parentCategory').val(0);
                         }
                     }
                     
