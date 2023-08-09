@@ -238,12 +238,14 @@
         SELECT categoryName, PkCategoryId FROM Category 
         WHERE 
             parentCategoryId = <cfqueryparam value="0" cfsqltype="cf_sql_integer"> 
+            AND PkCategoryId <> parentCategoryId
             AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfset data['data'] = []>
     <cfloop query="getCategory">
         <cfset dataRecord = {}>
         <cfset dataRecord['PkCategoryId'] = getCategory.PkCategoryId>
+        <cfset dataRecord['parentCategoryId'] = getCategory.parentCategoryId>
         <cfset dataRecord['categoryName'] = getCategory.categoryName>
         <cfset arrayAppend(data['data'], dataRecord)>
     </cfloop>
