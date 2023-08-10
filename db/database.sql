@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 03, 2023 at 09:02 AM
+-- Generation Time: Aug 10, 2023 at 03:49 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -45,51 +45,47 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `categoryImage`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 0, 'Home', 'portfolio-1_oc0ov0wstuhp.jpg', b'1', b'0', '2023-07-24 12:14:41', 1, '2023-08-02 12:34:48', 1),
-(2, 9, 'TV', '12_o900z4cfhcl4.jpg', b'1', b'0', '2023-07-24 15:47:11', 1, '2023-08-02 15:25:07', 1),
+(1, 0, 'Home', '6_6afh051ialta.png', b'1', b'0', '2023-07-24 12:14:41', 1, '2023-08-08 17:35:34', 1),
+(2, 9, 'TV', '7_dw8jkchbrsrx.png', b'1', b'0', '2023-07-24 15:47:11', 1, '2023-08-09 10:31:55', 1),
 (3, 8, 'Beauty product', '', b'0', b'0', '2023-07-24 16:04:14', 1, '2023-08-03 10:25:25', 1),
-(4, 1, 'Furniture', '', b'1', b'0', '2023-07-24 18:05:26', 1, '2023-08-03 10:24:35', 1),
-(5, 6, 'abcd', '5_1x40qld4syum2.png', b'1', b'0', '2023-07-24 18:11:42', 1, '2023-08-02 12:33:26', 1),
+(4, 1, 'Furniture', '', b'1', b'0', '2023-07-24 18:05:26', 1, '2023-08-07 15:19:46', 1),
+(5, 6, 'abcd', 'avatar-6_tk7ojkq0nvwc.jpg', b'1', b'0', '2023-07-24 18:11:42', 1, '2023-08-09 10:32:06', 1),
 (6, 0, 'School', '', b'1', b'0', '2023-07-24 18:27:35', 1, '2023-08-02 12:49:42', 1),
-(7, 9, 'Mobile', '3_1ikjcira4aia3.jpg', b'1', b'1', '2023-07-24 18:32:19', 1, '2023-08-02 14:54:39', 1),
-(8, 0, 'Beauty & Health', '', b'1', b'0', '2023-07-27 15:30:15', 1, '2023-08-02 12:37:15', 1),
-(9, 0, 'Electronics', '1_1nf439uu5idfc.jpg', b'1', b'0', '2023-07-27 16:13:37', 1, '2023-08-03 10:24:52', 1),
+(7, 9, 'Mobile', '11.jpg', b'1', b'1', '2023-07-24 18:32:19', 1, '2023-08-08 17:20:14', 1),
+(8, 0, 'Beauty & Health', '', b'1', b'0', '2023-07-27 15:30:15', 1, '2023-08-08 12:11:24', 1),
+(9, 0, 'Electronics', '7_14jpleral6q13.png', b'1', b'0', '2023-07-27 16:13:37', 1, '2023-08-08 17:35:42', 1),
 (10, 6, 'school bag', '', b'1', b'1', '2023-07-27 16:13:42', 1, '2023-08-03 10:31:15', 1),
-(11, 8, 'Face Cream', '13_1q9zoladypwvh.jpg', b'0', b'0', '2023-07-27 16:13:47', 1, '2023-08-03 10:25:12', 1),
-(12, 8, 'Home Decore12', NULL, b'1', b'0', '2023-07-28 15:03:24', 1, '2023-08-02 14:54:03', 1),
-(13, 1, 'Photo Frame', '6_le35filfgnfm.png', b'1', b'0', '2023-08-01 10:10:48', 1, '2023-08-02 12:33:34', 1),
-(14, 0, 'XYZ', '1_ykx6dpl6qte6.jpg', b'1', b'1', '2023-08-01 10:56:25', 1, '2023-08-02 14:54:49', 1),
-(15, 14, 'XYZ423453', NULL, b'1', b'1', '2023-08-02 14:53:01', 1, '2023-08-02 14:54:49', NULL),
-(16, 14, 'hikuyio', NULL, b'1', b'1', '2023-08-02 14:53:10', 1, '2023-08-02 14:54:49', NULL);
+(11, 8, 'Face Cream', '', b'0', b'0', '2023-07-27 16:13:47', 1, '2023-08-07 15:42:30', 1),
+(12, 8, 'Home Decore12', '', b'1', b'0', '2023-07-28 15:03:24', 1, '2023-08-07 11:42:46', 1),
+(13, 1, 'Photo Frame', '1.png', b'1', b'0', '2023-08-01 10:10:48', 1, '2023-08-08 17:18:49', 1),
+(14, 0, 'XYZ', 'cellphone.jpg', b'1', b'1', '2023-08-01 10:56:25', 1, '2023-08-08 17:20:24', 1),
+(15, 14, 'XYZ423453', '', b'1', b'1', '2023-08-02 14:53:01', 1, '2023-08-07 11:55:17', NULL),
+(16, 14, 'hikuyio', '', b'1', b'1', '2023-08-02 14:53:10', 1, '2023-08-07 11:55:21', NULL),
+(17, 0, 'ABC', '3.jpg', b'1', b'0', '2023-08-07 13:41:57', 1, '2023-08-08 17:19:30', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `courses`
+-- Table structure for table `customer`
 --
 
-CREATE TABLE `courses` (
-  `PkCourseId` int(11) UNSIGNED NOT NULL,
-  `FkTireId` int(10) UNSIGNED NOT NULL,
-  `duration` int(11) NOT NULL,
-  `minCourse` int(20) NOT NULL,
-  `maxCourse` int(20) NOT NULL,
-  `minExpenditure` float NOT NULL,
-  `maxExpenditure` float NOT NULL,
-  `maxCredits` float NOT NULL
+CREATE TABLE `customer` (
+  `PkCustomerId` int(10) UNSIGNED NOT NULL,
+  `firstName` varchar(100) NOT NULL,
+  `lastName` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `dob` date NOT NULL,
+  `gender` bit(1) NOT NULL,
+  `profile` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `courses`
+-- Dumping data for table `customer`
 --
 
-INSERT INTO `courses` (`PkCourseId`, `FkTireId`, `duration`, `minCourse`, `maxCourse`, `minExpenditure`, `maxExpenditure`, `maxCredits`) VALUES
-(20, 1, 150, 2, 5, 500, 1000, 1000),
-(28, 1, 300, 2, 3, 450, 750, 580),
-(29, 2, 300, 3, 6, 1200, 1500, 1200),
-(30, 2, 150, 1, 5, 200, 500, 500),
-(31, 3, 150, 6, 7, 560, 780, 780),
-(35, 4, 300, 2, 10, 400, 500, 6000);
+INSERT INTO `customer` (`PkCustomerId`, `firstName`, `lastName`, `email`, `password`, `dob`, `gender`, `profile`) VALUES
+(1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '$2a$10$7iuUsjZsF0DQevwRE9oT8eU7OmcsyUFkA0tGVxJvbyg50nWnQBwZS', '2001-07-16', b'0', NULL);
 
 -- --------------------------------------------------------
 
@@ -117,82 +113,11 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `productPrice`, `productQty`, `productImage`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 13, 'Wooden Frame', 500, 10, '12.jpg', b'1', b'0', '2023-08-01 12:27:41', 1, '2023-08-01 12:47:26', 1),
+(1, 13, 'Wooden Frame', 500, 10, '5.png', b'1', b'0', '2023-08-01 12:27:41', 1, '2023-08-08 17:21:10', 1),
 (2, 10, 'Red Color School Beg', 1000, 10, '1.png', b'1', b'1', '2023-08-01 12:43:49', 1, '2023-08-03 10:31:15', 1),
 (3, 3, 'Foundation', 3500, 2, NULL, b'1', b'0', '2023-08-01 12:44:18', 1, '2023-08-01 14:28:50', 1),
-(4, 2, 'Sony 4K Smart TV', 55000, 15, '1_srm5rwpq0qpx.png', b'1', b'0', '2023-08-01 12:45:31', 1, '2023-08-03 10:35:44', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `publisher`
---
-
-CREATE TABLE `publisher` (
-  `PkPublishId` int(11) UNSIGNED NOT NULL,
-  `publisherId` int(10) UNSIGNED NOT NULL,
-  `publisherName` varchar(255) NOT NULL,
-  `status` bit(1) NOT NULL DEFAULT b'1',
-  `iconImage` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `publisher`
---
-
-INSERT INTO `publisher` (`PkPublishId`, `publisherId`, `publisherName`, `status`, `iconImage`) VALUES
-(1, 22, 'fr', b'1', ''),
-(2, 102, 'Mamta', b'1', ''),
-(6, 7498, 'sgdsegd', b'1', 'unsplash-2.jpg'),
-(32, 42, 'Vinay133', b'1', ''),
-(33, 42, 'Vinay14', b'1', 'avatar-4.jpg'),
-(41, 42, 'Vinay22', b'1', 'avatar-4.jpg'),
-(49, 42, 'Vinay30', b'1', 'avatar-4.jpg'),
-(56, 42, 'Vinay37', b'1', 'avatar-4.jpg'),
-(57, 42, 'Vinay333', b'1', ''),
-(90, 651, 'qwewr', b'1', ''),
-(92, 1651, 'GDSDFYH4564565', b'1', ''),
-(96, 2562, 'wewertwer', b'1', ''),
-(97, 626, 'tetg', b'1', ''),
-(101, 3, 'Mamta Soni3', b'1', ''),
-(102, 4, 'Mamta Soni4', b'1', ''),
-(103, 5, 'Mamta Soni5', b'1', ''),
-(104, 6, 'Mamta Soni6', b'1', ''),
-(105, 7, 'Mamta Soni7', b'1', ''),
-(106, 8, 'Mamta Soni8', b'1', ''),
-(107, 9, 'Mamta Soni9', b'1', ''),
-(108, 10, 'Mamta Soni101', b'1', ''),
-(109, 1, 'Mamta Soni1222', b'1', ''),
-(110, 45, 'Mamta Soni2', b'1', ''),
-(111, 3, 'Mamta Soni3', b'1', ''),
-(112, 4, 'Mamta Soni4', b'1', ''),
-(113, 5, 'Mamta Soni5555', b'1', ''),
-(114, 6, 'Mamta Soni67', b'1', ''),
-(115, 7, 'Mamta Soni7', b'1', ''),
-(116, 8, 'Mamta Soni8', b'1', ''),
-(117, 9, 'Mamta Soni9', b'1', ''),
-(118, 11, 'Mamta Soni10', b'1', '');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tier`
---
-
-CREATE TABLE `tier` (
-  `PkTierId` int(11) UNSIGNED NOT NULL,
-  `titleTier` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tier`
---
-
-INSERT INTO `tier` (`PkTierId`, `titleTier`) VALUES
-(1, 'Homeschool Accreditation'),
-(2, 'Homeschool Academy'),
-(3, 'Homeschool Live'),
-(4, 'PVC');
+(4, 2, 'Sony 4K Smart TV', 55000, 15, '1.png', b'1', b'0', '2023-08-01 12:45:31', 1, '2023-08-08 17:21:06', 1),
+(5, 4, 'ytut', 46416, 2, '', b'1', b'1', '2023-08-07 10:57:58', 1, '2023-08-07 11:40:20', 1);
 
 -- --------------------------------------------------------
 
@@ -217,7 +142,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`PkUserId`, `token`, `firstName`, `lastName`, `email`, `dob`, `gender`, `password`, `image`) VALUES
-(1, NULL, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', 'avatar-3_vjbvmmcfk63l.jpg'),
+(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', 'avatar-3_vjbvmmcfk63l.jpg'),
 (2, NULL, 'Nanu', 'Soni', 'nanu@gmail.com', '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL),
 (3, NULL, 'gvedrfg', 'dftgd', 'admin@gmail.com', '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', NULL),
 (4, NULL, 'test', 'test', 'mamta@gmail.com', '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL),
@@ -236,11 +161,10 @@ ALTER TABLE `category`
   ADD PRIMARY KEY (`PkCategoryId`);
 
 --
--- Indexes for table `courses`
+-- Indexes for table `customer`
 --
-ALTER TABLE `courses`
-  ADD PRIMARY KEY (`PkCourseId`),
-  ADD KEY `FkTireId` (`FkTireId`);
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`PkCustomerId`);
 
 --
 -- Indexes for table `product`
@@ -248,18 +172,6 @@ ALTER TABLE `courses`
 ALTER TABLE `product`
   ADD PRIMARY KEY (`PkProductId`),
   ADD KEY `FkCategoryId` (`FkCategoryId`);
-
---
--- Indexes for table `publisher`
---
-ALTER TABLE `publisher`
-  ADD PRIMARY KEY (`PkPublishId`);
-
---
--- Indexes for table `tier`
---
-ALTER TABLE `tier`
-  ADD PRIMARY KEY (`PkTierId`);
 
 --
 -- Indexes for table `users`
@@ -275,31 +187,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT for table `courses`
+-- AUTO_INCREMENT for table `customer`
 --
-ALTER TABLE `courses`
-  MODIFY `PkCourseId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+ALTER TABLE `customer`
+  MODIFY `PkCustomerId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `publisher`
---
-ALTER TABLE `publisher`
-  MODIFY `PkPublishId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
-
---
--- AUTO_INCREMENT for table `tier`
---
-ALTER TABLE `tier`
-  MODIFY `PkTierId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -310,12 +210,6 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `courses`
---
-ALTER TABLE `courses`
-  ADD CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`FkTireId`) REFERENCES `tier` (`PkTierId`);
 
 --
 -- Constraints for table `product`
