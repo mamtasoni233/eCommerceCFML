@@ -12,7 +12,7 @@
     <cfparam name="password" default="" />
     <cfif len(trim(email)) GT 0>
         <cfquery name="login">
-            SELECT PkCustomerId, firstName, lastName, email, dob, password, gender, image FROM customer 
+            SELECT PkCustomerId, firstName, lastName, email, dob, password, gender, profile FROM customer 
             WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar">
         </cfquery>
         <cfif login.recordCount EQ 1>
@@ -26,7 +26,7 @@
                 <cfset session.customer.email = login.email>
                 <cfset session.customer.gender = login.gender>
                 <cfset session.customer.dob = login.dob>
-                <cfset session.customer.profile = login.image>
+                <cfset session.customer.profile = login.profile>
                 <cfset session.customer.saved = 1>
                 <!--- <cfset saved = 2> --->
                 <cflocation url="index.cfm?pg=dashboard" addtoken="false">
@@ -62,22 +62,18 @@
             <link rel="mask-icon" href="./assets/favicon/safari-pinned-tab.svg" color="##5bbad5">
             <meta name="msapplication-TileColor" content="##da532c">
             <meta name="theme-color" content="##ffffff">
-
+            <!--- fontawsome --->
+            <script src="https://kit.fontawesome.com/194ef163b5.js" crossorigin="anonymous"></script>       
             <!-- Vendor CSS -->
             <link rel="stylesheet" href="./assets/css/libs.bundle.css"/>
-
             <!-- Main CSS -->
             <link rel="stylesheet" href="./assets/css/theme.bundle.css"/>
+            <link rel="stylesheet" href="./assets/css/custom.css"/>
             <!-- jquery -->
-            <script
-                src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-                integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer"
-            ></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
             <!-- Fix for custom scrollbar if JS is disabled-->
-            <noscript>
+            <!--- <noscript>
                 <style>
                     /**
                     * Reinstate scrolling for non-JS clients
@@ -86,19 +82,91 @@
                     overflow: auto;
                     }
                 </style>
-            </noscript>
-
+            </noscript> --->
             <!-- Page Title -->
             <title>Alpine | Bootstrap 5 HTML Template</title>
+            <style>
+                body {
+                    background: ##fccb90;
+                    background: -webkit-linear-gradient(to right, ##ee7724, ##d8363a, ##dd3675, ##b44593);
+                    background: linear-gradient(to right, ##3cb0d1, ##324db1, ##5736dd, ##4581b4);
+                }
+            </style>
         </head>
-        <body class=" bg-light">
+        <body>
             <!-- Main Section-->
-            <section class="mt-0 overflow-hidden  vh-100 d-flex justify-content-center align-items-center p-4">
+            <section class="" >
+                <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col col-xl-10">
+                            <div class="card" style="border-radius: 1rem;">
+                                <div class="row g-0">
+                                    <div class="col-md-6 col-lg-5 d-none d-md-block">
+                                    <img src="./assets/images/logos/woman-shopping-online.gif"
+                                        alt="login form" class="img-fluid mt-5 pt-3" />
+                                    </div>
+                                    <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                                        <div class="card-bodyshadow-xl p-5 p-lg-5 bg-white rounded-3 text-black">
+                                            <cfif structKeyExists(url,"saved") AND url.saved EQ 4>
+                                                <div class="alert alert-success alert-dismissible show fade">
+                                                    <i class="bi bi-check-circle"></i> Your password is succesfully set!!
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                    </button>
+                                                </div>
+                                            <cfelseif structKeyExists(url,"error") AND url.error EQ 1>
+                                                <div class="alert alert-danger alert-dismissible show fade">
+                                                    <i class="bi bi-exclamation-circle"></i> Invalid User Name/Password!!
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                    </button>
+                                                </div>
+                                            </cfif>
+                                            <h1 class="text-center fw-bold mb-5 fs-2">Login Form</h1>
+                                            <p class="auth-subtitle mb-4">
+                                                Log in with your data that you entered during registration.
+                                            </p>
+                                            <form class="form" id="loginForm" method="POST">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <label class="form-label d-flex justify-content-between align-items-center" for="login-email">Email address</label>
+                                                        <div class="form-group position-relative">
+                                                            <input type="email" class="form-control" name="email" id="email" placeholder="name@email.com">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label
+                                                            for="login-password"
+                                                            class="form-label d-flex justify-content-between align-items-center"
+                                                        >
+                                                            Password
+                                                            <a href="##" class="text-muted small">Forgot your password?</a>
+                                                        </label>
+                                                        <div class="form-group">
+                                                            <input
+                                                                type="password"
+                                                                class="form-control" name="password" id="password"
+                                                                placeholder="Enter your password"
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn text-white d-block w-100 my-4 login-button">Login</button>
+                                            </form>
+                                            <p class="d-block text-center text-muted">
+                                                New customer? <a class="text-dark" href="sign-up.cfm">Sign up for an account</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!---  <section class="d-flex justify-content-center align-items-center p-5">
                 <!-- Page Content Goes Here -->
-
                 <!-- Login Form-->
-                <div class="col col-md-8 col-lg-6 col-xxl-5">
-                    <!-- Logo-->
+                <div class="col col-md-8 col-lg-6 col-xxl-6 ">
+                    <!--- <!-- Logo-->
                     <a
                         class="navbar-brand fw-bold fs-3 flex-shrink-0 order-0 align-self-center justify-content-center d-flex mx-0 px-0"
                         href="./index.cfm"
@@ -121,8 +189,8 @@
                             <span class="fs-5">Alpine</span>
                         </div>
                     </a>
-                    <!-- / Logo-->
-                    <div class="shadow-xl p-4 p-lg-3 bg-white">
+                    <!-- / Logo--> --->
+                    <div class="shadow-xl p-5 p-lg-5 bg-white rounded-3">
                         <cfif structKeyExists(url,"saved") AND url.saved EQ 4>
                             <div class="alert alert-light-success alert-dismissible show fade">
                                 <i class="bi bi-check-circle"></i> Your password is succesfully set!!
@@ -136,14 +204,14 @@
                                 </button>
                             </div>
                         </cfif>
-                        <h1 class="text-center fw-bold mb-5 fs-2">Login</h1>
+                        <h1 class="text-center fw-bold mb-5 fs-2">Login Form</h1>
                         <p class="auth-subtitle mb-5">
                             Log in with your data that you entered during registration.
                         </p>
-                        <form class="form" id="loginForm" method="POST" action="">
+                        <form class="form" id="loginForm" method="POST">
                             <div class="form-group">
                                 <label class="form-label" for="login-email">Email address</label>
-                                <input type="email" class="form-control" id="login-email" placeholder="name@email.com">
+                                <input type="email" class="form-control" name="email" id="email" placeholder="name@email.com">
                             </div>
                             <div class="form-group">
                                 <label
@@ -155,7 +223,7 @@
                                 </label>
                                 <input
                                     type="password"
-                                    class="form-control" id="login-password"
+                                    class="form-control" name="password" id="password"
                                     placeholder="Enter your password"
                                 >
                             </div>
@@ -168,15 +236,10 @@
                 </div>
                 <!-- / Login Form-->
                 <!-- /Page Content -->
-            </section>
+            </section> --->
             <!-- / Main Section-->
             <!--- jquery validation js --->
-            <script
-                src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"
-                integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer"
-            ></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <!-- Vendor JS -->
             <script src="./assets/js/vendor.bundle.js"></script>
 
@@ -185,6 +248,7 @@
 
             <script>
                 $( document ).ready(function() {
+                    console.log('hiiiii');
                     $("##loginForm").validate({
                         rules: {
                             email: {

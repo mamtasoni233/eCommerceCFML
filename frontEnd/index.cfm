@@ -1,4 +1,7 @@
 <cfoutput>
+    <cfif NOT StructKeyExists(session, "customer")>
+        <cflocation url="login.cfm" addtoken="false">
+    </cfif>
     <cfparam name="pg" default="">
     <!doctype html>
     <html lang="en">
@@ -19,7 +22,8 @@
             <link rel="mask-icon" href="./assets/favicon/safari-pinned-tab.svg" color="##5bbad5">
             <meta name="msapplication-TileColor" content="##da532c">
             <meta name="theme-color" content="##ffffff">
-
+            <!--- fontawsome --->
+            <script src="https://kit.fontawesome.com/194ef163b5.js" crossorigin="anonymous"></script>
             <!-- Vendor CSS -->
             <link rel="stylesheet" href="./assets/css/libs.bundle.css"/>
 
@@ -57,6 +61,13 @@
             <title>Alpine | Bootstrap 5 Ecommerce HTML Template</title>
         </head>
         <body class="">
+            <cfif structKeyExists(session.customer, "saved") AND session.customer.saved EQ 1>
+                <div class="alert alert-success alert-dismissible show fade">
+                    <i class="fa fa-check-circle"></i> Customer Succefully Login!!!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <cfset StructDelete(session.customer,'saved')>
+            </cfif>
             <!-- Navbar -->
             <div class="position-relative z-index-30">
                 <!-- Navbar -->

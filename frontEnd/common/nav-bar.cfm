@@ -15,7 +15,7 @@
                                     class="svg-logo-white"
                                     d="M47.45,60l1.36,27.58,53.41-51.66,50.87,50,3.84-26L194,100.65V31.94A31.94,31.94,0,0,0,162.06,0H31.94A31.94,31.94,0,0,0,0,31.94v82.57Z"
                                 />
-                                <path
+                                <pathbiperson
                                     fill="currentColor"
                                     class="svg-logo-dark"
                                     d="M178.8,113.19l1,34.41L116.3,85.92l-14.12,15.9L88.07,85.92,24.58,147.53l.93-34.41L0,134.86v27.2A31.94,31.94,0,0,0,31.94,194H162.06A31.94,31.94,0,0,0,194,162.06V125.83Z"
@@ -347,7 +347,7 @@
 
                     <!-- Navbar Login-->
                     <li class="ms-1 d-none d-lg-inline-block">
-                        <a class="btn btn-link px-2 text-decoration-none d-flex align-items-center" href="../login.cfm">
+                        <a class="btn btn-link px-2 text-decoration-none d-flex align-items-center" href="../validate.cfm?formAction=logOut">
                             <i class="ri-user-line ri-lg align-middle"></i>
                         </a>
                     </li>

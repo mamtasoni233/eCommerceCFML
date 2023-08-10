@@ -16,7 +16,7 @@
                 PkCustomerId != <cfqueryparam value = "#form.PkCustomerId#" cfsqltype = "cf_sql_integer">
             </cfquery>
             <cfif checkEmail.recordCount GT 0>
-                <cflocation url="auth-register.cfm?checkEmail=1" addtoken="false">
+                <cflocation url="sign-up.cfm?checkEmail=1" addtoken="false">
             </cfif>     
         </cfif>
         
@@ -39,7 +39,7 @@
                 , <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
             )
         </cfquery>
-        <cflocation url="auth-register.cfm?saved=2" addtoken="false">
+        <cflocation url="sign-up.cfm?saved=2" addtoken="false">
     </cfif>
     <!doctype html>
     <html lang="en">
@@ -66,12 +66,13 @@
             <link rel="mask-icon" href="./assets/favicon/safari-pinned-tab.svg" color="##5bbad5">
             <meta name="msapplication-TileColor" content="##da532c">
             <meta name="theme-color" content="##ffffff">
-
+            <!--- fontawsome --->
+            <script src="https://kit.fontawesome.com/194ef163b5.js" crossorigin="anonymous"></script>
             <!-- Vendor CSS -->
             <link rel="stylesheet" href="./assets/css/libs.bundle.css"/>
-
             <!-- Main CSS -->
             <link rel="stylesheet" href="./assets/css/theme.bundle.css"/>
+            <link rel="stylesheet" href="./assets/css/custom.css"/>
             <!-- jquery -->
             <script
                 src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
@@ -81,7 +82,7 @@
             ></script>
 
             <!-- Fix for custom scrollbar if JS is disabled-->
-            <noscript>
+            <!--- <noscript>
                 <style>
                     /**
                     * Reinstate scrolling for non-JS clients
@@ -90,75 +91,210 @@
                     overflow: auto;
                     }
                 </style>
-            </noscript>
+            </noscript> --->
             <!-- Page Title -->
             <title>Alpine | Bootstrap 5 HTML Template</title>
             <style>
                 .invalidCs{
                     border:1px solid red !important;
                 }
+                body {
+                    background: ##fccb90;
+                    background: -webkit-linear-gradient(to right, ##ee7724, ##d8363a, ##dd3675, ##b44593);
+                    background: linear-gradient(to right, ##3cb0d1, ##324db1, ##5736dd, ##4581b4);
+                }
             </style>
         </head>
-        <body class=" bg-light">
+        <body>
             <!-- Main Section-->
-            <section class="mt-0 overflow-hidden  vh-100 d-flex justify-content-center align-items-center p-4">
+                        <section class="" >
+                <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-12 col-xl-11">
+                            <div class="card" style="border-radius: 1rem;">
+                                <div class="row g-0">
+                                    <div class="col-md-6 col-lg-5 col-xl-5 d-none d-md-block">
+                                    <img src="./assets/images/logos/woman-shopping-online.gif"
+                                        alt="login form" class="img-fluid mt-5 pt-3" />
+                                    </div>
+                                    <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                                        <div class="card-bodyshadow-xl p-5 p-lg-5 bg-white rounded-3 text-black">
+                                            <h1 class="text-center mb-5 fs-2 fw-bold">Sign Up</h1>
+                                            <p class="auth-subtitle mb-4">
+                                                Log in with your data that you entered during registration.
+                                            </p>
+                                            <cfif structKeyExists(url,"saved") AND url.saved EQ 2>
+                                                <div class="alert alert alert-success alert-dismissible show fade">
+                                                    <i class="fa-regular fa-circle-check"></i> User Succefully created!!!
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                    </button>
+                                                </div>
+                                            <cfelseif structKeyExists(url,"checkEmail") AND url.checkEmail EQ 1>
+                                                <div class="alert alert-danger alert-dismissible show fade">
+                                                    <i class="fa-solid fa-circle-exclamation"></i> Email already exist!!!
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                    </button>
+                                                </div>
+                                            </cfif>
+                                            <form class="form" id="register" method="POST" action="">
+                                                <input type="hidden" value="0" name="PkCustomerId">
+                                                <div class="row">
+                                                    <div class="col-12 col-md-6">
+                                                        <lable class="form-label d-flex justify-content-between align-items-center" for="firstName">First Name</lable>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" class="form-control form-control-xl" id="firstName" name="firstName" placeholder="First Name"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <lablel class="form-label d-flex justify-content-between align-items-center" for="lastName">Last Name</lablel>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" class="form-control form-control-xl" id="lastName" name="lastName" placeholder="Last Name"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <lablel class="form-label d-flex justify-content-between align-items-center" for="email">Email</lablel>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" class="form-control form-control-xl" id="email" name="email" placeholder="Email"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <lablel class="form-label d-flex justify-content-between align-items-center" for="gender">Gender</lablel>
+                                                        <div class="form-group position-relative">
+                                                            <div class="row genderRow">
+                                                                <div class="col-md-6">
+                                                                        <div class="form-check ms-5">
+                                                                            <input class="form-check-input genderCheck" type="radio" name="gender" value="1">
+                                                                            <label class="form-check-label" for="male" id="male"> Male</label>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-check ms-5">
+                                                                        <input class="form-check-input genderCheck" type="radio" name="gender" value="0">
+                                                                        <label class="form-check-label" for="female" id="female"> Female </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <lable class="fw-bold form-label " for="dob">DOB</lable>
+                                                        <div class="form-group position-relative">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <select name="year" class="form-select" id="year">
+                                                                            <option value="" selected class="opacity-100">Year</option>
+                                                                            <cfloop from="1995" to="2013" index="idx">
+                                                                                <option value="#idx#">#idx#</option>
+                                                                            </cfloop>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <select name="month" class="form-select" id="month">
+                                                                            <option value="" selected class="opacity-100">Month</option>
+                                                                            <cfloop from="1" to="12" index="i">
+                                                                                <option value="#i#">#i#</option>
+                                                                            </cfloop>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <select name="day" class="form-select" id="day">
+                                                                            <option value="" class="opacity-100">Day</option>
+                                                                            <cfloop from="1" to="31" index="j">
+                                                                                <option value="#j#">#j#</option>
+                                                                            </cfloop>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <lable class="form-label d-flex justify-content-between align-items-center" for="password">Password</lable>
+                                                        <div class="form-group position-relative ">
+                                                            <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Enter Your Password" value=""/>
+                                                        </div>
+                                                        <div id="pswmeter" class="d-none"></div>
+                                                        <div id="pswmeter-message" class="d-none mb-3"></div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <lable class="form-label d-flex justify-content-between align-items-center" for="confrimPassword">Confrim Password</lable>
+                                                        <div class="form-group position-relative ">
+                                                            <input type="password" name="confrimPassword" id="confrimPassword" class="form-control form-control-xl" placeholder="Confrim Password"/>
+                                                        </div>
+                                                        <div id="pswmeter" class="d-none"></div>
+                                                        <div id="pswmeter-message" class="d-none mb-3"></div>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn text-white d-block w-100 my-4 signup-button">Sign Up</button>
+                                            </form>
+                                            <p class="d-block text-center text-muted">
+                                                Already registered? <a class="text-dark" href="login.cfm">Login here.</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section> 
+            <!---  <section class=" d-flex justify-content-center align-items-center p-5">
                 <!-- Page Content Goes Here -->
 
                 <!-- Login Form-->
-                <div class="col col-md-8 col-lg-6 col-xxl-5">
-                    <!-- Logo-->
-                    <a
-                        class="navbar-brand fw-bold fs-3 flex-shrink-0 order-0 align-self-center justify-content-center d-flex mx-0 px-0"
-                        href="./index.cfm"
-                    >
-                        <div class="d-flex align-items-center">
-                            <div class="f-w-6 d-flex align-items-center me-2 lh-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 194 194">
-                                    <path
-                                        fill="currentColor"
-                                        class="svg-logo-white"
-                                        d="M47.45,60l1.36,27.58,53.41-51.66,50.87,50,3.84-26L194,100.65V31.94A31.94,31.94,0,0,0,162.06,0H31.94A31.94,31.94,0,0,0,0,31.94v82.57Z"
-                                    />
-                                    <path
-                                        fill="currentColor"
-                                        class="svg-logo-dark"
-                                        d="M178.8,113.19l1,34.41L116.3,85.92l-14.12,15.9L88.07,85.92,24.58,147.53l.93-34.41L0,134.86v27.2A31.94,31.94,0,0,0,31.94,194H162.06A31.94,31.94,0,0,0,194,162.06V125.83Z"
-                                    />
-                                </svg>
+                <div class="col col-md-8 col-lg-6 col-xxl-6">
+                    <div class="shadow-xl p-5 p-lg-5 bg-white rounded-3">
+                        <h1 class="text-center mb-5 fs-2 fw-bold">Sign Up</h1>
+                        <cfif structKeyExists(url,"saved") AND url.saved EQ 2>
+                            <div class="alert alert alert-success alert-dismissible show fade">
+                                <i class="fa-regular fa-circle-check"></i> User Succefully created!!!
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                </button>
                             </div>
-                            <span class="fs-5">Alpine</span>
-                        </div>
-                    </a>
-                    <!-- / Logo-->
-                    <div class="shadow-xl p-4 p-lg-5 bg-white">
-                        <h1 class="text-center mb-5 fs-2 fw-bold">Open Account</h1>
-                        <a href="#" class="btn btn-facebook d-block mb-2"><i class="ri-facebook-circle-fill align-bottom"></i> Login
-                            with Facebook</a>
-                        <a href="#" class="btn btn-twitter d-block mb-2"><i class="ri-twitter-fill align-bottom"></i> Login with
-                            Twitter</a>
-                        <span class="text-muted text-center d-block fw-bolder my-4">OR</span>
-                        <form>
+                        <cfelseif structKeyExists(url,"checkEmail") AND url.checkEmail EQ 1>
+                            <div class="alert alert-danger alert-dismissible show fade">
+                                <i class="fa-solid fa-circle-exclamation"></i> Email already exist!!!
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                </button>
+                            </div>
+                        </cfif>
+                        <form class="form" id="register" method="POST" action="">
+                            <input type="hidden" value="0" name="PkCustomerId">
                             <div class="form-group">
                                 <lable class="fw-bold form-label" for="firstName">First Name</lable>
-                                <div class="position-relative has-icon-left mb-4 mt-2">
-                                    <input type="text" class="form-control form-control-xl" id="firstName" name="firstName" placeholder="First Name"/>
-                                    <div class="form-control-icon">
-                                        <i class="bi bi-person"></i>
+                                <div class="input-group position-relative has-icon-left mb-4 mt-2">
+                                    <div class="input-group-text">
+                                        <i class="fa-solid fa-user-large"></i>
                                     </div>
+                                    <input type="text" class="form-control form-control-xl" id="firstName" name="firstName" placeholder="First Name"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <lable class="fw-bold form-label" for="lastName">Last Name</lable>
-                                <div class="position-relative has-icon-left mb-4 mt-2">
+                                <div class="input-group position-relative has-icon-left mb-4 mt-2">
+                                    <span class="">
+                                        <i class="fa-solid fa-user-large"></i>
+                                    </span>
                                     <input type="text" class="form-control form-control-xl" id="lastName" name="lastName" placeholder="Last Name"/>
-                                    <div class="form-control-icon">
-                                        <i class="bi bi-person"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <lable class="fw-bold form-label" for="email">Email</lable>
+                                <div class="input-group position-relative has-icon-left mb-4 mt-2">
+                                    <div class="input-group-text">
+                                        <i class="fa fa-envelope"></i>
                                     </div>
+                                    <input type="text" class="form-control form-control-xl" id="email" name="email" placeholder="Email"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <lable class="fw-bold form-label" for="gender">Gender</lable>
-                                <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                <div class="input-group position-relative has-icon-left mb-4 mt-2">
                                     <div class="row genderRow">
                                         <div class="col-md-6">
                                                 <div class="form-check ms-5">
@@ -177,7 +313,7 @@
                             </div>
                             <div class="form-group">
                                 <lable class="fw-bold form-label " for="dob">DOB</lable>
-                                <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                <div class=" position-relative has-icon-left mb-4 mt-2">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -214,22 +350,22 @@
                             </div>
                             <div class="form-group">
                                 <lable class="fw-bold form-label" for="password">Password</lable>
-                                <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                    <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Enter Your Password" value=""/>
-                                    <div class="form-control-icon">
-                                        <i class="bi bi-shield-lock"></i>
+                                <div class="input-group position-relative has-icon-left mb-4 mt-2">
+                                    <div class="input-group-text">
+                                        <i class="fa-solid fa-shield"></i>
                                     </div>
+                                    <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Enter Your Password" value=""/>
                                 </div>
                                 <div id="pswmeter" class="d-none"></div>
                                 <div id="pswmeter-message" class="d-none mb-3"></div>
                             </div>
                             <div class="form-group">
                                 <lable class="fw-bold form-label" for="confrimPassword">Confrim Password</lable>
-                                <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                    <input type="password" name="confrimPassword" id="confrimPassword" class="form-control form-control-xl" placeholder="Confrim Password"/>
-                                    <div class="form-control-icon">
-                                        <i class="bi bi-shield-lock"></i>
+                                <div class="input-group position-relative has-icon-left mb-4 mt-2">
+                                    <div class="input-group-text">
+                                        <i class="fa-solid fa-shield"></i>
                                     </div>
+                                    <input type="password" name="confrimPassword" id="confrimPassword" class="form-control form-control-xl" placeholder="Confrim Password"/>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-dark d-block w-100 my-4">Sign Up</button>
@@ -241,7 +377,7 @@
                 </div>
                 <!-- / Login Form-->
                 <!-- /Page Content -->
-            </section>
+            </section> --->
             <!-- / Main Section-->
             <!--- jquery validation js --->
             <script
@@ -250,6 +386,7 @@
                 crossorigin="anonymous"
                 referrerpolicy="no-referrer"
             ></script>
+            <script async defer src="https://buttons.github.io/buttons.js"></script>
             <!-- Vendor JS -->
             <script src="./assets/js/vendor.bundle.js"></script>
 
@@ -384,9 +521,7 @@
                     colorScore3: '##ffc107',
                     colorScore4: 'limegreen'
                     
-                });
-
-                
+                });  
     
             </script>
         </body>

@@ -1,4 +1,5 @@
 <cfoutput>
+    
     <!-- / Hero Section -->
     <cfinclude template="../common/header.cfm">
     <!--/ Hero Section-->

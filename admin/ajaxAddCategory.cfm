@@ -7,6 +7,7 @@
 <cfparam name="categoryImage" default="" />
 <cfparam name="parentCategory" default="" />
 <cfparam name="showCatecgory" default="" />
+<cfparam name="parentCatId" default="" />
 <cfparam name="formAction" default="" />
 
 <cffunction name="convertToObject" access="public" returntype="any" output="false"
@@ -234,18 +235,19 @@
     </cfquery>
 </cfif>
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
+    <!--- <cfdump var="#form#" abort="true"> --->
     <cfquery name="getCategory">
         SELECT categoryName, PkCategoryId FROM Category 
         WHERE 
             parentCategoryId = <cfqueryparam value="0" cfsqltype="cf_sql_integer"> 
-            AND PkCategoryId <> parentCategoryId
+            AND PkCategoryId != <cfqueryparam value="2" cfsqltype="cf_sql_integer"> 
             AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfset data['data'] = []>
     <cfloop query="getCategory">
         <cfset dataRecord = {}>
         <cfset dataRecord['PkCategoryId'] = getCategory.PkCategoryId>
-        <cfset dataRecord['parentCategoryId'] = getCategory.parentCategoryId>
+        <!--- <cfset dataRecord['parentCategoryId'] = getCategory.parentCategoryId> --->
         <cfset dataRecord['categoryName'] = getCategory.categoryName>
         <cfset arrayAppend(data['data'], dataRecord)>
     </cfloop>
