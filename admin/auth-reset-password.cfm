@@ -21,7 +21,7 @@
                 <cfquery result="updatePassword">
                     UPDATE users SET  
                     password = <cfqueryparam value="#hashPassword#" cfsqltype="cf_sql_varchar"> 
-                    , token = <cfqueryparam null="true"> 
+                    , token = <cfqueryparam value="" null="true"> 
                     WHERE email= <cfqueryparam value="#trim(getToken.email)#" cfsqltype="cf_sql_varchar"> 
                 </cfquery>
                 <!---  <cfdump var="#updatePassword#">

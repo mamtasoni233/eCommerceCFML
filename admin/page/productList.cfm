@@ -43,7 +43,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-end">
                     <button class="btn btn-primary editProduct"  name="addProduct" data-bs-toggle="model" id="addProduct" data-id="0">
-                        <i class="bi bi-plus-lg"></i>
+                        <i class="bi bi-plus-lg "></i><span class="ms-2 pt-1">Add Product</span>
                     </button>
                 </div>
                 <div class="modal fade" id="addProductData" tabindex="-1" role="dialog" aria-labelledby="addProductData" aria-hidden="true">

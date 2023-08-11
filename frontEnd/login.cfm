@@ -88,14 +88,14 @@
             <style>
                 body {
                     background: ##fccb90;
-                    background: -webkit-linear-gradient(to right, ##ee7724, ##d8363a, ##dd3675, ##b44593);
+                    background: -webkit-linear-gradient(to right,  ##3cb0d1, ##324db1, ##5736dd, ##4581b4);
                     background: linear-gradient(to right, ##3cb0d1, ##324db1, ##5736dd, ##4581b4);
                 }
             </style>
         </head>
         <body>
             <!-- Main Section-->
-            <section class="" >
+            <section class="d-flex justify-content-center align-items-center p-5" >
                 <div class="container py-5 h-100">
                     <div class="row d-flex justify-content-center align-items-center h-100">
                         <div class="col col-xl-10">
@@ -109,13 +109,13 @@
                                         <div class="card-bodyshadow-xl p-5 p-lg-5 bg-white rounded-3 text-black">
                                             <cfif structKeyExists(url,"saved") AND url.saved EQ 4>
                                                 <div class="alert alert-success alert-dismissible show fade">
-                                                    <i class="bi bi-check-circle"></i> Your password is succesfully set!!
+                                                    <i class="fa fa-check-circle"></i> Your password is succesfully set!!
                                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                     </button>
                                                 </div>
                                             <cfelseif structKeyExists(url,"error") AND url.error EQ 1>
                                                 <div class="alert alert-danger alert-dismissible show fade">
-                                                    <i class="bi bi-exclamation-circle"></i> Invalid User Name/Password!!
+                                                    <i class="fa fa-exclamation-circle"></i> Invalid User Name/Password!!
                                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                     </button>
                                                 </div>
@@ -128,8 +128,12 @@
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <label class="form-label d-flex justify-content-between align-items-center" for="login-email">Email address</label>
-                                                        <div class="form-group position-relative">
+                                                        <div class="form-floating form-group position-relative">
                                                             <input type="email" class="form-control" name="email" id="email" placeholder="name@email.com">
+                                                            <label for="email" class="text-muted">
+                                                                <i class="fa-solid fa-envelope"></i>
+                                                                Enter email address
+                                                            </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
@@ -138,14 +142,18 @@
                                                             class="form-label d-flex justify-content-between align-items-center"
                                                         >
                                                             Password
-                                                            <a href="##" class="text-muted small">Forgot your password?</a>
+                                                            <a href="forgot-password.cfm" class="text-muted small">Forgot your password?</a>
                                                         </label>
-                                                        <div class="form-group">
+                                                        <div class="form-floating form-group">
                                                             <input
                                                                 type="password"
                                                                 class="form-control" name="password" id="password"
                                                                 placeholder="Enter your password"
                                                             >
+                                                            <label for="password" class="text-muted">
+                                                                <i class="fa-solid fa-key"></i>
+                                                                Enter password
+                                                            </label>
                                                         </div>
                                                     </div>
                                                 </div>

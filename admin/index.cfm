@@ -77,6 +77,9 @@
                             <cfcase value="product">
                                 <cfinclude template="./page/product.cfm">
                             </cfcase>
+                            <cfcase value="customer">
+                                <cfinclude template="./page/customer.cfm">
+                            </cfcase>
                         </cfswitch>
                     </div>
                     <!--- start footer --->

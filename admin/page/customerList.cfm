@@ -1,12 +1,18 @@
 <cfoutput>
-    <cfparam name="PkCategoryId" default="" />
-    <cfparam name="categoryName" default="" />
-    <cfparam name="categoryImage" default="" />
+    <cfparam name="PkCustomerId" default="" />
+    <cfparam name="firstName" default="" />
+    <cfparam name="lastName" default="" />
+    <cfparam name="email" default="" />
+    <cfparam name="password" default="" />
+    <cfparam name="dob" default="" />
+    <cfparam name="gender" default="" />
+    <cfparam name="profile" default="" />
+    <cfparam name="isActive" default="" /> 
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h1>Category</h1>
+                    <h1>Customer</h1>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -15,29 +21,29 @@
                                 <a href="index.cfm?pg=dashboard">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Categories
+                                Customers
                             </li>
                         </ol>
                     </nav>
                 </div>
-                <cfif structKeyExists(session.user, 'categorySave') AND session.user.categorySave EQ 1>
+                <cfif structKeyExists(session.user, 'customerSave') AND session.user.customerSave EQ 1>
                     <div class="alert alert-light-success alert-dismissible show fade">
-                        <i class="bi bi-check-circle"></i> Category Data successfully inserted..!!!
+                        <i class="bi bi-check-circle"></i> Customer Data successfully inserted..!!!
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <cfset StructDelete(session.user,'categorySave')>
-                <cfelseif structKeyExists(session.user, 'categoryUpdate') AND session.user.categoryUpdate EQ 1>
+                    <cfset StructDelete(session.user,'customerSave')>
+                <cfelseif structKeyExists(session.user, 'customerUpdate') AND session.user.customerUpdate EQ 1>
                     <div class="alert alert-light-success alert-dismissible show fade">
-                        <i class="bi bi-check-circle"></i> Category Data successfully updated..!!!
+                        <i class="bi bi-check-circle"></i> Customer Data successfully updated..!!!
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <cfset StructDelete(session.user,'categoryUpdate')>
-                <cfelseif structKeyExists(session.user, 'deleteCategory') AND session.user.deleteCategory EQ 1>
+                    <cfset StructDelete(session.user,'customerUpdate')>
+                <cfelseif structKeyExists(session.user, 'deleteCustomer') AND session.user.deleteCustomer EQ 1>
                     <div class="alert alert-light-success alert-dismissible show fade">
-                        <i class="bi bi-check-circle"></i> Category Data successfully deleted..!!!
+                        <i class="bi bi-check-circle"></i> Customer Data successfully deleted..!!!
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <cfset StructDelete(session.user,'deleteCategory')>
+                    <cfset StructDelete(session.user,'deleteCustomer')>
                 </cfif>
             </div>
         </div>
@@ -45,89 +51,11 @@
         <section class="section">
             <div class="card">
                 <div class="card-header d-flex justify-content-end">
-                    <button class="btn btn-primary editCategory"  name="addCategory" data-bs-toggle="model" id="addCategory" data-id="0">
-                        <i class="bi bi-plus-lg "></i><span class="ms-2 pt-1">Add Category</span>
-                    </button>
-                </div>
-                <div class="modal fade" id="addCategoryData" tabindex="-1" role="dialog" aria-labelledby="addCategoryData" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary">
-                                <h5 class="modal-title white">
-                                    Add Category
-                                </h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <i data-feather="x"></i>
-                                </button>
-                            </div>
-                            <form class="form p-3" id="addCategoryForm" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" id="PkCategoryId" value="" name="PkCategoryId">
-                                <div class="row g-3">
-                                    <div class="col-md-12">
-                                        <lable class="fw-bold form-label" for="parentCategory">Parent Category Name</lable>
-                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <select name="parentCategory" id="parentCategory" class="form-control-xl">
-                                                <!--- <option selected value='0'>Select As A Parent</option> --->
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <lable class="fw-bold form-label" for="categoryName">Category Name</lable>
-                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="text" class="form-control form-control-xl" id="categoryName" value="" name="categoryName"  placeholder="Category Name"/>
-                                            <div class="form-control-icon">
-                                                <i class="bi bi-bag-heart-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <lable class="fw-bold form-label text-center" for="categoryImage">Category Image</lable>
-                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="file" class="form-control form-control-xl" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend">
-                                        </div>
-                                        <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
-                                        <div class="form-check removeImageContainer d-none">
-                                            <div class="checkbox">
-                                                <input type="checkbox" id="removeImage" name="removeImage" class="form-check-input" value="1" />
-                                                <label class="form-label text-dark font-weight-bold" for="removeImage">
-                                                    Remove Image
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-2">
-                                        <div class="form-check">
-                                            <div class="checkbox">
-                                                <label class="form-label text-dark font-weight-bold" for="isActive">Is Active
-                                                </label>
-                                                <input type="checkbox" class="form-check-input" id="isActive" checked name="isActive" value="1">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                        <i class="bx bx-x d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">Close</span>
-                                    </button>
-                                    <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
-                                        <i class="bx bx-check d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">Submit</span>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                    <a href="index.cfm?pg=customer&s=addCustomer" class="btn btn-primary editCustomer"  name="addCustomer" id="addCustomer" data-id="0">
+                        <i class="bi bi-plus-lg "></i><span class="ms-2 pt-1">Add Customer</span>
+                    </a>
                 </div>
                 <div class="card-body">
-                    <!--- <div class="row justify-content-end mb-3">
-                        <div class="col-2 ">
-                            <select name="isDeleted" id="isDeleted" class="form-control" >
-                                <option value="0">Not Deleted</option>
-                                <option value="1">Deleted</option>
-                            </select>
-                        </div>
-                    </div> --->
                     <div class="table-responsive">
                         <table class="table" id="categoryDataTable">
                             <thead>
@@ -194,7 +122,7 @@
             ], */
     
             ajax: {
-                url: "../ajaxAddCategory.cfm?formAction=getRecord",
+                url: "../ajaxAddCustomer.cfm?formAction=getRecord",
                 type :'post',
                 data: function(d){
                     var sIdx = d.order[0].column;
@@ -231,16 +159,16 @@
                 { data: 'isActive',
                     render: function (data,type,row) {
                         if(row.isActive == 1){
-                            return '<span id="deactive" data-id="'+row.PkCategoryId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
+                            return '<span id="deactive" data-id="'+row.PkCustomerId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
                         }else{
-                            return '<span id="active" data-id="'+row.PkCategoryId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
+                            return '<span id="active" data-id="'+row.PkCustomerId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
                         }
                     }
                 },
-                { data: 'PkCategoryId',
+                { data: 'PkCustomerId',
                     render: function(data, type, row, meta)
                     {
-                        return '<a data-id="'+row.PkCategoryId+'"  id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkCategoryId+'" data-name="'+row.categoryName+'" id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
+                        return '<a data-id="'+row.PkCustomerId+'"  id="editCustomer" class="border-none btn btn-sm btn-success text-white mt-1 editCustomer" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkCustomerId+'" data-name="'+row.categoryName+'" id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
                     }
                 },
             ],
@@ -257,12 +185,12 @@
             $('#categoryDataTable').DataTable().ajax.reload();
         });
         // open add category model
-        $("#addCategory").on("click", function () {
-            $("#addCategoryData").modal('show');
-            $('#PkCategoryId').val(0);
+        $("#addCustomer").on("click", function () {
+            $("#addCustomerData").modal('show');
+            $('#PkCustomerId').val(0);
             getParentCategory();
         });
-        $("#addCategoryForm").validate({
+        $("#addCustomerForm").validate({
             rules: {
                 categoryName: {
                     required: true
@@ -324,14 +252,14 @@
             }
         });
     
-        $("#categoryDataTable").on("click", ".editCategory", function () { 
+        $("#categoryDataTable").on("click", ".editCustomer", function () { 
             var id = $(this).attr("data-id");
-            $("#addCategoryData").modal('show');
-            $('#PkCategoryId').val(id);
+            $("#addCustomerData").modal('show');
+            $('#PkCustomerId').val(id);
             $(".modal-title").html("Update Category");
             $.ajax({
                 type: "GET",
-                url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
+                url: "../ajaxAddCustomer.cfm?PkCustomerId="+ id,
                 success: function(result) {
                     if (result.success) {
                         console.log(result);
@@ -339,10 +267,10 @@
                         /* if (result.json.parentCategoryId > 0) {
                             getParentCategory(result.json.parentCategoryId);
                         } else{
-                            getParentCategory(result.json.PkCategoryId);
+                            getParentCategory(result.json.PkCustomerId);
                         } */
                         getParentCategory(result.json.parentCategoryId);
-                        $("#PkCategoryId").val(result.json.PkCategoryId);
+                        $("#PkCustomerId").val(result.json.PkCustomerId);
                         $('#categoryName').val(result.json.categoryName);
                         let imgSrc = '.../../assets/categoryImage/' + result.json.categoryImage;
                         if (image.length > 0) {
@@ -354,8 +282,8 @@
                         } else{
                             $('#isActive').prop('checked', false);
                         }
-                        $('#addCategoryData').on('hidden.bs.modal', function () {
-                            $("#addCategoryForm").trigger('reset');
+                        $('#addCustomerData').on('hidden.bs.modal', function () {
+                            $("#addCustomerForm").trigger('reset');
                             $('#imgPreview').attr('src', '');
                             $("#parentCategory").val(''); 
                             $('.removeImageContainer').addClass('d-none')
@@ -377,7 +305,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({  
-                        url: '../ajaxAddCategory.cfm?delPkCategoryId='+id, 
+                        url: '../ajaxAddCustomer.cfm?delPkCustomerId='+id, 
                         type: 'GET',  
                         success: function(data) {
                             dangerToast("Deleted!","Category Deleted Successfully");
@@ -402,7 +330,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({  
-                            url: '../ajaxAddCategory.cfm?statusId='+id,  
+                            url: '../ajaxAddCustomer.cfm?statusId='+id,  
                             type: 'POST',  
                             success: function(data) {
                                 dangerToast("Deactivated!","Category Deactivated Successfully");
@@ -422,7 +350,7 @@
                     }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({  
-                            url: '../ajaxAddCategory.cfm?statusId='+id,  
+                            url: '../ajaxAddCustomer.cfm?statusId='+id,  
                             type: 'POST',  
                             success: function(data) {
                                 successToast("Activated!","Category Activated Successfully");
@@ -437,7 +365,7 @@
     function getParentCategory(parentCatId=0) {
         $.ajax({    
                 type: "GET",
-                url: "../ajaxAddCategory.cfm?formAction=getCategory", 
+                url: "../ajaxAddCustomer.cfm?formAction=getCategory", 
                 dataType: "html",   
                 data: parentCatId,          
                 success: function(result){
@@ -448,7 +376,7 @@
                         var html = "";
                         var html = "<option value='0'>Select As A Parent</option>";
                         for (var i = 0; i < dataRecord.data.length; i++) {
-                            html += "<option value="+dataRecord.data[i].PkCategoryId+" >"+dataRecord.data[i].categoryName+"</option>";
+                            html += "<option value="+dataRecord.data[i].PkCustomerId+" >"+dataRecord.data[i].categoryName+"</option>";
                         }
                         $('#parentCategory').append(html);
                         if (parentCatId > 0) {
@@ -462,23 +390,23 @@
             }); 
     }
     function submitCategoryData() {
-        var formData = new FormData($('#addCategoryForm')[0]);
+        var formData = new FormData($('#addCustomerForm')[0]);
         $.ajax({
             type: "POST",
-            url: "../ajaxAddCategory.cfm?PkCategoryId=" + $('#PkCategoryId').val(),
+            url: "../ajaxAddCustomer.cfm?PkCustomerId=" + $('#PkCustomerId').val(),
             data: formData,
             contentType: false,
             processData: false,
             success: function(result) {
-                if ($('#PkCategoryId').val() > 0) {
+                if ($('#PkCustomerId').val() > 0) {
                     successToast("Category Updated!","Category Successfully Updated");
                 } else{
                     successToast("Category Add!","Category Successfully Added");
                 }
                 
-                $("#addCategoryData").modal('hide');
-                $('#addCategoryData').on('hidden.bs.modal', function () {
-                    $("#addCategoryForm").trigger('reset');
+                $("#addCustomerData").modal('hide');
+                $('#addCustomerData').on('hidden.bs.modal', function () {
+                    $("#addCustomerForm").trigger('reset');
                     $('#imgPreview').attr('src', '');
                     $("#parentCategory").val(''); 
                 });

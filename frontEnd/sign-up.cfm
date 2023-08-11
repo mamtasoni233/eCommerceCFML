@@ -30,6 +30,7 @@
                 , dob
                 , gender
                 , password
+                , createdBy
             ) VALUES (
                 <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
                 , <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
@@ -37,6 +38,7 @@
                 , <cfqueryparam value = "#dob#" cfsqltype = "cf_sql_date">
                 , <cfqueryparam value = "#form.gender#" cfsqltype = "cf_sql_bit">
                 , <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
+                , <cfqueryparam value = "0" cfsqltype = "cf_sql_integer">
             )
         </cfquery>
         <cflocation url="sign-up.cfm?saved=2" addtoken="false">
@@ -82,7 +84,7 @@
             ></script>
 
             <!-- Fix for custom scrollbar if JS is disabled-->
-            <!--- <noscript>
+            <noscript>
                 <style>
                     /**
                     * Reinstate scrolling for non-JS clients
@@ -91,7 +93,7 @@
                     overflow: auto;
                     }
                 </style>
-            </noscript> --->
+            </noscript> 
             <!-- Page Title -->
             <title>Alpine | Bootstrap 5 HTML Template</title>
             <style>
@@ -100,28 +102,28 @@
                 }
                 body {
                     background: ##fccb90;
-                    background: -webkit-linear-gradient(to right, ##ee7724, ##d8363a, ##dd3675, ##b44593);
+                    background: -webkit-linear-gradient(to right,  ##3cb0d1, ##324db1, ##5736dd, ##4581b4);
                     background: linear-gradient(to right, ##3cb0d1, ##324db1, ##5736dd, ##4581b4);
                 }
             </style>
         </head>
         <body>
             <!-- Main Section-->
-                        <section class="" >
+            <section class="d-flex justify-content-center align-items-center px-5" >
                 <div class="container py-5 h-100">
                     <div class="row d-flex justify-content-center align-items-center h-100">
-                        <div class="col-12 col-xl-11">
+                        <div class="col-12 col-xl-10">
                             <div class="card" style="border-radius: 1rem;">
                                 <div class="row g-0">
-                                    <div class="col-md-6 col-lg-5 col-xl-5 d-none d-md-block">
-                                    <img src="./assets/images/logos/woman-shopping-online.gif"
-                                        alt="login form" class="img-fluid mt-5 pt-3" />
+                                    <div class="col-md-6 col-lg-5 col-xl-5 col-sm-12 d-none d-md-block">
+                                        <img src="./assets/images/logos/woman-shopping-online.gif"
+                                        alt="login form" class="img-fluid mt-5 pt-4 w-100 h-75" />
                                     </div>
-                                    <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                                    <div class="col-md-6 col-lg-7 col-sm-12 d-flex align-items-center">
                                         <div class="card-bodyshadow-xl p-5 p-lg-5 bg-white rounded-3 text-black">
                                             <h1 class="text-center mb-5 fs-2 fw-bold">Sign Up</h1>
                                             <p class="auth-subtitle mb-4">
-                                                Log in with your data that you entered during registration.
+                                                Please fill your details below for registration...
                                             </p>
                                             <cfif structKeyExists(url,"saved") AND url.saved EQ 2>
                                                 <div class="alert alert alert-success alert-dismissible show fade">
@@ -141,34 +143,46 @@
                                                 <div class="row">
                                                     <div class="col-12 col-md-6">
                                                         <lable class="form-label d-flex justify-content-between align-items-center" for="firstName">First Name</lable>
-                                                        <div class="form-group position-relative">
+                                                        <div class="form-floating form-group position-relative">
                                                             <input type="text" class="form-control form-control-xl" id="firstName" name="firstName" placeholder="First Name"/>
+                                                            <label class="text-muted" for="firstName">
+                                                                <i class="fa-solid fa-user"></i>
+                                                                Enter your first name
+                                                            </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md-6">
                                                         <lablel class="form-label d-flex justify-content-between align-items-center" for="lastName">Last Name</lablel>
-                                                        <div class="form-group position-relative">
+                                                        <div class="form-floating form-group position-relative">
                                                             <input type="text" class="form-control form-control-xl" id="lastName" name="lastName" placeholder="Last Name"/>
+                                                            <label class="text-muted" for="lastName">
+                                                                <i class="fa-solid fa-user"></i>
+                                                                Enter your last name
+                                                            </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md-6">
                                                         <lablel class="form-label d-flex justify-content-between align-items-center" for="email">Email</lablel>
-                                                        <div class="form-group position-relative">
+                                                        <div class="form-floating form-group position-relative">
                                                             <input type="text" class="form-control form-control-xl" id="email" name="email" placeholder="Email"/>
+                                                            <label class="text-muted" for="email">
+                                                                <i class="fa-solid fa-envelope"></i> 
+                                                                Enter email address
+                                                            </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md-6">
                                                         <lablel class="form-label d-flex justify-content-between align-items-center" for="gender">Gender</lablel>
                                                         <div class="form-group position-relative">
-                                                            <div class="row genderRow">
+                                                            <div class="row genderRow mt-3">
                                                                 <div class="col-md-6">
-                                                                        <div class="form-check ms-5">
+                                                                        <div class="form-check">
                                                                             <input class="form-check-input genderCheck" type="radio" name="gender" value="1">
                                                                             <label class="form-check-label" for="male" id="male"> Male</label>
                                                                         </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <div class="form-check ms-5">
+                                                                    <div class="form-check">
                                                                         <input class="form-check-input genderCheck" type="radio" name="gender" value="0">
                                                                         <label class="form-check-label" for="female" id="female"> Female </label>
                                                                     </div>
@@ -177,12 +191,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
-                                                        <lable class="fw-bold form-label " for="dob">DOB</lable>
+                                                        <lable class=" form-label" for="dob">DOB</lable>
                                                         <div class="form-group position-relative">
-                                                            <div class="row">
+                                                            <div class="row mt-2">
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <select name="year" class="form-select" id="year">
+                                                                        <select name="year" class="form-control form-select" id="year">
                                                                             <option value="" selected class="opacity-100">Year</option>
                                                                             <cfloop from="1995" to="2013" index="idx">
                                                                                 <option value="#idx#">#idx#</option>
@@ -192,7 +206,7 @@
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <select name="month" class="form-select" id="month">
+                                                                        <select name="month" class="form-control form-select" id="month">
                                                                             <option value="" selected class="opacity-100">Month</option>
                                                                             <cfloop from="1" to="12" index="i">
                                                                                 <option value="#i#">#i#</option>
@@ -202,7 +216,7 @@
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <select name="day" class="form-select" id="day">
+                                                                        <select name="day" class="form-control form-select" id="day">
                                                                             <option value="" class="opacity-100">Day</option>
                                                                             <cfloop from="1" to="31" index="j">
                                                                                 <option value="#j#">#j#</option>
@@ -215,16 +229,25 @@
                                                     </div>
                                                     <div class="col-12 col-md-6">
                                                         <lable class="form-label d-flex justify-content-between align-items-center" for="password">Password</lable>
-                                                        <div class="form-group position-relative ">
+                                                        <div class="form-floating form-group position-relative ">
                                                             <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Enter Your Password" value=""/>
+                                                            <label for="password" class="text-muted">
+                                                                <i class="fa-solid fa-key"></i> 
+                                                                Enter password
+                                                            </label>
                                                         </div>
                                                         <div id="pswmeter" class="d-none"></div>
                                                         <div id="pswmeter-message" class="d-none mb-3"></div>
                                                     </div>
                                                     <div class="col-12 col-md-6">
                                                         <lable class="form-label d-flex justify-content-between align-items-center" for="confrimPassword">Confrim Password</lable>
-                                                        <div class="form-group position-relative ">
+                                                        <div class="form-floating form-group position-relative ">
                                                             <input type="password" name="confrimPassword" id="confrimPassword" class="form-control form-control-xl" placeholder="Confrim Password"/>
+                                                            <label for="confrimPassword" class="text-muted">
+                                                                <i class="fa-solid fa-key"></i> 
+                                                                Confrim password
+                                                            </label>
+
                                                         </div>
                                                         <div id="pswmeter" class="d-none"></div>
                                                         <div id="pswmeter-message" class="d-none mb-3"></div>
