@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 10, 2023 at 03:49 PM
+-- Generation Time: Aug 11, 2023 at 11:57 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -71,21 +71,29 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 
 CREATE TABLE `customer` (
   `PkCustomerId` int(10) UNSIGNED NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
   `firstName` varchar(100) NOT NULL,
   `lastName` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `dob` date NOT NULL,
   `gender` bit(1) NOT NULL,
-  `profile` varchar(255) DEFAULT NULL
+  `profile` varchar(255) DEFAULT NULL,
+  `isBlcoked` bit(1) NOT NULL DEFAULT b'0',
+  `isActive` bit(1) NOT NULL DEFAULT b'1',
+  `isDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `createdBy` int(10) UNSIGNED NOT NULL,
+  `createdDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedBy` int(10) DEFAULT NULL,
+  `updatedDate` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`PkCustomerId`, `firstName`, `lastName`, `email`, `password`, `dob`, `gender`, `profile`) VALUES
-(1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '$2a$10$7iuUsjZsF0DQevwRE9oT8eU7OmcsyUFkA0tGVxJvbyg50nWnQBwZS', '2001-07-16', b'0', NULL);
+INSERT INTO `customer` (`PkCustomerId`, `token`, `firstName`, `lastName`, `email`, `password`, `dob`, `gender`, `profile`, `isBlcoked`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
+(1, NULL, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '$2a$10$y0k8/Sap/WLAHSclo/Uex.ejyzRFfKPmHyOS2Zy/0W.Jqbm1T1hZG', '2001-07-16', b'0', NULL, b'0', b'1', b'0', 0, '2023-08-11 08:05:50', NULL, '2023-08-11 09:11:14');
 
 -- --------------------------------------------------------
 
