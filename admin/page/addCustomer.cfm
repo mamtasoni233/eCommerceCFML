@@ -1,13 +1,35 @@
 <cfoutput>
-    <cfparam name="PkCustomerId" default="" />
+    <cfparam name="PkCustomerId" default="0" />
+    <cfdump var="#PkCustomerId#">
     <cfparam name="firstName" default="" />
     <cfparam name="lastName" default="" />
     <cfparam name="email" default="" />
     <cfparam name="password" default="" />
     <cfparam name="dob" default="" />
+    <cfparam name="dobYear" default="" />
+    <cfparam name="dobDate" default="" />
+    <cfparam name="dobMonth" default="" />
     <cfparam name="gender" default="" />
     <cfparam name="profile" default="" />
     <cfparam name="isActive" default="" /> 
+    <cfif structKeyExists(url, "PkCustomerId") AND url.PkCustomerId GT 0>
+        <cfquery name="editCustomerData">
+            SELECT PkCustomerId, firstName, profile, isActive, lastName, email, gender, dob
+            FROM customer 
+            WHERE PkCustomerId = <cfqueryparam value="#PkCustomerId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfdump var="#editCustomerData#">
+        <cfset PkCustomerId= editCustomerData.PkCustomerId>
+        <cfset firstName = editCustomerData.firstName>
+        <cfset lastName = editCustomerData.lastName>
+        <cfset email = editCustomerData.email>
+        <cfset gender = editCustomerData.gender>
+        <cfset dobDate = dateFormat(editCustomerData.dob, 'dd')>
+        <cfset dobMonth = dateFormat(editCustomerData.dob, 'mm')>
+        <cfset dobYear = dateFormat(editCustomerData.dob, 'yyyy')>
+        <cfset profile = editCustomerData.profile>
+        <cfset isActive = editCustomerData.isActive>
+    </cfif>
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -29,69 +51,128 @@
                         </ol>
                     </nav>
                 </div>
-                <cfif structKeyExists(session.user, 'customerSave') AND session.user.customerSave EQ 1>
-                    <div class="alert alert-light-success alert-dismissible show fade">
-                        <i class="bi bi-check-circle"></i> Customer Data successfully inserted..!!!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <cfif structKeyExists(url,"checkEmail") AND url.checkEmail EQ 1>
+                    <div class="alert alert-light-danger alert-dismissible show fade">
+                        <i class="bi bi-exclamation-circle"></i> Email already exist!!!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
                     </div>
-                    <cfset StructDelete(session.user,'customerSave')>
-                <cfelseif structKeyExists(session.user, 'customerUpdate') AND session.user.customerUpdate EQ 1>
-                    <div class="alert alert-light-success alert-dismissible show fade">
-                        <i class="bi bi-check-circle"></i> Customer Data successfully updated..!!!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <cfset StructDelete(session.user,'customerUpdate')>
-                <cfelseif structKeyExists(session.user, 'deleteCustomer') AND session.user.deleteCustomer EQ 1>
-                    <div class="alert alert-light-success alert-dismissible show fade">
-                        <i class="bi bi-check-circle"></i> Customer Data successfully deleted..!!!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <cfset StructDelete(session.user,'deleteCustomer')>
                 </cfif>
             </div>
         </div>
-        <!-- Data Tables start -->
         <section class="section">
             <div class="card">
                 <div class="card-header d-flex justify-content-end">
-                    <a href="index.cfm?pg=customerList" class="btn btn-primary editCustomer"  name="addCustomer" id="addCustomer" data-id="0">
-                        <i class="bi bi-plus-lg "></i><span class="ms-2 pt-1">Back</span>
+                    <a href="index.cfm?pg=customer&s=customerList" class="btn btn-primary editCustomer"  name="addCustomer" id="addCustomer" data-id="0">
+                        <i class="bi bi-left-arrow"></i><span class="ms-2 pt-1">Back</span>
                     </a>
                 </div>
-                <form class="form p-3" id="addCustomerForm" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="PkCustomerId" value="" name="PkCustomerId">
+                <form action="ajaxAddCustomer.cfm?formAction=saveCustomer" class="form p-3" id="addCustomerForm" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="PkCustomerId" value="#PkCustomerId#" name="PkCustomerId">
                     <div class="row g-3">
-                        <div class="col-md-12">
-                            <lable class="fw-bold form-label" for="parentCategory">Parent Category Name</lable>
+                        <div class="col-md-6">
+                            <lable class="fw-bold form-label" for="firstName">First Name</lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                <select name="parentCategory" id="parentCategory" class="form-control-xl">
-                                    <!--- <option selected value='0'>Select As A Parent</option> --->
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <lable class="fw-bold form-label" for="categoryName">Category Name</lable>
-                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                <input type="text" class="form-control form-control-xl" id="categoryName" value="" name="categoryName"  placeholder="Category Name"/>
+                                <input type="text" name="firstName" id="firstName" class="form-control form-control-xl" placeholder="Enter First Name" value="#firstName#"/>
                                 <div class="form-control-icon">
-                                    <i class="bi bi-bag-heart-fill"></i>
+                                    <i class="bi bi-person-fill"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <lable class="fw-bold form-label text-center" for="categoryImage">Category Image</lable>
+                        <div class="col-md-6">
+                            <lable class="fw-bold form-label" for="lastName">Last Name</lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                <input type="file" class="form-control form-control-xl" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend">
-                            </div>
-                            <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
-                            <div class="form-check removeImageContainer d-none">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="removeImage" name="removeImage" class="form-check-input" value="1" />
-                                    <label class="form-label text-dark font-weight-bold" for="removeImage">
-                                        Remove Image
-                                    </label>
+                                <input type="text" name="lastName" id="lastName" class="form-control form-control-xl" placeholder="Enter Last Name" value="#lastName#"/>
+                                <div class="form-control-icon">
+                                    <i class="bi bi-person-fill"></i>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-6">
+                            <lable class="fw-bold form-label" for="email">Email</lable>
+                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                <input type="email" name="email" id="email" class="form-control form-control-xl" placeholder="Enter Email" value="#email#"/>
+                                <div class="form-control-icon">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <lable class="fw-bold form-label" for="password">Password</lable>
+                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Password" <cfif PkCustomerId EQ 0>required</cfif> value="" />
+                                <div class="form-control-icon">
+                                    <i class="bi bi-shield-lock"></i>
+                                </div>
+                            </div>
+                            <div id="pswmeter" class="d-none"></div>
+                            <div id="pswmeter-message" class="d-none mb-3"></div>
+                        </div>
+                        <div class="col-md-6"> 
+                            <lable class="fw-bold form-label" for="gender">Gender</lable>
+                            <div class="form-group position-relative has-icon-left mb-4 mt-3">
+                                <div class="row genderRow me-5">
+                                    <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input genderCheck" type="radio" name="gender" value="1" <cfif gender EQ 1>checked</cfif>>
+                                                <label class="form-check-label" for="male" id="male"> Male</label>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input genderCheck" type="radio" name="gender" value="0" <cfif gender EQ 0>checked</cfif>>
+                                            <label class="form-check-label" for="female" id="female"> Female </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <lable class="fw-bold form-label " for="dob">DOB</lable>
+                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <select name="year" class="form-select" id="year">
+                                                <option value="" selected class="opacity-100">Year</option>
+                                                <cfloop from="1995" to="2013" index="idx">
+                                                    <option value="#idx#" <cfif dobYear EQ idx>selected</cfif>>#idx#</option>
+                                                </cfloop>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <select name="month" class="form-select" id="month">
+                                                <option value="" selected class="opacity-100">Month</option>
+                                                <cfloop from="1" to="12" index="i">
+                                                    <option value="#i#" <cfif dobMonth EQ i>selected</cfif>>#i#</option>
+                                                </cfloop>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <select name="day" class="form-select" id="day">
+                                                <option value="" class="opacity-100">Day</option>
+                                                <cfloop from="1" to="31" index="j">
+                                                    <option value="#j#" <cfif dobDate EQ j>selected</cfif>>#j#</option>
+                                                </cfloop>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <lable class="fw-bold form-label" for="customerProfile">Profile</lable>
+                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                            <input type="file" class="form-control form-control-xl" name="customerProfile" id="customerProfile"  aria-describedby="inputGroupPrepend">
+                                <div class="form-control-icon">
+                                    <i class="bi bi-cloud-plus-fill me-2"></i>
+                                </div>
+                            </div>
+                            <img id="imgPreviewProfile" src="" class="w-25">     
                         </div>
                         <div class="col-md-12 mb-2">
                             <div class="form-check">
@@ -106,7 +187,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                             <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Close</span>
+                            <span class="d-none d-sm-block">Cancel</span>
                         </button>
                         <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
                             <i class="bx bx-check d-block d-sm-none"></i>
@@ -117,4 +198,143 @@
             </div>
         </section>
     </div>
+    <script src="/assets/js/pswmeter.min.js"></script>
+    <script>
+        $( document ).ready(function() {
+            $('##password').on('keyup',function(){
+                if ($(this).val().length > 0) {
+                    $("##pswmeter").removeClass('d-none');
+                    $("##pswmeter-message").removeClass('d-none');
+                } else {
+                    $("##pswmeter").addClass('d-none');
+                    $("##pswmeter-message").addClass('d-none');
+                }
+            });
+            $('##customerProfile').change(function(){
+                const file = this.files[0];
+                if (file){
+                    let reader = new FileReader();
+                    reader.onload = function(event){
+                        $('##imgPreviewProfile').attr('src', event.target.result);
+                    }
+                        reader.readAsDataURL(file);
+                    }
+            });
+            $("##addCustomerForm").validate({
+                rules: {
+                    firstName: {
+                        required: true
+                    },
+                    lastName: {
+                        required: true
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    gender: {
+                        required: true
+                    },
+                    day: {
+                        required: true
+                    },
+                    month: {
+                        required: true
+                    },
+                    year: {
+                        required: true
+                    },
+                    password: {
+                        //required: true,
+                        required: function(element){
+                            if( $("##PkCustomerId").val().length > 0){
+                                return false;
+                            } else{
+                                return true;
+                            }
+                        },
+                        minlength:8
+                    },
+                },
+                messages: {
+                    firstName: {
+                        required: "Please enter your first name",                    
+                    },   
+                    lastName: {
+                        required: "Please enter your last name",                    
+                    },  
+                    email: {
+                        required: "Please enter your email address",                    
+                    },
+                    gender: {
+                        required: "Please enter your gender",                    
+                    },
+                    day: {
+                        required: "Please enter your birth date",                    
+                    },
+                    month: {
+                        required: "Please enter your birth month",                    
+                    },
+                    year: {
+                        required: "Please enter your birth year",                    
+                    },
+                    password: {
+                        required: "Please enter your password"
+                    } 
+                },
+                ignore: [],
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    if (element.attr("name") == "gender") {
+                        error.insertAfter($('.genderRow'));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                    error.addClass('invalid-feedback');
+                },
+                highlight: function (element, errorClass, validClass) {
+                    if ($(element).hasClass('form-check-input')){
+                        if ($(element).attr('name') == 'gender') {
+                            $('.genderCheck').each(function () {
+                                $(this).addClass('is-invalid');
+                            });
+                        }
+                    } else {
+                        $(element).addClass('is-invalid');
+                    }
+                    //$(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+            });
+    
+        });
+        // Run pswmeter with options
+        var pass = document.getElementById('password');
+        const myPassMeter = passwordStrengthMeter({
+            containerElement: '##pswmeter',
+            passwordInput: '##password',
+            showMessage: true,
+            messageContainer: '##pswmeter-message',
+            messagesList: [
+                'Write your password...',
+                'Easy peasy!',
+                'That is a simple one',
+                'That is better',
+                'Yeah! that password rocks ;)'
+            ],
+            height: 6,
+            borderRadius: 0,
+            pswMinLength: 8,
+            colorScore1: '##d91818',
+            colorScore2: '##c37b48',
+            colorScore3: '##ffc107',
+            colorScore4: 'limegreen'
+            
+        });
+
+        
+
+    </script>
 </cfoutput>

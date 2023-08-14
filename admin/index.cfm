@@ -31,6 +31,8 @@
             <link rel="stylesheet" href="./assets/compiled/css/table-datatable-jquery.css"/>
             <link rel="stylesheet" href="./assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css"/>
             <link rel="stylesheet" href="./assets/extensions/datatables.net-bs5/css/buttons.dataTables.min.css"/>
+            <link href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css" rel="stylesheet">
+            <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" rel="stylesheet"> 
             <!--- image preview css --->
             <link rel="stylesheet" href="./assets/extensions/filepond/filepond.css" />
             <link rel="stylesheet" href="./assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css"/>
@@ -105,6 +107,8 @@
             <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
             <script src="./assets/extensions/datatables.net-bs5/js/dataTables.buttons.min.js"></script>
             <script src="./assets/static/js/pages/datatables.js"></script>
+            <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+            <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
             <script src="./assets/js/common.js"></script>
             <!--- file uploader js --->
             <script src="./assets/extensions/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js"></script>
