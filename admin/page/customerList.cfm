@@ -54,7 +54,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table" id="customerDataTable" width="100%" >
+                        <table class="table nowrap" id="customerDataTable" width="100%" >
                             <thead>
                                 <tr>
                                     <th>Customer Id</th>
