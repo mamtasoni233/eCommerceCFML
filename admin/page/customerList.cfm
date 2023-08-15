@@ -26,13 +26,13 @@
                         </ol>
                     </nav>
                 </div>
-                <cfif structKeyExists(session.customer, 'customerSave') AND session.customer.customerSave EQ 1>
+                <cfif structKeyExists(session, 'customer') AND structKeyExists(session.customer, 'customerSave') AND session.customer.customerSave EQ 1>
                     <div class="alert alert-light-success alert-dismissible show fade">
                         <i class="bi bi-check-circle"></i> Customer Data successfully inserted..!!!
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     <cfset StructDelete(session.customer,'customerSave')>
-                <cfelseif structKeyExists(session.customer, 'customerUpdate') AND session.customer.customerUpdate EQ 1>
+                <cfelseif structKeyExists(session, 'customer') AND structKeyExists(session.customer, 'customerUpdate') AND session.customer.customerUpdate EQ 1>
                     <div class="alert alert-light-success alert-dismissible show fade">
                         <i class="bi bi-check-circle"></i> Customer Data successfully updated..!!!
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table" id="customerDataTable" width="100%" style="width: 0px;">
+                        <table class="table table-striped nowrap" id="customerDataTable" width="100%" style="width: 0px;">
                             <thead>
                                 <tr>
                                     <th>Customer Id</th>
@@ -81,7 +81,6 @@
 </cfoutput>
 <script>
     $(document).ready( function () {
-
         var table = $('#customerDataTable').DataTable({
             processing: true,
             pageLength: 10,
@@ -91,9 +90,9 @@
             pagingType: "full_numbers",
             dom: 'Blfrtip',
             responsive: true,
-            scrollX:        true,
+            scrollX: true,
             scrollCollapse: true,
-            autoWidth:         true,  
+            autoWidth: true,
             columnDefs: [
                 { "width": "30%", "targets": [0,1,2,3,4,5,6,7,8,9,10,11] }
             ],

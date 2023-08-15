@@ -167,7 +167,7 @@
                         <div class="col-md-6">
                             <lable class="fw-bold form-label" for="customerProfile">Profile</lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                            <input type="file" class="form-control form-control-xl" name="customerProfile" id="customerProfile"  aria-describedby="inputGroupPrepend">
+                            <input type="file" class="form-control form-control-xl image-preview-filepond" name="customerProfile" id="customerProfile"  aria-describedby="inputGroupPrepend">
                                 <div class="form-control-icon">
                                     <i class="bi bi-cloud-plus-fill me-2"></i>
                                 </div>
@@ -308,7 +308,6 @@
                     $(element).removeClass('is-invalid');
                 },
             });
-    
         });
         // Run pswmeter with options
         var pass = document.getElementById('password');
@@ -333,8 +332,5 @@
             colorScore4: 'limegreen'
             
         });
-
-        
-
     </script>
 </cfoutput>

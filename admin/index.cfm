@@ -126,6 +126,22 @@
             <script src="./assets/extensions/toastify-js/src/toastify.js"></script>
             <!--- sweet alert js --->
             <script src="./assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+            <script>
+                FilePond.create(document.querySelector(".image-preview-filepond"), {
+                    credits: null,
+                    allowImagePreview: true,
+                    allowImageFilter: false,
+                    allowImageExifOrientation: false,
+                    allowImageCrop: false,
+                    acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
+                    storeAsFile: true,
+                    fileValidateTypeDetectType: (source, type) =>
+                    new Promise((resolve, reject) => {
+                        // Do custom type detection here and return with promise
+                        resolve(type);
+                    }),
+                });
+            </script>
 
             <!-- Need: Apexcharts -->
             <!--- <script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>
