@@ -247,7 +247,7 @@
                     password: {
                         //required: true,
                         required: function(element){
-                            if( $("##PkCustomerId").val().length > 0){
+                            if( $("##PkCustomerId").val() > 0){
                                 return false;
                             } else{
                                 return true;
@@ -305,7 +305,16 @@
                     //$(element).addClass('is-invalid');
                 },
                 unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
+                    if ($(element).hasClass('form-check-input')){
+                        if ($(element).attr('name') == 'gender') {
+                            $('.genderCheck').each(function () {
+                                // $(this).addClass('is-invalid');
+                                $(this).removeClass('is-invalid');
+                            });
+                        }
+                    } else {
+                        $(element).removeClass('is-invalid');
+                    }
                 },
             });
         });

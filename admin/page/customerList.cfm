@@ -1,4 +1,5 @@
 <cfoutput>
+    <cfdump var="#session#"> 
     <cfparam name="PkCustomerId" default="" />
     <cfparam name="firstName" default="" />
     <cfparam name="lastName" default="" />
@@ -26,18 +27,20 @@
                         </ol>
                     </nav>
                 </div>
-                <cfif structKeyExists(session, 'customer') AND structKeyExists(session.customer, 'customerSave') AND session.customer.customerSave EQ 1>
-                    <div class="alert alert-light-success alert-dismissible show fade">
-                        <i class="bi bi-check-circle"></i> Customer Data successfully inserted..!!!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <cfset StructDelete(session.customer,'customerSave')>
-                <cfelseif structKeyExists(session, 'customer') AND structKeyExists(session.customer, 'customerUpdate') AND session.customer.customerUpdate EQ 1>
-                    <div class="alert alert-light-success alert-dismissible show fade">
-                        <i class="bi bi-check-circle"></i> Customer Data successfully updated..!!!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <cfset StructDelete(session.customer,'customerUpdate')>
+                <cfif structKeyExists(session, 'customer')>
+                    <cfif structKeyExists(session.customer, 'customerSave') AND session.customer.customerSave EQ 1>
+                        <div class="alert alert-light-success alert-dismissible show fade">
+                            <i class="bi bi-check-circle"></i> Customer Data successfully inserted..!!!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <cfset StructDelete(session.customer,'customerSave')>
+                    <cfelseif structKeyExists(session.customer, 'customerUpdate') AND session.customer.customerUpdate EQ 1>
+                        <div class="alert alert-light-success alert-dismissible show fade">
+                            <i class="bi bi-check-circle"></i> Customer Data successfully updated..!!!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <cfset StructDelete(session.customer,'customerUpdate')>
+                    </cfif>
                 </cfif>
             </div>
         </div>
@@ -51,7 +54,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped nowrap" id="customerDataTable" width="100%" style="width: 0px;">
+                        <table class="table table-striped nowrap" id="customerDataTable" width="100%" >
                             <thead>
                                 <tr>
                                     <th>Customer Id</th>
