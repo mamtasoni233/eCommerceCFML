@@ -63,7 +63,7 @@
         <body class="">
             <cfif structKeyExists(session.customer, "saved") AND session.customer.saved EQ 1>
                 <div class="alert alert-success alert-dismissible show fade">
-                    <i class="fa fa-check-circle"></i> Customer Succefully Login!!!
+                    <i class="fa fa-check-circle"></i> Customer Successfully Login!!!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <cfset StructDelete(session.customer,'saved')>

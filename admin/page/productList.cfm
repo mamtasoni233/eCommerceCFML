@@ -133,7 +133,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table" id="productDataTable">
+                        <table class="table table-striped nowrap table-dark" id="productDataTable">
                             <thead>
                                 <tr>
                                     <th>Product Name</th>
@@ -169,8 +169,12 @@
             pageLength: 10,
             pagination: 'datatablePagination',
             order: [[1, 'desc']],
-            responsive: true,
             serverSide:true,
+            responsive: true,
+            autoWidth: false,
+            columnDefs: [
+                { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8,9,10] }
+            ],
             pagingType: "full_numbers",
             dom: 'l<"toolbar">frtip',
             ajax: {

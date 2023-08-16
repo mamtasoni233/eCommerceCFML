@@ -139,27 +139,6 @@
     </cfloop>
 </cfif>
 
-<!--- <cfif structKeyExists(url, "PkCustomerId") AND url.PkCustomerId GT 0>
-    <cfquery name="editCustomerData">
-        SELECT PkCustomerId, firstName, profile, isActive, lastName, email, gender, dob
-        FROM customer 
-        WHERE PkCustomerId = <cfqueryparam value="#PkCustomerId#" cfsqltype="cf_sql_integer">
-    </cfquery>
-
-<cfset data['json'] = {}>
-<cfset data['json']['PkCustomerId'] = editCustomerData.PkCustomerId>
-<cfset data['json']['firstName'] = editCustomerData.firstName>
-<cfset data['json']['lastName'] = editCustomerData.lastName>
-<cfset data['json']['email'] = editCustomerData.email>
-<cfset data['json']['gender'] = editCustomerData.gender>
-<cfset data['json']['dobDate'] = dateFormat(editCustomerData.dob, 'dd')>
-<cfset data['json']['dobMonth'] = dateFormat(editCustomerData.dob, 'mm')>
-<cfset data['json']['dobYear'] = dateFormat(editCustomerData.dob, 'yyyy')>
-<cfset data['json']['profile'] = editCustomerData.profile>
-<cfset data['json']['isActive'] = editCustomerData.isActive>
-<cflocation url="index.cfm?pg=customer&s=addCustomer&PkCustomerId=#editCustomerData.PkCustomerId#" addtoken="false">
-</cfif> --->
-
 <cfif structKeyExists(url, 'formAction') AND url.formAction EQ 'saveCustomer'>
     
     <cfif structKeyExists(form, "firstName") AND len(form.firstName) GT 0>

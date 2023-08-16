@@ -611,7 +611,6 @@
                 processData: false,
                 contentType: false,
                 success: function(result) {
-                    // toast("Profile image Updated!", 'Your Profile Image has been successfully updated!!!', "success");
                     successToast("Profile image Updated!");
                     setTimeout(() => {
                         location.href = 'index.cfm?pg=profile';

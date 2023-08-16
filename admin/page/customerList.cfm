@@ -1,5 +1,4 @@
 <cfoutput>
-    <cfdump var="#session#"> 
     <cfparam name="PkCustomerId" default="" />
     <cfparam name="firstName" default="" />
     <cfparam name="lastName" default="" />
@@ -54,7 +53,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped nowrap" id="customerDataTable" width="100%" >
+                        <table class="table table-striped nowrap table-dark" id="customerDataTable" >
                             <thead>
                                 <tr>
                                     <th>Customer Id</th>

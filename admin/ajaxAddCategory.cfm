@@ -160,6 +160,7 @@
     <cfset catId = 0>
 
     <cfif structKeyExists(url, "PkCategoryId") AND url.PkCategoryId GT 0>
+        <!--- <cfdump var="#form#"><cfabort> --->
         <cfset catId = url.PkCategoryId>
         <cfquery name="updateCategoryData">
             UPDATE category SET
@@ -188,9 +189,10 @@
         </cfquery>
         <cfset catId = addCategoryData.generatedKey>
     </cfif>
-    <cfif structKeyExists(form, "categoryImage") AND len(form.categoryImage) GT 0>
+    <cfif structKeyExists(form, "filepond") AND len(form.filepond) GT 0>
+        
         <cfset txtcategoryImage = "">
-        <cffile action="upload" destination="#categoryImagePath#" fileField="categoryImage"  nameconflict="makeunique" result="dataImage">
+        <cffile action="upload" destination="#categoryImagePath#" fileField="filepond"  nameconflict="makeunique" result="dataImage">
         <cfset txtcategoryImage = dataImage.serverfile>
         <cfquery name="qryGetImageName">
             SELECT categoryImage
@@ -202,6 +204,7 @@
                 <cffile action="delete" file="#categoryImagePath##qryGetImageName.categoryImage#">
             </cfif>
         </cfif>
+        
         <cfif len(txtcategoryImage) GT 0>
             <cfquery name="qryCategoryUpdateImg" result="qryResultCategoryUpdateImg">
                 UPDATE category SET

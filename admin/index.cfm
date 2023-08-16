@@ -20,19 +20,15 @@
             <!--- select 2 css --->
             <link href="./assets/compiled/css/select2.min.css" rel="stylesheet" />
             <!--- toast css --->
-            <!--- <link href="./assets/css/jquery.toast.min.css" rel="stylesheet"> --->
             <link rel="stylesheet" href="./assets/extensions/toastify-js/src/toastify.css" />
             <!--- sweetalert css --->
             <link rel="stylesheet" href="./assets/extensions/sweetalert2/sweetalert2.min.css"/>
             <!-- Datatables -->
-            <!---  <link href="./assets/dataTable/css/jquery.dataTables.min.css">
-            <link href="./assets/dataTable/css/dataTables.bootstrap5.min.css" rel="stylesheet"> --->
-            <!--- data table css --->
             <link rel="stylesheet" href="./assets/compiled/css/table-datatable-jquery.css"/>
             <link rel="stylesheet" href="./assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css"/>
             <link rel="stylesheet" href="./assets/extensions/datatables.net-bs5/css/buttons.dataTables.min.css"/>
-            <link href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css" rel="stylesheet">
-            <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" rel="stylesheet"> 
+            <link href="./assets/css/fixedHeader.dataTables.min.css" rel="stylesheet">
+            <link href="./assets/css/responsive.dataTables.min.css" rel="stylesheet"> 
             <!--- image preview css --->
             <link rel="stylesheet" href="./assets/extensions/filepond/filepond.css" />
             <link rel="stylesheet" href="./assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css"/>
@@ -107,8 +103,8 @@
             <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
             <script src="./assets/extensions/datatables.net-bs5/js/dataTables.buttons.min.js"></script>
             <script src="./assets/static/js/pages/datatables.js"></script>
-            <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-            <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
+            <script src="./assets/js/dataTables.responsive.min.js"></script>
+            <script src="./assets/js/dataTables.fixedHeader.min.js"></script>
             <script src="./assets/js/common.js"></script>
             <!--- file uploader js --->
             <script src="./assets/extensions/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js"></script>
@@ -141,11 +137,8 @@
                         resolve(type);
                     }),
                 });
+                FilePond.removeFile('.image-preview-filepond');
             </script>
-
-            <!-- Need: Apexcharts -->
-            <!--- <script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>
-            <script src="/assets/static/js/pages/dashboard.js"></script> --->
         </body>
     </html>
 </cfoutput>

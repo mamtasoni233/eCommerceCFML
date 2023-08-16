@@ -28,7 +28,6 @@
                 <cfset session.customer.dob = login.dob>
                 <cfset session.customer.profile = login.profile>
                 <cfset session.customer.saved = 1>
-                <!--- <cfset saved = 2> --->
                 <cflocation url="index.cfm?pg=dashboard" addtoken="false">
             <cfelse>
                 <cflocation url="login.cfm?error=1" addtoken="false">
@@ -72,17 +71,6 @@
             <!-- jquery -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-            <!-- Fix for custom scrollbar if JS is disabled-->
-            <!--- <noscript>
-                <style>
-                    /**
-                    * Reinstate scrolling for non-JS clients
-                    */
-                    .simplebar-content-wrapper {
-                    overflow: auto;
-                    }
-                </style>
-            </noscript> --->
             <!-- Page Title -->
             <title>Alpine | Bootstrap 5 HTML Template</title>
             <style>

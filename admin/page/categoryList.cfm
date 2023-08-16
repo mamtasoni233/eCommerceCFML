@@ -67,7 +67,6 @@
                                         <lable class="fw-bold form-label" for="parentCategory">Parent Category Name</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                             <select name="parentCategory" id="parentCategory" class="form-control-xl">
-                                                <!--- <option selected value='0'>Select As A Parent</option> --->
                                             </select>
                                         </div>
                                     </div>
@@ -83,7 +82,8 @@
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label text-center" for="categoryImage">Category Image</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="file" class="form-control form-control-xl" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend">
+                                            <input type="file" class="form-control form-control-xl image-preview-filepond" name="filepond" id="categoryImage"  aria-describedby="inputGroupPrepend">
+                                            <!--- <input type="file" class="form-control form-control-xl" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend"> --->
                                         </div>
                                         <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
                                         <div class="form-check removeImageContainer d-none">
@@ -120,16 +120,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <!--- <div class="row justify-content-end mb-3">
-                        <div class="col-2 ">
-                            <select name="isDeleted" id="isDeleted" class="form-control" >
-                                <option value="0">Not Deleted</option>
-                                <option value="1">Deleted</option>
-                            </select>
-                        </div>
-                    </div> --->
                     <div class="table-responsive">
-                        <table class="table" id="categoryDataTable">
+                        <table class="table table-striped nowrap table-dark" id="categoryDataTable">
                             <thead>
                                 <tr>
                                     <th>Category Name</th>
@@ -165,33 +157,16 @@
             pagination: 'datatablePagination',
             order: [[1, 'desc']],
             responsive: true,
+            scrollX: true,
+            scrollCollapse: true,
+            autoWidth: true,
+            columnDefs: [
+                { "width": "30%", "targets": [0,1,2,3,4,5,6,7,8] }
+            ],
             serverSide: true,
             pagingType: "full_numbers",
             // dom: 'Blfrtip',
             dom: 'l<"toolbar">frtip',
-            /* buttons: [
-                // 'deleted', 'notDeleted'
-                {
-                    extend: 'collection',
-                    text: 'View Deleted',
-                    // className: 'showCatecgory',
-                    buttons: [
-                        'deleted', 'notDeleted'
-                        {
-                            text: 'Not Deleted',
-                            action: function ( e, dt, node, config ) {
-                                dt.ajax.reload();
-                            }
-                        },
-                        {
-                            text: 'Deleted',
-                            action: function ( e, dt, node, config ) {
-                                $('#categoryDataTable').DataTable().ajax.reload();    
-                            }
-                        },
-                    ]
-                }
-            ], */
     
             ajax: {
                 url: "../ajaxAddCategory.cfm?formAction=getRecord",
@@ -313,7 +288,7 @@
                 }
             }, 
         });
-        $('#categoryImage').change(function(){
+        /* $('#categoryImage').change(function(){
             const file = this.files[0];
             if (file){
                 let reader = new FileReader();
@@ -322,7 +297,7 @@
                 }
                 reader.readAsDataURL(file);
             }
-        });
+        }); */
     
         $("#categoryDataTable").on("click", ".editCategory", function () { 
             var id = $(this).attr("data-id");
@@ -481,6 +456,8 @@
                     $("#addCategoryForm").trigger('reset');
                     $('#imgPreview').attr('src', '');
                     $("#parentCategory").val(''); 
+                    //filepond.removeFiles();
+                    
                 });
                 $('#categoryDataTable').DataTable().ajax.reload();
             }
