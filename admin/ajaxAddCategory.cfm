@@ -160,7 +160,6 @@
     <cfset catId = 0>
 
     <cfif structKeyExists(url, "PkCategoryId") AND url.PkCategoryId GT 0>
-        <!--- <cfdump var="#form#"><cfabort> --->
         <cfset catId = url.PkCategoryId>
         <cfquery name="updateCategoryData">
             UPDATE category SET
@@ -238,12 +237,11 @@
     </cfquery>
 </cfif>
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
-    <!--- <cfdump var="#form#" abort="true"> --->
     <cfquery name="getCategory">
         SELECT categoryName, PkCategoryId FROM Category 
         WHERE 
             parentCategoryId = <cfqueryparam value="0" cfsqltype="cf_sql_integer"> 
-            AND PkCategoryId != <cfqueryparam value="2" cfsqltype="cf_sql_integer"> 
+            AND PkCategoryId != <cfqueryparam value="#url.pkCategoryId#" cfsqltype="cf_sql_integer"> 
             AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfset data['data'] = []>
@@ -283,4 +281,4 @@
 </cfif>
 
 <cfset output = serializeJson(data) />
-<cfoutput>#rereplace(output,'//','')#</cfoutput>
+<cfoutput>#output#</cfoutput>

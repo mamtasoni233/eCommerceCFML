@@ -36,6 +36,15 @@
             <script src="./assets/extensions/jquery/jquery.min.js"></script>
             <!--- js --->
             <script src="./assets/static/js/initTheme.js"></script>
+            <!--- file uploader js --->
+            <script src="./assets/extensions/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js"></script>
+            <script src="./assets/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.min.js"></script>
+            <script src="./assets/extensions/filepond-plugin-image-crop/filepond-plugin-image-crop.min.js"></script>
+            <script src="./assets/extensions/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js"></script>
+            <script src="./assets/extensions/filepond-plugin-image-filter/filepond-plugin-image-filter.min.js"></script>
+            <script src="./assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
+            <script src="./assets/extensions/filepond-plugin-image-resize/filepond-plugin-image-resize.min.js"></script>
+            <script src="./assets/extensions/filepond/filepond.js"></script>
             <style>
                 .table.dataTable{
                     width: 100% !important;
@@ -106,39 +115,12 @@
             <script src="./assets/js/dataTables.responsive.min.js"></script>
             <script src="./assets/js/dataTables.fixedHeader.min.js"></script>
             <script src="./assets/js/common.js"></script>
-            <!--- file uploader js --->
-            <script src="./assets/extensions/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js"></script>
-            <script src="./assets/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.min.js"></script>
-            <script src="./assets/extensions/filepond-plugin-image-crop/filepond-plugin-image-crop.min.js"></script>
-            <script src="./assets/extensions/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js"></script>
-            <script src="./assets/extensions/filepond-plugin-image-filter/filepond-plugin-image-filter.min.js"></script>
-            <script src="./assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
-            <script src="./assets/extensions/filepond-plugin-image-resize/filepond-plugin-image-resize.min.js"></script>
-            <script src="./assets/extensions/filepond/filepond.js"></script>
-            <script src="./assets/static/js/pages/filepond.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
             <script src="./assets/extensions/dayjs/plugin/advancedFormat.js"></script>
             <!--- tostify js --->
             <script src="./assets/extensions/toastify-js/src/toastify.js"></script>
             <!--- sweet alert js --->
             <script src="./assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-            <script>
-                FilePond.create(document.querySelector(".image-preview-filepond"), {
-                    credits: null,
-                    allowImagePreview: true,
-                    allowImageFilter: false,
-                    allowImageExifOrientation: false,
-                    allowImageCrop: false,
-                    acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
-                    storeAsFile: true,
-                    fileValidateTypeDetectType: (source, type) =>
-                    new Promise((resolve, reject) => {
-                        // Do custom type detection here and return with promise
-                        resolve(type);
-                    }),
-                });
-                FilePond.removeFile('.image-preview-filepond');
-            </script>
         </body>
     </html>
 </cfoutput>

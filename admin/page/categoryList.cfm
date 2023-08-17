@@ -82,7 +82,7 @@
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label text-center" for="categoryImage">Category Image</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="file" class="form-control form-control-xl image-preview-filepond" name="filepond" id="categoryImage"  aria-describedby="inputGroupPrepend">
+                                            <input type="file" class="form-control form-control-xl image-preview-filepond" id="categoryImage">
                                             <!--- <input type="file" class="form-control form-control-xl" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend"> --->
                                         </div>
                                         <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
@@ -146,6 +146,32 @@
     </div>
 </cfoutput>
 <script>
+    FilePond.registerPlugin(
+        FilePondPluginImagePreview,
+        FilePondPluginImageCrop,
+        FilePondPluginImageExifOrientation,
+        FilePondPluginImageFilter,
+        FilePondPluginImageResize,
+        FilePondPluginFileValidateSize,
+        FilePondPluginFileValidateType
+    )
+    function createFilePond() {
+        const filepondInput = document.querySelector(".image-preview-filepond");
+        const filepondImage = FilePond.create(filepondInput, {
+            credits: null,
+            allowImagePreview: true,
+            allowImageFilter: false,
+            allowImageExifOrientation: false,
+            allowImageCrop: false,
+            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
+            storeAsFile: true,
+            fileValidateTypeDetectType: (source, type) =>
+            new Promise((resolve, reject) => {
+                // Do custom type detection here and return with promise
+                resolve(type);
+            }),
+        });
+    }
     $(document).ready( function () {
         $('#parentCategory').select2({
             //placeholder: "Select a parent category",
@@ -215,7 +241,7 @@
                 { data: 'PkCategoryId',
                     render: function(data, type, row, meta)
                     {
-                        return '<a data-id="'+row.PkCategoryId+'"  id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkCategoryId+'" data-name="'+row.categoryName+'" id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
+                        return '<a data-id="'+row.PkCategoryId+'" data-parentid="' + row.parentCategoryId + '" id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+ row.PkCategoryId + '" data-name="'+row.categoryName+'" id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
                     }
                 },
             ],
@@ -235,6 +261,7 @@
         $("#addCategory").on("click", function () {
             $("#addCategoryData").modal('show');
             $('#PkCategoryId').val(0);
+            createFilePond();
             getParentCategory();
         });
         $("#addCategoryForm").validate({
@@ -301,22 +328,25 @@
     
         $("#categoryDataTable").on("click", ".editCategory", function () { 
             var id = $(this).attr("data-id");
+            var parentid =  $(this).attr("data-parentid");
+            createFilePond();
             $("#addCategoryData").modal('show');
             $('#PkCategoryId').val(id);
             $(".modal-title").html("Update Category");
+            if (parentid == 0) {
+                getParentCategory(id);
+            } else {
+                getParentCategory();
+            }
             $.ajax({
                 type: "GET",
                 url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
                 success: function(result) {
                     if (result.success) {
-                        console.log(result);
                         var image = result.json.categoryImage;
-                        /* if (result.json.parentCategoryId > 0) {
-                            getParentCategory(result.json.parentCategoryId);
-                        } else{
-                            getParentCategory(result.json.PkCategoryId);
-                        } */
-                        getParentCategory(result.json.parentCategoryId);
+                        if (parentid > 0) {
+                            $('#parentCategory').val(parentid).trigger("change");
+                        }
                         $("#PkCategoryId").val(result.json.PkCategoryId);
                         $('#categoryName').val(result.json.categoryName);
                         let imgSrc = '.../../assets/categoryImage/' + result.json.categoryImage;
@@ -402,39 +432,33 @@
                             success: function(data) {
                                 successToast("Activated!","Category Activated Successfully");
                                 $('#categoryDataTable').DataTable().ajax.reload();                       
-                            }  
+                            }
                         });
                     }
                 });
             }
         });
     });
-    function getParentCategory(parentCatId=0) {
+    function getParentCategory(pkCategoryId=0) {
         $.ajax({    
-                type: "GET",
-                url: "../ajaxAddCategory.cfm?formAction=getCategory", 
-                dataType: "html",   
-                data: parentCatId,          
-                success: function(result){
-                    let dataRecord = JSON.parse(result);
-                    if (dataRecord.success) {
-                        console.log(dataRecord);
-                        $('#parentCategory').html('');
-                        var html = "";
-                        var html = "<option value='0'>Select As A Parent</option>";
-                        for (var i = 0; i < dataRecord.data.length; i++) {
-                            html += "<option value="+dataRecord.data[i].PkCategoryId+" >"+dataRecord.data[i].categoryName+"</option>";
-                        }
-                        $('#parentCategory').append(html);
-                        if (parentCatId > 0) {
-                            $('#parentCategory').val(parentCatId);
-                        } else {
-                            $('#parentCategory').val(0);
-                        }
+            type: "GET",
+            url: "../ajaxAddCategory.cfm?formAction=getCategory", 
+            dataType: "html",   
+            data: {pkCategoryId: pkCategoryId},          
+            success: function(result){
+                let dataRecord = JSON.parse(result);
+                if (dataRecord.success) {
+                    $('#parentCategory').html('');
+                    var html = "";
+                    var html = "<option value='0'>Select As A Parent</option>";
+                    for (var i = 0; i < dataRecord.data.length; i++) {
+                        html += "<option value="+dataRecord.data[i].PkCategoryId+" >"+dataRecord.data[i].categoryName+"</option>";
                     }
-                    
+                    $('#parentCategory').append(html);
                 }
-            }); 
+                
+            }
+        }); 
     }
     function submitCategoryData() {
         var formData = new FormData($('#addCategoryForm')[0]);
@@ -455,9 +479,8 @@
                 $('#addCategoryData').on('hidden.bs.modal', function () {
                     $("#addCategoryForm").trigger('reset');
                     $('#imgPreview').attr('src', '');
-                    $("#parentCategory").val(''); 
-                    //filepond.removeFiles();
-                    
+                    $("#parentCategory").val('');
+                    FilePond.destroy();
                 });
                 $('#categoryDataTable').DataTable().ajax.reload();
             }
