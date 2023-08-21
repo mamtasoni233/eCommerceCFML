@@ -55,6 +55,34 @@
 			return loc.DataArray;
     </cfscript>
 </cffunction>
+
+<cffunction name="getParentCategoryResult" access="public" returntype="array">
+        <cfargument name="parentId" required="true" type="any"/>
+        <cfargument name="parentName" required="true" type="any"/>
+        <cfargument name="returnArray" required="true" type="any"/>
+
+        <cfset var qryGetCategory = "">
+        <cfquery name="qryGetCategory">
+            SELECT categoryName, PkCategoryId FROM Category 
+            WHERE parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+            AND PkCategoryId != <cfqueryparam value="#url.pkCategoryId#" cfsqltype="cf_sql_integer"> 
+            AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfif qryGetCategory.recordCount GT 0>
+            <cfloop query="qryGetCategory">
+                <cfset var res = StructNew()>
+                <cfset res.catName = qryGetCategory.categoryName>
+                <cfset res.PkCategoryId = qryGetCategory.PkCategoryId>
+                <cfif len(arguments.parentName) GT 0>
+                    <cfset res.catName  = arguments.parentName & ' -> ' & qryGetCategory.categoryName>
+                </cfif>       
+                <cfset arrayAppend(arguments.returnArray, res)>         
+                <cfset getParentCategoryResult(res.PkCategoryId , res.catName, arguments.returnArray)>
+            </cfloop>
+        </cfif>
+        <cfreturn arguments.returnArray>
+</cffunction>
+
 <cfset data = {}>
 <cfset data['success'] = true>
 <cfset categoryImagePath = ExpandPath('.../../assets/categoryImage/')>
@@ -237,6 +265,9 @@
     </cfquery>
 </cfif>
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
+    <cfset data['categoryList'] = getParentCategoryResult(0,"",[])>
+</cfif>
+<!--- <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
     <cfquery name="getCategory">
         SELECT categoryName, PkCategoryId FROM Category 
         WHERE 
@@ -252,7 +283,7 @@
         <cfset dataRecord['categoryName'] = getCategory.categoryName>
         <cfset arrayAppend(data['data'], dataRecord)>
     </cfloop>
-</cfif>
+</cfif> --->
 <cfif structKeyExists(url, 'delPkCategoryId') AND url.delPkCategoryId GT 0>
         <cfquery name="removeImage">
             SELECT PkCategoryId, categoryImage FROM Category 

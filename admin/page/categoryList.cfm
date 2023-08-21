@@ -338,14 +338,20 @@
             } else {
                 getParentCategory();
             }
+            //getParentCategory();
             $.ajax({
                 type: "GET",
                 url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
                 success: function(result) {
                     if (result.success) {
                         var image = result.json.categoryImage;
-                        if (parentid > 0) {
+                        /* if (parentid > 0) {
                             $('#parentCategory').val(parentid).trigger("change");
+                        } */
+                        if (parentid > 0) {
+                            getParentCategory(parentid);
+                        } else{
+                            getParentCategory(result.json.PkCategoryId);
                         }
                         $("#PkCategoryId").val(result.json.PkCategoryId);
                         $('#categoryName').val(result.json.categoryName);
@@ -447,7 +453,7 @@
             data: {pkCategoryId: pkCategoryId},          
             success: function(result){
                 let dataRecord = JSON.parse(result);
-                if (dataRecord.success) {
+                /* if (dataRecord.success) {
                     $('#parentCategory').html('');
                     var html = "";
                     var html = "<option value='0'>Select As A Parent</option>";
@@ -455,6 +461,20 @@
                         html += "<option value="+dataRecord.data[i].PkCategoryId+" >"+dataRecord.data[i].categoryName+"</option>";
                     }
                     $('#parentCategory').append(html);
+                } */
+                if (dataRecord.success) {
+                    $('#parentCategory').html('');
+                    var html = "";
+                    var html = "<option>Select As A Parent</option>";
+                    for (var i = 0; i < dataRecord.categoryList.length; i++) {
+                        html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
+                    }
+                    $('#parentCategory').append(html);
+                    if (pkCategoryId > 0) {
+                        $('#parentCategory').val(pkCategoryId);
+                    } else {
+                        $('#parentCategory').val();
+                    }
                 }
                 
             }
