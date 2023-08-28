@@ -328,12 +328,12 @@
     
         $("#categoryDataTable").on("click", ".editCategory", function () { 
             var id = $(this).attr("data-id");
-            var parentid =  $(this).attr("data-parentid");
+            var parentId =  $(this).attr("data-parentid");
             createFilePond();
             $("#addCategoryData").modal('show');
             $('#PkCategoryId').val(id);
             $(".modal-title").html("Update Category");
-            if (parentid == 0) {
+            if (parentId == 0) {
                 getParentCategory(id);
             } else {
                 getParentCategory();
@@ -344,14 +344,28 @@
                 url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
                 success: function(result) {
                     if (result.success) {
+                        console.log('result.json.PkCategoryId', result.json.PkCategoryId);
+                        console.log('parentId', parentId);
                         var image = result.json.categoryImage;
-                        /* if (parentid > 0) {
-                            $('#parentCategory').val(parentid).trigger("change");
+                        /* if (parentId > 0) {
+                            $('#parentCategory').val(parentId).trigger("change");
                         } */
-                        if (parentid > 0) {
-                            getParentCategory(parentid);
-                        } else{
-                            getParentCategory(result.json.PkCategoryId);
+                        // if (parentId > 0 ) {
+                        //     // setTimeout(() => {
+                        //     //     $('#parentCategory').val(parentId).trigger("change");
+                        //     //     //getParentCategory(parentId);
+                        //     // }, 150);
+                        //     getParentCategory(parentId);
+                        // } else{
+                        //     getParentCategory(result.json.PkCategoryId);
+                        // }
+                        if (parentId > 0 ) {
+                            setTimeout(() => {
+                                $('#parentCategory').val(parentId).trigger("change");
+                                //getParentCategory(parentId);
+                            }, 150);
+                        }else{
+                            getParentCategory(result.json.parentCategoryId);
                         }
                         $("#PkCategoryId").val(result.json.PkCategoryId);
                         $('#categoryName').val(result.json.categoryName);
@@ -445,12 +459,14 @@
             }
         });
     });
-    function getParentCategory(pkCategoryId=0) {
+    function getParentCategory(PkCategoryId=0) {
+        var EditCategoryId = $('#PkCategoryId').val();
+
         $.ajax({    
             type: "GET",
             url: "../ajaxAddCategory.cfm?formAction=getCategory", 
             dataType: "html",   
-            data: {pkCategoryId: pkCategoryId},          
+            data: {PkCategoryId: PkCategoryId, EditCategoryId :EditCategoryId},          
             success: function(result){
                 let dataRecord = JSON.parse(result);
                 /* if (dataRecord.success) {
@@ -470,11 +486,12 @@
                         html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
                     }
                     $('#parentCategory').append(html);
-                    if (pkCategoryId > 0) {
-                        $('#parentCategory').val(pkCategoryId);
-                    } else {
-                        $('#parentCategory').val();
-                    }
+                    //alert(PkCategoryId);
+                    // if (PkCategoryId > 0) {
+                    //     $('#parentCategory').val(PkCategoryId);
+                    // } else {
+                    //     $('#parentCategory').val();
+                    // }
                 }
                 
             }

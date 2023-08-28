@@ -58,6 +58,7 @@
 
 <cffunction name="getParentCategoryResult" access="public" returntype="array">
         <cfargument name="parentId" required="true" type="any"/>
+        <cfargument name="PkCategoryId" required="true" type="any"/>
         <cfargument name="parentName" required="true" type="any"/>
         <cfargument name="returnArray" required="true" type="any"/>
 
@@ -65,7 +66,7 @@
         <cfquery name="qryGetCategory">
             SELECT categoryName, PkCategoryId FROM Category 
             WHERE parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
-            AND PkCategoryId != <cfqueryparam value="#url.pkCategoryId#" cfsqltype="cf_sql_integer"> 
+            AND PkCategoryId != <cfqueryparam value="#arguments.PkCategoryId#" cfsqltype="cf_sql_integer"> 
             AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
         </cfquery>
         <cfif qryGetCategory.recordCount GT 0>
@@ -77,7 +78,7 @@
                     <cfset res.catName  = arguments.parentName & ' -> ' & qryGetCategory.categoryName>
                 </cfif>       
                 <cfset arrayAppend(arguments.returnArray, res)>         
-                <cfset getParentCategoryResult(res.PkCategoryId , res.catName, arguments.returnArray)>
+                <cfset getParentCategoryResult(res.PkCategoryId, arguments.PkCategoryId, res.catName, arguments.returnArray)>
             </cfloop>
         </cfif>
         <cfreturn arguments.returnArray>
@@ -265,7 +266,7 @@
     </cfquery>
 </cfif>
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
-    <cfset data['categoryList'] = getParentCategoryResult(0,"",[])>
+    <cfset data['categoryList'] = getParentCategoryResult(0, url.EditCategoryId, "",[])>
 </cfif>
 <!--- <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
     <cfquery name="getCategory">

@@ -61,9 +61,9 @@
             <title>Alpine | Bootstrap 5 Ecommerce HTML Template</title>
         </head>
         <body class="">
-            <cfif structKeyExists(session.customer, "saved") AND session.customer.saved EQ 1>
+            <cfif structKeyExists(session.customer, "saved") AND session.customer.saved EQ 1 >
                 <div class="alert alert-success alert-dismissible show fade">
-                    <i class="fa fa-check-circle"></i> Customer Successfully Login!!!
+                    <i class="fa fa-check-circle"></i> #session.customer.firstName# #session.customer.lastName# Successfully Login!!!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <cfset StructDelete(session.customer,'saved')>
