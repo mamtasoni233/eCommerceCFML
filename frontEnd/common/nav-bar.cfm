@@ -1,3 +1,84 @@
+<!--- <cffunction name="getCategoryResult" access="public" returntype="array">
+    <cfargument name="returnArray" required="true" type="any"/>
+    <cfargument name="parentId" required="true" default="0" type="any"/>
+
+        <cfset qryGetCategory = "">
+        <cfquery name="qryGetCategory">
+            SELECT categoryName, PkCategoryId, parentCategoryId FROM Category 
+            WHERE parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+            AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfif qryGetCategory.recordCount GT 0>
+            <cfdump var="#qryGetCategory#">
+            
+            <cfloop query="qryGetCategory">
+                <cfset res = StructNew()>
+                <cfset res.catName = qryGetCategory.categoryName>
+                <cfset res.parentCategoryId = qryGetCategory.parentCategoryId>
+                <cfset res.PkCategoryId = qryGetCategory.PkCategoryId>
+                
+                <cfif arguments.parentId EQ 0>
+                    <!--- <cfset res.catName  = arguments.parentName & ' -> ' & qryGetCategory.categoryName> --->
+                    <cfset res.catName  = qryGetCategory.categoryName>
+                    <cfset getCategoryResult( arguments.returnArray, res.PkCategoryId)>
+                </cfif>       
+                <!--- <cfset getCategoryResult( arguments.returnArray, res.PkCategoryId)> --->
+                <cfset arrayAppend(arguments.returnArray, res)>         
+            </cfloop>
+            <!--- <cfset getCategoryResult( arguments.returnArray, res.PkCategoryId)> --->
+        </cfif>
+        <cfreturn arguments.returnArray>
+</cffunction> --->
+<cffunction name="getCategoryResult" access="public" returntype="array">
+        <cfargument name="parentId" default="0" required="true" type="any"/>
+        <cfargument name="PkCategoryId" required="true" type="any"/>
+        <cfargument name="returnArray" required="true" type="any"/>
+
+        <cfset var qryGetCategory = "">
+        <cfquery name="qryGetCategory">
+            SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM Category 
+            WHERE parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+            AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfif qryGetCategory.recordCount GT 0>
+            <cfloop query="qryGetCategory">
+                <cfset res = StructNew()>
+                <cfset res.catName = qryGetCategory.categoryName>
+                <cfset res.PkCategoryId = qryGetCategory.PkCategoryId>
+                <cfset res.parentCategoryId = qryGetCategory.parentCategoryId>
+                <cfset res.categoryImage = qryGetCategory.categoryImage>
+                <cfif qryGetCategory.parentCategoryId EQ 0>
+                    <cfset res.catName  =  qryGetCategory.categoryName>
+                </cfif>       
+                <cfset arrayAppend(arguments.returnArray, res)>         
+                <cfset getCategoryResult(res.PkCategoryId, arguments.PkCategoryId, arguments.returnArray)>
+            </cfloop>
+        </cfif>
+        <cfreturn arguments.returnArray>
+</cffunction>
+<cfset categoryList = getCategoryResult(0,"",[])>
+
+<cfquery name="qryAllGetCategory">
+    SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM Category 
+    WHERE isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+</cfquery>
+
+<cfquery name="qryAllParentCategory" dbtype="query">
+    SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage  FROM qryAllGetCategory 
+    WHERE parentCategoryId = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+</cfquery>
+
+<!--- <cfdump var="#qryAllGetCategory#" >
+<cfdump var="#qryAllParentCategory#"> --->
+
+<!--- <cfloop query="qryAllParentCategory">
+    <cfquery name="qryGetChildCategory" dbtype="query">
+        SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM qryAllGetCategory
+        WHERE parentCategoryId = <cfqueryparam value="#qryAllParentCategory.PkCategoryId#" cfsqltype="cf_sql_integer">
+    </cfquery>
+    <cfdump var="#qryGetChildCategory#">
+</cfloop>
+<cfabort> --->
 <cfoutput>
     <nav
         class="navbar navbar-expand-lg navbar-light bg-white border-bottom mx-0 p-0 flex-column border-0 position-absolute w-100 z-index-30 bg-transparent navbar-dark navbar-transparent bg-white-hover transition-all"
@@ -46,7 +127,7 @@
                     </button>
                     <!-- / Mobile Nav Toggler-->
 
-                    <ul class="navbar-nav py-lg-2 mx-auto">
+                    <!---  <ul class="navbar-nav py-lg-2 mx-auto">
                         <li class="nav-item me-lg-4 dropdown position-static">
                             <a
                                 class="nav-link fw-bolder dropdown-toggle py-lg-4"
@@ -308,6 +389,69 @@
                                 </li>
                             </ul>
                         </li>
+                    </ul> --->
+                    <ul class="navbar-nav py-lg-2 mx-auto">
+                        <cfloop query="qryAllParentCategory">
+                            <cfquery name="qryGetChildCategory" dbtype="query">
+                                SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM qryAllGetCategory
+                                WHERE parentCategoryId = <cfqueryparam value="#qryAllParentCategory.PkCategoryId#" cfsqltype="cf_sql_integer">
+                            </cfquery>
+                            
+                            <li class="nav-item me-lg-4 dropdown position-static">
+                                <a
+                                    class="nav-link fw-bolder dropdown-toggle py-lg-4"
+                                    href="##"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                >
+                                    #qryAllParentCategory.categoryName#
+                                </a>
+                                <!-- parent category dropdown menu-->
+                                <div class="dropdown-menu dropdown-megamenu">
+                                    <div class="container">
+                                        <div class="row g-0">
+                                            <!-- Dropdown Menu Links Section-->
+                                            <div class="col-12 col-lg-7">
+                                                <div class="row py-lg-5">
+                                                    <!-- menu row-->
+                                                        <div class="col col-lg-6 mb-5 mb-sm-0">
+                                                            <h6 class="dropdown-heading">
+                                                                <!---  #qryGetChildCategory.categoryName# --->
+                                                            </h6>
+                                                            <ul class="list-unstyled">
+                                                                <cfloop query="qryGetChildCategory">
+                                                                    <li class="dropdown-list-item">
+                                                                        <a class="dropdown-item" href="./category.html">
+                                                                            #qryGetChildCategory.categoryName#
+                                                                        </a>
+                                                                    </li>
+                                                                </cfloop>
+                                                            </ul>
+                                                        </div>
+                                                    <!-- /menu row-->
+                                                    
+                                                </div>
+                                            </div>
+                                            <!-- /Dropdown Menu Links Section-->
+
+                                            <!-- Dropdown Menu Images Section-->
+                                            <div class="d-none d-lg-block col-lg-5">
+                                                <div
+                                                    class="vw-50 h-100 bg-img-cover bg-pos-center-center position-absolute"
+                                                    style=" background-image: url('../../assets/categoryImage/#qryAllParentCategory.categoryImage#'); "
+                                                >
+                                            </div>
+                                                <img src="../../assets/categoryImage/#qryAllParentCategory.categoryImage#">
+                                            </div>
+                                            <!-- Dropdown Menu Images Section-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / parent category dropdown menu-->
+                            </li>
+                        </cfloop>
                     </ul>
                 </div>
                 <!-- / Main Navigation-->

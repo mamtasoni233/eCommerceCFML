@@ -206,7 +206,7 @@
                     render: function(data, display, row) {
                         var returnStr = '';
                         if (data !== "") {
-                            returnStr+=  '<img class="image" src="../assets/productImage/'+data+'" width="80">' 
+                            returnStr+=  '<img class="image" src=".../../../assets/productImage/'+data+'" width="80">' 
                         } 
                         return returnStr;
                     }

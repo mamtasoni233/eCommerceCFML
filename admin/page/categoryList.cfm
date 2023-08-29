@@ -183,11 +183,8 @@
             pagination: 'datatablePagination',
             order: [[1, 'desc']],
             responsive: true,
-            scrollX: true,
-            scrollCollapse: true,
-            autoWidth: true,
             columnDefs: [
-                { "width": "30%", "targets": [0,1,2,3,4,5,6,7,8] }
+                { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8] }
             ],
             serverSide: true,
             pagingType: "full_numbers",
@@ -220,7 +217,7 @@
                     render: function(data, display, row) {
                         var returnStr = '';
                         if (data !== "") {
-                            returnStr+=  '<img class="image" src=".../../assets/categoryImage/'+data+'" width="80">' 
+                            returnStr+=  '<img class="image" src=".../../../assets/categoryImage/'+data+'" width="80">' 
                         }
                         return returnStr;
                     }
@@ -344,8 +341,6 @@
                 url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
                 success: function(result) {
                     if (result.success) {
-                        console.log('result.json.PkCategoryId', result.json.PkCategoryId);
-                        console.log('parentId', parentId);
                         var image = result.json.categoryImage;
                         /* if (parentId > 0) {
                             $('#parentCategory').val(parentId).trigger("change");
@@ -364,8 +359,6 @@
                                 $('#parentCategory').val(parentId).trigger("change");
                                 //getParentCategory(parentId);
                             }, 150);
-                        }else{
-                            getParentCategory(result.json.parentCategoryId);
                         }
                         $("#PkCategoryId").val(result.json.PkCategoryId);
                         $('#categoryName').val(result.json.categoryName);
@@ -481,7 +474,7 @@
                 if (dataRecord.success) {
                     $('#parentCategory').html('');
                     var html = "";
-                    var html = "<option>Select As A Parent</option>";
+                    var html = "<option value='0'>Select As A Parent</option>";
                     for (var i = 0; i < dataRecord.categoryList.length; i++) {
                         html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
                     }
