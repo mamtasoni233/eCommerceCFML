@@ -178,15 +178,15 @@
             width: '100%' 
         });
         var table = $('#categoryDataTable').DataTable({
+            serverSide: true,
             processing: true,
             pageLength: 10,
             pagination: 'datatablePagination',
-            order: [[1, 'desc']],
+            order: [[0, 'desc']],
             responsive: true,
             columnDefs: [
                 { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8] }
             ],
-            serverSide: true,
             pagingType: "full_numbers",
             // dom: 'Blfrtip',
             dom: 'l<"toolbar">frtip',
@@ -217,7 +217,7 @@
                     render: function(data, display, row) {
                         var returnStr = '';
                         if (data !== "") {
-                            returnStr+=  '<img class="image" src=".../../../assets/categoryImage/'+data+'" width="80">' 
+                            returnStr+=  '<img class="image" src="/assets/categoryImage/'+data+'" width="80">' 
                         }
                         return returnStr;
                     }

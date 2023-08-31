@@ -83,20 +83,9 @@
                     <cfcase value="dashboard">
                         <cfinclude template="./page/dashboard.cfm">
                     </cfcase>
-                    <!---
-                        <cfcase value="profile">
-                        <cfinclude template="./page/profile.cfm">
-                        </cfcase>
-                        <cfcase value="category">
-                        <cfinclude template="./page/category.cfm">
-                        </cfcase>
-                        <cfcase value="add_category">
-                        <cfinclude template="./page/add_category.cfm">
-                        </cfcase>
-                        <cfcase value="product">
-                        <cfinclude template="./page/product.cfm">
-                        </cfcase>
-                    --->
+                    <cfcase value="category">
+                    <cfinclude template="./page/category.cfm">
+                    </cfcase>
                 </cfswitch>
                 <!-- /Page Content -->
             </section>

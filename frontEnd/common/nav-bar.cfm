@@ -29,7 +29,7 @@
         </cfif>
         <cfreturn arguments.returnArray>
 </cffunction> --->
-<cffunction name="getCategoryResult" access="public" returntype="array">
+<!--- <cffunction name="getCategoryResult" access="public" returntype="array">
         <cfargument name="parentId" default="0" required="true" type="any"/>
         <cfargument name="PkCategoryId" required="true" type="any"/>
         <cfargument name="returnArray" required="true" type="any"/>
@@ -56,7 +56,7 @@
         </cfif>
         <cfreturn arguments.returnArray>
 </cffunction>
-<cfset categoryList = getCategoryResult(0,"",[])>
+<cfset categoryList = getCategoryResult(0,"",[])> --->
 
 <cfquery name="qryAllGetCategory">
     SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM Category 
@@ -80,6 +80,7 @@
 </cfloop>
 <cfabort> --->
 <cfoutput>
+    <cfset imagePath = "http://127.0.0.1:50847/assets/categoryImage/">
     <nav
         class="navbar navbar-expand-lg navbar-light bg-white border-bottom mx-0 p-0 flex-column border-0 position-absolute w-100 z-index-30 bg-transparent navbar-dark navbar-transparent bg-white-hover transition-all"
     >
@@ -400,7 +401,7 @@
                             <li class="nav-item me-lg-4 dropdown position-static">
                                 <a
                                     class="nav-link fw-bolder dropdown-toggle py-lg-4"
-                                    href="##"
+                                    href="index.cfm?pg=category.cfm"
                                     role="button"
                                     data-bs-toggle="dropdown"
                                     aria-haspopup="true"
@@ -423,7 +424,7 @@
                                                             <ul class="list-unstyled">
                                                                 <cfloop query="qryGetChildCategory">
                                                                     <li class="dropdown-list-item">
-                                                                        <a class="dropdown-item" href="./category.html">
+                                                                        <a class="dropdown-item" href="index.cfm?pg=category">
                                                                             #qryGetChildCategory.categoryName#
                                                                         </a>
                                                                     </li>
@@ -439,11 +440,14 @@
                                             <!-- Dropdown Menu Images Section-->
                                             <div class="d-none d-lg-block col-lg-5">
                                                 <div
-                                                    class="vw-50 h-100 bg-img-cover bg-pos-center-center position-absolute"
-                                                    style=" background-image: url('../../assets/categoryImage/#qryAllParentCategory.categoryImage#'); "
-                                                >
-                                            </div>
-                                                <img src="../../assets/categoryImage/#qryAllParentCategory.categoryImage#">
+                                                    class="vw-50 h-100 position-absolute"
+                                                    style=" background: url('#imagePath##qryAllParentCategory.categoryImage#');background-repeat: no-repeat;background-position: center center;background-size: cover;">
+                                                </div>
+                                                <!---  <div
+                                                    class="vw-50 h-100"
+                                                    style=" background-repeat: no-repeat;background:url('#imagePath##qryGetChildCategory.categoryImage#');background-position: center center; background-size: cover;">
+                                                </div> --->
+                                                <!--- <img src="../../assets/categoryImage/#qryAllParentCategory.categoryImage#"> --->
                                             </div>
                                             <!-- Dropdown Menu Images Section-->
                                         </div>

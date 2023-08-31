@@ -1,6 +1,7 @@
 <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
 <cfcontent reset="true" type="application/json" />
+<!--- <cfdump var="#session#"><cfabort> --->
 
 <cfparam name="PkCategoryId" default="" />
 <cfparam name="categoryName" default="" />
@@ -86,7 +87,7 @@
 
 <cfset data = {}>
 <cfset data['success'] = true>
-<cfset categoryImagePath = ExpandPath('.../../../assets/categoryImage/')>
+<cfset categoryImagePath = ExpandPath('./assets/categoryImage/')>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getCategoryDataRows">
@@ -143,6 +144,7 @@
     <cfset data['recordsFiltered'] = getCategoryDataRows.recordCount>
     <cfset data['draw'] = form.draw>
     <cfset data['recordsTotal'] = getCategoryDataRows.recordCount>
+
     <cfloop query="getCategoryData">
         <cfset dataRecord = {}>
 
@@ -154,8 +156,8 @@
         <cfset dataRecord['isActive'] = getCategoryData.isActive>
         <cfset dataRecord['isDeleted'] = getCategoryData.isDeleted>
         <cfset dataRecord['createdBy'] = getCategoryData.createdBy>
-        <cfset dataRecord['dateCreated'] = dateTimeFormat(getCategoryData.dateCreated, 'dd-mm-yyyy hh:nn:ss tt')>
-        <cfset dataRecord['dateUpdated'] = dateTimeFormat(getCategoryData.dateUpdated, 'dd-mm-yyyy hh:nn:ss tt')>
+        <cfset dataRecord['dateCreated'] = dateTimeFormat(getCategoryData.dateCreated.toString(), 'dd-mm-yyyy hh:nn:ss tt')>
+        <cfset dataRecord['dateUpdated'] = dateTimeFormat(getCategoryData.dateUpdated.toString(), 'dd-mm-yyyy hh:nn:ss tt')>
         <cfset dataRecord['updatedBy'] = getCategoryData.updatedBy>
         <cfset dataRecord['PkUserId'] = getCategoryData.PkUserId>
         <cfset dataRecord['userName'] = getCategoryData.userName>

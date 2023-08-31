@@ -60,7 +60,7 @@
                                     <img
                                         class="w-100 img-fluid position-relative z-index-10"
                                         title=""
-                                        src="./assets/images/products/product-1.jpg"
+                                        src="../assets/images/products/product-1.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -68,7 +68,7 @@
                                     <img
                                         class="w-100 img-fluid"
                                         title=""
-                                        src="./assets/images/products/product-1b.jpg"
+                                        src="../assets/images/products/product-1b.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -122,7 +122,7 @@
                                     <img
                                         class="w-100 img-fluid position-relative z-index-10"
                                         title=""
-                                        src="./assets/images/products/product-2.jpg"
+                                        src="../assets/images/products/product-2.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -185,7 +185,7 @@
                                     <img
                                         class="w-100 img-fluid position-relative z-index-10"
                                         title=""
-                                        src="./assets/images/products/product-3.jpg"
+                                        src="../assets/images/products/product-3.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -247,7 +247,7 @@
                                     <img
                                         class="w-100 img-fluid position-relative z-index-10"
                                         title=""
-                                        src="./assets/images/products/product-4.jpg"
+                                        src="../assets/images/products/product-4.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -298,7 +298,7 @@
                                     <img
                                         class="w-100 img-fluid position-relative z-index-10"
                                         title=""
-                                        src="./assets/images/products/product-5.jpg"
+                                        src="../assets/images/products/product-5.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -306,7 +306,7 @@
                                     <img
                                         class="w-100 img-fluid"
                                         title=""
-                                        src="./assets/images/products/product-5b.jpg"
+                                        src="../assets/images/products/product-5b.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -357,7 +357,7 @@
                                     <img
                                         class="w-100 img-fluid position-relative z-index-10"
                                         title=""
-                                        src="./assets/images/products/product-6.jpg"
+                                        src="../assets/images/products/product-6.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -409,7 +409,7 @@
                                     <img
                                         class="w-100 img-fluid position-relative z-index-10"
                                         title=""
-                                        src="./assets/images/products/product-7.jpg"
+                                        src="../assets/images/products/product-7.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -470,7 +470,7 @@
                                     <img
                                         class="w-100 img-fluid position-relative z-index-10"
                                         title=""
-                                        src="./assets/images/products/product-8.jpg"
+                                        src="../assets/images/products/product-8.jpg"
                                         alt=""
                                     >
                                 </picture>
@@ -615,7 +615,7 @@
                         <div class="f-w-48 px-3 pt-3">
                             <img
                                 class="img-fluid"
-                                src="./assets/images/products/product-3.jpg"
+                                src="../assets/images/products/product-3.jpg"
                                 alt="Bootstrap 5 Template by Pixel Rocket"
                             >
                         </div>
@@ -690,7 +690,7 @@
                                                     <img
                                                         class="w-100 img-fluid position-relative z-index-10"
                                                         title=""
-                                                        src="./assets/images/products/product-12.jpg"
+                                                        src="../assets/images/products/product-12.jpg"
                                                         alt="Bootstrap 5 Template by Pixel Rocket"
                                                     >
                                                 </picture>
@@ -752,7 +752,7 @@
                                                     <img
                                                         class="w-100 img-fluid position-relative z-index-10"
                                                         title=""
-                                                        src="./assets/images/products/product-1.jpg"
+                                                        src="../assets/images/products/product-1.jpg"
                                                         alt="Bootstrap 5 Template by Pixel Rocket"
                                                     >
                                                 </picture>
@@ -814,7 +814,7 @@
                                                     <img
                                                         class="w-100 img-fluid position-relative z-index-10"
                                                         title=""
-                                                        src="./assets/images/products/product-13.jpg"
+                                                        src="../assets/images/products/product-13.jpg"
                                                         alt="Bootstrap 5 Template by Pixel Rocket"
                                                     >
                                                 </picture>
@@ -900,7 +900,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-13.jpg"
+                                                            src="../assets/images/products/product-13.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -957,7 +957,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-14.jpg"
+                                                            src="../assets/images/products/product-14.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1014,7 +1014,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-15.jpg"
+                                                            src="../assets/images/products/product-15.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1071,7 +1071,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-16.jpg"
+                                                            src="../assets/images/products/product-16.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1135,7 +1135,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-2.jpg"
+                                                            src="../assets/images/products/product-2.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1192,7 +1192,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-3.jpg"
+                                                            src="../assets/images/products/product-3.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1249,7 +1249,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-4.jpg"
+                                                            src="../assets/images/products/product-4.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1306,7 +1306,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-5.jpg"
+                                                            src="../assets/images/products/product-5.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1370,7 +1370,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-12.jpg"
+                                                            src="../assets/images/products/product-12.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1427,7 +1427,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-14.jpg"
+                                                            src="../assets/images/products/product-14.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1484,7 +1484,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-15.jpg"
+                                                            src="../assets/images/products/product-15.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>
@@ -1541,7 +1541,7 @@
                                                         <img
                                                             class="w-100 img-fluid position-relative z-index-10"
                                                             title=""
-                                                            src="./assets/images/products/product-16.jpg"
+                                                            src="../assets/images/products/product-16.jpg"
                                                             alt="Bootstrap 5 Template by Pixel Rocket"
                                                         >
                                                     </picture>

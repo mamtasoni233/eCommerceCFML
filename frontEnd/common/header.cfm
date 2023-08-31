@@ -58,21 +58,21 @@
                 <div class="swiper-wrapper">
                     <div class="swiper-slide position-relative">
                         <div
-                            class="w-100 h-100 bg-img-cover animation-move bg-pos-center-center" style="background-image: url(./assets/images/slideshows/slideshow-1.jpg);"
+                            class="w-100 h-100 bg-img-cover animation-move bg-pos-center-center" style="background-image: url('../assets/images/slideshows/slideshow-1.jpg');"
                         >
                             
                         </div>
                     </div>
                     <div class="swiper-slide position-relative">
                         <div
-                            class="w-100 h-100 bg-img-cover animation-move bg-pos-center-center" style="background-image: url(./assets/images/slideshows/slideshow-2.jpg);"
+                            class="w-100 h-100 bg-img-cover animation-move bg-pos-center-center" style="background-image: url('../assets/images/slideshows/slideshow-2.jpg');"
                         >
                             
                         </div>
                     </div>
                     <div class="swiper-slide position-relative">
                         <div
-                            class="w-100 h-100 bg-img-cover animation-move bg-pos-center-center" style="background-image: url(./assets/images/slideshows/slideshow-3.jpg);"
+                            class="w-100 h-100 bg-img-cover animation-move bg-pos-center-center" style="background-image: url('../assets/images/slideshows/slideshow-3.jpg');"
                         >
                             
                         </div>

@@ -14,9 +14,21 @@ component {
     
     this.javaSettings = {loadPaths: ['../lib/'], loadColdFusionClassPath: true, reloadOnChange: true};
 
+    //this.mappings = structNew();
+
+    //this.mappings["/assets"] =   expandPath('./../assets/'); 
+    // this.mappings["/assets"] = expandPath('./../assets/')&"assets";
+
     function onApplicationStart() {
         application.bcrypt = createObject('java', 'org.mindrot.jbcrypt.BCrypt');
         return true;
     }
+/* 
+    function onRequest( string targetPage ) {
+        if(structKeyExists(URL,'reloadApp')){
+            onApplicationStart();
+        }
+        include arguments.targetPage;
+    } */
 
 }
