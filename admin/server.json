@@ -1,14 +1,14 @@
 {
-    "app": {
-        "cfengine": "lucee@5.3.10+97"
+    "app":{
+        "cfengine":"lucee@5.3.10+97"
     },
-    "name": "admin2",
-    "web": {
-        "http": {
-        "port": "50847"
+    "name":"admin2",
+    "web":{
+        "http":{
+            "port":"50847"
         },
-        "rewrites": {
-        "enable": "true"
+        "rewrites":{
+            "enable":"true"
         }
     }
 }

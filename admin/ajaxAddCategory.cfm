@@ -202,6 +202,14 @@
             WHERE PkCategoryId = <cfqueryparam value = "#url.PkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
     <cfelse>
+        <!--- <cfquery name="checkCategory">
+            SELECT PkCategoryId, categoryName FROM category 
+            WHERE categoryName = <cfqueryparam value="#trim(categoryName)#" cfsqltype="cf_sql_varchar"> AND 
+            PkCategoryId != <cfqueryparam value = "#form.PkCategoryId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+        <cfif checkCategory.recordCount GT 0>
+            <cflocation url="./categoryAdd.cfm?checkEmail=1" addtoken="false">
+        </cfif>   --->
         <cfquery result="addCategoryData">
             INSERT INTO category (
                 categoryName
