@@ -163,7 +163,7 @@
             allowImageFilter: false,
             allowImageExifOrientation: false,
             allowImageCrop: false,
-            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
+            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "image/webp"],
             storeAsFile: true,
             fileValidateTypeDetectType: (source, type) =>
             new Promise((resolve, reject) => {
@@ -312,16 +312,6 @@
                 }
             }, 
         });
-        /* $('#categoryImage').change(function(){
-            const file = this.files[0];
-            if (file){
-                let reader = new FileReader();
-                reader.onload = function(event){
-                    $('#imgPreview').attr('src', event.target.result);
-                }
-                reader.readAsDataURL(file);
-            }
-        }); */
     
         $("#categoryDataTable").on("click", ".editCategory", function () { 
             var id = $(this).attr("data-id");
@@ -335,29 +325,15 @@
             } else {
                 getParentCategory();
             }
-            //getParentCategory();
             $.ajax({
                 type: "GET",
                 url: "../ajaxAddCategory.cfm?PkCategoryId="+ id,
                 success: function(result) {
                     if (result.success) {
                         var image = result.json.categoryImage;
-                        /* if (parentId > 0) {
-                            $('#parentCategory').val(parentId).trigger("change");
-                        } */
-                        // if (parentId > 0 ) {
-                        //     // setTimeout(() => {
-                        //     //     $('#parentCategory').val(parentId).trigger("change");
-                        //     //     //getParentCategory(parentId);
-                        //     // }, 150);
-                        //     getParentCategory(parentId);
-                        // } else{
-                        //     getParentCategory(result.json.PkCategoryId);
-                        // }
                         if (parentId > 0 ) {
                             setTimeout(() => {
                                 $('#parentCategory').val(parentId).trigger("change");
-                                //getParentCategory(parentId);
                             }, 150);
                         }
                         $("#PkCategoryId").val(result.json.PkCategoryId);
@@ -462,15 +438,6 @@
             data: {PkCategoryId: PkCategoryId, EditCategoryId :EditCategoryId},          
             success: function(result){
                 let dataRecord = JSON.parse(result);
-                /* if (dataRecord.success) {
-                    $('#parentCategory').html('');
-                    var html = "";
-                    var html = "<option value='0'>Select As A Parent</option>";
-                    for (var i = 0; i < dataRecord.data.length; i++) {
-                        html += "<option value="+dataRecord.data[i].PkCategoryId+" >"+dataRecord.data[i].categoryName+"</option>";
-                    }
-                    $('#parentCategory').append(html);
-                } */
                 if (dataRecord.success) {
                     $('#parentCategory').html('');
                     var html = "";
@@ -479,12 +446,6 @@
                         html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
                     }
                     $('#parentCategory').append(html);
-                    //alert(PkCategoryId);
-                    // if (PkCategoryId > 0) {
-                    //     $('#parentCategory').val(PkCategoryId);
-                    // } else {
-                    //     $('#parentCategory').val();
-                    // }
                 }
                 
             }

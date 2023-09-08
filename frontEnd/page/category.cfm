@@ -5,8 +5,8 @@
             <div class="container position-relative z-index-20" data-aos="fade-right" data-aos-delay="300">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item breadcrumb-light"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item breadcrumb-light"><a href="#">Activities</a></li>
+                        <li class="breadcrumb-item breadcrumb-light"><a href="##">Home</a></li>
+                        <li class="breadcrumb-item breadcrumb-light"><a href="##">Activities</a></li>
                         <li class="breadcrumb-item active breadcrumb-light" aria-current="page">Clothing</li>
                     </ol>
                 </nav>                <h1 class="fw-bold display-6 mb-4 text-white">Latest Arrivals (121)</h1>

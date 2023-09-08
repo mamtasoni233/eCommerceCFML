@@ -61,7 +61,7 @@
 </cffunction>
 <cfset data = {}>
 <cfset data['success'] = true>
-<cfset customerProfilePath = ExpandPath('.../../assets/customerProfile/')>
+<cfset customerProfilePath = ExpandPath('./assets/customerProfile/')>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getCustomerDataRows">

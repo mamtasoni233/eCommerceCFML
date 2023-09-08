@@ -1,34 +1,3 @@
-<!--- <cffunction name="getCategoryResult" access="public" returntype="array">
-    <cfargument name="returnArray" required="true" type="any"/>
-    <cfargument name="parentId" required="true" default="0" type="any"/>
-
-        <cfset qryGetCategory = "">
-        <cfquery name="qryGetCategory">
-            SELECT categoryName, PkCategoryId, parentCategoryId FROM Category 
-            WHERE parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
-            AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-        </cfquery>
-        <cfif qryGetCategory.recordCount GT 0>
-            <cfdump var="#qryGetCategory#">
-            
-            <cfloop query="qryGetCategory">
-                <cfset res = StructNew()>
-                <cfset res.catName = qryGetCategory.categoryName>
-                <cfset res.parentCategoryId = qryGetCategory.parentCategoryId>
-                <cfset res.PkCategoryId = qryGetCategory.PkCategoryId>
-                
-                <cfif arguments.parentId EQ 0>
-                    <!--- <cfset res.catName  = arguments.parentName & ' -> ' & qryGetCategory.categoryName> --->
-                    <cfset res.catName  = qryGetCategory.categoryName>
-                    <cfset getCategoryResult( arguments.returnArray, res.PkCategoryId)>
-                </cfif>       
-                <!--- <cfset getCategoryResult( arguments.returnArray, res.PkCategoryId)> --->
-                <cfset arrayAppend(arguments.returnArray, res)>         
-            </cfloop>
-            <!--- <cfset getCategoryResult( arguments.returnArray, res.PkCategoryId)> --->
-        </cfif>
-        <cfreturn arguments.returnArray>
-</cffunction> --->
 <cffunction name="getCategoryResult" access="public" returntype="array">
     <cfargument name="parentId" default="0" required="false" type="numeric"/>
     <cfargument name="returnArray" required="false" type="array" default="#arrayNew(1)#"/>
@@ -57,50 +26,19 @@
     <cfreturn arguments.returnArray>
 </cffunction>
 <cfset categoryList = getCategoryResult()>
-<!--- <cfdump var='#categoryList#'>
-<!--- <cfset firstLevelArray = []> ---> 
-<cfloop array="#categoryList#" index="idx">
-    <cfif idx['parentCategoryId'] EQ 0>
-        <!---  <cfset arrayAppend(firstLevelArray, idx)> --->
-        <cfdump var="#idx.catName#">
-    </cfif>
-    <cfloop array="#idx.child#" index="child">
-        <cfdump var="#child#">
-        <cfloop array="#child.child#" index="subChild">
-            <cfdump var="#subChild#">
-        </cfloop>
-    </cfloop>
-    <!--- <cfdump var="#firstLevelArray#"> --->
-</cfloop>
-<!--- <cfdump var='#firstLevelArray#'> --->
-
-<cfabort> --->
-
-<!--- <cfquery name="qryAllGetCategory">
-    SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM Category 
-    WHERE isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-</cfquery>
-
-<cfquery name="qryAllParentCategory" dbtype="query">
-    SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage  FROM qryAllGetCategory 
-    WHERE parentCategoryId = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-</cfquery> --->
-
-<!--- <cfdump var="#qryAllGetCategory#" >
-<cfdump var="#qryAllParentCategory#"> --->
-
-<!--- <cfloop query="qryAllParentCategory">
-    <cfquery name="qryGetChildCategory" dbtype="query">
-        SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM qryAllGetCategory
-        WHERE parentCategoryId = <cfqueryparam value="#qryAllParentCategory.PkCategoryId#" cfsqltype="cf_sql_integer">
-    </cfquery>
-    <cfdump var="#qryGetChildCategory#">
-</cfloop>
-<cfabort> --->
 <cfoutput>
+    <style>
+        .fixed-top.scrolled {
+            background-color: ##fff !important;
+            transition: background-color 200ms linear;
+        }
+        .fixed-top.scrolled .nav-link{
+            color:##000000;
+        }
+    </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/categoryImage/">
     <nav
-        class="navbar navbar-expand-lg navbar-light bg-white border-bottom mx-0 p-0 flex-column border-0 position-absolute w-100 z-index-30 bg-transparent navbar-dark navbar-transparent bg-white-hover transition-all"
+        class="navbar navbar-expand-lg navbar-light bg-white border-bottom mx-0 p-0 flex-column border-0  fixed-top w-100 z-index-30 bg-transparent navbar-dark navbar-transparent bg-white-hover transition-all"
     >
         <div class="w-100 pb-lg-0 pt-lg-0 pt-4 pb-3">
             <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
@@ -411,12 +349,6 @@
                     </ul> --->
                     <ul class="navbar-nav py-lg-2 mx-auto">
                         <cfloop array="#categoryList#" index="idx">
-
-                            <!---  <cfquery name="qryGetChildCategory" dbtype="query">
-                                SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM qryAllGetCategory
-                                WHERE parentCategoryId = <cfqueryparam value="#qryAllParentCategory.PkCategoryId#" cfsqltype="cf_sql_integer">
-                            </cfquery> --->
-                            
                             <li class="nav-item me-lg-4 dropdown position-static">
                                 <a
                                     class="nav-link fw-bolder dropdown-toggle py-lg-4"
@@ -431,24 +363,24 @@
                                 </cfif>
                                 </a>
                                 <!-- parent category dropdown menu-->
-                                <div class="dropdown-menu dropdown-megamenu">
+                                <div class="dropdown-menu dropdown-megamenu vh-100">
                                     <div class="container">
                                         <div class="row g-0">
                                             <!-- Dropdown Menu Links Section-->
-                                            <div class="col-12 col-lg-7">
+                                            <div class="col-12 col-lg-6">
                                                 <div class="row py-lg-5">
                                                     <!-- menu row-->
                                                         <div class="col col-lg-6 mb-5 mb-sm-0">
-                                                            <h6 class="dropdown-heading">
-                                                                <!---  #qryGetChildCategory.categoryName# --->
-                                                            </h6>
+                                                            <!--- <h6 class="dropdown-heading">
+                                                                #idx.catName#
+                                                            </h6> --->
                                                             <ul class="list-unstyled">
                                                                 <cfloop array="#idx.child#" index="child">
                                                                     <li class="dropdown-list-item">
-                                                                        <a class="dropdown-item" href="index.cfm?pg=category">
+                                                                        <a class="dropdown-item fw-bold" href="index.cfm?pg=category">
                                                                             #child.catName#
                                                                         </a>
-                                                                        <ul class="list-unstyled ms-5">
+                                                                        <ul class="list-unstyled">
                                                                             <cfloop array="#child.child#" index="subChild">
                                                                                 <li class="dropdown-list-item">
                                                                                     <a class="dropdown-item" href="index.cfm?pg=category">
@@ -468,7 +400,7 @@
                                             <!-- /Dropdown Menu Links Section-->
 
                                             <!-- Dropdown Menu Images Section-->
-                                            <div class="d-none d-lg-block col-lg-5">
+                                            <div class="d-none d-lg-block col-lg-6">
                                                 <div
                                                     class="vw-50 h-100 position-absolute"
                                                     style=" background: url('#imagePath##idx.categoryImage#');background-repeat: no-repeat;background-position: center center;background-size: cover;">
@@ -552,3 +484,11 @@
         </div>
     </nav>
 </cfoutput>
+<script>
+    $(function () {
+        $(document).scroll(function () {
+            var $nav = $(".fixed-top");
+            $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+        });
+    });
+</script>

@@ -56,6 +56,9 @@
                 div.dataTables_wrapper div.dataTables_filter {
                     float: right;
                 }
+                .invalidCs{
+                    border:1px solid red !important;
+                }
             </style>
         </head>
         <body>
@@ -86,6 +89,9 @@
                             </cfcase>
                             <cfcase value="customer">
                                 <cfinclude template="./page/customer.cfm">
+                            </cfcase>
+                            <cfcase value="productTag">
+                                <cfinclude template="./page/productTag.cfm">
                             </cfcase>
                         </cfswitch>
                     </div>

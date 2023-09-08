@@ -206,7 +206,7 @@
                     render: function(data, display, row) {
                         var returnStr = '';
                         if (data !== "") {
-                            returnStr+=  '<img class="image" src=".../../../assets/productImage/'+data+'" width="80">' 
+                            returnStr+=  '<img class="image" src="/assets/productImage/'+data+'" width="80">' 
                         } 
                         return returnStr;
                     }
@@ -232,7 +232,6 @@
                 },
             ],
             rowCallback: function( row, data ) {
-                console.log("dataaaaaa", data);
                 if ( data.isDeleted === 1 ) {
                     $(row).addClass('text-danger');
                 }
@@ -254,6 +253,9 @@
             rules: {
                 productName: {
                     required: true
+                },
+                category: {
+                    required: true
                 }
             },
             errorPlacement: function (error, element) {
@@ -261,20 +263,36 @@
             },
             messages: {
                 productName: {
-                    required: "Please enter category name",                    
+                    required: "Please enter product name",                    
+                },
+                category: {
+                    required: "Please select category",                    
                 }
             },
             ignore: [],
             errorElement: 'span',
             errorPlacement: function (error, element) {
-                error.addClass('invalid-feedback');
-                element.after(error);
+                var elem = $(element);
+                if (elem.hasClass("select2-hidden-accessible")) {
+                    element = element.siblings(".select2");
+                    error.insertAfter(element);
+                } else {
+                    error.insertAfter(element);
+                }
+                error.addClass('invalid-feedback'); 
             },
             highlight: function (element, errorClass, validClass) {
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).siblings('.select2').children('span').children('span.select2-selection').addClass("invalidCs")
+                } 
+    
                 $(element).addClass('is-invalid');
             },
             unhighlight: function (element, errorClass, validClass) {
                 $(element).removeClass('is-invalid');
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).siblings('.select2').children('span').children('span.select2-selection').removeClass("invalidCs");
+                }
             },
             submitHandler: function (form) {
                 event.preventDefault();
@@ -299,6 +317,9 @@
                     submitProductData();
                 }
             }, 
+        });
+        $("select").on("select2:close", function (e) {  
+            $(this).valid(); 
         });
         $('#productImage').change(function(){
             const file = this.files[0];
@@ -406,7 +427,7 @@
                             url: '../ajaxAddProduct.cfm?statusId='+id,  
                             type: 'POST',  
                             success: function(data) {
-                                successToast("Activated!","Category Activated Successfully");
+                                successToast("Activated!","Product Activated Successfully");
                                 $('#productDataTable').DataTable().ajax.reload();                       
                             }  
                         });
@@ -451,9 +472,9 @@
             processData: false,
             success: function(result) {
                 if ($('#PkProductId').val() > 0) {
-                    successToast("Category Updated!","Category Successfully Updated");
+                    successToast("Product Updated!","Product Successfully Updated");
                 } else{
-                    successToast("Category Add!","Category Successfully Added");
+                    successToast("Product Add!","Product Successfully Added");
                 }
                 $("#addProductData").modal('hide');
                 $('#addProductData').on('hidden.bs.modal', function () {

@@ -245,3 +245,16 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+CREATE TABLE `product_tags` (
+  `PkTagId` int(11) UNSIGNED NOT NULL,
+  `FkCategoryId` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `tagName` varchar(100) NOT NULL,
+  `isActive` bit(1) NOT NULL DEFAULT '1',
+  `isDeleted` bit(1) NOT NULL DEFAULT '0',
+  `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
+  `createdBy` int(11) NOT NULL,
+  `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `updatedBy` int(11) DEFAULT NULL,
+  FOREIGN KEY (`FkCategoryId`) REFERENCES `category`(`PkCategoryId`)
+);

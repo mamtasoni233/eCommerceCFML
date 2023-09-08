@@ -87,7 +87,7 @@
 <cfset data = {}>
 <cfset data['success'] = true>
 <!--- <cfset productImagePath = ExpandPath('.../../assets/productImage/')> --->
-<cfset productImagePath = ExpandPath('.../../../assets/productImage/')>
+<cfset productImagePath = ExpandPath('./assets/productImage/')>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getProductDataRows">

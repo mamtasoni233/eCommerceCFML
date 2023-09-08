@@ -93,6 +93,12 @@
                             <span>Customer</span>
                         </a>
                     </li>
+                    <li class="sidebar-item <cfif pg EQ 'productTag'>active</cfif>">
+                        <a href="index.cfm?pg=productTag&s=productTagList" class="sidebar-link">
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Product Tags</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
