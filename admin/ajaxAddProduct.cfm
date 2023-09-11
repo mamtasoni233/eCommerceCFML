@@ -8,6 +8,7 @@
 <cfparam name="productQty" default="" />
 <cfparam name="productImage" default="" />
 <cfparam name="productPrice" default="" />
+<cfparam name="productDescription" default="" />
 <cfparam name="showProduct" default="" />
 <cfparam name="formAction" default="" />
 
@@ -91,7 +92,7 @@
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getProductDataRows">
-        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName, P.productPrice, P.productImage, P.isActive, P.createdBy, P.updatedBy, P.dateCreated, P.dateUpdated, P.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
+        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName, P.productPrice, P.isActive, P.createdBy, P.updatedBy, P.dateCreated, P.dateUpdated, P.isDeleted, P.productDescription, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM product P
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN users U ON P.createdBy = U.PkUserId
@@ -107,6 +108,7 @@
                     OR P.productName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productPrice LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productQty LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR P.productDescription LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
@@ -116,7 +118,7 @@
         </cfif>
     </cfquery>
     <cfquery name="getProductData">
-        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productName,P.productQty, P.productPrice, P.productImage, P.isActive, P.createdBy, P.updatedBy, P.dateCreated, P.dateUpdated, P.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
+        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productName,P.productQty, P.productPrice, P.isActive, P.createdBy, P.updatedBy, P.dateCreated, P.dateUpdated, P.isDeleted, P.productDescription, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM product P
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN users U ON P.createdBy = U.PkUserId
@@ -132,6 +134,7 @@
                     OR P.productName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productPrice LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productQty LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR P.productDescription LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                     OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
@@ -155,7 +158,7 @@
         <cfset dataRecord['categoryName'] = getProductData.categoryName>
         <cfset dataRecord['productQty'] = getProductData.productQty>
         <cfset dataRecord['productPrice'] = getProductData.productPrice>
-        <cfset dataRecord['productImage'] = getProductData.productImage>
+        <cfset dataRecord['productDescription'] = getProductData.productDescription>
         <cfset dataRecord['isActive'] = getProductData.isActive>
         <cfset dataRecord['isDeleted'] = getProductData.isDeleted>
         <cfset dataRecord['createdBy'] = getProductData.createdBy>
@@ -170,33 +173,30 @@
 </cfif>
 
 <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
-    <cfquery name="editCategoryData">
-        SELECT PkProductId, productName, productImage, productPrice, productQty, isActive, FkCategoryId
+    <cfquery name="editProductData">
+        SELECT PkProductId, productName, productPrice,productQty, productDescription, isActive, FkCategoryId
         FROM product 
         WHERE PkProductId = <cfqueryparam value="#PkProductId#" cfsqltype="cf_sql_integer">
     </cfquery>
-
     <cfset data['json'] = {}>
-    <cfset data['json']['PkProductId'] = editCategoryData.PkProductId>
-    <cfset data['json']['FkCategoryId'] = editCategoryData.FkCategoryId>
-    <cfset data['json']['productName'] = editCategoryData.productName>
-    <cfset data['json']['productPrice'] = editCategoryData.productPrice>
-    <cfset data['json']['productQty'] = editCategoryData.productQty>
-    <cfset data['json']['productImage'] = editCategoryData.productImage>
-    <cfset data['json']['isActive'] = editCategoryData.isActive>
+    <cfset data['json']['PkProductId'] = editProductData.PkProductId>
+    <cfset data['json']['FkCategoryId'] = editProductData.FkCategoryId>
+    <cfset data['json']['productName'] = editProductData.productName>
+    <cfset data['json']['productPrice'] = editProductData.productPrice>
+    <cfset data['json']['productQty'] = editProductData.productQty>
+    <cfset data['json']['productDescription'] = editProductData.productDescription>
+    <cfset data['json']['isActive'] = editProductData.isActive>
 </cfif>
 
 
-<cfif structKeyExists(form, "productName") AND len(form.productName) GT 0>
+<cfif structKeyExists(form, "productName") AND len(trim(form.productName)) GT 0>
     <cfif NOT structKeyExists(form, "isActive")>
         <cfset isActive = 0>
     <cfelse>
         <cfset isActive = form.isActive>
     </cfif>
     <cfset productId = 0>
-
     <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
-        
         <cfset productId = url.PkProductId>
         <cfquery name="updateproductData">
             UPDATE product SET
@@ -204,6 +204,7 @@
             , FkCategoryId =  <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
             , productPrice =  <cfqueryparam value = "#form.productPrice#" cfsqltype = "cf_sql_float">
             , productQty =  <cfqueryparam value = "#form.productQty#" cfsqltype = "cf_sql_integer">
+            , productDescription =  <cfqueryparam value = "#form.productDescription#" cfsqltype = "cf_sql_text">
             , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
             , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
             , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
@@ -216,6 +217,7 @@
                 , FkCategoryId
                 , productPrice
                 , productQty
+                , productDescription
                 , isActive
                 , createdBy
                 , dateCreated
@@ -224,6 +226,7 @@
                 , <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
                 ,  <cfqueryparam value = "#form.productPrice#" cfsqltype = "cf_sql_float">
                 , <cfqueryparam value = "#form.productQty#" cfsqltype = "cf_sql_integer">
+                , <cfqueryparam value = "#form.productDescription#" cfsqltype = "cf_sql_text">
                 , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
                 , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
@@ -231,45 +234,47 @@
         </cfquery>
         <cfset productId = addProductData.generatedKey>
     </cfif>
-    <cfif structKeyExists(form, "productImage") AND len(form.productImage) GT 0>
-        <cfset txtproductImage = "">
-        <cffile action="upload" destination="#productImagePath#" fileField="productImage"  nameconflict="makeunique" result="dataImage">
-        <cfset txtproductImage = dataImage.serverfile>
-
-        <cfquery name="qryGetImageName">
-            SELECT productImage
-            FROM product
-            WHERE PkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
-        </cfquery>
-
-        <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.productImage) GT 0>
-            <cfif fileExists("#productImagePath##qryGetImageName.productImage#")>
-                <cffile action="delete" file="#productImagePath##qryGetImageName.productImage#">
+    <cfif structKeyExists(form, "filepond") AND arrayLen(form.filepond) GT 0>
+        <cfloop array="#form.filepond#" index="i">
+            <cfset txtproductImage = "">
+            <cffile action="upload" destination="#productImagePath#" fileField="#i#"  nameconflict="makeunique" result="dataImage">
+            <cfset txtproductImage = dataImage.serverfile>
+            <!--- <cfdump var="#txtproductImage#"><cfabort> --->
+            <cfif len(txtproductImage) GT 0>
+                <cfquery name="qryProductUpdateImg" result="qryResultProductUpdateImg">
+                    INSERT INTO product_image (
+                        image
+                        , FkProductId
+                        , createdBy
+                        , dateCreated
+                    ) VALUES (
+                        <cfqueryparam value="#txtproductImage#">
+                        , <cfqueryparam value = "#productId#" cfsqltype = "cf_sql_varchar">
+                        , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                        , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                    )
+                    
+                </cfquery>
             </cfif>
-        </cfif>
-        <cfif len(txtproductImage) GT 0>
-            <cfquery name="qryProductUpdateImg" result="qryResultProductUpdateImg">
-                UPDATE product SET
-                productImage = <cfqueryparam value="#txtproductImage#">
-                WHERE PkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
-            </cfquery>
-        </cfif>
+
+        </cfloop>
+        
     </cfif>
-    <cfif structKeyExists(form, "removeImage")>
+    <!--- <cfif structKeyExists(form, "removeImage")>
         <cfquery name="qryGetImageNameForRemove">
-            SELECT productImage
-            FROM product
-            WHERE PkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
+            SELECT image
+            FROM product_image
+            WHERE FkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
         </cfquery>
         <cfif fileExists("#productImagePath##qryGetImageNameForRemove.productImage#")>
             <cffile action="delete" file="#productImagePath##qryGetImageNameForRemove.productImage#">
         </cfif>
         <cfquery name="qryRemoveImage">
-            UPDATE product SET 
-            productImage = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
-            WHERE PkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
+            UPDATE product_image SET 
+            image = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
+            WHERE FkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
         </cfquery>
-    </cfif>
+    </cfif> --->
 </cfif>
 <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
     <cfquery name="changeStatus">
@@ -285,8 +290,8 @@
 
 <cfif structKeyExists(url, 'delPkProductId') AND url.delPkProductId GT 0>
         <cfquery name="removeImage">
-            SELECT PkProductId, productImage FROM product 
-            WHERE PkProductId = <cfqueryparam value="#url.delPkProductId#" cfsqltype = "cf_sql_integer">
+            SELECT PkImageId, image FROM product_image 
+            WHERE FkProductId = <cfqueryparam value="#url.delPkProductId#" cfsqltype = "cf_sql_integer">
         </cfquery>
 
         <cfif fileExists("#productImagePath##removeImage.productImage#")>

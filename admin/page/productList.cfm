@@ -62,52 +62,61 @@
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="category">Category Name</lable>
-                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <select name="category" id="category" class="form-control-xl" >
+                                        <div class="form-group">
+                                            <select name="category" id="category" class="form-control " >
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <lable class="fw-bold form-label" for="productName">Product Name</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="text" class="form-control form-control-xl" id="productName" value="" name="productName"  placeholder="Enter Product Name"/>
+                                            <input type="text" class="form-control " id="productName" value="" name="productName"  placeholder="Enter Product Name"/>
                                             <div class="form-control-icon">
                                                 <i class="bi bi-tag-fill"></i>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <lable class="fw-bold form-label" for="productPrice">Product Price</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="text" class="form-control form-control-xl" id="productPrice" value="" name="productPrice"  placeholder="Enter Product Price"/>
+                                            <input type="text" class="form-control " id="productPrice" value="" name="productPrice"  placeholder="Enter Product Price"/>
                                             <div class="form-control-icon">
                                                 <i class="bi bi-currency-rupee"></i>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <lable class="fw-bold form-label" for="productQty">Product Qtuantity</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="number" class="form-control form-control-xl" id="productQty" value="" name="productQty"  placeholder="Enter Product Qty"/>
+                                            <input type="number" class="form-control " id="productQty" value="" name="productQty"  placeholder="Enter Product Qty"/>
                                             <div class="form-control-icon">
                                                 <i class="bi bi-plus-circle"></i>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <lable class="fw-bold form-label" for="productDescription">Product Description</lable>
+                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                            <textarea rows="1" cols="" class="form-control" id="productDescription" name="productDescription"></textarea>
+                                            <div class="form-control-icon">
+                                                <i class="bi bi-pen"></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label text-center" for="productImage">Product Image</lable>
-                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="file" class="form-control form-control-xl" name="productImage" id="productImage"  aria-describedby="inputGroupPrepend">
+                                        <div class="form-group position-relative mb-4 mt-2">
+                                            <input type="file" class="form-control form-control-xl image-preview-filepond filepond" name="filepond[]" multiple id="productImage" data-allow-reorder="true">
                                         </div>
                                         <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
-                                        <div class="form-check removeImageContainer d-none">
+                                        <!--- <div class="form-check removeImageContainer d-none">
                                             <div class="checkbox">
                                                 <input type="checkbox" id="removeImage" name="removeImage" class="form-check-input" value="1" />
                                                 <label class="form-label text-dark font-weight-bold" for="removeImage">
                                                     Remove Image
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> --->
                                     </div>
                                     <div class="col-md-12 mb-2">
                                         <label class="form-label text-dark font-weight-bold" for="isActive">Is Active :
@@ -140,7 +149,7 @@
                                     <th>Category Name</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
-                                    <th>Image</th>
+                                    <!--- <th>Image</th> --->
                                     <th>Create By</th>
                                     <th>Create Date</th>
                                     <th>Update By</th>
@@ -160,7 +169,36 @@
     </div>
 </cfoutput>
 <script>
+
     $(document).ready( function () {
+
+            FilePond.registerPlugin(
+        FilePondPluginImagePreview,
+        FilePondPluginImageCrop,
+        FilePondPluginImageExifOrientation,
+        FilePondPluginImageFilter,
+        FilePondPluginImageResize,
+        FilePondPluginFileValidateSize,
+        FilePondPluginFileValidateType
+    )
+    function createFilePond() {
+        const filepondInput = document.querySelector(".image-preview-filepond");
+        const filepondImage = FilePond.create(filepondInput, {
+            credits: null,
+            allowImagePreview: true,
+            allowImageFilter: false,
+            allowImageExifOrientation: false,
+            allowImageCrop: false,
+            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "image/webp"],
+            storeAsFile: true,
+            fileValidateTypeDetectType: (source, type) =>
+            new Promise((resolve, reject) => {
+                // Do custom type detection here and return with promise
+                resolve(type);
+            }),
+        });
+    }
+
         $('#category').select2({
             width: '100%' 
         });
@@ -173,7 +211,7 @@
             responsive: true,
             autoWidth: false,
             columnDefs: [
-                { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8,9,10] }
+                { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8,9] }
             ],
             pagingType: "full_numbers",
             dom: 'l<"toolbar">frtip',
@@ -202,7 +240,7 @@
                 { data: 'categoryName' },
                 { data: 'productQty' },
                 { data: 'productPrice' },
-                { data: 'productImage',
+                /* { data: 'productImage',
                     render: function(data, display, row) {
                         var returnStr = '';
                         if (data !== "") {
@@ -210,7 +248,7 @@
                         } 
                         return returnStr;
                     }
-                },
+                }, */
                 { data: 'userName' },
                 { data: 'dateCreated' },
                 { data: 'userNameUpdate' },
@@ -247,6 +285,7 @@
         $("#addProduct").on("click", function () {
             $("#addProductData").modal('show');
             $('#PkProductId').val(0);
+            createFilePond();
             getCategory();
         });
         $("#addProductForm").validate({
@@ -295,7 +334,7 @@
                 }
             },
             submitHandler: function (form) {
-                event.preventDefault();
+                /* event.preventDefault();
                 var removeImageChecked = $('input:checkbox[name=removeImage]:checked');
                 if (removeImageChecked.length > 0) {
                     Swal.fire({
@@ -315,13 +354,36 @@
                     });
                 } else {
                     submitProductData();
-                }
+                } */
+                var formData = new FormData($('#addProductForm')[0]);
+                $.ajax({
+                    type: "POST",
+                    url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(result) {
+                        if ($('#PkProductId').val() > 0) {
+                            successToast("Product Updated!","Product Successfully Updated");
+                        } else{
+                            successToast("Product Add!","Product Successfully Added");
+                        }
+                        $("#addProductData").modal('hide');
+                        $('#addProductData').on('hidden.bs.modal', function () {
+                            $("#addProductForm").trigger('reset');
+                            $('#imgPreview').attr('src', '');
+                            $("#category").val(''); 
+                            FilePond.destroy();
+                        });
+                        $('#productDataTable').DataTable().ajax.reload();   
+                    }
+                });
             }, 
         });
         $("select").on("select2:close", function (e) {  
             $(this).valid(); 
         });
-        $('#productImage').change(function(){
+        /*  $('#productImage').change(function(){
             const file = this.files[0];
             if (file){
                 let reader = new FileReader();
@@ -330,10 +392,11 @@
                 }
                 reader.readAsDataURL(file);
             }
-        });
+        }); */
         $("#productDataTable").on("click", ".editProduct", function () { 
             var id = $(this).attr("data-id");
             $("#addProductData").modal('show');
+            createFilePond();
             $('#PkProductId').val(id);
             $(".modal-title").html("Update Category");
             $.ajax({
@@ -341,17 +404,18 @@
                 url: "../ajaxAddProduct.cfm?PkProductId="+ id,
                 success: function(result) {
                     if (result.success) {
-                        var image = result.json.productImage;
+                        /* var image = result.json.productImage; */
                         $("#PkProductId").val(result.json.PkProductId);
                         $('#productName').val(result.json.productName);
                         $('#productPrice').val(result.json.productPrice);
                         $('#productQty').val(result.json.productQty);
+                        $('#productDescription').val(result.json.productDescription);
                         getCategory(result.json.FkCategoryId);
-                        let imgSrc = '../assets/productImage/' + result.json.productImage;
+                        /* let imgSrc = '../assets/productImage/' + result.json.productImage;
                         if (image.length > 0) {
                             $('#imgPreview').attr('src', imgSrc);
                             $('.removeImageContainer').removeClass('d-none')
-                        }
+                        } */
                         if(result.json.isActive == 1){ 
                             $('#isActive').prop('checked', true);
                         } else{
@@ -361,6 +425,7 @@
                             $("#addProductForm").trigger('reset');
                             $('#imgPreview').attr('src', '');
                             $("#category").val(''); 
+                            FilePond.destroy();
                         });
                     }
                 }   
@@ -481,11 +546,11 @@
                     $("#addProductForm").trigger('reset');
                     $('#imgPreview').attr('src', '');
                     $("#category").val(''); 
+                    FilePond.destroy();
                 });
                 $('#productDataTable').DataTable().ajax.reload();   
             }
         });
-        
     }
     
 </script>

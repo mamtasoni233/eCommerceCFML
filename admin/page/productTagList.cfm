@@ -134,7 +134,7 @@
             responsive: true,
             autoWidth: false,
             columnDefs: [
-                { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8,9,10] }
+                { "width": "40%", "targets": [0,1,2,3,4,5,6,7] }
             ],
             pagingType: "full_numbers",
             dom: 'l<"toolbar">frtip',
@@ -368,33 +368,6 @@
             }
         });
     });
-    /* function getCategory(catId=0) {
-        $.ajax({    
-            type: "GET",
-            url: "../ajaxAddProductTag.cfm?formAction=getCategory", 
-            dataType: "html",  
-            data: catId,         
-            success: function(data){
-                let dataRecord = JSON.parse(data);
-                if (dataRecord.success) {
-                    $('#category').html('');
-                    var html = "";
-                    var html = "<option>Select Category</option>";
-                    for (var i = 0; i < dataRecord.categoryList.length; i++) {
-                        console.log(dataRecord.categoryList);
-                        html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
-                    }
-                    $('#category').append(html);
-                    if (catId > 0) {
-                        $('#category').val(catId);
-                    } else {
-                        $('#category').val();
-                    }
-                }
-                
-            }
-        }); 
-    } */
     function getCategory(catId=0) {
         $.ajax({    
             type: "GET",
@@ -408,14 +381,7 @@
                     var html = "";
                     var html = "<option>Select Category</option>";
                     for (var i = 0; i < dataRecord.categoryList.length; i++) {
-                       /*  console.log(dataRecord.categoryList);
-                        console.log(dataRecord.categoryList[i].child); */
-                        /* for (var j = 0; j < dataRecord.categoryList[i].child.length; j++) {
-                            
-                            html += "<option value="+dataRecord.categoryList[i].child[j].PkCategoryId+" >"+dataRecord.categoryList[i].child[j].catName+"</option>";
-                            
-                        } */
-                        html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
+                        html += "<option value="+dataRecord.categoryList[i].PkCategoryId+" >"+dataRecord.categoryList[i].catName+"</option>";
                     }
                     $('#category').append(html);
                     if (catId > 0) {

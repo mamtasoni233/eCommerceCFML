@@ -278,23 +278,6 @@
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
     <cfset data['categoryList'] = getParentCategoryResult(0, url.EditCategoryId, "",[])>
 </cfif>
-<!--- <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
-    <cfquery name="getCategory">
-        SELECT categoryName, PkCategoryId FROM Category 
-        WHERE 
-            parentCategoryId = <cfqueryparam value="0" cfsqltype="cf_sql_integer"> 
-            AND PkCategoryId != <cfqueryparam value="#url.pkCategoryId#" cfsqltype="cf_sql_integer"> 
-            AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-    </cfquery>
-    <cfset data['data'] = []>
-    <cfloop query="getCategory">
-        <cfset dataRecord = {}>
-        <cfset dataRecord['PkCategoryId'] = getCategory.PkCategoryId>
-        <!--- <cfset dataRecord['parentCategoryId'] = getCategory.parentCategoryId> --->
-        <cfset dataRecord['categoryName'] = getCategory.categoryName>
-        <cfset arrayAppend(data['data'], dataRecord)>
-    </cfloop>
-</cfif> --->
 <cfif structKeyExists(url, 'delPkCategoryId') AND url.delPkCategoryId GT 0>
         <cfquery name="removeImage">
             SELECT PkCategoryId, categoryImage FROM Category 

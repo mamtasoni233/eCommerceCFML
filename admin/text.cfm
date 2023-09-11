@@ -2,7 +2,6 @@
         <cfargument name="parentId" default="0" required="true" type="any"/>
         <cfargument name="parentName" required="true" type="any"/>
         <cfargument name="returnArray" required="true" type="any"/>
-        <!--- <cfargument name="label" default="1" required="true" type="numeric"/> --->
 
         <cfset var qryGetCategory = "">
         <cfquery name="qryGetCategory">
@@ -10,30 +9,20 @@
             WHERE parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
             AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
         </cfquery>
-        <!--- <cfdump var="#qryGetCategory#"> --->
         <cfif qryGetCategory.recordCount GT 0>
             <cfloop query="qryGetCategory">
                 <cfset var res = StructNew()>
                 <cfset res['catName'] = qryGetCategory.categoryName>
                 <cfset res['PkCategoryId'] = qryGetCategory.PkCategoryId>
                 <cfset res['parentCategoryId'] = qryGetCategory.parentCategoryId>
-                <!--- <cfset res['label'] = arguments.label> --->
                 <cfif len(arguments.parentName) GT 0>
                     <cfset res['catName']  = arguments.parentName & ' -> ' & qryGetCategory.categoryName>
-                </cfif>       
-                <!--- <cfif myArra EQ 1> --->
-                    <!--- <cfset label = arguments.label + 2>
-                    <cfif arguments.label EQ label>
-                        <cfset arrayAppend(arguments.returnArray, res)> 
-                    </cfif> --->
-                    
-                    <cfset myList = getCategoryResult(qryGetCategory.PkCategoryId, res['catName'], arguments.returnArray)>
-                    <!--- <cfdump var="#myList#">  --->       
-                    <cfset myArray = listToArray(res['catName'],"->", true, false)>
-                    <cfdump var="#myArray#">
-                    <cfset arrayAppend(arguments.returnArray, res)> 
-                <!--- </cfif> --->
-                <!--- <cfset getCategoryResult(qryGetCategory.PkCategoryId, res['catName'], ListToArray(arguments.returnArray," -> ", true, false))> --->
+                </cfif>
+                <cfset test = reFind("->", res['catName'], 1, false, "all")>
+                <cfif isArray(test) AND arrayLen(test) EQ 2>
+                    <cfset arrayAppend(arguments.returnArray, res)>
+                </cfif>
+                <cfset getCategoryResult(qryGetCategory.PkCategoryId, res['catName'], arguments.returnArray)>
             </cfloop>
         </cfif>
         <cfreturn arguments.returnArray>
