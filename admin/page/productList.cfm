@@ -47,7 +47,7 @@
                     </button>
                 </div>
                 <div class="modal fade" id="addProductData" tabindex="-1" role="dialog" aria-labelledby="addProductData" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-primary">
                                 <h5 class="modal-title white">
@@ -57,86 +57,95 @@
                                     <i data-feather="x"></i>
                                 </button>
                             </div>
-                            <form class="form p-3" id="addProductForm" method="POST" action="" enctype="multipart/form-data">
-                                <input type="hidden" id="PkProductId" value="" name="PkProductId">
-                                <div class="row g-3">
-                                    <div class="col-md-12">
-                                        <lable class="fw-bold form-label" for="category">Category Name</lable>
-                                        <div class="form-group">
-                                            <select name="category" id="category" class="form-control " >
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <lable class="fw-bold form-label" for="productName">Product Name</lable>
-                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="text" class="form-control " id="productName" value="" name="productName"  placeholder="Enter Product Name"/>
-                                            <div class="form-control-icon">
-                                                <i class="bi bi-tag-fill"></i>
+                            <div class="modal-body">
+                                <form class="form p-3" id="addProductForm" method="POST" action="" enctype="multipart/form-data">
+                                    <input type="hidden" id="PkProductId" value="" name="PkProductId">
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <lable class="fw-bold form-label" for="category">Category Name</lable>
+                                            <div class="form-group">
+                                                <select name="category" id="category" class="form-control " >
+                                                </select>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <lable class="fw-bold form-label" for="productPrice">Product Price</lable>
-                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="text" class="form-control " id="productPrice" value="" name="productPrice"  placeholder="Enter Product Price"/>
-                                            <div class="form-control-icon">
-                                                <i class="bi bi-currency-rupee"></i>
+                                        <div class="col-md-6">
+                                            <lable class="fw-bold form-label" for="productName">Product Name</lable>
+                                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                                <input type="text" class="form-control " id="productName" value="" name="productName"  placeholder="Enter Product Name"/>
+                                                <div class="form-control-icon">
+                                                    <i class="bi bi-tag-fill"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <lable class="fw-bold form-label" for="productQty">Product Qtuantity</lable>
-                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="number" class="form-control " id="productQty" value="" name="productQty"  placeholder="Enter Product Qty"/>
-                                            <div class="form-control-icon">
-                                                <i class="bi bi-plus-circle"></i>
+                                        <div class="col-md-6">
+                                            <lable class="fw-bold form-label" for="productPrice">Product Price</lable>
+                                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                                <input type="text" class="form-control " id="productPrice" value="" name="productPrice"  placeholder="Enter Product Price"/>
+                                                <div class="form-control-icon">
+                                                    <i class="bi bi-currency-rupee"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <lable class="fw-bold form-label" for="productDescription">Product Description</lable>
-                                        <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <textarea rows="1" cols="" class="form-control" id="productDescription" name="productDescription"></textarea>
-                                            <div class="form-control-icon">
-                                                <i class="bi bi-pen"></i>
+                                        <div class="col-md-6">
+                                            <lable class="fw-bold form-label" for="productQty">Product Qtuantity</lable>
+                                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                                <input type="number" class="form-control " id="productQty" value="" name="productQty"  placeholder="Enter Product Qty"/>
+                                                <div class="form-control-icon">
+                                                    <i class="bi bi-plus-circle"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <lable class="fw-bold form-label text-center" for="productImage">Product Image</lable>
-                                        <div class="form-group position-relative mb-4 mt-2">
-                                            <input type="file" class="form-control form-control-xl image-preview-filepond filepond" name="filepond[]" multiple id="productImage" data-allow-reorder="true">
-                                        </div>
-                                        <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
-                                        <!--- <div class="form-check removeImageContainer d-none">
-                                            <div class="checkbox">
-                                                <input type="checkbox" id="removeImage" name="removeImage" class="form-check-input" value="1" />
-                                                <label class="form-label text-dark font-weight-bold" for="removeImage">
-                                                    Remove Image
-                                                </label>
+                                        <div class="col-md-6">
+                                            <lable class="fw-bold form-label" for="productDescription">Product Description</lable>
+                                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                                <textarea rows="1" cols="" class="form-control" id="productDescription" name="productDescription"></textarea>
+                                                <div class="form-control-icon">
+                                                    <i class="bi bi-pen"></i>
+                                                </div>
                                             </div>
-                                        </div> --->
+                                        </div>
+                                        <div class="col-md-12">
+                                            <lable class="fw-bold form-label text-center" for="productImage">Product Image</lable>
+                                            <div class="form-group position-relative mb-4 mt-2">
+                                                <input type="file" class="form-control form-control-xl image-preview-filepond" multiple id="productImage" >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-2">
+                                            <label class="form-label text-dark font-weight-bold" for="isActive">Is Active :
+                                            </label>
+                                            <span class="mt-1">
+                                                <input type="checkbox" class="ms-2" id="isActive" checked name="isActive" value="1">
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="col-md-12 mb-2">
-                                        <label class="form-label text-dark font-weight-bold" for="isActive">Is Active :
-                                        </label>
-                                        <span class="mt-1">
-                                            <input type="checkbox" class="ms-2" id="isActive" checked name="isActive" value="1">
-                                        </span>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                            <i class="bx bx-x d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block">Close</span>
+                                        </button>
+                                        <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
+                                            <i class="bx bx-check d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block">Submit</span>
+                                        </button>
                                     </div>
+                                </form>
+                                <div class="table-responsive productImageContainer d-none">
+                                    <table class="table table-striped nowrap table-dark" id="productImageDataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>SI No.</th>
+                                                <th>Image</th>
+                                                <th>Create By</th>
+                                                <th>Create Date</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                        <i class="bx bx-x d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">Close</span>
-                                    </button>
-                                    <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
-                                        <i class="bx bx-check d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">Submit</span>
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -149,7 +158,6 @@
                                     <th>Category Name</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
-                                    <!--- <th>Image</th> --->
                                     <th>Create By</th>
                                     <th>Create Date</th>
                                     <th>Update By</th>
@@ -170,40 +178,43 @@
 </cfoutput>
 <script>
 
-    $(document).ready( function () {
 
-            FilePond.registerPlugin(
-        FilePondPluginImagePreview,
-        FilePondPluginImageCrop,
-        FilePondPluginImageExifOrientation,
-        FilePondPluginImageFilter,
-        FilePondPluginImageResize,
-        FilePondPluginFileValidateSize,
-        FilePondPluginFileValidateType
-    )
-    function createFilePond() {
-        const filepondInput = document.querySelector(".image-preview-filepond");
-        const filepondImage = FilePond.create(filepondInput, {
-            credits: null,
-            allowImagePreview: true,
-            allowImageFilter: false,
-            allowImageExifOrientation: false,
-            allowImageCrop: false,
-            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "image/webp"],
-            storeAsFile: true,
-            fileValidateTypeDetectType: (source, type) =>
-            new Promise((resolve, reject) => {
-                // Do custom type detection here and return with promise
-                resolve(type);
-            }),
-        });
-    }
-
+    $(document).ready( function () {    
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginImageCrop,
+            FilePondPluginImageExifOrientation,
+            FilePondPluginImageFilter,
+            FilePondPluginImageResize,
+            FilePondPluginFileValidateSize,
+            FilePondPluginFileValidateType
+        )
+        function createFilePond() {
+            const filepondInput = document.querySelector(".image-preview-filepond");
+            const filePondName  = filepondInput.setAttribute("name", "filepond[]");
+            const filePondMultiple  = filepondInput.setAttribute("multiple", true);
+            const filepondImage = FilePond.create(filepondInput, {
+                credits: null,
+                allowImagePreview: true,
+                allowImageFilter: false,
+                allowImageExifOrientation: false,
+                allowImageCrop: false,
+                acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "image/webp"],
+                storeAsFile: true,
+                fileValidateTypeDetectType: (source, type) =>
+                new Promise((resolve, reject) => {
+                    // Do custom type detection here and return with promise
+                    resolve(type);
+                }),
+            });
+        }
+        /* createFilePond(); */
         $('#category').select2({
             width: '100%' 
         });
         $('#productDataTable').DataTable({
             processing: true,
+            destroy: true,
             pageLength: 10,
             pagination: 'datatablePagination',
             order: [[1, 'desc']],
@@ -219,7 +230,6 @@
                 url: "../ajaxAddProduct.cfm?formAction=getRecord",
                 type :'post',
                 data: function(d){
-                    console.log(d);
                     var sIdx = d.order[0].column;
                     var m = {};
                     m['draw'] = d.draw;
@@ -240,15 +250,6 @@
                 { data: 'categoryName' },
                 { data: 'productQty' },
                 { data: 'productPrice' },
-                /* { data: 'productImage',
-                    render: function(data, display, row) {
-                        var returnStr = '';
-                        if (data !== "") {
-                            returnStr+=  '<img class="image" src="/assets/productImage/'+data+'" width="80">' 
-                        } 
-                        return returnStr;
-                    }
-                }, */
                 { data: 'userName' },
                 { data: 'dateCreated' },
                 { data: 'userNameUpdate' },
@@ -256,9 +257,9 @@
                 { data: 'isActive',
                     render: function (data,type,row) {
                         if(row.isActive == 1){
-                            return '<span id="deactive" data-id="'+row.PkProductId+'" data-status="Active" data-name="'+row.productName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
+                            return '<span id="deactive" data-id="'+row.PkProductId+'" data-status="Active" data-name="'+row.productName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Product" data-placement="bottom">Active</span>';
                         }else{
-                            return '<span id="active" data-id="'+row.PkProductId+'" data-status="Deactive" data-name="'+row.productName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
+                            return '<span id="active" data-id="'+row.PkProductId+'" data-status="Deactive" data-name="'+row.productName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active product" data-placement="bottom">Inactive</span>';
                         }
                     }
                 },
@@ -275,7 +276,7 @@
                 }
             }
         });
-
+        
         $('div.toolbar').after('<select id="isDeleted" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="2">Select All</option><option value="0" selected>Not Deleted</option><option value="1">Deleted</option></select>');
         
         $('#isDeleted').change(function () {
@@ -293,7 +294,18 @@
                 productName: {
                     required: true
                 },
+                productPrice: {
+                    required: true,
+                    digits:true
+                },
+                productQty: {
+                    required: true,
+                    number:true
+                },
                 category: {
+                    required: true
+                },
+                productDescription: {
                     required: true
                 }
             },
@@ -306,7 +318,16 @@
                 },
                 category: {
                     required: "Please select category",                    
-                }
+                },
+                productPrice: {
+                    required: "Please enter product price",                    
+                },
+                productQty: {
+                    required: "Please enter product quantity",                    
+                },
+                productDescription: {
+                    required: "Please enter product description",                    
+                },
             },
             ignore: [],
             errorElement: 'span',
@@ -334,28 +355,17 @@
                 }
             },
             submitHandler: function (form) {
-                /* event.preventDefault();
-                var removeImageChecked = $('input:checkbox[name=removeImage]:checked');
-                if (removeImageChecked.length > 0) {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: 'You want to delete image ' ,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#dc3545',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (!result.isConfirmed == true) {
-                            $('#removeImage').prop('checked', false);
-                        } else{
-                            $('#removeImage').prop('checked', true);
-                            submitProductData();
-                        }
-                    });
-                } else {
-                    submitProductData();
-                } */
+                //event. preventDefault();
                 var formData = new FormData($('#addProductForm')[0]);
+                var files = $("input[name='filepond']");
+                console.log('pondFiles', files.length);
+                console.log('files', FilePond.create().getFiles.length);
+                /* if ($('#PkProductId').val() == 0) { */
+                    if (FilePond.create().getFiles.length == 0)
+                    {
+                        dangerToast("Issue!","Please upload Atleast 1 image!!!");
+                    } 
+                /* } */
                 $.ajax({
                     type: "POST",
                     url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
@@ -371,7 +381,6 @@
                         $("#addProductData").modal('hide');
                         $('#addProductData').on('hidden.bs.modal', function () {
                             $("#addProductForm").trigger('reset');
-                            $('#imgPreview').attr('src', '');
                             $("#category").val(''); 
                             FilePond.destroy();
                         });
@@ -383,39 +392,111 @@
         $("select").on("select2:close", function (e) {  
             $(this).valid(); 
         });
-        /*  $('#productImage').change(function(){
-            const file = this.files[0];
-            if (file){
-                let reader = new FileReader();
-                reader.onload = function(event){
-                    $('#imgPreview').attr('src', event.target.result);
-                }
-                reader.readAsDataURL(file);
-            }
-        }); */
         $("#productDataTable").on("click", ".editProduct", function () { 
             var id = $(this).attr("data-id");
-            $("#addProductData").modal('show');
             createFilePond();
+            $("#addProductData").modal('show');
             $('#PkProductId').val(id);
-            $(".modal-title").html("Update Category");
+            $(".modal-title").html("Update Product");
             $.ajax({
                 type: "GET",
                 url: "../ajaxAddProduct.cfm?PkProductId="+ id,
                 success: function(result) {
                     if (result.success) {
-                        /* var image = result.json.productImage; */
                         $("#PkProductId").val(result.json.PkProductId);
                         $('#productName').val(result.json.productName);
                         $('#productPrice').val(result.json.productPrice);
                         $('#productQty').val(result.json.productQty);
                         $('#productDescription').val(result.json.productDescription);
                         getCategory(result.json.FkCategoryId);
-                        /* let imgSrc = '../assets/productImage/' + result.json.productImage;
-                        if (image.length > 0) {
-                            $('#imgPreview').attr('src', imgSrc);
-                            $('.removeImageContainer').removeClass('d-none')
-                        } */
+                        if (result.json.PkProductId > 0) {
+                            $('.productImageContainer').removeClass('d-none');
+                            $('#productImageDataTable').DataTable({
+                                processing: true,
+                                destroy: true,
+                                pageLength: 10,
+                                pagination: 'datatablePagination',
+                                order: [[1, 'desc']],
+                                serverSide:true,
+                                responsive: true,
+                                autoWidth: false,
+                                columnDefs: [
+                                    { "width": "40%", "targets": [0,1,2,3,4,5] }
+                                ],
+                                pagingType: "full_numbers",
+                                ajax: {
+                                    url: "../ajaxAddProduct.cfm?formAction=getProductImageRecord",
+                                    type :'post',
+                                    data: function(d){
+                                        var sIdx = d.order[0].column;
+                                        var m = {};
+                                        m['draw'] = d.draw;
+                                        m["start"] = d.start;
+                                        m["length"] = d.length;
+                                        m["search"] = d.search.value;
+                                        m["FkProductId"] = $("#PkProductId").val()
+                                        m["order"] = d.columns[sIdx].data + ' ' + d.order[0].dir;
+                                        return m;
+                                    }
+                                },
+                                columns: [
+                                    { data: 'sNo' },
+                                    { data: 'image',
+                                        render: function(data, display, row) {
+                                            var returnStr = '';
+                                            if (data !== "") {
+                                                returnStr+=  '<img class="image" src="/assets/productImage/'+data+'" width="80">' 
+                                            } 
+                                            return returnStr;
+                                        }
+                                    },
+                                    { data: 'userName' },
+                                    { data: 'dateCreated' },
+                                    { data: 'isDefault',
+                                        render: function (data,type,row) {
+                                            if (row.isDefault == 1) {
+                                                return '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="default" checked data-id="'+row.FkProductId+'" data-status="Default" data-name="'+row.productName+'" data-bs-toggle="tooltip" data-bs-html="true" title="Click to Un Default Product Image" data-bs-placement="bottom"></div>'
+                                            } else{
+                                                return '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="noDefault" data-id="'+row.FkProductId+'" data-status="noDefault" data-name="'+row.productName+'" data-bs-toggle="tooltip" data-bs-html="true" title="Click to Default Product Image" data-bs-placement="bottom"></div>'
+                                            }
+                                        }
+                                    },
+                                    { data: 'PkImageId',
+                                        render: function(data, type, row, meta)
+                                        {
+                                            return '<a data-id="'+row.PkImageId+'" data-name="'+row.productName+'" id="deleteProductImage" class="border-none btn btn-sm btn-danger text-white mt-1 deleteProductImage" data-bs-toggle="tooltip" data-bs-html="true" title="Click to Delete Product Image" data-bs-placement="bottom" > <i class="bi bi-trash"></i></a>'				
+                                        }
+                                    },
+                                ],
+                                rowCallback : function(nRow, aData, iDisplayIndex){
+                                    $("td:first", nRow).html(iDisplayIndex + 1);
+                                    return nRow;
+                                },
+                            });
+                            $("#productImageDataTable").on("click", ".deleteProductImage", function () { 
+                                var id = $(this).attr("data-id");
+                                var name = $(this).data("name");
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: 'You want to delete product image record for ' + '"' +  name + '"',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#dc3545',
+                                    confirmButtonText: 'Yes, delete it!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $.ajax({  
+                                            url: '../ajaxAddProduct.cfm?delPkImageId='+id, 
+                                            type: 'GET',  
+                                            success: function(data) {
+                                                dangerToast("Deleted!","Product Image Deleted Successfully");
+                                                $('#productImageDataTable').DataTable().ajax.reload();               
+                                            }  
+                                        });
+                                    }
+                                });
+                            }); 
+                        } 
                         if(result.json.isActive == 1){ 
                             $('#isActive').prop('checked', true);
                         } else{
@@ -423,9 +504,10 @@
                         }
                         $('#addProductData').on('hidden.bs.modal', function () {
                             $("#addProductForm").trigger('reset');
-                            $('#imgPreview').attr('src', '');
+                            //$('#productImageDataTable').DataTable().destroy();
+                            $('.productImageContainer').addClass('d-none');
+                            $(".modal-title").html("Add Product");
                             $("#category").val(''); 
-                            FilePond.destroy();
                         });
                     }
                 }   
@@ -527,7 +609,7 @@
             }
         }); 
     }
-    function submitProductData() {
+    /* function submitProductData() {
         var formData = new FormData($('#addProductForm')[0]);
         $.ajax({
             type: "POST",
@@ -551,6 +633,6 @@
                 $('#productDataTable').DataTable().ajax.reload();   
             }
         });
-    }
+    } */
     
 </script>

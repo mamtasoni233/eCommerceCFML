@@ -1,6 +1,6 @@
 <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
-<cfcontent reset="true" type="application/json" />
+<cfcontent reset="true" type="application/json" /> 
 
 <cfparam name="PkProductId" default="" />
 <cfparam name="FkCategoryId" default="" />
@@ -142,9 +142,9 @@
         <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
             ORDER BY #form.order#
         </cfif>
-        <cfif structKeyExists(form, "start") AND (form.start) GT 0>
-            LIMIT #form.start#, #form.length#
-        </cfif>
+       
+        LIMIT #form.start#, #form.length#
+        
     </cfquery>
     <cfset data['data'] = []>
     <cfset data['recordsFiltered'] = getProductDataRows.recordCount>
@@ -235,12 +235,15 @@
         <cfset productId = addProductData.generatedKey>
     </cfif>
     <cfif structKeyExists(form, "filepond") AND arrayLen(form.filepond) GT 0>
+        <cfquery name="getImage">
+            SELECT PkImageId, image, isDefault FROM product_image 
+            WHERE FkProductId = <cfqueryparam value="#productId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
         <cfloop array="#form.filepond#" index="i">
             <cfset txtproductImage = "">
             <cffile action="upload" destination="#productImagePath#" fileField="#i#"  nameconflict="makeunique" result="dataImage">
             <cfset txtproductImage = dataImage.serverfile>
-            <!--- <cfdump var="#txtproductImage#"><cfabort> --->
-            <cfif len(txtproductImage) GT 0>
+            <!--- <cfif len(txtproductImage) GT 0> --->
                 <cfquery name="qryProductUpdateImg" result="qryResultProductUpdateImg">
                     INSERT INTO product_image (
                         image
@@ -255,26 +258,9 @@
                     )
                     
                 </cfquery>
-            </cfif>
-
+            <!--- </cfif> --->
         </cfloop>
-        
     </cfif>
-    <!--- <cfif structKeyExists(form, "removeImage")>
-        <cfquery name="qryGetImageNameForRemove">
-            SELECT image
-            FROM product_image
-            WHERE FkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
-        </cfquery>
-        <cfif fileExists("#productImagePath##qryGetImageNameForRemove.productImage#")>
-            <cffile action="delete" file="#productImagePath##qryGetImageNameForRemove.productImage#">
-        </cfif>
-        <cfquery name="qryRemoveImage">
-            UPDATE product_image SET 
-            image = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
-            WHERE FkProductId = <cfqueryparam value="#productId#" cfsqltype="cf_sql_integer">
-        </cfquery>
-    </cfif> --->
 </cfif>
 <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
     <cfquery name="changeStatus">
@@ -289,20 +275,79 @@
 </cfif>
 
 <cfif structKeyExists(url, 'delPkProductId') AND url.delPkProductId GT 0>
-        <cfquery name="removeImage">
-            SELECT PkImageId, image FROM product_image 
-            WHERE FkProductId = <cfqueryparam value="#url.delPkProductId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
+    <cfquery name="removeImage">
+        SELECT PkImageId, image FROM product_image 
+        WHERE FkProductId = <cfqueryparam value="#url.delPkProductId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
 
-        <cfif fileExists("#productImagePath##removeImage.productImage#")>
-            <cffile action="delete" file="#productImagePath##removeImage.productImage#">
+    <cfloop query="removeImage">
+        <cfif fileExists("#productImagePath##removeImage.image#")>
+            <cffile action="delete" file="#productImagePath##removeImage.image#">
         </cfif>
-        <cfquery result="deleteProductData">
-            UPDATE product SET
-            productImage = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
-            , isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
-            WHERE PkProductId = <cfqueryparam value="#url.delPkProductId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
+    </cfloop>
+    <cfquery result="deleteProductData">
+        UPDATE product SET
+        isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
+        WHERE PkProductId IN(<cfqueryparam value="#url.delPkProductId#" list="true">)
+    </cfquery>
+</cfif>
+<cfif structKeyExists(url, "formAction") AND url.formAction EQ "getProductImageRecord">
+    <cfquery name="getProductImageDataRows">
+        SELECT P.PkProductId, P.productName, PI.PkImageId, PI.FkProductId, PI.image, PI.isDefault, PI.createdBy, PI.dateCreated, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
+        FROM product_image PI
+        LEFT JOIN product P ON PI.FkProductId = P.PkProductId
+        LEFT JOIN users U ON PI.createdBy = U.PkUserId
+        WHERE PI.FkProductId = <cfqueryparam value="#form.FkProductId#" cfsqltype = "cf_sql_integer">
+        
+        <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
+            ORDER BY #form.order#
+        </cfif>
+    </cfquery>
+    <cfquery name="getProductImageData">
+        SELECT P.PkProductId, P.productName, PI.PkImageId, PI.FkProductId, PI.image, PI.isActive, PI.isDefault, PI.createdBy, PI.dateCreated, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
+        FROM product_image PI
+        LEFT JOIN product P ON PI.FkProductId = P.PkProductId
+        LEFT JOIN users U ON P.createdBy = U.PkUserId
+        WHERE PI.FkProductId = <cfqueryparam value="#form.FkProductId#" cfsqltype = "cf_sql_integer">
+        <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
+            ORDER BY #form.order#
+        </cfif>
+        LIMIT #form.start#, #form.length#
+    </cfquery>
+    <cfset data['data'] = []>
+    <cfset data['recordsFiltered'] = getProductImageDataRows.recordCount>
+    <cfset data['draw'] = form.draw>
+    <cfset data['recordsTotal'] = getProductImageDataRows.recordCount>
+    <cfloop query="getProductImageData">
+        <cfset dataRecord = {}>
+
+        <cfset dataRecord['PkProductId'] = getProductImageData.PkProductId>
+        <cfset dataRecord['PkImageId'] = getProductImageData.PkImageId>
+        <cfset dataRecord['productName'] = getProductImageData.productName>
+        <cfset dataRecord['image'] = getProductImageData.image>
+        <cfset dataRecord['isActive'] = getProductImageData.isActive>
+        <cfset dataRecord['isDefault'] = getProductImageData.isDefault>
+        <cfset dataRecord['createdBy'] = getProductImageData.createdBy>
+        <cfset dataRecord['dateCreated'] = dateTimeFormat(getProductImageData.dateCreated, 'dd-mm-yyyy hh:nn:ss tt')>
+        <cfset dataRecord['PkUserId'] = getProductImageData.PkUserId>
+        <cfset dataRecord['userName'] = getProductImageData.userName>
+        <cfset dataRecord['sNo'] = 1>
+        <cfset arrayAppend(data['data'], dataRecord)>
+    </cfloop>
+</cfif>
+<cfif structKeyExists(url, 'delPkImageId') AND url.delPkImageId GT 0>
+    <cfquery name="removeImage">
+        SELECT PkImageId, image FROM product_image 
+        WHERE PkImageId = <cfqueryparam value="#url.delPkImageId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+
+    <cfif fileExists("#productImagePath##removeImage.image#")>
+        <cffile action="delete" file="#productImagePath##removeImage.image#">
     </cfif>
+    <cfquery result="deleteProductData">
+        DELETE FROM product_image WHERE
+        PkImageId = <cfqueryparam value="#url.delPkImageId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+</cfif>
 <cfset output = serializeJson(data) />
 <cfoutput>#rereplace(output,'//','')#</cfoutput>

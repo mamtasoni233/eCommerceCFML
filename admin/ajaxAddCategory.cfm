@@ -136,9 +136,8 @@
         <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
             ORDER BY #form.order#
         </cfif>
-        <cfif structKeyExists(form, "start") AND (form.start) GT 0>
-            LIMIT #form.start#, #form.length#
-        </cfif>
+        LIMIT #form.start#, #form.length#
+       
     </cfquery>
     <cfset data['data'] = []>
     <cfset data['recordsFiltered'] = getCategoryDataRows.recordCount>
