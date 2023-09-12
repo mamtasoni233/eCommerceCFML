@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 11, 2023 at 03:12 PM
+-- Generation Time: Sep 12, 2023 at 03:25 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -75,14 +75,14 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 (28, 13, 'Footwear', NULL, b'1', b'0', '2023-09-08 11:59:01', 1, NULL, NULL),
 (29, 13, 'Jeans', NULL, b'1', b'0', '2023-09-08 11:59:19', 1, NULL, NULL),
 (30, 14, 'Suits', NULL, b'1', b'0', '2023-09-08 11:59:42', 1, NULL, NULL),
-(31, 14, 'Western wear', NULL, b'1', b'0', '2023-09-08 12:00:02', 1, NULL, NULL),
+(31, 0, 'Western wear', 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_1q9j9jy3hw4ce.jpg', b'1', b'0', '2023-09-08 12:00:02', 1, '2023-09-12 10:16:41', 1),
 (32, 14, 'Sarees', NULL, b'1', b'0', '2023-09-08 12:00:11', 1, NULL, NULL),
 (33, 14, 'Antalkali ', NULL, b'1', b'0', '2023-09-08 12:00:30', 1, NULL, NULL),
 (34, 15, 'Boy\'s Fashion', NULL, b'1', b'0', '2023-09-08 12:00:55', 1, NULL, NULL),
 (35, 15, 'Girl\'s Fashion', NULL, b'1', b'0', '2023-09-08 12:01:18', 1, NULL, NULL),
 (36, 16, 'Printers', NULL, b'1', b'0', '2023-09-08 12:02:26', 1, NULL, NULL),
 (37, 16, 'Moniters', NULL, b'1', b'0', '2023-09-08 12:05:51', 1, NULL, NULL),
-(38, 16, 'Toners', NULL, b'1', b'0', '2023-09-08 12:06:06', 1, NULL, NULL),
+(38, 16, 'Toners', 'istockphoto-178716575-612x612_15h1ibzha0hh7.jpg', b'1', b'0', '2023-09-08 12:06:06', 1, '2023-09-12 10:16:54', 1),
 (39, 17, 'DSLR & Mirrorless', NULL, b'1', b'0', '2023-09-08 12:13:32', 1, NULL, NULL),
 (40, 17, 'Compact & Bridge Cameras', NULL, b'1', b'0', '2023-09-08 12:14:22', 1, NULL, NULL),
 (41, 17, 'Sports & Action', NULL, b'1', b'0', '2023-09-08 12:15:00', 1, NULL, NULL),
@@ -156,19 +156,41 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, 'PARLE G Original Gluco Biscuits Plain', 100, 5, '', b'1', b'0', '2023-09-08 14:47:51', 1, '2023-09-11 17:40:28', 1),
-(2, 18, 'UNIBIC Rich Chocolate Wafers', 25, 5, '', b'1', b'0', '2023-09-08 14:51:28', 1, '2023-09-11 17:51:51', 1),
-(3, 19, 'Anand Namkeen ', 500, 1, 'Thika Meetha mix', b'1', b'0', '2023-09-11 12:13:42', 1, '2023-09-11 17:05:00', 1),
-(4, 19, 'Gopal Namkeen', 850, 10, 'Ratlami Sev', b'1', b'0', '2023-09-11 13:31:49', 1, '2023-09-11 17:05:32', 1),
-(5, 21, 'pasta', 850, 13, 'test', b'1', b'0', '2023-09-11 15:47:16', 1, '2023-09-11 17:37:23', 1),
-(6, 26, 'testy', 500, 25, 'test', b'1', b'0', '2023-09-11 15:49:42', 1, '2023-09-11 17:52:55', 1),
+(1, 18, 'PARLE G Original Gluco Biscuits Plain', 100, 5, 'gmgmg', b'1', b'0', '2023-09-08 14:47:51', 1, '2023-09-12 17:26:41', 1),
+(2, 18, 'UNIBIC Rich Chocolate Wafers', 25, 5, '', b'1', b'0', '2023-09-08 14:51:28', 1, '2023-09-11 18:53:19', 1),
+(3, 19, 'Anand Namkeen ', 500, 1, 'Thika Meetha mix', b'1', b'0', '2023-09-11 12:13:42', 1, '2023-09-12 15:57:44', 1),
+(4, 19, 'Gopal Namkeen', 850, 10, 'Ratlami Sev', b'1', b'0', '2023-09-11 13:31:49', 1, '2023-09-12 18:39:38', 1),
+(5, 21, 'pasta', 850, 13, 'test', b'1', b'0', '2023-09-11 15:47:16', 1, '2023-09-12 18:37:43', 1),
+(6, 26, 'testy', 500, 25, 'test', b'1', b'1', '2023-09-11 15:49:42', 1, '2023-09-12 15:54:55', 1),
 (7, 26, 'MDH Sambhar Masala', 500, 25, 'test', b'1', b'0', '2023-09-11 15:52:59', 1, '2023-09-11 16:58:22', 1),
-(8, 26, 'Catch Pavbhaji Masala', 500, 25, 'test', b'1', b'0', '2023-09-11 15:53:53', 1, '2023-09-11 17:39:54', 1),
-(11, 27, 'T-SHIRT', 850, 10, 'gdg', b'1', b'0', '2023-09-11 16:10:51', 1, '2023-09-11 17:07:59', 1),
-(16, 37, 'Sony 4K Smart TV', 500, 15, 'NBCBMCBN ', b'1', b'0', '2023-09-11 16:35:48', 1, '2023-09-11 17:52:37', 1),
+(8, 26, 'Catch Pavbhaji Masala', 500, 25, 'test', b'1', b'0', '2023-09-11 15:53:53', 1, '2023-09-12 17:27:49', 1),
+(11, 27, 'T-SHIRT', 850, 10, 'gdg', b'1', b'0', '2023-09-11 16:10:51', 1, '2023-09-12 18:22:43', 1),
+(16, 37, 'Sony 4K Smart TV', 500, 15, 'NBCBMCBN ', b'1', b'0', '2023-09-11 16:35:48', 1, '2023-09-12 14:46:49', 1),
 (21, 43, 'Wooden Frame', 850, 15, 'rwerw', b'1', b'0', '2023-09-11 16:49:58', 1, '2023-09-11 18:33:41', 1),
-(27, 15, 'hello', 25, 20, 'eter', b'1', b'0', '2023-09-11 17:30:15', 1, NULL, NULL),
-(28, 19, 'Red Color School Beg', 55000, 20, 'weqw', b'1', b'0', '2023-09-11 17:31:47', 1, '2023-09-11 17:35:30', 1);
+(27, 15, 'hello', 25, 20, 'eter', b'1', b'1', '2023-09-11 17:30:15', 1, '2023-09-12 16:02:52', 1),
+(28, 19, 'Mixer Namkeen', 55000, 20, 'weqw', b'1', b'0', '2023-09-11 17:31:47', 1, '2023-09-12 16:07:53', 1),
+(29, 18, 'testyhoy', 65, 5, 'sfwef', b'1', b'0', '2023-09-12 10:42:39', 1, NULL, NULL),
+(30, 19, 'wf', 55000, 15, 'wfwe', b'1', b'1', '2023-09-12 11:06:01', 1, '2023-09-12 14:15:48', 1),
+(31, 18, 'soap', 65, 20, 'werfwefr', b'1', b'0', '2023-09-12 11:09:09', 1, NULL, NULL),
+(32, 19, 'afsaef', 1000, 15, 'efwerf', b'1', b'1', '2023-09-12 11:24:21', 1, '2023-09-12 15:58:02', 1),
+(33, 27, 'T-SHIRT6i88', 25, 68, '686786', b'1', b'0', '2023-09-12 17:44:57', 1, '2023-09-12 18:39:23', 1),
+(34, 19, 'fyry', 45654, 6, 'dfsf', b'1', b'0', '2023-09-12 17:45:30', 1, NULL, NULL),
+(35, 19, 'frgfr87489', 25, 20, 'fgerg', b'1', b'0', '2023-09-12 17:47:19', 1, '2023-09-12 18:18:33', 1),
+(36, 19, 'frgfr', 25, 20, 'fgerg', b'1', b'0', '2023-09-12 17:47:34', 1, NULL, NULL),
+(37, 19, 'erter', 25, 50, 'eter', b'1', b'0', '2023-09-12 17:47:54', 1, NULL, NULL),
+(38, 19, 'erter', 25, 50, 'eter', b'1', b'0', '2023-09-12 17:48:06', 1, NULL, NULL),
+(39, 25, 'sef', 25, 20, 'gswg', b'1', b'0', '2023-09-12 17:52:28', 1, NULL, NULL),
+(40, 25, 'sefi79885', 25, 20, 'gswg', b'1', b'0', '2023-09-12 17:52:33', 1, '2023-09-12 18:18:59', 1),
+(41, 19, 'Sony 4K Smart TVerger', 25, 5454, 'sdfsfsd', b'1', b'0', '2023-09-12 18:43:20', 1, NULL, NULL),
+(42, 19, 'Sony 4K Smart TVerger', 25, 5454, 'sdfsfsd', b'1', b'0', '2023-09-12 18:43:22', 1, NULL, NULL),
+(43, 19, 'Sony 4K Smart TVerger', 25, 5454, 'sdfsfsd', b'1', b'0', '2023-09-12 18:43:26', 1, NULL, NULL),
+(44, 19, 'Sony 4K Smart TVerger', 25, 5454, 'sdfsfsd', b'1', b'0', '2023-09-12 18:43:26', 1, NULL, NULL),
+(45, 19, 'Sony 4K Smart TVerger', 25, 5454, 'sdfsfsd', b'1', b'0', '2023-09-12 18:44:01', 1, NULL, NULL),
+(46, 19, 'Sony 4K Smart TVerger', 25, 5454, 'sdfsfsd', b'1', b'0', '2023-09-12 18:44:11', 1, NULL, NULL),
+(47, 19, 'Sony 4K Smart TVerger', 25, 5454, 'sdfsfsd', b'1', b'0', '2023-09-12 18:43:51', 1, NULL, NULL),
+(48, 24, 'dfgxdfg', 659, 595, 'fdgdfgdfghg', b'1', b'0', '2023-09-12 18:47:08', 1, NULL, NULL),
+(49, 24, 'dfgxdfg', 659, 595, 'fdgdfgdfghg', b'1', b'0', '2023-09-12 18:46:37', 1, NULL, NULL),
+(50, 24, 'dfgxdfg', 659, 595, 'fdgdfgdfghg', b'1', b'0', '2023-09-12 18:46:58', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -182,60 +204,59 @@ CREATE TABLE `product_image` (
   `image` text DEFAULT NULL,
   `isDefault` bit(1) NOT NULL DEFAULT b'0',
   `isActive` bit(1) NOT NULL DEFAULT b'1',
-  `isDeleted` bit(1) NOT NULL DEFAULT b'0',
   `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
-  `createdBy` int(11) NOT NULL,
-  `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  `updatedBy` int(11) DEFAULT NULL
+  `createdBy` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `product_image`
 --
 
-INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 3, 'ratlami-sev_1xp2xmc313ng4.png', b'0', b'1', b'0', '2023-09-11 17:05:00', 1, NULL, NULL),
-(2, 3, 'anand-nmkieen_1mkf0z2h032iy.png', b'0', b'1', b'0', '2023-09-11 17:05:00', 1, NULL, NULL),
-(3, 3, '31-315722_product-image-parle-g-biscuit-25-gm_1rmduislgdbgq.png', b'0', b'1', b'0', '2023-09-11 17:05:00', 1, NULL, NULL),
-(4, 4, 'ratlami-sev_94608lkau4d.png', b'0', b'1', b'0', '2023-09-11 17:05:32', 1, NULL, NULL),
-(5, 4, '31-315722_product-image-parle-g-biscuit-25-gm_1pbsqauebaww8.png', b'0', b'1', b'0', '2023-09-11 17:05:32', 1, NULL, NULL),
-(6, 4, 'images (2)_12kxjeok77cfv.jpg', b'0', b'1', b'0', '2023-09-11 17:05:32', 1, NULL, NULL),
-(7, 11, 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses.jpg', b'0', b'1', b'0', '2023-09-11 17:07:00', 1, NULL, NULL),
-(8, 11, 'fashion_xwo46843rbuh.jpg', b'0', b'1', b'0', '2023-09-11 17:07:00', 1, NULL, NULL),
-(9, 11, 'images (1).jfif', b'0', b'1', b'0', '2023-09-11 17:07:00', 1, NULL, NULL),
-(10, 11, 'cute-cheerful-little-girl-with-teddy-bear-blue-wall.jpg', b'0', b'1', b'0', '2023-09-11 17:07:59', 1, NULL, NULL),
-(11, 11, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood (1).jpg', b'0', b'1', b'0', '2023-09-11 17:07:59', 1, NULL, NULL),
-(12, 1, '31-315722_product-image-parle-g-biscuit-25-gm - Copy.png', b'0', b'1', b'0', '2023-09-11 17:08:43', 1, NULL, NULL),
-(13, 1, '31-315722_product-image-parle-g-biscuit-25-gm_8jlzu7cuotdf.png', b'0', b'1', b'0', '2023-09-11 17:08:43', 1, NULL, NULL),
-(14, 1, 'images (2)_wh71boydmiou.jpg', b'0', b'1', b'0', '2023-09-11 17:08:43', 1, NULL, NULL),
-(15, 1, 'download_14hrcyv2yyp6w.jpg', b'0', b'1', b'0', '2023-09-11 17:08:43', 1, NULL, NULL),
-(16, 1, '1523530788-Parle-Parle G Original Gluco Biscuits-Front.jpg', b'0', b'1', b'0', '2023-09-11 17:08:43', 1, NULL, NULL),
-(17, 6, 'download_aixxlz64be66.jpg', b'0', b'1', b'0', '2023-09-11 17:11:02', 1, NULL, NULL),
-(18, 6, '1523530788-Parle-Parle G Original Gluco Biscuits-Front_axbfmj3iennm.jpg', b'0', b'1', b'0', '2023-09-11 17:11:02', 1, NULL, NULL),
-(19, 6, 'marketing-creative-collage-with-phone.jpg', b'0', b'1', b'0', '2023-09-11 17:11:02', 1, NULL, NULL),
-(20, 2, 'ratlami-sev_1v6gduyf3o701.png', b'0', b'1', b'0', '2023-09-11 17:21:38', 1, NULL, NULL),
-(21, 2, 'anand-nmkieen_o8vozzug7p4w.png', b'0', b'1', b'0', '2023-09-11 17:21:38', 1, NULL, NULL),
-(22, 2, '31-315722_product-image-parle-g-biscuit-25-gm - Copy - Copy.png', b'0', b'1', b'0', '2023-09-11 17:21:38', 1, NULL, NULL),
-(23, 27, 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_tr2e8dr9sv62.jpg', b'0', b'1', b'0', '2023-09-11 17:30:15', 1, NULL, NULL),
-(24, 27, 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_1qvqtzozcm6hk.jpg', b'0', b'1', b'0', '2023-09-11 17:30:15', 1, NULL, NULL),
-(25, 27, 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_yp8qzpt8prt7.jpg', b'0', b'1', b'0', '2023-09-11 17:30:15', 1, NULL, NULL),
-(26, 28, 'ratlami-sev_t9p0pdeh9x0n.png', b'0', b'1', b'0', '2023-09-11 17:31:47', 1, NULL, NULL),
-(27, 28, '31-315722_product-image-parle-g-biscuit-25-gm - Copy - Copy (2).png', b'0', b'1', b'0', '2023-09-11 17:31:47', 1, NULL, NULL),
-(28, 5, 'ratlami-sev_1x7vwwbe41zx6.png', b'0', b'1', b'0', '2023-09-11 17:37:23', 1, NULL, NULL),
-(29, 5, 'anand-nmkieen_1wpad8qieho8u.png', b'0', b'1', b'0', '2023-09-11 17:37:23', 1, NULL, NULL),
-(30, 5, '31-315722_product-image-parle-g-biscuit-25-gm - Copy - Copy (2)_pajfzqg7u04j.png', b'0', b'1', b'0', '2023-09-11 17:37:23', 1, NULL, NULL),
-(31, 8, 'ratlami-sev_1i1c79cfz4kxs.png', b'0', b'1', b'0', '2023-09-11 17:39:54', 1, NULL, NULL),
-(32, 8, 'anand-nmkieen_4ckz8lzcxp0p.png', b'0', b'1', b'0', '2023-09-11 17:39:54', 1, NULL, NULL),
-(33, 6, 'ratlami-sev_19lnuhptgvo7c.png', b'0', b'1', b'0', '2023-09-11 17:40:54', 1, NULL, NULL),
-(34, 6, 'anand-nmkieen_1i0nxhlypa0d7.png', b'0', b'1', b'0', '2023-09-11 17:40:54', 1, NULL, NULL),
-(35, 16, 'download_mfjhvrn7hedr.jpg', b'0', b'1', b'0', '2023-09-11 17:41:34', 1, NULL, NULL),
-(36, 16, 'images (2)_14say7zxyk639.jpg', b'0', b'1', b'0', '2023-09-11 17:41:34', 1, NULL, NULL),
-(37, 2, 'ratlami-sev_kq4uvk3u7og0.png', b'0', b'1', b'0', '2023-09-11 17:44:28', 1, NULL, NULL),
-(38, 2, 'anand-nmkieen_1jvmcyi0za7l4.png', b'0', b'1', b'0', '2023-09-11 17:44:28', 1, NULL, NULL),
-(39, 16, '31-315722_product-image-parle-g-biscuit-25-gm - Copy - Copy (2)_10v0pif2wwj2w.png', b'0', b'1', b'0', '2023-09-11 17:52:37', 1, NULL, NULL),
-(40, 16, '31-315722_product-image-parle-g-biscuit-25-gm_11v1kbgeiykq.png', b'0', b'1', b'0', '2023-09-11 17:52:37', 1, NULL, NULL),
-(41, 16, 'images (2)_1tgkodqmm34ir.jpg', b'0', b'1', b'0', '2023-09-11 17:52:37', 1, NULL, NULL),
-(42, 16, 'download_1mwxgiwax0870.jpg', b'0', b'1', b'0', '2023-09-11 17:52:37', 1, NULL, NULL);
+INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `isActive`, `dateCreated`, `createdBy`) VALUES
+(1, 32, 'ratlami-sev.png', b'0', b'1', '2023-09-12 15:56:42', 1),
+(2, 32, 'anand-nmkieen.png', b'0', b'1', '2023-09-12 15:56:42', 1),
+(3, 32, '31-315722_product-image-parle-g-biscuit-25-gm - Copy - Copy (2).png', b'0', b'1', '2023-09-12 15:56:42', 1),
+(4, 32, '31-315722_product-image-parle-g-biscuit-25-gm - Copy - Copy.png', b'0', b'1', '2023-09-12 15:56:42', 1),
+(6, 3, 'ratlami-sev_19v21zj4efxxz.png', b'0', b'1', '2023-09-12 15:57:44', 1),
+(7, 3, 'anand-nmkieen_je1s69a5isu.png', b'0', b'1', '2023-09-12 15:57:44', 1),
+(8, 4, 'images (2).jpg', b'0', b'1', '2023-09-12 15:57:56', 1),
+(9, 4, 'download.jpg', b'0', b'1', '2023-09-12 15:57:56', 1),
+(10, 4, '1523530788-Parle-Parle G Original Gluco Biscuits-Front.jpg', b'0', b'1', '2023-09-12 15:57:56', 1),
+(11, 27, 'anand-nmkieen.png', b'0', b'1', '2023-09-12 15:59:54', 1),
+(14, 27, '31-315722_product-image-parle-g-biscuit-25-gm.png', b'0', b'1', '2023-09-12 15:59:54', 1),
+(15, 27, 'images (2)_waebje1w2l2h.jpg', b'0', b'1', '2023-09-12 15:59:54', 1),
+(16, 27, '31-315722_product-image-parle-g-biscuit-25-gm - Copy - Copy (2) - Copy.png', b'0', b'1', '2023-09-12 15:59:54', 1),
+(17, 8, 'marketing-creative-collage-with-phone.jpg', b'0', b'1', '2023-09-12 16:02:14', 1),
+(18, 8, 'cute-cheerful-little-girl-with-teddy-bear-blue-wall.jpg', b'0', b'1', '2023-09-12 16:02:14', 1),
+(19, 8, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood (1).jpg', b'0', b'1', '2023-09-12 16:02:14', 1),
+(20, 8, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'0', b'1', '2023-09-12 16:02:14', 1),
+(21, 8, 'fashion.jpg', b'0', b'1', '2023-09-12 16:02:14', 1),
+(22, 11, 'anand-nmkieen - Copy.png', b'0', b'1', '2023-09-12 17:18:42', 1),
+(23, 11, '1523530788-Parle-Parle G Original Gluco Biscuits-Front_1vq98c8t0r4kf.jpg', b'0', b'1', '2023-09-12 17:20:00', 1),
+(24, 11, '31-315722_product-image-parle-g-biscuit-25-gm.png', b'0', b'1', '2023-09-12 17:24:49', 1),
+(25, 11, 'cute-cheerful-little-girl-with-teddy-bear-blue-wall_1ny13t1sk36pq.jpg', b'0', b'1', '2023-09-12 17:26:01', 1),
+(26, 4, '-original-imagnbzq8acbnh3m.webp', b'0', b'1', '2023-09-12 17:26:21', 1),
+(27, 5, 'electric-blender-mixer-juicer-set.jpg', b'0', b'1', '2023-09-12 17:28:21', 1),
+(28, 38, 'ratlami-sev.png', b'0', b'1', '2023-09-12 17:48:06', 1),
+(29, 38, 'anand-nmkieen - Copy_uc9xteamk89j.png', b'0', b'1', '2023-09-12 17:48:06', 1),
+(30, 33, 'ratlami-sev_10dtcpppv0jc9.png', b'0', b'1', '2023-09-12 17:49:25', 1),
+(31, 33, '31-315722_product-image-parle-g-biscuit-25-gm - Copy - Copy.png', b'0', b'1', '2023-09-12 17:49:25', 1),
+(32, 33, '1523530788-Parle-Parle G Original Gluco Biscuits-Front_yvyl6mw7rp1d.jpg', b'0', b'1', '2023-09-12 17:49:25', 1),
+(33, 33, 'motorcycle-with-helmet.jpg', b'0', b'1', '2023-09-12 17:49:25', 1),
+(34, 40, 'ratlami-sev_1g7jbb4to7cs4.png', b'0', b'1', '2023-09-12 17:52:33', 1),
+(35, 11, 'motorcycle-with-helmet_1rg8k1oxbpl64.jpg', b'0', b'1', '2023-09-12 18:10:52', 1),
+(36, 11, 'ratlami-sev_kylu1ka4untt.png', b'0', b'1', '2023-09-12 18:17:44', 1),
+(37, 35, 'canon-eos-eos-3000d-dslr-original-imaf3t5h9yuyc5zu.webp', b'0', b'1', '2023-09-12 18:18:33', 1),
+(38, 40, 'ratlami-sev_1ajlenbnd17dc.png', b'0', b'1', '2023-09-12 18:18:59', 1),
+(39, 40, 'anand-nmkieen.png', b'0', b'1', '2023-09-12 18:18:59', 1),
+(40, 33, 'ratlami-sev_1hrpe8zzhrn3z.png', b'0', b'1', '2023-09-12 18:39:23', 1),
+(41, 45, 'scandinavian-living-room-interior-design-zoom-background.jpg', b'0', b'1', '2023-09-12 18:44:07', 1),
+(42, 45, 'istockphoto-178716575-612x612.jpg', b'0', b'1', '2023-09-12 18:44:07', 1),
+(43, 47, 'scandinavian-living-room-interior-design-zoom-background_1nn5jflrmwgls.jpg', b'0', b'1', '2023-09-12 18:44:17', 1),
+(44, 47, 'istockphoto-178716575-612x612_4fxjswd61osl.jpg', b'0', b'1', '2023-09-12 18:44:17', 1),
+(45, 46, 'scandinavian-living-room-interior-design-zoom-background_1hwh5e7zmiryz.jpg', b'0', b'1', '2023-09-12 18:44:31', 1),
+(46, 46, 'istockphoto-178716575-612x612_cvhx2okjizna.jpg', b'0', b'1', '2023-09-12 18:44:31', 1),
+(47, 48, 'ratlami-sev_17o8pwfioti1j.png', b'0', b'1', '2023-09-12 18:47:09', 1);
 
 -- --------------------------------------------------------
 
@@ -287,7 +308,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`PkUserId`, `token`, `firstName`, `lastName`, `email`, `dob`, `gender`, `password`, `image`) VALUES
-(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', 'avatar-3_vjbvmmcfk63l.jpg'),
+(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '5.jpg'),
 (2, NULL, 'Nanu', 'Soni', 'nanu@gmail.com', '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL),
 (3, NULL, 'gvedrfg', 'dftgd', 'admin@gmail.com', '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', NULL),
 (4, NULL, 'test', 'test', 'mamta@gmail.com', '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL),
@@ -358,13 +379,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `product_tags`
