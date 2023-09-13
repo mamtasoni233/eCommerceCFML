@@ -351,11 +351,13 @@
         UPDATE product_image SET
         isDefault = <cfqueryparam value = "1" cfsqltype = "cf_sql_bit">
         WHERE PkImageId = <cfqueryparam value = "#url.defaultId#" cfsqltype = "cf_sql_integer">
+        AND FkProductId = <cfqueryparam value = "#url.productId#" cfsqltype = "cf_sql_integer">
     </cfquery>
     <cfquery name="changeDefaultValue">
         UPDATE product_image SET
         isDefault = <cfqueryparam value = "0" cfsqltype = "cf_sql_bit">
         WHERE PkImageId != <cfqueryparam value = "#url.defaultId#" cfsqltype = "cf_sql_integer">
+        AND FkProductId = <cfqueryparam value = "#url.productId#" cfsqltype = "cf_sql_integer">
     </cfquery>
 </cfif>
 
