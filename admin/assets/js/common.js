@@ -44,7 +44,7 @@ function warnToast(heading, text) {
     heading: heading,
     text: text,
     duration: 3000,
-    backgroundColor: 'linear-gradient(to right, #CAC531, #F3F9A7)',
+    backgroundColor: 'linear-gradient(to right, #f77200, #ffa700, #bd6704)',
     close: true,
   }).showToast();
 }

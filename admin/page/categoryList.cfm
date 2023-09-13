@@ -83,7 +83,6 @@
                                         <lable class="fw-bold form-label text-center" for="categoryImage">Category Image</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                             <input type="file" class="form-control form-control-xl image-preview-filepond" id="categoryImage">
-                                            <!--- <input type="file" class="form-control form-control-xl" name="categoryImage" id="categoryImage"  aria-describedby="inputGroupPrepend"> --->
                                         </div>
                                         <img id="imgPreview" src="" class="w-25 mt-2 mb-3">
                                         <div class="form-check removeImageContainer d-none">
@@ -173,9 +172,15 @@
         });
     }
     $(document).ready( function () {
-        $('#parentCategory').select2({
+        /* $('#parentCategory').select2({
             //placeholder: "Select a parent category",
             width: '100%' 
+        }); */
+        $('#parentCategory').select2({
+            width: '100%',
+            allowClear: true,
+            dropdownParent: $('#addCategoryData')
+            
         });
         var table = $('#categoryDataTable').DataTable({
             serverSide: true,
@@ -259,7 +264,7 @@
             createFilePond();
             getParentCategory();
         });
-        $("#addCategoryForm").validate({
+        var validator =$("#addCategoryForm").validate({
             rules: {
                 categoryName: {
                     required: true
@@ -346,16 +351,18 @@
                         } else{
                             $('#isActive').prop('checked', false);
                         }
-                        $('#addCategoryData').on('hidden.bs.modal', function () {
-                            $("#addCategoryForm").trigger('reset');
-                            $('#imgPreview').attr('src', '');
-                            $("#parentCategory").val(''); 
-                            $('.removeImageContainer').addClass('d-none')
-                            $(".modal-title").html("Add Category");
-                        });
+                        
                     }
                 }   
             });
+        });
+        $('#addCategoryData').on('hidden.bs.modal', function () {
+            $("#addCategoryForm").trigger('reset');
+            validator.resetForm();
+            $('#imgPreview').attr('src', ''); 
+            $("#parentCategory").val(0).trigger("change");  
+            $('.removeImageContainer').addClass('d-none')
+            $(".modal-title").html("Add Category");
         }); 
         $("#categoryDataTable").on("click", ".deleteCategory", function () { 
             var id = $(this).attr("data-id");
@@ -440,10 +447,13 @@
                 if (dataRecord.success) {
                     $('#parentCategory').html('');
                     var html = "";
-                    var html = "<option value='0'>Select As A Parent</option>";
-                    for (var i = 0; i < dataRecord.categoryList.length; i++) {
+                    html = "<option value='0'>Select As A Parent</option>";
+                    /* for (var i = 0; i < dataRecord.categoryList.length; i++) {
                         html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
-                    }
+                    } */
+                    $.each(dataRecord.categoryList, function( data, value, i ) {
+                        html += "<option value="+value.PKCATEGORYID+">" + value.CATNAME +"</option>";
+                    });
                     $('#parentCategory').append(html);
                 }
                 

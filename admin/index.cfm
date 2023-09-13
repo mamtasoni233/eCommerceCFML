@@ -18,7 +18,8 @@
             <link rel="stylesheet" href="./assets/extensions/@fortawesome/fontawesome-free/css/all.min.css" />
             <!--- <link rel="stylesheet" href="../assets/extensions/choices.js/public/assets/styles/choices.css"/> --->
             <!--- select 2 css --->
-            <link href="./assets/compiled/css/select2.min.css" rel="stylesheet" />
+            <!--- <link href="./assets/compiled/css/select2.min.css" rel="stylesheet" /> --->
+            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
             <!--- toast css --->
             <link rel="stylesheet" href="./assets/extensions/toastify-js/src/toastify.css" />
             <!--- sweetalert css --->
@@ -109,7 +110,8 @@
             <!--- jquery validation js --->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <!--- select2 js --->
-            <script src="./assets/compiled/js/select2.min.js"></script>
+            <!---  <script src="./assets/compiled/js/select2.min.js"></script> --->
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
             <!--- password meter --->
             <script async defer src="https://buttons.github.io/buttons.js"></script>

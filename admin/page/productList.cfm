@@ -64,7 +64,7 @@
                                         <div class="col-md-12">
                                             <lable class="fw-bold form-label" for="category">Category Name</lable>
                                             <div class="form-group">
-                                                <select name="category" id="category" class="form-control " >
+                                                <select name="category" id="category" class="form-control">
                                                 </select>
                                             </div>
                                         </div>
@@ -80,7 +80,7 @@
                                         <div class="col-md-6">
                                             <lable class="fw-bold form-label" for="productPrice">Product Price</lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="text" class="form-control " id="productPrice" value="" name="productPrice"  placeholder="Enter Product Price"/>
+                                                <input type="number" class="form-control " id="productPrice" value="" name="productPrice"  placeholder="Enter Product Price"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-currency-rupee"></i>
                                                 </div>
@@ -162,7 +162,7 @@
                                     <th>Create Date</th>
                                     <th>Update By</th>
                                     <th>Update Date</th>
-                                    <th>Status</th>
+                                    <th>Deafult</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -189,6 +189,7 @@
             FilePondPluginFileValidateSize,
             FilePondPluginFileValidateType
         )
+        let filepondImageObj = {};
         function createFilePond() {
             const filepondInput = document.querySelector(".image-preview-filepond");
             const filePondName  = filepondInput.setAttribute("name", "filepond[]");
@@ -207,10 +208,14 @@
                     resolve(type);
                 }),
             });
+            filepondImageObj = filepondImage;
         }
         /* createFilePond(); */
         $('#category').select2({
-            width: '100%' 
+            placeholder: "Please Select Category",
+            width: '100%',
+            allowClear: true,
+            dropdownParent: $('#addProductData')
         });
         $('#productDataTable').DataTable({
             processing: true,
@@ -289,7 +294,7 @@
             createFilePond();
             getCategory();
         });
-        $("#addProductForm").validate({
+        var validator = $("#addProductForm").validate({
             rules: {
                 productName: {
                     required: true
@@ -300,7 +305,7 @@
                 },
                 productQty: {
                     required: true,
-                    number:true
+                    digits:true
                 },
                 category: {
                     required: true
@@ -339,7 +344,7 @@
                 } else {
                     error.insertAfter(element);
                 }
-                error.addClass('invalid-feedback'); 
+                error.addClass('invalid-feedback');
             },
             highlight: function (element, errorClass, validClass) {
                 if ($(element).hasClass('select2-hidden-accessible')) {
@@ -355,39 +360,25 @@
                 }
             },
             submitHandler: function (form) {
-                //event. preventDefault();
-                var formData = new FormData($('#addProductForm')[0]);
-                var files = $("input[name='filepond']");
-                console.log('pondFiles', files.length);
-                console.log('files', FilePond.create().getFiles.length);
-                /* if ($('#PkProductId').val() == 0) { */
-                    if (FilePond.create().getFiles.length == 0)
-                    {
+                event.preventDefault();
+                if ($('#PkProductId').val() == 0) {
+                    if (filepondImageObj.getFiles().length === 0) {
                         dangerToast("Issue!","Please upload Atleast 1 image!!!");
-                    } 
-                /* } */
-                $.ajax({
-                    type: "POST",
-                    url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(result) {
-                        if ($('#PkProductId').val() > 0) {
-                            successToast("Product Updated!","Product Successfully Updated");
-                        } else{
-                            successToast("Product Add!","Product Successfully Added");
-                        }
-                        $("#addProductData").modal('hide');
-                        $('#addProductData').on('hidden.bs.modal', function () {
-                            $("#addProductForm").trigger('reset');
-                            $("#category").val(''); 
-                            FilePond.destroy();
-                        });
-                        $('#productDataTable').DataTable().ajax.reload();   
+                    } else {
+                        submitProductData();
                     }
-                });
+                } else {
+                    submitProductData();
+                }
             }, 
+        });
+
+        $('#addProductData').on('hidden.bs.modal', function () {
+            $("#addProductForm").trigger('reset');
+            validator.resetForm();
+            $('.productImageContainer').addClass('d-none');
+            $("#category").val(); 
+            FilePond.destroy(); 
         });
         $("select").on("select2:close", function (e) {  
             $(this).valid(); 
@@ -455,10 +446,11 @@
                                     { data: 'isDefault',
                                         render: function (data,type,row) {
                                             if (row.isDefault == 1) {
-                                                return '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="default" checked data-id="'+row.FkProductId+'" data-status="Default" data-name="'+row.productName+'" data-bs-toggle="tooltip" data-bs-html="true" title="Click to Un Default Product Image" data-bs-placement="bottom"></div>'
+                                                return '<div class="form-check form-switch"><input class="form-check-input changeDefault" name="isDefault" type="radio" role="switch" id="default" checked data-default = "'+row.isDefault+'" data-id="'+row.PkImageId+'" data-pId="'+row.PkProductId+'"  data-name="'+row.productName+'" data-bs-toggle="tooltip" data-bs-html="true" title="Click to Un Default Product Image" data-bs-placement="bottom"></div>'
                                             } else{
-                                                return '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="noDefault" data-id="'+row.FkProductId+'" data-status="noDefault" data-name="'+row.productName+'" data-bs-toggle="tooltip" data-bs-html="true" title="Click to Default Product Image" data-bs-placement="bottom"></div>'
+                                                return '<div class="form-check form-switch"><input class="form-check-input changeDefault" name="isDefault" type="radio" role="switch" id="default" data-default = "'+row.isDefault+'" data-id="'+row.PkImageId+'" data-pId="'+row.PkProductId+'"  data-name="'+row.productName+'" data-bs-toggle="tooltip" data-bs-html="true" title="Click to Un Default Product Image" data-bs-placement="bottom"></div>'
                                             }
+                                            
                                         }
                                     },
                                     { data: 'PkImageId',
@@ -495,6 +487,42 @@
                                         });
                                     }
                                 });
+                            });
+                            $("#productImageDataTable").on("change", ".changeDefault", function () {
+                                var id = $(this).attr("data-id");
+                                var pId = $(this).attr("data-pId");
+                                var name = $(this).attr("data-name");
+                                var defaultId = $(this).attr("data-default");
+                                var checked = $(this).prop('checked');
+                                if (checked == false) {
+                                    $.ajax({  
+                                        url: '../ajaxAddProduct.cfm?&productId='+pId+'&defaultId='+id,  
+                                        type: 'POST', 
+                                        success: function(data) {
+                                            successToast("Activated!","Product Image Is Default Set Successfully");
+                                            $('#productImageDataTable').DataTable().ajax.reload();                       
+                                        }  
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: 'You want to select default image for ' + '"' +  name + '"',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Yes, Default Set it!'
+                                        }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            $.ajax({  
+                                                url: '../ajaxAddProduct.cfm?&productId='+pId+'&defaultId='+id,  
+                                                type: 'POST', 
+                                                success: function(data) {
+                                                    successToast("Activated!","Product Image Is Default Set Successfully");
+                                                    $('#productImageDataTable').DataTable().ajax.reload();                       
+                                                }  
+                                            });
+                                        }
+                                    });
+                                }
                             }); 
                         } 
                         if(result.json.isActive == 1){ 
@@ -504,10 +532,10 @@
                         }
                         $('#addProductData').on('hidden.bs.modal', function () {
                             $("#addProductForm").trigger('reset');
-                            //$('#productImageDataTable').DataTable().destroy();
+                            validator.resetForm();
                             $('.productImageContainer').addClass('d-none');
                             $(".modal-title").html("Add Product");
-                            $("#category").val(''); 
+                            $("#category").val();  
                         });
                     }
                 }   
@@ -592,12 +620,16 @@
             success: function(data){
                 let dataRecord = JSON.parse(data);
                 if (dataRecord.success) {
-                    $('#category').html('');
                     var html = "";
-                    var html = "<option>Select Category</option>";
-                    for (var i = 0; i < dataRecord.categoryList.length; i++) {
+                    $('#category').html('');
+                    /* var html = "<option>Select Category</option>"; */
+                    /* for (var i = 0; i < dataRecord.categoryList.length; i++) {
                         html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
-                    }
+                    } */
+                    html = "<option value=''></option>";
+                    $.each(dataRecord.categoryList, function( data, value, i ) {
+                        html += "<option value="+value.PKCATEGORYID+">" + value.CATNAME +"</option>";
+                    });
                     $('#category').append(html);
                     if (catId > 0) {
                         $('#category').val(catId);
@@ -609,8 +641,13 @@
             }
         }); 
     }
-    /* function submitProductData() {
+    function submitProductData() {
         var formData = new FormData($('#addProductForm')[0]);
+        for (var [key, value] of formData.entries()) {
+            if (key === "filepond[]" && value.name === "") {
+                formData.delete(key);
+            }
+        }
         $.ajax({
             type: "POST",
             url: "../ajaxAddProduct.cfm?PkProductId=" + $('#PkProductId').val(),
@@ -618,21 +655,21 @@
             contentType: false,
             processData: false,
             success: function(result) {
+                console.log(result)
                 if ($('#PkProductId').val() > 0) {
                     successToast("Product Updated!","Product Successfully Updated");
+                    if (result.json.isDefault == 0) {
+
+                        warnToast("Issue!","Default image is not selected!!!");
+                    }
                 } else{
                     successToast("Product Add!","Product Successfully Added");
+                    warnToast("Issue!","Default image is not selected!!!");
                 }
                 $("#addProductData").modal('hide');
-                $('#addProductData').on('hidden.bs.modal', function () {
-                    $("#addProductForm").trigger('reset');
-                    $('#imgPreview').attr('src', '');
-                    $("#category").val(''); 
-                    FilePond.destroy();
-                });
+                
                 $('#productDataTable').DataTable().ajax.reload();   
             }
         });
-    } */
-    
+    }
 </script>

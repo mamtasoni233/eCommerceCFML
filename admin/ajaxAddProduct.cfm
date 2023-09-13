@@ -1,6 +1,6 @@
 <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
-<cfcontent reset="true" type="application/json" /> 
+<cfcontent reset="true" type="application/json" />
 
 <cfparam name="PkProductId" default="" />
 <cfparam name="FkCategoryId" default="" />
@@ -87,7 +87,6 @@
 
 <cfset data = {}>
 <cfset data['success'] = true>
-<!--- <cfset productImagePath = ExpandPath('.../../assets/productImage/')> --->
 <cfset productImagePath = ExpandPath('./assets/productImage/')>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
@@ -109,8 +108,6 @@
                     OR P.productPrice LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productQty LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productDescription LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
         <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
@@ -135,14 +132,11 @@
                     OR P.productPrice LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productQty LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productDescription LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
         <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
             ORDER BY #form.order#
         </cfif>
-       
         LIMIT #form.start#, #form.length#
         
     </cfquery>
@@ -174,8 +168,8 @@
 
 <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
     <cfquery name="editProductData">
-        SELECT PkProductId, productName, productPrice,productQty, productDescription, isActive, FkCategoryId
-        FROM product 
+        SELECT P.PkProductId, P.productName, P.productPrice,productQty, P.productDescription, P.isActive, P.FkCategoryId, PI.isDefault
+        FROM product P LEFT JOIN product_image PI ON P.PkProductId = PI.FkProductId
         WHERE PkProductId = <cfqueryparam value="#PkProductId#" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfset data['json'] = {}>
@@ -186,6 +180,7 @@
     <cfset data['json']['productQty'] = editProductData.productQty>
     <cfset data['json']['productDescription'] = editProductData.productDescription>
     <cfset data['json']['isActive'] = editProductData.isActive>
+    <cfset data['json']['isDefault'] = editProductData.isDefault>
 </cfif>
 
 
@@ -196,6 +191,7 @@
         <cfset isActive = form.isActive>
     </cfif>
     <cfset productId = 0>
+
     <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
         <cfset productId = url.PkProductId>
         <cfquery name="updateproductData">
@@ -210,6 +206,7 @@
             , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
             WHERE PkProductId = <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
         </cfquery>
+        
     <cfelse>
         <cfquery result="addProductData">
             INSERT INTO product (
@@ -235,15 +232,15 @@
         <cfset productId = addProductData.generatedKey>
     </cfif>
     <cfif structKeyExists(form, "filepond") AND arrayLen(form.filepond) GT 0>
-        <cfquery name="getImage">
-            SELECT PkImageId, image, isDefault FROM product_image 
-            WHERE FkProductId = <cfqueryparam value="#productId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
         <cfloop array="#form.filepond#" index="i">
             <cfset txtproductImage = "">
             <cffile action="upload" destination="#productImagePath#" fileField="#i#"  nameconflict="makeunique" result="dataImage">
             <cfset txtproductImage = dataImage.serverfile>
-            <!--- <cfif len(txtproductImage) GT 0> --->
+            <cfquery name="getImage">
+                SELECT PkImageId, image, isDefault FROM product_image 
+                WHERE FkProductId = <cfqueryparam value="#productId#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+            <cfif len(txtproductImage)  GT 0>
                 <cfquery name="qryProductUpdateImg" result="qryResultProductUpdateImg">
                     INSERT INTO product_image (
                         image
@@ -256,9 +253,8 @@
                         , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
                         , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
                     )
-                    
                 </cfquery>
-            <!--- </cfif> --->
+            </cfif>
         </cfloop>
     </cfif>
 </cfif>
@@ -349,5 +345,19 @@
         PkImageId = <cfqueryparam value="#url.delPkImageId#" cfsqltype = "cf_sql_integer">
     </cfquery>
 </cfif>
+
+<cfif structKeyExists(url, "defaultId") AND url.defaultId GT 0>
+    <cfquery name="changeDefault">
+        UPDATE product_image SET
+        isDefault = <cfqueryparam value = "1" cfsqltype = "cf_sql_bit">
+        WHERE PkImageId = <cfqueryparam value = "#url.defaultId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+    <cfquery name="changeDefaultValue">
+        UPDATE product_image SET
+        isDefault = <cfqueryparam value = "0" cfsqltype = "cf_sql_bit">
+        WHERE PkImageId != <cfqueryparam value = "#url.defaultId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+</cfif>
+
 <cfset output = serializeJson(data) />
 <cfoutput>#rereplace(output,'//','')#</cfoutput>
