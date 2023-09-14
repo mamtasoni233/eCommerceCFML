@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2023 at 03:12 PM
+-- Generation Time: Sep 14, 2023 at 03:38 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -139,6 +139,7 @@ INSERT INTO `customer` (`PkCustomerId`, `token`, `firstName`, `lastName`, `email
 CREATE TABLE `product` (
   `PkProductId` int(11) UNSIGNED NOT NULL,
   `FkCategoryId` int(11) UNSIGNED NOT NULL,
+  `product_tags` mediumtext DEFAULT NULL,
   `productName` varchar(100) NOT NULL,
   `productPrice` float NOT NULL,
   `productQty` int(11) NOT NULL,
@@ -155,10 +156,13 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, 'PARLE G Original Gluco Biscuits Plain', 56, 15, 'fwerfwe', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-09-13 18:37:26', 1),
-(2, 19, 'Anand Namkeen Thika Meetha mix', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-09-13 18:37:44', 1),
-(3, 28, 'Puma Snikers', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-13 18:37:21', 1);
+INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `product_tags`, `productName`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(1, 18, '', 'PARLE G Original Gluco Biscuits Plain', 56, 15, 'fwerfwe', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-09-13 18:37:26', 1),
+(2, 19, '4,7', 'Anand Namkeen Thika Meetha mix', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-09-14 18:54:48', 1),
+(3, 28, '', 'Puma Snikers', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-14 10:34:27', 1),
+(4, 41, '', 'T-SHIRT', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-09-14 16:23:20', 1),
+(5, 7, '', 'Samsung Z-fold ', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-14 16:23:31', 1),
+(6, 18, '', 'Biscuits', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-14 16:23:42', 1);
 
 -- --------------------------------------------------------
 
@@ -181,13 +185,17 @@ CREATE TABLE `product_image` (
 --
 
 INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `isActive`, `dateCreated`, `createdBy`) VALUES
-(3, 1, 'ratlami-sev.png', b'0', b'1', '2023-09-13 15:51:58', 1),
+(3, 1, 'ratlami-sev.png', b'1', b'1', '2023-09-13 15:51:58', 1),
 (4, 1, 'anand-nmkieen.png', b'0', b'1', '2023-09-13 15:51:58', 1),
-(5, 2, 'ratlami-sev_d4tkyqcxb7mb.png', b'1', b'1', '2023-09-13 16:03:30', 1),
+(5, 2, 'ratlami-sev_d4tkyqcxb7mb.png', b'0', b'1', '2023-09-13 16:03:30', 1),
 (6, 2, 'anand-nmkieen_1nvr14ueh50bq.png', b'0', b'1', '2023-09-13 16:03:30', 1),
 (7, 2, '50474c.webp', b'0', b'1', '2023-09-13 16:03:30', 1),
-(8, 2, '9fbd36.webp', b'0', b'1', '2023-09-13 16:03:30', 1),
-(9, 3, '69c6589653afdb9a.webp', b'0', b'1', '2023-09-13 18:01:45', 1);
+(8, 2, '9fbd36.webp', b'1', b'1', '2023-09-13 16:03:30', 1),
+(9, 3, '69c6589653afdb9a.webp', b'1', b'1', '2023-09-13 18:01:45', 1),
+(11, 4, 'motorcycle-with-helmet.jpg', b'1', b'1', '2023-09-14 14:26:46', 1),
+(12, 5, '22fddf3c7da4c4f4.webp', b'1', b'1', '2023-09-14 14:35:24', 1),
+(13, 6, 'images (2).jpg', b'0', b'1', '2023-09-14 14:59:19', 1),
+(14, 6, 'download.jpg', b'1', b'1', '2023-09-14 14:59:19', 1);
 
 -- --------------------------------------------------------
 
@@ -214,7 +222,13 @@ CREATE TABLE `product_tags` (
 INSERT INTO `product_tags` (`PkTagId`, `FkCategoryId`, `tagName`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
 (1, 18, 'biscuits', b'1', b'0', '2023-09-11 10:57:18', 1, '2023-09-11 10:58:46', NULL),
 (2, 36, 'printers', b'1', b'0', '2023-09-11 10:57:45', 1, NULL, NULL),
-(3, 21, 'sfrsfe', b'1', b'1', '2023-09-11 10:58:38', 1, '2023-09-11 10:58:53', NULL);
+(3, 10, 'food', b'1', b'0', '2023-09-11 10:58:38', 1, '2023-09-14 16:36:40', 1),
+(4, 19, 'nmkin', b'1', b'0', '2023-09-14 11:23:59', 1, '2023-09-14 16:36:49', 1),
+(5, 41, 'sports', b'1', b'0', '2023-09-14 14:10:34', 1, NULL, NULL),
+(6, 17, 'camera', b'1', b'0', '2023-09-14 14:10:43', 1, '2023-09-14 16:36:31', 1),
+(7, 19, 'mixer', b'1', b'0', '2023-09-14 17:09:22', 1, NULL, NULL),
+(8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-09-14 18:11:30', 1),
+(9, 18, 'butter buiscuit', b'1', b'0', '2023-09-14 18:11:51', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -310,19 +324,19 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `product_tags`
 --
 ALTER TABLE `product_tags`
-  MODIFY `PkTagId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `PkTagId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
