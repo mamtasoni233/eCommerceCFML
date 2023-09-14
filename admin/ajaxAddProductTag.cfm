@@ -74,7 +74,7 @@
                     <cfset res['catName']  = arguments.parentName & ' -> ' & qryGetCategory.categoryName>
                 </cfif>
                 <cfset test = reFind("->", res['catName'], 1, false, "all")>
-                <cfif isArray(test) AND arrayLen(test) EQ 2>
+                <cfif isArray(test) AND arrayLen(test) GT 0>
                     <cfset arrayAppend(arguments.returnArray, res)>
                 </cfif>
                 <cfset getCategoryResult(qryGetCategory.PkCategoryId, res['catName'], arguments.returnArray)>

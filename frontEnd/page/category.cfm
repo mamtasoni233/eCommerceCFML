@@ -5,13 +5,12 @@
     <cfparam name="PkProductId" default="" />
     <cfparam name="isDeleted" default="0" />
     <cfquery name="getProduct">
-
-        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName, P.productPrice, P.productImage
+        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName, P.productPrice, PI.image
         FROM product P
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
+        LEFT JOIN product_image PI ON P.PkProductId = PI.FkProductId
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_integer">
         AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
-        
     </cfquery>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
     <!---    <cfdump var="#getProduct#" abort="true"> --->
@@ -407,11 +406,17 @@
                                 <div class="card position-relative h-100 card-listing hover-trigger">
                                     <div class="card-header">
                                         <picture class="position-relative overflow-hidden d-block bg-light">
-                                            <img class="w-100 vh-50 img-fluid position-relative z-index-10" title="" src="#imagePath##getProduct.productImage#" alt="">
+                                            <img class="w-100 vh-50 img-fluid position-relative z-index-10" title="" src="#imagePath##getProduct.image#" alt="">
                                         </picture>
+                                        <!--- <picture class="position-relative overflow-hidden d-block bg-light">
+                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="#imagePath##getProduct.image#" alt="">
+                                        </picture> --->
                                         <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
-                                            <img class="w-100 vh-50 img-fluid" title="" src="#imagePath##getProduct.productImage#" alt="">
+                                            <img class="w-100 vh-50 img-fluid" title="" src="#imagePath##getProduct.image#" alt="">
                                         </picture>
+                                        <!--- <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
+                                            <img class="w-100 img-fluid" title="" src="#imagePath##getProduct.image#" alt="">
+                                        </picture> --->
                                         <div class="card-actions">
                                             <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
                                             <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
@@ -445,7 +450,7 @@
                                         <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center" href="">
                                             #getProduct.productName#
                                         </a>
-                                        <p class="fw-bolder m-0 mt-2">#getProduct.productPrice#</p>
+                                        <p class="fw-bolder m-0 mt-2">$#getProduct.productPrice#</p>
                                     </div>
                                 </div>
                                 <!--/ Card Product-->

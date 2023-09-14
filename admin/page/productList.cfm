@@ -64,7 +64,7 @@
                                         <div class="col-md-12">
                                             <lable class="fw-bold form-label" for="category">Category Name</lable>
                                             <div class="form-group">
-                                                <select name="category" id="category" class="form-control">
+                                                <select name="category" id="category" class="form-control" data-placeholder="Select Category">
                                                 </select>
                                             </div>
                                         </div>
@@ -102,6 +102,24 @@
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-pen"></i>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <lable class="fw-bold form-label" for="productTags">Product Tags</lable>
+                                            <div class="form-group">
+                                                <!--- <cfquery name="getProductTag">
+                                                    SELECT C.PkCategoryId, C.categoryName, PT.PkTagId, PT.FkCategoryId, PT.tagName, PT.isActive, PT.isDeleted
+                                                    FROM product_tags PT
+                                                    LEFT JOIN category C ON PT.FkCategoryId = C.PkCategoryId
+                                                    WHERE PT.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+                                                    AND PT.isActive = <cfqueryparam value="1" cfsqltype = "cf_sql_bit">
+                                                </cfquery> --->
+                                                <select name="productTags" id="productTags" class="form-control productTagMultiple" data-placeholder="Select Product Tags" multiple>
+                                                    <option></option>
+                                                    <!--- <cfloop query="getProductTag">
+                                                        <option value="#getProductTag.PkTagId#">#getProductTag.tagName#</option>
+                                                    </cfloop> --->
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -212,11 +230,83 @@
         }
         /* createFilePond(); */
         $('#category').select2({
-            placeholder: "Please Select Category",
+            /* placeholder: "Please Select Category",
             width: '100%',
+            allowClear: true, */
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            dropdownParent: $('#addProductData'),
             allowClear: true,
-            dropdownParent: $('#addProductData')
         });
+        $('#productTags').select2({
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: false,
+            allowClear: true,
+            dropdownParent: $('#addProductData'),
+        });
+        /*  $("#productTags").select2({
+            placeholder: {
+                id: '-1', // the value of the option
+                text: "Select Product Tags",
+            },
+            width: '100%',
+            tags:true,
+            tokenSeparators: [',', ' '],
+            dropdownParent: $('#addProductData'),
+            multiple: true,
+            ajax: {    
+                type: "GET",
+                url: '../ajaxAddProduct.cfm?formAction=getProductTag',       
+                dataType: "json",
+                processResults: function(data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data.message.data, function (item) {
+                            console.log(item)
+                            return {
+                                text: item.values.title,
+                                id: item.values.id
+                            }
+                        }),
+                    };
+                    return {
+                        results: data.items
+                    };
+                    cache: true
+                } 
+                //processResults: function (data) {
+                    return {
+                        result.items;
+                    }; 
+                    //var arr = [];
+                    //results: $.map(data, function (item) {
+                        //console.log(item)
+                        arr.push({
+                            id: index,
+                            text: value
+                        }) 
+                       // return {
+                           // text: item.tagName,
+                           /// id: item.PkTagId,
+                       // }
+                    //});
+                    var arr = []
+                    $.each(data, function (index, value) {
+                        arr.push({
+                            id: index,
+                            text: value
+                        })
+                    }) 
+                    return {
+                        results: arr
+                    }; 
+               // },
+               // cache: true
+            }  
+        }); */
         $('#productDataTable').DataTable({
             processing: true,
             destroy: true,
@@ -378,6 +468,7 @@
             validator.resetForm();
             $('.productImageContainer').addClass('d-none');
             $("#category").val(); 
+            $("#productTags").val(); 
             FilePond.destroy(); 
         });
         $("select").on("select2:close", function (e) {  
@@ -399,6 +490,8 @@
                         $('#productPrice').val(result.json.productPrice);
                         $('#productQty').val(result.json.productQty);
                         $('#productDescription').val(result.json.productDescription);
+                        //$('#productTags').val(result.json.product_tags);
+                        $('#productTags').val(result.json.product_tags).trigger("change");
                         getCategory(result.json.FkCategoryId);
                         if (result.json.PkProductId > 0) {
                             $('.productImageContainer').removeClass('d-none');
@@ -536,6 +629,7 @@
                             $('.productImageContainer').addClass('d-none');
                             $(".modal-title").html("Add Product");
                             $("#category").val();  
+                            $("#productTags").val();  
                         });
                     }
                 }   
@@ -610,6 +704,25 @@
                 });
             }
         });
+        $("#category").change(function(){
+            var category_Id = $("#category option:selected").val();
+            $.ajax({
+                url: "../ajaxAddProduct.cfm?formAction=getProductTag&category_Id="+category_Id,
+                type: "GET", 
+                success: function(data) {
+                    var html = "";
+                    $('#productTags ').html("");
+                    html = "<option value=''></option> ";
+                    console.log( data );
+                    $.each(data.data, function( data, value ) {
+                        html += "<option value="+value.PkTagId+">"+value.tagName+"</option>";
+                    });
+                    $('#productTags ').append(html);
+                    
+                }
+            });
+
+        });
     });
     function getCategory(catId=0) {
         $.ajax({    
@@ -621,14 +734,17 @@
                 let dataRecord = JSON.parse(data);
                 if (dataRecord.success) {
                     var html = "";
+                   /*  var htm2 = ""; */
                     $('#category').html('');
+                    /* $('#productTags').html(''); */
                     /* var html = "<option>Select Category</option>"; */
                     /* for (var i = 0; i < dataRecord.categoryList.length; i++) {
                         html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
                     } */
-                    html = "<option value=''></option>";
+                    html = "<option value=''></option> ";
                     $.each(dataRecord.categoryList, function( data, value, i ) {
-                        html += "<option value="+value.PKCATEGORYID+">" + value.CATNAME +"</option>";
+                        html += "<option value="+value.PkCategoryId+">" + value.catName +"</option>";
+                        
                     });
                     $('#category').append(html);
                     if (catId > 0) {
@@ -637,7 +753,6 @@
                         $('#category').val();
                     }
                 }
-                
             }
         }); 
     }
@@ -655,11 +770,9 @@
             contentType: false,
             processData: false,
             success: function(result) {
-                console.log(result)
                 if ($('#PkProductId').val() > 0) {
                     successToast("Product Updated!","Product Successfully Updated");
                     if (result.json.isDefault == 0) {
-
                         warnToast("Issue!","Default image is not selected!!!");
                     }
                 } else{
@@ -667,7 +780,6 @@
                     warnToast("Issue!","Default image is not selected!!!");
                 }
                 $("#addProductData").modal('hide');
-                
                 $('#productDataTable').DataTable().ajax.reload();   
             }
         });

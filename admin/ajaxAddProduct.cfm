@@ -58,7 +58,7 @@
     </cfscript>
 </cffunction>
 
-<cffunction name="getCategoryResult" access="public" returntype="array">
+<!--- <cffunction name="getCategoryResult" access="public" returntype="array">
         <cfargument name="parentId" required="true" type="any"/>
         <cfargument name="parentName" required="true" type="any"/>
         <cfargument name="returnArray" required="true" type="any"/>
@@ -79,6 +79,48 @@
                 </cfif>       
                 <cfset arrayAppend(arguments.returnArray, res)>         
                 <cfset getCategoryResult(qryGetCategory.PkCategoryId, res.catName, arguments.returnArray)>
+            </cfloop>
+        </cfif>
+        <cfreturn arguments.returnArray>
+</cffunction> --->
+<cffunction name="getCategoryResult" access="public" returntype="array">
+        <cfargument name="parentId" default="0" required="true" type="any"/>
+        <cfargument name="parentName" required="true" type="any"/>
+        <cfargument name="returnArray" required="true" type="any"/>
+
+        <cfset var qryGetCategory = "">
+        <cfquery name="qryGetCategory">
+            SELECT C.categoryName, C.PkCategoryId, C.parentCategoryId
+            FROM Category C
+            WHERE C.parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+            AND C.isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <!--- <cfquery name="qryGetProductTag">
+            SELECT C.categoryName, C.PkCategoryId, P.tagName, P.PkTagId, P.FkCategoryId
+            FROM Category C
+            LEFT JOIN product_tags P ON C.PkCategoryId = P.FkCategoryId
+            WHERE P.FkCategoryId =  <cfqueryparam value="#qryGetCategory.PkCategoryId#" cfsqltype="cf_sql_integer">
+            AND C.isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+        </cfquery> --->
+        <cfif qryGetCategory.recordCount GT 0>
+            <cfloop query="qryGetCategory">
+                <cfset var res = StructNew()>
+                <!--- <cfloop query="qryGetProductTag"> --->
+                    <!--- <cfset res['PkTagId'] = qryGetProductTag.PkTagId>
+                    <cfset res['tagName'] = qryGetProductTag.tagName>
+                    <cfset res['FkCategoryId'] = qryGetProductTag.FkCategoryId> --->
+                <!---  </cfloop> --->
+                <cfset res['catName'] = qryGetCategory.categoryName>
+                <cfset res['PkCategoryId'] = qryGetCategory.PkCategoryId>
+                <cfset res['parentCategoryId'] = qryGetCategory.parentCategoryId>
+                <cfif len(arguments.parentName) GT 0>
+                    <cfset res['catName']  = arguments.parentName & ' -> ' & qryGetCategory.categoryName>
+                </cfif>
+                <cfset test = reFind("->", res['catName'], 1, false, "all")>
+                <cfif isArray(test) AND arrayLen(test) GT 0>
+                    <cfset arrayAppend(arguments.returnArray, res)>
+                </cfif>
+                <cfset getCategoryResult(qryGetCategory.PkCategoryId, res['catName'], arguments.returnArray)>
             </cfloop>
         </cfif>
         <cfreturn arguments.returnArray>
@@ -146,7 +188,6 @@
     <cfset data['recordsTotal'] = getProductDataRows.recordCount>
     <cfloop query="getProductData">
         <cfset dataRecord = {}>
-
         <cfset dataRecord['PkProductId'] = getProductData.PkProductId>
         <cfset dataRecord['productName'] = getProductData.productName>
         <cfset dataRecord['categoryName'] = getProductData.categoryName>
@@ -168,7 +209,7 @@
 
 <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
     <cfquery name="editProductData">
-        SELECT P.PkProductId, P.productName, P.productPrice,productQty, P.productDescription, P.isActive, P.FkCategoryId, PI.isDefault
+        SELECT P.PkProductId, P.productName, P.productPrice,productQty, P.productDescription, P.isActive, P.FkCategoryId, P.product_tags, PI.isDefault
         FROM product P LEFT JOIN product_image PI ON P.PkProductId = PI.FkProductId
         WHERE PkProductId = <cfqueryparam value="#PkProductId#" cfsqltype="cf_sql_integer">
     </cfquery>
@@ -181,6 +222,7 @@
     <cfset data['json']['productDescription'] = editProductData.productDescription>
     <cfset data['json']['isActive'] = editProductData.isActive>
     <cfset data['json']['isDefault'] = editProductData.isDefault>
+    <cfset data['json']['product_tags'] = editProductData.product_tags>
 </cfif>
 
 
@@ -231,6 +273,13 @@
         </cfquery>
         <cfset productId = addProductData.generatedKey>
     </cfif>
+    <cfif structKeyExists(form, 'productTags') AND len(form.productTags) GT 0>
+        <cfquery name="updateproductData">
+            UPDATE product SET
+                product_tags = <cfqueryparam value = "#form.productTags#" cfsqltype = "cf_sql_text">
+            WHERE PkProductId = <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+    </cfif>
     <cfif structKeyExists(form, "filepond") AND arrayLen(form.filepond) GT 0>
         <cfloop array="#form.filepond#" index="i">
             <cfset txtproductImage = "">
@@ -267,6 +316,7 @@
 </cfif>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
+    <!--- <cfset data['categoryList'] = getCategoryResult(0,"",[])> --->
     <cfset data['categoryList'] = getCategoryResult(0,"",[])>
 </cfif>
 
@@ -316,7 +366,6 @@
     <cfset data['recordsTotal'] = getProductImageDataRows.recordCount>
     <cfloop query="getProductImageData">
         <cfset dataRecord = {}>
-
         <cfset dataRecord['PkProductId'] = getProductImageData.PkProductId>
         <cfset dataRecord['PkImageId'] = getProductImageData.PkImageId>
         <cfset dataRecord['productName'] = getProductImageData.productName>
@@ -360,6 +409,23 @@
         AND FkProductId = <cfqueryparam value = "#url.productId#" cfsqltype = "cf_sql_integer">
     </cfquery>
 </cfif>
-
+<cfif structKeyExists(url, "formAction") AND url.formAction EQ "getProductTag">
+    <cfquery name="getProductTag">
+        SELECT C.PkCategoryId, C.categoryName, PT.PkTagId, PT.FkCategoryId, PT.tagName, PT.isActive, PT.isDeleted
+        FROM product_tags PT
+        LEFT JOIN category C ON PT.FkCategoryId = C.PkCategoryId
+        WHERE PT.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+        AND PT.isActive = <cfqueryparam value="1" cfsqltype = "cf_sql_bit">
+        AND PT.FkCategoryId = <cfqueryparam value="#url.category_Id#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+    <cfset data['data'] = []>
+    <cfloop query="getProductTag">
+        <cfset dataRecord = {}>
+        <cfset dataRecord['PkTagId'] = getProductTag.PkTagId>
+        <cfset dataRecord['tagName'] = getProductTag.tagName>
+        <cfset arrayAppend(data['data'], dataRecord)>
+    </cfloop>
+    <!--- <cfdump var="#data['data']#"> --->
+</cfif>
 <cfset output = serializeJson(data) />
 <cfoutput>#rereplace(output,'//','')#</cfoutput>

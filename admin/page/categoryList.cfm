@@ -172,15 +172,18 @@
         });
     }
     $(document).ready( function () {
+        
         /* $('#parentCategory').select2({
-            //placeholder: "Select a parent category",
-            width: '100%' 
-        }); */
-        $('#parentCategory').select2({
             width: '100%',
             allowClear: true,
             dropdownParent: $('#addCategoryData')
             
+        }); */
+        $('#parentCategory').select2({
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            dropdownParent: $('#addCategoryData'),
+            allowClear: true,
         });
         var table = $('#categoryDataTable').DataTable({
             serverSide: true,
