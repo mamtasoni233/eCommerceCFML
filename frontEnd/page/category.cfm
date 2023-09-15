@@ -5,13 +5,15 @@
     <cfparam name="PkProductId" default="" />
     <cfparam name="isDeleted" default="0" />
     <cfquery name="getProduct">
-        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName, P.productPrice, PI.image
+        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName, P.productPrice
         FROM product P
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
-        LEFT JOIN product_image PI ON P.PkProductId = PI.FkProductId
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_integer">
         AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
     </cfquery>
+    <!--- <cfloop query="getProduct"> --->
+    <!--- </cfloop> --->
+    <!---  --->
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
     <!---    <cfdump var="#getProduct#" abort="true"> --->
     <!-- Category Top Banner -->
@@ -401,22 +403,27 @@
                     <!-- Products-->
                     <div class="row g-4 mb-5">
                         <cfloop query="#getProduct#">
+                            <cfquery name="getProductImage">
+                                SELECT image, isDefault
+                                FROM product_image
+                                WHERE FkProductId = <cfqueryparam value="#getProduct.PkProductId#" cfsqltype = "cf_sql_integer">
+                            </cfquery>
+                            <!--- <cfdump var="#getProduct#">
+                            <cfdump var="#getProductImage#"> --->
                             <div class="col-12 col-sm-6 col-md-4">
                                 <!-- Card Product-->
                                 <div class="card position-relative h-100 card-listing hover-trigger">
                                     <div class="card-header">
-                                        <picture class="position-relative overflow-hidden d-block bg-light">
-                                            <img class="w-100 vh-50 img-fluid position-relative z-index-10" title="" src="#imagePath##getProduct.image#" alt="">
-                                        </picture>
-                                        <!--- <picture class="position-relative overflow-hidden d-block bg-light">
-                                            <img class="w-100 img-fluid position-relative z-index-10" title="" src="#imagePath##getProduct.image#" alt="">
-                                        </picture> --->
-                                        <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
-                                            <img class="w-100 vh-50 img-fluid" title="" src="#imagePath##getProduct.image#" alt="">
-                                        </picture>
-                                        <!--- <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
-                                            <img class="w-100 img-fluid" title="" src="#imagePath##getProduct.image#" alt="">
-                                        </picture> --->
+                                        <cfloop query="#getProductImage#">
+                                            <cfif getProductImage.isDefault GT 0>
+                                                <picture class="position-relative overflow-hidden d-block bg-light">
+                                                    <img class="vh-50 img-fluid position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="">
+                                                </picture>
+                                            </cfif>
+                                            <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
+                                                <img class="vh-50 object-fit-none img-fluid" title="" src="#imagePath##getProductImage.image#" alt="">
+                                            </picture>
+                                        </cfloop> 
                                         <div class="card-actions">
                                             <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
                                             <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
@@ -456,23 +463,6 @@
                                 <!--/ Card Product-->
                             </div>
                         </cfloop>
-                        
-                        <!---  <div class="d-none d-md-flex col-md-8">
-                            <div class="w-100 h-100 position-relative">
-                                <div class="position-absolute w-50 h-100 start-0 bottom-0 top-0 bg-pos-center-center bg-img-cover"
-                                    style="background-image: url(./assets/images/banners/banner-3.jpg);">
-                                </div>
-                                <div
-                                    class="position-absolute w-50 h-100 bg-light end-0 top-0 bottom-0 d-flex justify-content-center align-items-center">
-                                    <div class="px-4 text-center">
-                                        <h4 class="fs-4 fw-bold mb-4">Built for adventure</h4>
-                                        <p class="mb-4">The perfect grab-and-go layer for every hiking adventure</p>
-                                        <a href="##" class="text-link-border border-2 pb-1 fw-bolder">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --->
-                        
                     </div>
                     <!-- / Products-->
 

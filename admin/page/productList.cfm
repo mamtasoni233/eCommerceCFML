@@ -468,12 +468,16 @@
             validator.resetForm();
             $('.productImageContainer').addClass('d-none');
             $("#category").val(); 
-            $("#productTags").val(); 
+            $("#productTags").val().trigger("change");
             FilePond.destroy(); 
         });
         $("select").on("select2:close", function (e) {  
             $(this).valid(); 
         });
+        $("#category").change(function(){
+            var categoryId = $("#category option:selected").val();
+            getTag(parseInt(categoryId));
+        }); 
         $("#productDataTable").on("click", ".editProduct", function () { 
             var id = $(this).attr("data-id");
             createFilePond();
@@ -490,9 +494,8 @@
                         $('#productPrice').val(result.json.productPrice);
                         $('#productQty').val(result.json.productQty);
                         $('#productDescription').val(result.json.productDescription);
-                        //$('#productTags').val(result.json.product_tags);
-                        $('#productTags').val(result.json.product_tags).trigger("change");
-                        getCategory(result.json.FkCategoryId);
+                        getCategory(result.json.FkCategoryId,result.json.product_tags);
+                        $('#productTags').val(result.json.product_tags).trigger('change');
                         if (result.json.PkProductId > 0) {
                             $('.productImageContainer').removeClass('d-none');
                             $('#productImageDataTable').DataTable({
@@ -617,7 +620,7 @@
                                     });
                                 }
                             }); 
-                        } 
+                        }
                         if(result.json.isActive == 1){ 
                             $('#isActive').prop('checked', true);
                         } else{
@@ -629,7 +632,7 @@
                             $('.productImageContainer').addClass('d-none');
                             $(".modal-title").html("Add Product");
                             $("#category").val();  
-                            $("#productTags").val();  
+                            $("#productTags").val().trigger("change");
                         });
                     }
                 }   
@@ -704,27 +707,8 @@
                 });
             }
         });
-        $("#category").change(function(){
-            var category_Id = $("#category option:selected").val();
-            $.ajax({
-                url: "../ajaxAddProduct.cfm?formAction=getProductTag&category_Id="+category_Id,
-                type: "GET", 
-                success: function(data) {
-                    var html = "";
-                    $('#productTags ').html("");
-                    html = "<option value=''></option> ";
-                    console.log( data );
-                    $.each(data.data, function( data, value ) {
-                        html += "<option value="+value.PkTagId+">"+value.tagName+"</option>";
-                    });
-                    $('#productTags ').append(html);
-                    
-                }
-            });
-
-        });
     });
-    function getCategory(catId=0) {
+    function getCategory(catId=0, productTag='') {
         $.ajax({    
             type: "GET",
             url: "../ajaxAddProduct.cfm?formAction=getCategory", 
@@ -744,7 +728,6 @@
                     html = "<option value=''></option> ";
                     $.each(dataRecord.categoryList, function( data, value, i ) {
                         html += "<option value="+value.PkCategoryId+">" + value.catName +"</option>";
-                        
                     });
                     $('#category').append(html);
                     if (catId > 0) {
@@ -752,9 +735,33 @@
                     } else {
                         $('#category').val();
                     }
+                    getTag(parseInt(catId), productTag);
                 }
             }
         }); 
+    }
+    function getTag(catid = 0, productTag = '') {
+        if (catid > 0) {
+            $.ajax({
+                url: "../ajaxAddProduct.cfm?formAction=getProductTag&category_Id="+ catid,         
+                type: "GET", 
+                success: function(data) {
+                    var html2 = "";
+                    $('#productTags').html("");
+                    html2 = "<option value=''></option>";
+                    $.each(data.data, function( data, value ) {
+                        html2 += "<option value="+value.PkTagId+">"+value.tagName+"</option>";
+                    });
+                    $('#productTags').append(html2);
+                    
+                    if (productTag.length > 0) {
+                        $("#productTags").val(productTag).trigger("change");
+                    }
+                }
+            });
+        } else {
+            $("#productTags").val().trigger("change");
+        }
     }
     function submitProductData() {
         var formData = new FormData($('#addProductForm')[0]);

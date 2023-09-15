@@ -209,7 +209,7 @@
 
 <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
     <cfquery name="editProductData">
-        SELECT P.PkProductId, P.productName, P.productPrice,productQty, P.productDescription, P.isActive, P.FkCategoryId, P.product_tags, PI.isDefault
+        SELECT P.PkProductId, P.productName, P.productPrice,productQty, P.productDescription, P.isActive, PI.FkProductId, P.FkCategoryId, P.product_tags, PI.isDefault
         FROM product P LEFT JOIN product_image PI ON P.PkProductId = PI.FkProductId
         WHERE PkProductId = <cfqueryparam value="#PkProductId#" cfsqltype="cf_sql_integer">
     </cfquery>
@@ -222,7 +222,7 @@
     <cfset data['json']['productDescription'] = editProductData.productDescription>
     <cfset data['json']['isActive'] = editProductData.isActive>
     <cfset data['json']['isDefault'] = editProductData.isDefault>
-    <cfset data['json']['product_tags'] = editProductData.product_tags>
+    <cfset data['json']['product_tags'] = listToArray(editProductData.product_tags)>
 </cfif>
 
 
@@ -233,7 +233,6 @@
         <cfset isActive = form.isActive>
     </cfif>
     <cfset productId = 0>
-
     <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
         <cfset productId = url.PkProductId>
         <cfquery name="updateproductData">
@@ -248,7 +247,6 @@
             , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
             WHERE PkProductId = <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
         </cfquery>
-        
     <cfelse>
         <cfquery result="addProductData">
             INSERT INTO product (
@@ -316,7 +314,6 @@
 </cfif>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'getCategory'>
-    <!--- <cfset data['categoryList'] = getCategoryResult(0,"",[])> --->
     <cfset data['categoryList'] = getCategoryResult(0,"",[])>
 </cfif>
 
@@ -425,7 +422,6 @@
         <cfset dataRecord['tagName'] = getProductTag.tagName>
         <cfset arrayAppend(data['data'], dataRecord)>
     </cfloop>
-    <!--- <cfdump var="#data['data']#"> --->
 </cfif>
 <cfset output = serializeJson(data) />
 <cfoutput>#rereplace(output,'//','')#</cfoutput>
