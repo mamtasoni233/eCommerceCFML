@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 14, 2023 at 03:38 PM
+-- Generation Time: Sep 15, 2023 at 03:35 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -49,10 +49,10 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 (2, 0, 'Fashion', 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses.jpg', b'1', b'0', '2023-09-08 10:54:38', 1, '2023-09-08 11:57:08', 1),
 (3, 0, 'Electronics', 'istockphoto-178716575-612x612.jpg', b'1', b'0', '2023-09-08 10:55:13', 1, '2023-09-08 12:12:40', 1),
 (4, 0, 'Home & Furniture', 'scandinavian-living-room-interior-design-zoom-background.jpg', b'1', b'0', '2023-09-08 10:55:37', 1, '2023-09-08 12:18:42', 1),
-(5, 0, 'Appliances', 'electric-blender-mixer-juicer-set.jpg', b'1', b'0', '2023-09-08 10:56:04', 1, '2023-09-08 12:10:17', 1),
-(6, 0, 'Beauty, Toys & More', 'cute-cheerful-little-girl-with-teddy-bear-blue-wall.jpg', b'1', b'0', '2023-09-08 10:56:26', 1, '2023-09-08 14:32:10', 1),
-(7, 0, 'Mobiles', 'marketing-creative-collage-with-phone.jpg', b'1', b'0', '2023-09-08 10:56:55', 1, '2023-09-08 14:35:03', 1),
-(8, 0, 'Two Wheelers', 'motorcycle-with-helmet.jpg', b'1', b'0', '2023-09-08 10:57:22', 1, '2023-09-08 14:38:24', 1),
+(5, 3, 'Appliances', 'electric-blender-mixer-juicer-set.jpg', b'1', b'0', '2023-09-08 10:56:04', 1, '2023-09-15 15:35:28', 1),
+(6, 2, 'Beauty, Toys & More', 'cute-cheerful-little-girl-with-teddy-bear-blue-wall.jpg', b'1', b'0', '2023-09-08 10:56:26', 1, '2023-09-15 15:35:43', 1),
+(7, 3, 'Mobiles', 'marketing-creative-collage-with-phone.jpg', b'1', b'0', '2023-09-08 10:56:55', 1, '2023-09-15 15:36:32', 1),
+(8, 44, 'Two Wheelers', 'motorcycle-with-helmet.jpg', b'1', b'0', '2023-09-08 10:57:22', 1, '2023-09-15 15:37:18', 1),
 (9, 1, 'Snacks & Beverages', '9fbd36.webp', b'1', b'0', '2023-09-08 10:58:30', 1, '2023-09-08 10:58:28', NULL),
 (10, 1, 'Packaged Food', 'ac8550.webp', b'1', b'0', '2023-09-08 10:58:53', 1, '2023-09-08 10:58:51', NULL),
 (11, 1, 'Staples', '50474c.webp', b'1', b'0', '2023-09-08 10:59:16', 1, '2023-09-08 10:59:15', NULL),
@@ -75,7 +75,7 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 (28, 13, 'Footwear', NULL, b'1', b'0', '2023-09-08 11:59:01', 1, NULL, NULL),
 (29, 13, 'Jeans', NULL, b'1', b'0', '2023-09-08 11:59:19', 1, NULL, NULL),
 (30, 14, 'Suits', NULL, b'1', b'0', '2023-09-08 11:59:42', 1, NULL, NULL),
-(31, 0, 'Western wear', 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_1q9j9jy3hw4ce.jpg', b'1', b'0', '2023-09-08 12:00:02', 1, '2023-09-12 10:16:41', 1),
+(31, 14, 'Western wear', 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_1q9j9jy3hw4ce.jpg', b'1', b'0', '2023-09-08 12:00:02', 1, '2023-09-15 15:37:41', 1),
 (32, 14, 'Sarees', NULL, b'1', b'0', '2023-09-08 12:00:11', 1, NULL, NULL),
 (33, 14, 'Antalkali ', NULL, b'1', b'0', '2023-09-08 12:00:30', 1, NULL, NULL),
 (34, 15, 'Boy\'s Fashion', NULL, b'1', b'0', '2023-09-08 12:00:55', 1, NULL, NULL),
@@ -87,7 +87,26 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 (40, 17, 'Compact & Bridge Cameras', NULL, b'1', b'0', '2023-09-08 12:14:22', 1, NULL, NULL),
 (41, 17, 'Sports & Action', NULL, b'1', b'0', '2023-09-08 12:15:00', 1, NULL, NULL),
 (42, 4, 'Kitchen & dining', NULL, b'1', b'0', '2023-09-08 12:16:11', 1, NULL, NULL),
-(43, 4, 'Home Decor', NULL, b'1', b'0', '2023-09-08 12:16:41', 1, NULL, NULL);
+(43, 4, 'Home Decor', NULL, b'1', b'0', '2023-09-08 12:16:41', 1, NULL, NULL),
+(44, 0, 'Wheelers', 'motorcycle-with-helmet_12e6u0n0fs2yp.jpg', b'1', b'0', '2023-09-15 15:37:07', 1, '2023-09-15 15:37:08', NULL),
+(45, 12, 'Cleaning products', NULL, b'1', b'0', '2023-09-15 15:48:00', 1, NULL, NULL),
+(46, 12, ' Laundry products ', NULL, b'1', b'0', '2023-09-15 15:48:37', 1, NULL, NULL),
+(47, 6, 'Beauty & Personal Care', NULL, b'1', b'0', '2023-09-15 15:50:27', 1, NULL, NULL),
+(48, 6, 'Toys & School Supplies', NULL, b'1', b'0', '2023-09-15 16:37:35', 1, NULL, NULL),
+(49, 5, 'Air Conditioners', NULL, b'1', b'0', '2023-09-15 16:43:22', 1, NULL, NULL),
+(50, 5, 'TV', NULL, b'1', b'0', '2023-09-15 16:43:45', 1, NULL, NULL),
+(51, 5, 'Watching Machine', NULL, b'1', b'0', '2023-09-15 16:44:25', 1, NULL, NULL),
+(52, 7, 'Samsung', NULL, b'1', b'0', '2023-09-15 16:45:10', 1, NULL, NULL),
+(53, 7, 'Vivo', NULL, b'1', b'0', '2023-09-15 16:45:24', 1, NULL, NULL),
+(54, 7, 'Apple', NULL, b'1', b'0', '2023-09-15 16:45:42', 1, NULL, NULL),
+(55, 42, 'Cookware', NULL, b'1', b'0', '2023-09-15 16:47:25', 1, NULL, NULL),
+(56, 42, 'Kitchen Tools', NULL, b'1', b'0', '2023-09-15 16:48:58', 1, NULL, NULL),
+(57, 42, 'Table & Dinnerware', NULL, b'1', b'0', '2023-09-15 16:49:29', 1, NULL, NULL),
+(58, 43, 'Painting & Posters', NULL, b'1', b'0', '2023-09-15 16:50:18', 1, NULL, NULL),
+(59, 43, 'Clocks', NULL, b'1', b'0', '2023-09-15 16:50:32', 1, NULL, NULL),
+(60, 43, 'Wall Decore', NULL, b'1', b'0', '2023-09-15 16:50:54', 1, NULL, NULL),
+(61, 8, 'Petrol Vehicle', NULL, b'1', b'0', '2023-09-15 16:51:20', 1, NULL, NULL),
+(62, 8, 'Electronic Vehicle', NULL, b'1', b'0', '2023-09-15 16:51:34', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -157,12 +176,14 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `product_tags`, `productName`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, '', 'PARLE G Original Gluco Biscuits Plain', 56, 15, 'fwerfwe', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-09-13 18:37:26', 1),
-(2, 19, '4,7', 'Anand Namkeen Thika Meetha mix', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-09-14 18:54:48', 1),
-(3, 28, '', 'Puma Snikers', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-14 10:34:27', 1),
-(4, 41, '', 'T-SHIRT', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-09-14 16:23:20', 1),
+(1, 18, '1', 'PARLE G Original Gluco Biscuits Plain', 56, 15, 'fwerfwe', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-09-15 11:40:47', 1),
+(2, 19, '4,7', 'Anand Namkeen Thika Meetha mix', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-09-15 15:02:01', 1),
+(3, 28, '1,2', 'Puma Snikers', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-15 11:40:41', 1),
+(4, 41, '5', 'T-SHIRT', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-09-15 14:25:45', 1),
 (5, 7, '', 'Samsung Z-fold ', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-14 16:23:31', 1),
-(6, 18, '', 'Biscuits', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-14 16:23:42', 1);
+(6, 18, '', 'Biscuits', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-15 16:59:13', 1),
+(7, 21, '10', 'Meggie', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-09-15 15:15:19', 1),
+(8, 18, NULL, 'Sona Namkeen', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-09-15 18:41:15', 1);
 
 -- --------------------------------------------------------
 
@@ -194,8 +215,11 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (9, 3, '69c6589653afdb9a.webp', b'1', b'1', '2023-09-13 18:01:45', 1),
 (11, 4, 'motorcycle-with-helmet.jpg', b'1', b'1', '2023-09-14 14:26:46', 1),
 (12, 5, '22fddf3c7da4c4f4.webp', b'1', b'1', '2023-09-14 14:35:24', 1),
-(13, 6, 'images (2).jpg', b'0', b'1', '2023-09-14 14:59:19', 1),
-(14, 6, 'download.jpg', b'1', b'1', '2023-09-14 14:59:19', 1);
+(14, 6, 'download.jpg', b'1', b'1', '2023-09-14 14:59:19', 1),
+(15, 7, 'anand-nmkieen_1gfgiz2rj7f68.png', b'1', b'1', '2023-09-15 15:14:31', 1),
+(17, 6, '0ff199d1bd27eb98.webp', b'0', b'1', '2023-09-15 16:59:13', 1),
+(18, 8, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf.jpg', b'1', b'1', '2023-09-15 18:30:40', 1),
+(24, 8, 'png-transparent-vegetarian-cuisine-dal-french-fries-ramoji-wafer-and-namkeen-pvt-ltd-food-junk-food-food-recipe-wafer.png', b'0', b'1', '2023-09-15 18:40:02', 1);
 
 -- --------------------------------------------------------
 
@@ -228,7 +252,8 @@ INSERT INTO `product_tags` (`PkTagId`, `FkCategoryId`, `tagName`, `isActive`, `i
 (6, 17, 'camera', b'1', b'0', '2023-09-14 14:10:43', 1, '2023-09-14 16:36:31', 1),
 (7, 19, 'mixer', b'1', b'0', '2023-09-14 17:09:22', 1, NULL, NULL),
 (8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-09-14 18:11:30', 1),
-(9, 18, 'butter buiscuit', b'1', b'0', '2023-09-14 18:11:51', 1, NULL, NULL);
+(9, 18, 'butter buiscuit', b'1', b'0', '2023-09-14 18:11:51', 1, NULL, NULL),
+(10, 21, 'Noodles', b'1', b'0', '2023-09-15 15:14:51', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -312,7 +337,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -324,19 +349,19 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `product_tags`
 --
 ALTER TABLE `product_tags`
-  MODIFY `PkTagId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `PkTagId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
