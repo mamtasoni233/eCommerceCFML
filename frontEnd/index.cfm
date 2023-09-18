@@ -44,7 +44,11 @@
                 crossorigin="anonymous"
                 referrerpolicy="no-referrer"
             ></script>
-
+            <!-- swup -->
+            <script src="https://unpkg.com/swup@4"></script>
+            <script>
+                const swup = new Swup();
+            </script>
             <!-- Fix for custom scrollbar if JS is disabled-->
             <noscript>
                 <style>
@@ -53,6 +57,15 @@
                     */
                     .simplebar-content-wrapper {
                     overflow: auto;
+                    }
+                    /* Define a transition duration during page visits */
+                    html.is-changing .transition-fade {
+                        transition: opacity 0.25s;
+                        opacity: 1;
+                    }
+                    /* Define the styles for the unloaded pages */
+                    html.is-animating .transition-fade {
+                        opacity: 0;
                     }
                 </style>
             </noscript>
@@ -888,6 +901,7 @@
                 crossorigin="anonymous"
                 referrerpolicy="no-referrer"
             ></script>
+            
             <!-- Vendor JS -->
             <script src="./assets/js/vendor.bundle.js"></script>
 

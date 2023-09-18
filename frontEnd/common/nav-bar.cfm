@@ -40,7 +40,7 @@
         <div class="w-100 pb-lg-0 pt-lg-0 pt-4 pb-3">
             <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
                 <!-- Logo-->
-                <a class="navbar-brand fw-bold fs-3 m-0 p-0 flex-shrink-0" href="./index.html">
+                <a class="navbar-brand fw-bold fs-3 m-0 p-0 flex-shrink-0" href="index.cfm?pg=dashboard">
                     <!-- Start of Logo-->
                     <div class="d-flex align-items-center">
                         <div class="f-w-6 d-flex align-items-center me-2 lh-1">
@@ -64,10 +64,7 @@
                 <!-- / Logo-->
 
                 <!-- Main Navigation-->
-                <div
-                    class="ms-5 flex-shrink-0 collapse navbar-collapse navbar-collapse-light w-auto flex-grow-1"
-                    id="navbarNavDropdown"
-                >
+                <div class="ms-5 flex-shrink-0 collapse navbar-collapse navbar-collapse-light w-auto flex-grow-1" id="navbarNavDropdown">
                     <!-- Mobile Nav Toggler-->
                     <button
                         class="btn btn-link px-2 text-decoration-none navbar-toggler border-0 position-absolute top-0 end-0 mt-3 me-2"
@@ -85,7 +82,6 @@
                             <li class="nav-item me-lg-4 dropdown position-static">
                                 <a
                                     class="nav-link fw-bolder dropdown-toggle py-lg-4"
-                                    href="index.cfm?pg=category.cfm"
                                     role="button"
                                     data-bs-toggle="dropdown"
                                     aria-haspopup="true"

@@ -1,32 +1,112 @@
-<cfoutput>
-    <cfparam name="id" default="" />
-    <cfparam name="PkCategoryId" default="" />
-    <cfparam name="PkTagId" default="" />
-    <cfparam name="PkProductId" default="" />
-    <cfparam name="isDeleted" default="0" />
-    <cfquery name="getProduct">
-        SELECT C.PkCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName, P.productPrice
-        FROM product P
-        LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
-        WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_integer">
-        AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+<cfparam name="id" default="#url.id#" />
+<cfparam name="PkCategoryId" default="" />
+<cfparam name="PkTagId" default="" />
+<cfparam name="PkProductId" default="" />
+<cfparam name="isDeleted" default="0" />
+<cfparam name="startRow" default="">
+<cfparam name="pageNum" default="1">
+<cfparam name="maxRows" default="9">
+<cfset startRow = ( pageNum-1 ) * maxRows>
+<cfquery name="getProduct">
+    SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
+    FROM product P
+    LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
+    WHERE  1 = 1
+    AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_integer">
+    AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+</cfquery>
+<!--- paingnation --->
+<cfset totalPages = ceiling( getProduct.recordCount/maxRows )>
+<cfquery name="getProductPaging">
+    SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
+    FROM product P
+    LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
+    WHERE  1 = 1
+    AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_integer">
+    AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+    LIMIT #startRow#, #maxRows#
+</cfquery>
+<!--- <cfif structKeyExists(url, 'pageNum')>
+    <cfset pageNum = url.pageNum>
+<cfelse>
+    <cfset pageNum = 1>
+</cfif> --->
+<!---end paingnation --->
+<cffunction name="getCategoryResult" access="public" returntype="array">
+    <cfargument name="parentId" default="0" required="false" type="numeric"/>
+    <cfargument name="returnArray" required="false" type="array" default="#arrayNew(1)#"/>
+
+    <cfset var qryGetCategory = "">
+    <cfquery name="qryGetCategory">
+        SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM Category 
+        WHERE parentCategoryId = <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+        AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
     </cfquery>
-    <!--- <cfloop query="getProduct"> --->
-    <!--- </cfloop> --->
-    <!---  --->
+    <cfif qryGetCategory.recordCount GT 0>
+        <cfloop query="qryGetCategory">
+            <cfset var res = StructNew()>
+            <cfset res['child'] = []>
+            <cfset res['catName'] = qryGetCategory.categoryName>
+            <cfset res['PkCategoryId'] = qryGetCategory.PkCategoryId>
+            <cfset res['parentCategoryId'] = qryGetCategory.parentCategoryId>
+            <cfset res['categoryImage'] = qryGetCategory.categoryImage>
+            <cfset res['child'] = getCategoryResult(res.PkCategoryId)>
+            <cfquery name="countProduct">
+                SELECT COUNT(*) as productCount, C.PkCategoryId, C.parentCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName
+                FROM product P
+                LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
+                WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_integer">
+                AND P.FkCategoryId = <cfqueryparam value="#res['PkCategoryId']#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+            <cfset res['productCount'] = countProduct.productCount>
+            <cfset arrayAppend(arguments.returnArray, res)> 
+        </cfloop>
+    </cfif>
+    <cfreturn arguments.returnArray>
+</cffunction>
+<cfset categoryList = getCategoryResult()>
+<cfset parentId = getProduct.parentCategoryId>
+<cfquery name="getProductTag">
+    SELECT C.PkCategoryId, C.parentCategoryId, C.categoryName, PT.PkTagId, PT.FkCategoryId, PT.tagName, PT.isActive, PT.isDeleted
+    FROM product_tags PT
+    LEFT JOIN category C ON PT.FkCategoryId = C.PkCategoryId
+    WHERE PT.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+    AND PT.isActive = <cfqueryparam value="1" cfsqltype = "cf_sql_bit">
+    AND C.parentCategoryId = <cfqueryparam value="#parentId#" cfsqltype = "cf_sql_integer">
+</cfquery>
+<cfoutput>
+    <style>
+        /* Define a transition duration during page visits */
+        html.is-changing .transition-fade {
+            transition: opacity 0.25s;
+            opacity: 1;
+        }
+        /* Define the styles for the unloaded pages */
+        html.is-animating .transition-fade {
+            opacity: 0;
+        }
+    </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
-    <!---    <cfdump var="#getProduct#" abort="true"> --->
     <!-- Category Top Banner -->
         <div class="py-6 bg-img-cover bg-dark bg-overlay-gradient-dark position-relative overflow-hidden mb-4 bg-pos-center-center"
             style="background-image: url('../assets/images/banners/banner-1.jpg');">
             <div class="container position-relative z-index-20" data-aos="fade-right" data-aos-delay="300">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item breadcrumb-light"><a href="##">Home</a></li>
-                        <li class="breadcrumb-item breadcrumb-light"><a href="##">Activities</a></li>
-                        <li class="breadcrumb-item active breadcrumb-light" aria-current="page">Clothing</li>
+                        <li class="breadcrumb-item breadcrumb-light"><a href="index.cfm?pg=dashboard">Home</a></li>
+                        <li class="breadcrumb-item breadcrumb-light">
+                            <cfloop array="#categoryList#" index="idx">
+                                <cfloop array="#idx.child#" index="child">
+                                    <cfif child.PkCategoryId EQ getProductPaging.parentCategoryId>
+                                        #child.catName#
+                                    </cfif>
+                                </cfloop>
+                            </cfloop>    
+                        </li>
+                        <li class="breadcrumb-item active breadcrumb-light" aria-current="page">#getProductPaging.categoryName#</li>
                     </ol>
-                </nav>                <h1 class="fw-bold display-6 mb-4 text-white">Latest Arrivals (121)</h1>
+                </nav>                
+                <h1 class="fw-bold display-6 mb-4 text-white">Latest Arrivals (121)</h1>
                 <div class="col-12 col-md-6">
                     <p class="lead text-white mb-0">
                         Move, stretch, jump and hike in our latest waterproof arrivals. We've got you covered for your
@@ -37,6 +117,7 @@
             </div>
         </div>
         <!-- Category Top Banner -->
+        <!--- <cfdump var="#categoryList#"> --->
         <div class="container">
             <div class="row">
                 <!-- Category Aside/Sidebar -->
@@ -46,64 +127,41 @@
                         <aside>
                             <!-- Filter Category -->
                             <div class="mb-4">
-                                <h2 class="mb-4 fs-6 mt-2 fw-bolder">Jacket Category</h2>
+                                <h2 class="mb-4 fs-6 mt-2 fw-bolder">
+                                    <cfloop array="#categoryList#" index="idx">
+                                        <cfloop array="#idx.child#" index="child">
+                                            <cfif child.PkCategoryId EQ getProductPaging.parentCategoryId>
+                                                #child.catName#
+                                            </cfif>
+                                        </cfloop>
+                                    </cfloop>
+                                </h2>
                                 <nav>
                                     <ul class="list-unstyled list-default-text">
-                                        <li class="mb-2">
-                                            <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center"
-                                            href="##">
-                                                <span> <i class="ri-arrow-right-s-line align-bottom ms-n1"></i> Waterproof Jackets</span> <span class="text-muted ms-4">(21)</span>
-                                            </a>
-                                        </li>                        
-                                        <li class="mb-2">
-                                            <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center"
-                                            href="##">
-                                                <span><i class="ri-arrow-right-s-line align-bottom ms-n1"></i> Down Jackets</span> 
-                                                <span class="text-muted ms-4">(13)</span>
-                                            </a>
-                                        </li>                        
-                                        <li class="mb-2">
-                                            <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center"
-                                            href="##">
-                                                <span><i class="ri-arrow-right-s-line align-bottom ms-n1"></i> Windproof Jackets</span> 
-                                                <span class="text-muted ms-4">(18)</span>
-                                            </a>
-                                        </li>                        
-                                        <li class="mb-2">
-                                            <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center"
-                                            href="##">
-                                                <span><i class="ri-arrow-right-s-line align-bottom ms-n1"></i> Hiking Jackets</span> 
-                                                <span class="text-muted ms-4">(25)</span>
-                                                </a>
-                                        </li>                        
-                                        <li class="mb-2">
-                                            <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center"
-                                            href="##">
-                                                <span><i class="ri-arrow-right-s-line align-bottom ms-n1"></i> Climbing Jackets</span> 
-                                                <span class="text-muted ms-4">(11)</span>
-                                                </a>
-                                        </li>                        
-                                        <li class="mb-2">
-                                            <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center"
-                                            href="##">
-                                                <span><i class="ri-arrow-right-s-line align-bottom ms-n1"></i> Trekking Jackets</span> 
-                                                <span class="text-muted ms-4">(19)</span>
-                                            </a>
-                                        </li>                        
-                                        <li class="mb-2">
-                                            <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center" href="##">
-                                                <span><i class="ri-arrow-right-s-line align-bottom ms-n1"></i> Allround Jackets
-                                                </span> 
-                                                <span class="text-muted ms-4">(24)</span>
-                                            </a>
-                                        </li>                
+                                        <cfloop array="#categoryList#" index="idx">
+                                            <cfloop array="#idx.child#" index="child">
+                                                <cfif child.PkCategoryId EQ getProductPaging.parentCategoryId>
+                                                    <cfloop array="#child.child#" index="subChild">
+                                                        <li class="mb-2">
+                                                            <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center"
+                                                            href="index.cfm?pg=category&id=#subChild.PkCategoryId#&pageNum=#pageNum#">
+                                                                <span><i class="ri-arrow-right-s-line align-bottom ms-n1"></i> 
+                                                                    #subChild.catName#
+                                                                </span> 
+                                                                <span class="text-muted ms-4">(#subChild.productCount#)</span>
+                                                            </a>
+                                                        </li>
+                                                    </cfloop>
+                                                </cfif>
+                                            </cfloop>
+                                        </cfloop>              
                                     </ul>
                                 </nav>
                             </div>
                             <!-- / Filter Category-->
                         
                             <!-- Price Filter -->
-                            <div class="py-4 widget-filter widget-filter-price border-top">
+                            <!--- <div class="py-4 widget-filter widget-filter-price border-top">
                                 <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                     data-bs-toggle="collapse" href="##filter-price" role="button" aria-expanded="true"
                                     aria-controls="filter-price">
@@ -122,10 +180,10 @@
                                         </div>                
                                     </div>        
                                 </div>
-                            </div>
+                            </div> --->
                             <!-- / Price Filter -->   
                             <!-- Brands Filter -->
-                            <div class="py-4 widget-filter border-top">
+                            <!--- <div class="py-4 widget-filter border-top">
                                 <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                     data-bs-toggle="collapse" href="##filter-brands" role="button" aria-expanded="true"
                                     aria-controls="filter-brands">
@@ -201,14 +259,14 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --->
                             <!-- / Brands Filter -->
                             <!-- Type Filter -->
                             <div class="py-4 widget-filter border-top">
                                 <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                     data-bs-toggle="collapse" href="##filter-type" role="button" aria-expanded="true"
                                     aria-controls="filter-type">
-                                    Type
+                                    Product Type
                                 </a>
                                 <div id="filter-type" class="collapse show">
                                     <div class="input-group my-3 py-1">
@@ -216,42 +274,19 @@
                                         <span class="input-group-text bg-transparent px-2 position-absolute top-7 end-0 border-0 z-index-20"><i class="ri-search-2-line text-muted"></i></span>
                                     </div>
                                     <div class="filter-options">
-                                        <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input" id="filter-type-0">
-                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between"
-                                                for="filter-type-0">Slip On </label>
-                                        </div>                        
-                                        <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input" id="filter-type-1">
-                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between"
-                                                for="filter-type-1">Strap Up </label>
-                                        </div>                        
-                                        <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input" id="filter-type-2">
-                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between"
-                                                for="filter-type-2">Zip Up </label>
-                                        </div>                        
-                                        <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input" id="filter-type-3">
-                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between"
-                                                for="filter-type-3">Toggle </label>
-                                        </div>                        
-                                        <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input" id="filter-type-4">
-                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between"
-                                                for="filter-type-4">Auto </label>
-                                        </div>                        
-                                        <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input" id="filter-type-5">
-                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between"
-                                                for="filter-type-5">Click </label>
-                                        </div>                
+                                        <cfloop query="#getProductTag#">
+                                            <div class="form-group form-check mb-0">
+                                                <input type="checkbox" class="form-check-input productType" data-id="#url.id#" id="filter-type-0">
+                                                <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between"
+                                                    for="filter-type-0"> #getProductTag.tagName#</label>
+                                            </div>                        
+                                        </cfloop>               
                                     </div>
                                 </div>
                             </div>
                             <!-- / Type Filter -->
                             <!-- Sizes Filter -->
-                            <div class="py-4 widget-filter border-top">
+                            <!--- <div class="py-4 widget-filter border-top">
                                 <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                     data-bs-toggle="collapse" href="##filter-sizes" role="button" aria-expanded="true"
                                     aria-controls="filter-sizes">
@@ -305,10 +340,10 @@
                                         </div>                
                                     </div>
                                 </div>
-                            </div>
+                            </div> --->
                             <!-- / Sizes Filter -->
                             <!-- Colour Filter -->
-                            <div class="py-4 widget-filter border-top">
+                            <!--- <div class="py-4 widget-filter border-top">
                                 <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                     data-bs-toggle="collapse" href="##filter-colour" role="button" aria-expanded="true"
                                     aria-controls="filter-colour">
@@ -346,7 +381,7 @@
                                             </div>                
                                         </div>
                                 </div>
-                            </div>
+                            </div> --->
                             <!-- / Colour Filter -->
                         </aside>
                         <!-- / Category Aside-->                    
@@ -355,7 +390,7 @@
                 <!-- / Category Aside/Sidebar -->
 
                 <!-- Category Products-->
-                <div class="col-12 col-lg-9">
+                <div id="swup" class="col-12 col-lg-9 transition-fade">
                     <!-- Top Toolbar-->
                     <div class="mb-4 d-md-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0">
@@ -402,88 +437,109 @@
                     <!-- / Top Toolbar-->
                     <!-- Products-->
                     <div class="row g-4 mb-5">
-                        <cfloop query="#getProduct#">
-                            <cfquery name="getProductImage">
-                                SELECT image, isDefault
-                                FROM product_image
-                                WHERE FkProductId = <cfqueryparam value="#getProduct.PkProductId#" cfsqltype = "cf_sql_integer">
-                            </cfquery>
-                            <!--- <cfdump var="#getProduct#">
-                            <cfdump var="#getProductImage#"> --->
-                            <div class="col-12 col-sm-6 col-md-4">
-                                <!-- Card Product-->
-                                <div class="card position-relative h-100 card-listing hover-trigger">
-                                    <div class="card-header">
-                                        <cfloop query="#getProductImage#">
-                                            <cfif getProductImage.isDefault GT 0>
-                                                <picture class="position-relative overflow-hidden d-block bg-light">
-                                                    <img class="vh-50 img-fluid position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="">
+                        <cfif getProductPaging.recordCount GT 0>
+                            <cfloop query="#getProductPaging#">
+                                <cfquery name="getProductImage">
+                                    SELECT image, isDefault
+                                    FROM product_image
+                                    WHERE FkProductId = <cfqueryparam value="#getProductPaging.PkProductId#" cfsqltype = "cf_sql_integer">
+                                </cfquery>
+                                <div class="col-12 col-sm-6 col-md-4">
+                                    <!-- Card Product-->
+                                    <div class="card position-relative h-100 card-listing hover-trigger">
+                                        <div class="card-header d-flex align-self-center w-75">
+                                            <cfloop query="#getProductImage#">
+                                                <cfif getProductImage.isDefault EQ 1>
+                                                    <picture class="position-relative overflow-hidden d-block bg-light">
+                                                        <img class="vh-25 img-fluid object-fit-contain position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="">
+                                                    </picture>
+                                                </cfif>
+                                                <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
+                                                    <img class="vh-25 img-fluid object-fit-contain" title="" src="#imagePath##getProductImage.image#" alt="">
                                                 </picture>
-                                            </cfif>
-                                            <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
-                                                <img class="vh-50 object-fit-none img-fluid" title="" src="#imagePath##getProductImage.image#" alt="">
-                                            </picture>
-                                        </cfloop> 
-                                        <div class="card-actions">
-                                            <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                            <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                <button class="btn btn-outline-dark btn-sm mx-2">L</button>
+                                            </cfloop> 
+                                            <div class="card-actions">
+                                                <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
+                                                <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
+                                                    <button class="btn btn-outline-dark btn-sm mx-2">S</button>
+                                                    <button class="btn btn-outline-dark btn-sm mx-2">M</button>
+                                                    <button class="btn btn-outline-dark btn-sm mx-2">L</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card-body px-0 text-center">
-                                        <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                            <!-- Review Stars Small-->
-                                            <div class="rating position-relative d-table">
-                                                <div class="position-absolute stars" style="width: 90%">
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                    <i class="ri-star-fill text-dark mr-1"></i>
-                                                </div>
-                                                <div class="stars">
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                    <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
-                                                </div>
-                                            </div> 
-                                            <span class="small fw-bolder ms-2 text-muted"> 4.7 (456)</span>
+                                        <div class="card-body px-0 text-center">
+                                            <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
+                                                <!-- Review Stars Small-->
+                                                <div class="rating position-relative d-table">
+                                                    <div class="position-absolute stars" style="width: 90%">
+                                                        <i class="ri-star-fill text-dark mr-1"></i>
+                                                        <i class="ri-star-fill text-dark mr-1"></i>
+                                                        <i class="ri-star-fill text-dark mr-1"></i>
+                                                        <i class="ri-star-fill text-dark mr-1"></i>
+                                                        <i class="ri-star-fill text-dark mr-1"></i>
+                                                    </div>
+                                                    <div class="stars">
+                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                                        <i class="ri-star-fill mr-1 text-muted opacity-25"></i>
+                                                    </div>
+                                                </div> 
+                                                <span class="small fw-bolder ms-2 text-muted"> 4.7 (456)</span>
+                                            </div>
+                                            <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center" href="">
+                                                #getProductPaging.productName#
+                                            </a>
+                                            <p class="fw-bolder m-0 mt-2">$#getProductPaging.productPrice#</p>
                                         </div>
-                                        <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center" href="">
-                                            #getProduct.productName#
-                                        </a>
-                                        <p class="fw-bolder m-0 mt-2">$#getProduct.productPrice#</p>
+                                    </div>
+                                    <!--/ Card Product-->
+                                </div>
+                            </cfloop>
+                        <cfelse>
+                            <div class="card position-relative h-100 card-listing hover-trigger">
+                                <div class="card-header">
+                                    <div class="card-body px-0 text-center">
+                                        No Record Found
                                     </div>
                                 </div>
-                                <!--/ Card Product-->
                             </div>
-                        </cfloop>
+                        </cfif>
                     </div>
                     <!-- / Products-->
 
-                    <!-- Pagiation-->
                     <!-- Pagination-->
                     <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                         <ul class="pagination">
-                            <li class="page-item"><a class="page-link" href="##"><i class="ri-arrow-left-line align-bottom"></i> Prev</a></li>
+                            <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
+                                <a class="page-link prev" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#" data-id="#pageNum#" >
+                                    <i class="ri-arrow-left-line align-bottom"></i>
+                                    Prev
+                                </a>
+                            </li>
                         </ul>
                         <ul class="pagination">
-                            <li class="page-item active mx-1"><a class="page-link" href="##">1</a></li>
-                            <li class="page-item mx-1"><a class="page-link" href="##">2</a></li>
-                            <li class="page-item mx-1"><a class="page-link" href="##">3</a></li>
+                            <cfloop from="1" to="#totalPages#" index="i">
+                                <li class="page-item  <cfif pageNum EQ i>active</cfif> mx-1">
+                                    <a class="page-link" href="index.cfm?pg=category&id=#url.id#&pageNum=#i#">
+                                        #i#
+                                    </a>
+                                </li>
+                            </cfloop>
                         </ul>
                         <ul class="pagination">
-                            <li class="page-item"><a class="page-link" href="##">Next <i class="ri-arrow-right-line align-bottom"></i></a></li>
+                            <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
+                                <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#">Next 
+                                    <i class="ri-arrow-right-line align-bottom"></i>
+                                </a>
+                            </li>
                         </ul>
-                    </nav>                    <!-- / Pagination-->
+                    </nav>                    
+                    <!-- / Pagination-->
 
                     <!-- Related Categories-->
-                    <div class="border-top mt-5 pt-5">
+                    <!--- <div class="border-top mt-5 pt-5">
                         <p class="lead fw-bolder">Related Categories</p>
                         <div class="d-flex flex-wrap justify-content-start align-items-center">
                             <a class="btn btn-sm btn-outline-dark rounded-pill me-2 mb-2 mb-md-0 text-white-hover"
@@ -504,12 +560,29 @@
                             <a class="btn btn-sm btn-outline-dark rounded-pill me-2 mb-2 mb-md-0 text-white-hover"
                                 href="##">Rugsacks</a>
                         </div>
-                    </div>
+                    </div> --->
                     <!-- Related Categories-->
-
                 </div>
                 <!-- / Category Products-->
-
             </div>
         </div>
+
+        <script> 
+        var #toScript('#pageNum#','pageNum')#;
+            function pushTag(){
+                var path = '';
+                var url = window.location.href;
+                var checkedVals = '';
+                var id = $('.productType').attr('data-id');
+                $('.productType').each(function(){
+                    if(this.checked){
+                        checkedVals = $(':checked').map(function(){ return $(this).val(); }).get().join();
+                        window.history.pushState(null, null,'index.cfm?pg=category&id='+id+'&pageNum='+pageNum+'&tags='+checkedVals);
+                    }
+                });
+            }
+            $('.productType').on('change', function(){
+                pushTag();
+            });
+        </script> 
 </cfoutput>
