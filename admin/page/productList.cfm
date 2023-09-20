@@ -148,7 +148,7 @@
                                     </div>
                                 </form>
                                 <div class="table-responsive productImageContainer d-none">
-                                    <table class="table table-striped nowrap table-dark" id="productImageDataTable">
+                                    <table class="table" id="productImageDataTable">
                                         <thead>
                                             <tr>
                                                 <th>SI No.</th>
@@ -169,7 +169,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped nowrap table-dark" id="productDataTable">
+                        <table class="table nowrap" id="productDataTable">
                             <thead>
                                 <tr>
                                     <th>Product Name</th>
@@ -228,7 +228,9 @@
             });
             filepondImageObj = filepondImage;
         }
-        /* createFilePond(); */
+        Fancybox.bind("[data-fancybox]", {
+            fillRatio: 0.9,
+        });
         $('#category').select2({
             /* placeholder: "Please Select Category",
             width: '100%',
@@ -247,66 +249,6 @@
             allowClear: true,
             dropdownParent: $('#addProductData'),
         });
-        /*  $("#productTags").select2({
-            placeholder: {
-                id: '-1', // the value of the option
-                text: "Select Product Tags",
-            },
-            width: '100%',
-            tags:true,
-            tokenSeparators: [',', ' '],
-            dropdownParent: $('#addProductData'),
-            multiple: true,
-            ajax: {    
-                type: "GET",
-                url: '../ajaxAddProduct.cfm?formAction=getProductTag',       
-                dataType: "json",
-                processResults: function(data) {
-                    console.log(data);
-                    return {
-                        results: $.map(data.message.data, function (item) {
-                            console.log(item)
-                            return {
-                                text: item.values.title,
-                                id: item.values.id
-                            }
-                        }),
-                    };
-                    return {
-                        results: data.items
-                    };
-                    cache: true
-                } 
-                //processResults: function (data) {
-                    return {
-                        result.items;
-                    }; 
-                    //var arr = [];
-                    //results: $.map(data, function (item) {
-                        //console.log(item)
-                        arr.push({
-                            id: index,
-                            text: value
-                        }) 
-                       // return {
-                           // text: item.tagName,
-                           /// id: item.PkTagId,
-                       // }
-                    //});
-                    var arr = []
-                    $.each(data, function (index, value) {
-                        arr.push({
-                            id: index,
-                            text: value
-                        })
-                    }) 
-                    return {
-                        results: arr
-                    }; 
-               // },
-               // cache: true
-            }  
-        }); */
         $('#productDataTable').DataTable({
             processing: true,
             destroy: true,
@@ -361,13 +303,19 @@
                 { data: 'PkProductId',
                     render: function(data, type, row, meta)
                     {
-                        return '<a data-id="'+row.PkProductId+'"  id="editProduct" class="border-none btn btn-sm btn-success text-white mt-1 editProduct" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkProductId+'" data-name="'+row.productName+'" id="deleteProduct" class="border-none btn btn-sm btn-danger text-white mt-1 deleteProduct" > <i class="bi bi-trash"></i></a>'				
+                        var returnStr = '';
+                        if(row.isDeleted == 1){
+                            returnStr += '<a data-id="'+ row.PkProductId + '" data-name="'+row.productName+'" id="restoreProduct" class="border-none btn btn-sm btn-warning text-white mt-1 restoreProduct"><i class="fas fa-undo"></i></a>'	
+                        } else{
+                            returnStr += '<a data-id="'+row.PkProductId+'"  id="editProduct" class="border-none btn btn-sm btn-success text-white mt-1 editProduct" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkProductId+'" data-name="'+row.productName+'" id="deleteProduct" class="border-none btn btn-sm btn-danger text-white mt-1 deleteProduct" > <i class="bi bi-trash"></i></a>'				
+                        }
+                        return returnStr;
                     }
                 },
             ],
             rowCallback: function( row, data ) {
                 if ( data.isDeleted === 1 ) {
-                    $(row).addClass('text-danger');
+                    $(row).addClass('table-danger');
                 }
             }
         });
@@ -532,7 +480,7 @@
                                         render: function(data, display, row) {
                                             var returnStr = '';
                                             if (data !== "") {
-                                                returnStr+=  '<img class="image" src="/assets/productImage/'+data+'" width="80">' 
+                                                returnStr+=  '<a data-fancybox="imgPreview" data-src="'+data+'"><img data-fancybox="group" class="image" src="/assets/productImage/'+data+'" width="80" height="80">' 
                                             } 
                                             return returnStr;
                                         }
@@ -707,6 +655,28 @@
                 });
             }
         });
+        $("#productDataTable").on("click", ".restoreProduct", function () { 
+            var id = $(this).attr("data-id");
+            var name = $(this).data("name");
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You want to restore product record for ' + '"' +  name + '"',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Restore it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({  
+                        url: '../ajaxAddProduct.cfm?restorePkProductId='+id, 
+                        type: 'GET',  
+                        success: function(data) {
+                            dangerToast("Restore!","Product Restore Successfully");
+                            $('#productDataTable').DataTable().ajax.reload();               
+                        }  
+                    });
+                }
+            });
+        }); 
     });
     function getCategory(catId=0, productTag='') {
         $.ajax({    

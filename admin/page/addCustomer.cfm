@@ -1,6 +1,5 @@
 <cfoutput>
     <cfparam name="PkCustomerId" default="0" />
-    <cfdump var="#PkCustomerId#">
     <cfparam name="firstName" default="" />
     <cfparam name="lastName" default="" />
     <cfparam name="email" default="" />
@@ -18,7 +17,6 @@
             FROM customer 
             WHERE PkCustomerId = <cfqueryparam value="#PkCustomerId#" cfsqltype="cf_sql_integer">
         </cfquery>
-        <cfdump var="#editCustomerData#">
         <cfset PkCustomerId= editCustomerData.PkCustomerId>
         <cfset firstName = editCustomerData.firstName>
         <cfset lastName = editCustomerData.lastName>
@@ -43,7 +41,7 @@
                                 <a href="index.cfm?pg=dashboard">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item" aria-current="page">
-                                <a href="index.cfm?pg=customerList">Customers</a>
+                                <a href="index.cfm?pg=customer&s=customerList">Customers</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
                                 Add Customer

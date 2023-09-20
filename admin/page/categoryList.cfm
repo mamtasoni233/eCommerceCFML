@@ -66,7 +66,8 @@
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="parentCategory">Parent Category Name</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <select name="parentCategory" id="parentCategory" class="form-control-xl">
+                                            <select name="parentCategory" id="parentCategory" class="form-control-xl" data-placeholder="Select Parent Catgeory">
+                                                <!--- <option disabled selected></option> --->
                                             </select>
                                         </div>
                                     </div>
@@ -120,7 +121,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped nowrap table-dark" id="categoryDataTable">
+                        <table class="table nowrap" id="categoryDataTable">
                             <thead>
                                 <tr>
                                     <th>Category Name</th>
@@ -145,44 +146,43 @@
     </div>
 </cfoutput>
 <script>
-    FilePond.registerPlugin(
-        FilePondPluginImagePreview,
-        FilePondPluginImageCrop,
-        FilePondPluginImageExifOrientation,
-        FilePondPluginImageFilter,
-        FilePondPluginImageResize,
-        FilePondPluginFileValidateSize,
-        FilePondPluginFileValidateType
-    )
-    function createFilePond() {
-        const filepondInput = document.querySelector(".image-preview-filepond");
-        const filepondImage = FilePond.create(filepondInput, {
-            credits: null,
-            allowImagePreview: true,
-            allowImageFilter: false,
-            allowImageExifOrientation: false,
-            allowImageCrop: false,
-            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "image/webp"],
-            storeAsFile: true,
-            fileValidateTypeDetectType: (source, type) =>
-            new Promise((resolve, reject) => {
-                // Do custom type detection here and return with promise
-                resolve(type);
-            }),
-        });
-    }
     $(document).ready( function () {
-        
-        /* $('#parentCategory').select2({
-            width: '100%',
-            allowClear: true,
-            dropdownParent: $('#addCategoryData')
-            
-        }); */
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginImageCrop,
+            FilePondPluginImageExifOrientation,
+            FilePondPluginImageFilter,
+            FilePondPluginImageResize,
+            FilePondPluginFileValidateSize,
+            FilePondPluginFileValidateType
+        )
+        let filepondImageObj = {};
+        function createFilePond() {
+            const filepondInput = document.querySelector(".image-preview-filepond");
+            const filepondImage = FilePond.create(filepondInput, {
+                credits: null,
+                allowImagePreview: true,
+                allowImageFilter: false,
+                allowImageExifOrientation: false,
+                allowImageCrop: false,
+                acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "image/webp"],
+                storeAsFile: true,
+                fileValidateTypeDetectType: (source, type) =>
+                new Promise((resolve, reject) => {
+                    // Do custom type detection here and return with promise
+                    resolve(type);
+                }),
+            });
+            filepondImageObj = filepondImage;
+        }
+        Fancybox.bind("[data-fancybox]", {
+            fillRatio: 0.9,
+        });
         $('#parentCategory').select2({
             theme: "bootstrap-5",
             width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
             dropdownParent: $('#addCategoryData'),
+            placeholder: $( this ).data( 'placeholder' ),
             allowClear: true,
         });
         var table = $('#categoryDataTable').DataTable({
@@ -223,7 +223,7 @@
                     render: function(data, display, row) {
                         var returnStr = '';
                         if (data !== "") {
-                            returnStr+=  '<img class="image" src="/assets/categoryImage/'+data+'" width="80">' 
+                            returnStr +=  '<a data-fancybox="imgPreview" data-src="'+data+'"><img data-fancybox="group" class="image" src="/assets/categoryImage/'+data+'" width="80" height="80"> ' 
                         }
                         return returnStr;
                     }
@@ -234,23 +234,33 @@
                 { data: 'dateUpdated' },
                 { data: 'isActive',
                     render: function (data,type,row) {
-                        if(row.isActive == 1){
-                            return '<span id="deactive" data-id="'+row.PkCategoryId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
-                        }else{
-                            return '<span id="active" data-id="'+row.PkCategoryId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
+                        var returnStr = '';
+                        if(row.isDeleted == 0){
+                            if(row.isActive == 1){
+                                returnStr += '<span id="deactive" data-id="'+row.PkCategoryId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
+                            }else{
+                                returnStr += '<span id="active" data-id="'+row.PkCategoryId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
+                            }
                         }
+                        return returnStr;
                     }
                 },
                 { data: 'PkCategoryId',
                     render: function(data, type, row, meta)
                     {
-                        return '<a data-id="'+row.PkCategoryId+'" data-parentid="' + row.parentCategoryId + '" id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+ row.PkCategoryId + '" data-name="'+row.categoryName+'" id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
+                        var returnStr = '';
+                        if(row.isDeleted == 1){
+                            returnStr += '<a data-id="'+ row.PkCategoryId + '" data-name="'+row.categoryName+'" id="restoreCategory" class="border-none btn btn-sm btn-warning text-white mt-1 restoreCategory"><i class="fas fa-trash-restore"></i></a>'	
+                        } else{
+                            returnStr += '<a data-id="'+row.PkCategoryId+'" data-parentid="' + row.parentCategoryId + '" id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+ row.PkCategoryId + '" data-name="'+row.categoryName+'" id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
+                        }
+                        return returnStr;
                     }
                 },
             ],
             rowCallback: function( row, data ) {
                 if ( data.isDeleted === 1 ) {
-                    $(row).addClass('text-danger');
+                    $(row).addClass('table-danger');
                 }
             }
         });
@@ -271,6 +281,9 @@
             rules: {
                 categoryName: {
                     required: true
+                },
+                parentCategory: {
+                    required: true
                 }
             },
             errorPlacement: function (error, element) {
@@ -279,46 +292,86 @@
             messages: {
                 categoryName: {
                     required: "Please enter category name",                    
+                },
+                parentCategory: {
+                    required: "Please select parent category",                    
                 }
             },
             ignore: [],
             errorElement: 'span',
             errorPlacement: function (error, element) {
+                var elem = $(element);
+                if (elem.hasClass("select2-hidden-accessible")) {
+                    element = element.siblings(".select2");
+                    error.insertAfter(element);
+                } else {
+                    error.insertAfter(element);
+                }
                 error.addClass('invalid-feedback');
-                element.after(error);
             },
             highlight: function (element, errorClass, validClass) {
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).siblings('.select2').children('span').children('span.select2-selection').addClass("invalidCs")
+                } 
                 $(element).addClass('is-invalid');
             },
             unhighlight: function (element, errorClass, validClass) {
                 $(element).removeClass('is-invalid');
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).siblings('.select2').children('span').children('span.select2-selection').removeClass("invalidCs");
+                }
             },
             submitHandler: function (form) {
-                event. preventDefault();
+                event.preventDefault();
                 var removeImageChecked = $('input:checkbox[name=removeImage]:checked');
-                if (removeImageChecked.length > 0) {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: 'You want to delete image ' ,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#dc3545',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (!result.isConfirmed == true) {
-                            $('#removeImage').prop('checked', false);
-                            submitCategoryData();
-                        } else{
-                            $('#removeImage').prop('checked', true);
-                            submitCategoryData();
-                        }
-                    });
+                var imgSrc = $('#imgPreview').attr('src');
+                var imageFlag = true;
+                if ($('#PkCategoryId').val() == 0 ) {
+                    if ($('#parentCategory').val() == 0 && filepondImageObj.getFiles().length === 0 ) {
+                        warnToast("Issue!","Please upload Atleast 1 image!!!");
+                    } else{
+                        submitCategoryData();
+                    }
                 } else{
-                    submitCategoryData();
+                    if ((filepondImageObj.getFiles().length === 0 && imgSrc === '') || $('#parentCategory').val() == 0) {
+                        /* if (filepondImageObj.getFiles().length === 0 && imgSrc === ''){ */
+                            warnToast("Issue!","Please upload Atleast 1 image!!!") 
+                      /*   }  */
+                    } else if (removeImageChecked.length > 0) {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'You want to delete image ' ,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#dc3545',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (!result.isConfirmed == true) {
+                                $('#removeImage').prop('checked', false);
+                                submitCategoryData();
+                            } else{
+                                $('#removeImage').prop('checked', true);
+                                submitCategoryData();
+                            }
+                        });
+                    } else{
+                        submitCategoryData();
+                    }
                 }
+                
             }, 
         });
-    
+        $('#addCategoryData').on('hidden.bs.modal', function () {
+            $("#addCategoryForm").trigger('reset');
+            validator.resetForm();
+            $('#imgPreview').attr('src', ''); 
+            $("#parentCategory").val(0).trigger("change");  
+            $('.removeImageContainer').addClass('d-none')
+            $(".modal-title").html("Add Category");
+        }); 
+        $("select").on("select2:close", function (e) {  
+            $(this).valid(); 
+        });
         $("#categoryDataTable").on("click", ".editCategory", function () { 
             var id = $(this).attr("data-id");
             var parentId =  $(this).attr("data-parentid");
@@ -337,36 +390,39 @@
                 success: function(result) {
                     if (result.success) {
                         var image = result.json.categoryImage;
-                        if (parentId > 0 ) {
-                            setTimeout(() => {
-                                $('#parentCategory').val(parentId).trigger("change");
-                            }, 150);
-                        }
+                        setTimeout(() => {
+                            $('#parentCategory').val(parentId).trigger("change");
+                        }, 150);
+                        
                         $("#PkCategoryId").val(result.json.PkCategoryId);
                         $('#categoryName').val(result.json.categoryName);
                         let imgSrc = '.../../assets/categoryImage/' + result.json.categoryImage;
-                        if (image.length > 0) {
+                        $('#imgPreview').attr('src', '');
+                        if (parentId > 0 && image.length > 0) {
                             $('#imgPreview').attr('src', imgSrc);
-                            $('.removeImageContainer').removeClass('d-none')
+                            $('.removeImageContainer').removeClass('d-none');
+                        } else {
+                            $('#imgPreview').attr('src', imgSrc);
+                            $('.removeImageContainer').addClass('d-none');
                         }
                         if(result.json.isActive == 1){ 
                             $('#isActive').prop('checked', true);
                         } else{
                             $('#isActive').prop('checked', false);
                         }
-                        
+                        $('#addCategoryData').on('hidden.bs.modal', function () {
+                            $("#addCategoryForm").trigger('reset');
+                            validator.resetForm();
+                            $('#imgPreview').attr('src', ''); 
+                            $("#parentCategory").val(0).trigger("change");  
+                            $('.removeImageContainer').addClass('d-none')
+                            $(".modal-title").html("Add Category");
+                        }); 
                     }
                 }   
             });
         });
-        $('#addCategoryData').on('hidden.bs.modal', function () {
-            $("#addCategoryForm").trigger('reset');
-            validator.resetForm();
-            $('#imgPreview').attr('src', ''); 
-            $("#parentCategory").val(0).trigger("change");  
-            $('.removeImageContainer').addClass('d-none')
-            $(".modal-title").html("Add Category");
-        }); 
+        
         $("#categoryDataTable").on("click", ".deleteCategory", function () { 
             var id = $(this).attr("data-id");
             var name = $(this).data("name");
@@ -436,10 +492,31 @@
                 });
             }
         });
+        $("#categoryDataTable").on("click", ".restoreCategory", function () { 
+            var id = $(this).attr("data-id");
+            var name = $(this).data("name");
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You want to restore category record for ' + '"' +  name + '"',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Restore it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({  
+                        url: '../ajaxAddCategory.cfm?restorePkCategoryId='+id, 
+                        type: 'GET',  
+                        success: function(data) {
+                            dangerToast("Restore!","Category Restore Successfully");
+                            $('#categoryDataTable').DataTable().ajax.reload();               
+                        }  
+                    });
+                }
+            });
+        }); 
     });
     function getParentCategory(PkCategoryId=0) {
         var EditCategoryId = $('#PkCategoryId').val();
-
         $.ajax({    
             type: "GET",
             url: "../ajaxAddCategory.cfm?formAction=getCategory", 
@@ -449,8 +526,8 @@
                 let dataRecord = JSON.parse(result);
                 if (dataRecord.success) {
                     $('#parentCategory').html('');
-                    var html = "";
-                    html = "<option value='0'>Select As A Parent</option>";
+                    //var html = "";
+                    var html = "<option value=''>Select A Parent</option><option value='0'>Select As A Parent</option>";
                     /* for (var i = 0; i < dataRecord.categoryList.length; i++) {
                         html += "<option value="+dataRecord.categoryList[i].PKCATEGORYID+" >"+dataRecord.categoryList[i].CATNAME+"</option>";
                     } */
@@ -475,9 +552,12 @@
                 if ($('#PkCategoryId').val() > 0) {
                     successToast("Category Updated!","Category Successfully Updated");
                 } else{
+                    /* console.log($('#parentCategory').val());
+                    if ($('#parentCategory').val() == 0 && filepondImageObj.getFiles().length === 0) {
+                        dangerToast("Issue!","Please upload Atleast 1 image!!!");
+                    } */ 
                     successToast("Category Add!","Category Successfully Added");
                 }
-                
                 $("#addCategoryData").modal('hide');
                 $('#addCategoryData').on('hidden.bs.modal', function () {
                     $("#addCategoryForm").trigger('reset');

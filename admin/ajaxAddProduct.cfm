@@ -318,7 +318,7 @@
 </cfif>
 
 <cfif structKeyExists(url, 'delPkProductId') AND url.delPkProductId GT 0>
-    <cfquery name="removeImage">
+    <!--- <cfquery name="removeImage">
         SELECT PkImageId, image FROM product_image 
         WHERE FkProductId = <cfqueryparam value="#url.delPkProductId#" cfsqltype = "cf_sql_integer">
     </cfquery>
@@ -327,11 +327,18 @@
         <cfif fileExists("#productImagePath##removeImage.image#")>
             <cffile action="delete" file="#productImagePath##removeImage.image#">
         </cfif>
-    </cfloop>
+    </cfloop> --->
     <cfquery result="deleteProductData">
         UPDATE product SET
         isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
         WHERE PkProductId IN(<cfqueryparam value="#url.delPkProductId#" list="true">)
+    </cfquery>
+</cfif>
+<cfif structKeyExists(url, 'restorePkProductId') AND url.restorePkProductId GT 0>
+    <cfquery result="restoreProductData">
+        UPDATE product SET
+        isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+        WHERE PkProductId IN(<cfqueryparam value="#url.restorePkProductId#" list="true">)
     </cfquery>
 </cfif>
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getProductImageRecord">

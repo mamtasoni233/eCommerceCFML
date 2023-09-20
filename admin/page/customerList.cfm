@@ -53,7 +53,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped nowrap table-dark" id="customerDataTable" >
+                        <table class="table nowrap" id="customerDataTable" >
                             <thead>
                                 <tr>
                                     <th>Customer Id</th>

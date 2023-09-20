@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 18, 2023 at 03:25 PM
+-- Generation Time: Sep 20, 2023 at 03:18 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -52,19 +52,19 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 (5, 3, 'Appliances', 'electric-blender-mixer-juicer-set.jpg', b'1', b'0', '2023-09-08 10:56:04', 1, '2023-09-15 15:35:28', 1),
 (6, 2, 'Beauty, Toys & More', 'cute-cheerful-little-girl-with-teddy-bear-blue-wall.jpg', b'1', b'0', '2023-09-08 10:56:26', 1, '2023-09-15 15:35:43', 1),
 (7, 3, 'Mobiles', 'marketing-creative-collage-with-phone.jpg', b'1', b'0', '2023-09-08 10:56:55', 1, '2023-09-15 15:36:32', 1),
-(8, 44, 'Two Wheelers', 'motorcycle-with-helmet.jpg', b'1', b'0', '2023-09-08 10:57:22', 1, '2023-09-15 15:37:18', 1),
+(8, 44, 'Two Wheelers', 'motorcycle-with-helmet.jpg', b'1', b'0', '2023-09-08 10:57:22', 1, '2023-09-20 16:46:28', 1),
 (9, 1, 'Snacks & Beverages', '9fbd36.webp', b'1', b'0', '2023-09-08 10:58:30', 1, '2023-09-08 10:58:28', NULL),
 (10, 1, 'Packaged Food', 'ac8550.webp', b'1', b'0', '2023-09-08 10:58:53', 1, '2023-09-08 10:58:51', NULL),
 (11, 1, 'Staples', '50474c.webp', b'1', b'0', '2023-09-08 10:59:16', 1, '2023-09-08 10:59:15', NULL),
 (12, 1, 'Household Care', 'b7ade9.webp', b'1', b'0', '2023-09-08 10:59:49', 1, '2023-09-08 10:59:48', NULL),
 (13, 2, 'Men\'s Wear', '-original-imagnbzq8acbnh3m.webp', b'1', b'0', '2023-09-08 11:01:20', 1, '2023-09-08 11:01:18', NULL),
-(14, 2, 'Women\'s Wear', 'l-mf19kr414g-mon-original-imagsszy6fqxxueq.webp', b'1', b'0', '2023-09-08 11:02:52', 1, '2023-09-13 12:24:01', 1),
+(14, 0, 'Women\'s Wear', 'l-mf19kr414g-mon-original-imagsszy6fqxxueq_1gqgqcxufamrk.webp', b'1', b'0', '2023-09-08 11:02:52', 1, '2023-09-20 17:39:38', 1),
 (15, 2, 'Kid\'s Wear', '12-18-months-black-velvet-crazylife-fashion-original-imagsj4cpvngzx4a.webp', b'1', b'0', '2023-09-08 11:03:42', 1, '2023-09-08 11:03:40', NULL),
 (16, 3, 'Computer Peripherals', '-original-imagpa5fbvqzk2xn.webp', b'1', b'0', '2023-09-08 11:05:37', 1, '2023-09-08 11:05:36', NULL),
 (17, 3, 'Cameras & Accessories', 'canon-eos-eos-3000d-dslr-original-imaf3t5h9yuyc5zu.webp', b'1', b'0', '2023-09-08 11:07:39', 1, '2023-09-08 11:07:37', NULL),
 (18, 9, 'Biscuits', NULL, b'1', b'0', '2023-09-08 11:28:21', 1, NULL, NULL),
 (19, 9, 'Namkin', NULL, b'1', b'0', '2023-09-08 11:28:31', 1, NULL, NULL),
-(20, 9, 'Tea ', NULL, b'1', b'0', '2023-09-08 11:28:46', 1, NULL, NULL),
+(20, 0, 'Tea ', NULL, b'1', b'0', '2023-09-08 11:28:46', 1, '2023-09-20 17:39:51', 1),
 (21, 10, 'Noodles & Pasta', NULL, b'1', b'0', '2023-09-08 11:29:06', 1, NULL, NULL),
 (22, 10, 'Jam & Honey', NULL, b'1', b'0', '2023-09-08 11:29:25', 1, NULL, NULL),
 (23, 11, 'Dal & Pulses', NULL, b'1', b'0', '2023-09-08 11:29:50', 1, NULL, NULL),
@@ -75,38 +75,48 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 (28, 13, 'Footwear', NULL, b'1', b'0', '2023-09-08 11:59:01', 1, NULL, NULL),
 (29, 13, 'Jeans', NULL, b'1', b'0', '2023-09-08 11:59:19', 1, NULL, NULL),
 (30, 14, 'Suits', NULL, b'1', b'0', '2023-09-08 11:59:42', 1, NULL, NULL),
-(31, 14, 'Western wear', 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_1q9j9jy3hw4ce.jpg', b'1', b'0', '2023-09-08 12:00:02', 1, '2023-09-15 15:37:41', 1),
+(31, 14, 'Western wear', 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_1q9j9jy3hw4ce.jpg', b'1', b'0', '2023-09-08 12:00:02', 1, '2023-09-20 17:38:46', 1),
 (32, 14, 'Sarees', NULL, b'1', b'0', '2023-09-08 12:00:11', 1, NULL, NULL),
 (33, 14, 'Antalkali ', NULL, b'1', b'0', '2023-09-08 12:00:30', 1, NULL, NULL),
 (34, 15, 'Boy\'s Fashion', NULL, b'1', b'0', '2023-09-08 12:00:55', 1, NULL, NULL),
 (35, 15, 'Girl\'s Fashion', NULL, b'1', b'0', '2023-09-08 12:01:18', 1, NULL, NULL),
 (36, 16, 'Printers', NULL, b'1', b'0', '2023-09-08 12:02:26', 1, NULL, NULL),
 (37, 16, 'Moniters', NULL, b'1', b'0', '2023-09-08 12:05:51', 1, NULL, NULL),
-(38, 16, 'Toners', 'istockphoto-178716575-612x612_15h1ibzha0hh7.jpg', b'1', b'0', '2023-09-08 12:06:06', 1, '2023-09-12 10:16:54', 1),
+(38, 16, 'Toners', 'istockphoto-178716575-612x612_15h1ibzha0hh7.jpg', b'1', b'1', '2023-09-08 12:06:06', 1, '2023-09-20 11:32:11', 1),
 (39, 17, 'DSLR & Mirrorless', NULL, b'1', b'0', '2023-09-08 12:13:32', 1, NULL, NULL),
 (40, 17, 'Compact & Bridge Cameras', NULL, b'1', b'0', '2023-09-08 12:14:22', 1, NULL, NULL),
 (41, 17, 'Sports & Action', NULL, b'1', b'0', '2023-09-08 12:15:00', 1, NULL, NULL),
 (42, 4, 'Kitchen & dining', NULL, b'1', b'0', '2023-09-08 12:16:11', 1, NULL, NULL),
 (43, 4, 'Home Decor', NULL, b'1', b'0', '2023-09-08 12:16:41', 1, NULL, NULL),
-(44, 0, 'Wheelers', 'motorcycle-with-helmet_12e6u0n0fs2yp.jpg', b'1', b'0', '2023-09-15 15:37:07', 1, '2023-09-15 15:37:08', NULL),
+(44, 0, 'Wheelers', 'motorcycle-with-helmet_12e6u0n0fs2yp.jpg', b'1', b'0', '2023-09-15 15:37:07', 1, '2023-09-20 17:40:32', 1),
 (45, 12, 'Cleaning products', NULL, b'1', b'0', '2023-09-15 15:48:00', 1, NULL, NULL),
-(46, 12, ' Laundry products ', NULL, b'1', b'0', '2023-09-15 15:48:37', 1, NULL, NULL),
+(46, 12, ' Laundry products ', 'ratlami-sev_1omqdw9y0suja.png', b'1', b'0', '2023-09-15 15:48:37', 1, '2023-09-20 11:09:10', 1),
 (47, 6, 'Beauty & Personal Care', NULL, b'1', b'0', '2023-09-15 15:50:27', 1, NULL, NULL),
 (48, 6, 'Toys & School Supplies', NULL, b'1', b'0', '2023-09-15 16:37:35', 1, NULL, NULL),
 (49, 5, 'Air Conditioners', NULL, b'1', b'0', '2023-09-15 16:43:22', 1, NULL, NULL),
-(50, 5, 'TV', NULL, b'1', b'0', '2023-09-15 16:43:45', 1, NULL, NULL),
-(51, 5, 'Watching Machine', NULL, b'1', b'0', '2023-09-15 16:44:25', 1, NULL, NULL),
+(50, 5, 'TV', 'ratlami-sev_1xsckeqbnx67l.png', b'1', b'0', '2023-09-15 16:43:45', 1, '2023-09-20 17:25:19', 1),
+(51, 5, 'Watching Machine', NULL, b'1', b'0', '2023-09-15 16:44:25', 1, '2023-09-20 15:16:56', 1),
 (52, 7, 'Samsung', NULL, b'1', b'0', '2023-09-15 16:45:10', 1, NULL, NULL),
-(53, 7, 'Vivo', NULL, b'1', b'0', '2023-09-15 16:45:24', 1, NULL, NULL),
+(53, 7, 'Vivo', '', b'1', b'1', '2023-09-15 16:45:24', 1, '2023-09-20 11:05:48', NULL),
 (54, 7, 'Apple', NULL, b'1', b'0', '2023-09-15 16:45:42', 1, NULL, NULL),
 (55, 42, 'Cookware', NULL, b'1', b'0', '2023-09-15 16:47:25', 1, NULL, NULL),
 (56, 42, 'Kitchen Tools', NULL, b'1', b'0', '2023-09-15 16:48:58', 1, NULL, NULL),
 (57, 42, 'Table & Dinnerware', NULL, b'1', b'0', '2023-09-15 16:49:29', 1, NULL, NULL),
 (58, 43, 'Painting & Posters', NULL, b'1', b'0', '2023-09-15 16:50:18', 1, NULL, NULL),
 (59, 43, 'Clocks', NULL, b'1', b'0', '2023-09-15 16:50:32', 1, NULL, NULL),
-(60, 43, 'Wall Decore', NULL, b'1', b'0', '2023-09-15 16:50:54', 1, NULL, NULL),
+(60, 43, 'Wall Decore', 'oreo.jpeg', b'1', b'0', '2023-09-15 16:50:54', 1, '2023-09-20 17:21:55', 1),
 (61, 8, 'Petrol Vehicle', NULL, b'1', b'0', '2023-09-15 16:51:20', 1, NULL, NULL),
-(62, 8, 'Electronic Vehicle', NULL, b'1', b'0', '2023-09-15 16:51:34', 1, NULL, NULL);
+(62, 8, 'Electronic Vehicle', NULL, b'1', b'0', '2023-09-15 16:51:34', 1, NULL, NULL),
+(67, 0, 'Home', NULL, b'1', b'1', '2023-09-20 12:40:43', 1, '2023-09-20 12:42:34', NULL),
+(73, 0, 'erfwe', NULL, b'1', b'1', '2023-09-20 12:48:51', 1, '2023-09-20 12:49:29', 1),
+(74, 0, 'qwedw', NULL, b'1', b'0', '2023-09-20 12:49:41', 1, NULL, NULL),
+(75, 0, 'gd', NULL, b'1', b'0', '2023-09-20 13:19:37', 1, NULL, NULL),
+(76, 0, 'rtyr', NULL, b'1', b'0', '2023-09-20 13:19:59', 1, '2023-09-20 14:21:20', 1),
+(77, 0, 'sfs', '1_nkxt2l2uvkao.jpg', b'1', b'0', '2023-09-20 13:42:22', 1, '2023-09-20 14:22:20', 1),
+(78, 0, 'erwert', '1_1mguhzdhyoe0d.png', b'1', b'0', '2023-09-20 13:44:13', 1, '2023-09-20 13:49:08', 1),
+(79, 0, 'rtry', '1_aheksy692kfn.jpg', b'1', b'0', '2023-09-20 13:59:29', 1, '2023-09-20 13:59:29', NULL),
+(80, 0, 't6t54', '1.png', b'1', b'0', '2023-09-20 14:06:55', 1, '2023-09-20 14:06:55', NULL),
+(81, 0, 'fytr', '1_au8yxbmxivn1.png', b'1', b'0', '2023-09-20 14:43:50', 1, '2023-09-20 16:07:48', 1);
 
 -- --------------------------------------------------------
 
@@ -179,12 +189,12 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `product_tags`, `productNa
 (1, 18, '1', 'PARLE G Original Gluco Biscuits Plain', 56, 15, 'fwerfwe', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-09-18 12:07:09', 1),
 (2, 19, '4,7', 'Anand Namkeen Thika Meetha mix', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-09-15 15:02:01', 1),
 (3, 28, '1,2', 'Puma Snikers', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-15 11:40:41', 1),
-(4, 41, '5', 'T-SHIRT', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-09-15 14:25:45', 1),
+(4, 41, '5', 'T-SHIRT', 850, 25, 'test', b'1', b'1', '2023-09-14 14:12:42', 1, '2023-09-20 11:31:49', 1),
 (5, 7, '1,5', 'Samsung Z-fold ', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
 (6, 18, '6', 'Biscuits', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-18 14:41:03', 1),
 (7, 21, '10', 'Meggie', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-09-15 15:15:19', 1),
 (8, 18, '8', 'Sona Namkeen', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-09-18 14:41:15', 1),
-(9, 20, '10', 'Taj Mahal Tea', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-09-18 14:41:19', 1),
+(9, 20, '10', 'Taj Mahal Tea', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-09-20 11:14:34', 1),
 (10, 18, '1', 'crack jack', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:06:16', NULL),
 (11, 18, '1', 'Hide & seek', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, '1,9', 'Oreo', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:53:58', 1),
@@ -298,7 +308,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`PkUserId`, `token`, `firstName`, `lastName`, `email`, `dob`, `gender`, `password`, `image`) VALUES
-(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '5.jpg'),
+(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', 'avatar-3_16m9kqfyf69nz.jpg'),
 (2, NULL, 'Nanu', 'Soni', 'nanu@gmail.com', '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL),
 (3, NULL, 'gvedrfg', 'dftgd', 'admin@gmail.com', '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', NULL),
 (4, NULL, 'test', 'test', 'mamta@gmail.com', '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL),
@@ -357,7 +367,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `customer`

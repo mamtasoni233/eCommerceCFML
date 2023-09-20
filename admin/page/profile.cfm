@@ -593,7 +593,7 @@
                 processData: false,
                 contentType: false,
                 success: function(result) {
-                    successToast("Profile image Updated!");
+                    successToast("Updated!","Profile image Updated!");
                     setTimeout(() => {
                         location.href = 'index.cfm?pg=profile';
                     }, 1000);
@@ -611,7 +611,7 @@
                 processData: false,
                 contentType: false,
                 success: function(result) {
-                    successToast("Profile image Updated!");
+                    successToast("Updated!","Profile image Updated!");
                     setTimeout(() => {
                         location.href = 'index.cfm?pg=profile';
                     }, 1000);

@@ -278,29 +278,51 @@
     <cfset data['categoryList'] = getParentCategoryResult(0, url.EditCategoryId, "",[])>
 </cfif>
 <cfif structKeyExists(url, 'delPkCategoryId') AND url.delPkCategoryId GT 0>
-        <cfquery name="removeImage">
+        <!--- <cfquery name="removeImage">
             SELECT PkCategoryId, categoryImage FROM Category 
             WHERE PkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
         <cfif fileExists("#categoryImagePath##removeImage.categoryImage#")>
             <cffile action="delete" file="#categoryImagePath##removeImage.categoryImage#">
-        </cfif>
+        </cfif> --->
         <cfquery result="deleteCategoryData">
             UPDATE category SET
-            categoryImage = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
-            , isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
+            isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
             WHERE PkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
         <cfquery result="deleteParentCategoryData">
             UPDATE category SET
-            categoryImage = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
-            , isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
+            isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
             WHERE parentCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
         <cfquery result="deleteProductData">
             UPDATE product SET
             isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
             WHERE FkCategoryId = <cfqueryparam value="#url.delPkCategoryId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+</cfif>
+<cfif structKeyExists(url, 'restorePkCategoryId') AND url.restorePkCategoryId GT 0>
+        <!--- <cfquery name="removeImage">
+            SELECT PkCategoryId, categoryImage FROM Category 
+            WHERE PkCategoryId = <cfqueryparam value="#url.restorePkCategoryId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+        <cfif fileExists("#categoryImagePath##removeImage.categoryImage#")>
+            <cffile action="delete" file="#categoryImagePath##removeImage.categoryImage#">
+        </cfif> --->
+        <cfquery result="restoreCategoryData">
+            UPDATE category SET
+            isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+            WHERE PkCategoryId = <cfqueryparam value="#url.restorePkCategoryId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+        <cfquery result="restoreParentCategoryData">
+            UPDATE category SET
+            isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+            WHERE parentCategoryId = <cfqueryparam value="#url.restorePkCategoryId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+        <cfquery result="restoreProductData">
+            UPDATE product SET
+            isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+            WHERE FkCategoryId = <cfqueryparam value="#url.restorePkCategoryId#" cfsqltype = "cf_sql_integer">
         </cfquery>
 </cfif>
 

@@ -117,7 +117,7 @@
                                 <hr class="dropdown-divider"/>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="validate.cfm?formAction=logOut">
+                                <a class="dropdown-item" href="../validate.cfm?formAction=logOut">
                                     <i class="icon-mid bi bi-box-arrow-left me-2"></i>
                                     Logout
                                 </a>
