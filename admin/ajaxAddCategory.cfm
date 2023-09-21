@@ -1,7 +1,6 @@
 <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
 <cfcontent reset="true" type="application/json" />
-<!--- <cfdump var="#session#"><cfabort> --->
 
 <cfparam name="PkCategoryId" default="" />
 <cfparam name="categoryName" default="" />

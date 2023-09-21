@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 21, 2023 at 07:14 AM
+-- Generation Time: Sep 21, 2023 at 03:15 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -149,7 +149,7 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`PkCustomerId`, `token`, `firstName`, `lastName`, `email`, `password`, `dob`, `gender`, `profile`, `isBlcoked`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, NULL, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '$2a$10$y0k8/Sap/WLAHSclo/Uex.ejyzRFfKPmHyOS2Zy/0W.Jqbm1T1hZG', '2001-07-16', b'0', NULL, b'0', b'0', b'0', 0, '2023-08-11 08:05:50', NULL, '2023-08-14 12:28:46'),
+(1, NULL, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '$2a$10$5qSn89Mw3isavaBycU1CtewiylgqdjRNV8i/hDRmRohQey3anSfOO', '2001-07-16', b'0', NULL, b'0', b'1', b'0', 0, '2023-08-11 08:05:50', 1, '2023-09-21 05:34:16'),
 (2, NULL, 'test', 'test', 'mamta@yahoo.in', '$2a$10$qvrxiNNJUOrAY7s2pPLKcemxkZo85eZ0V2eC0ARMXLU0oAZtIho9K', '1996-03-04', b'1', '', b'0', b'1', b'1', 1, '2023-08-14 06:13:06', NULL, '2023-08-16 04:47:11'),
 (3, NULL, 'test', 'test', 'ravi@gmail.com', '$2a$10$A7SBFgAOmO8DAQVc8lFoAuFSRq5zctd5GzcNRo.XE8ZHIbF3NMzfC', '1996-03-04', b'1', NULL, b'1', b'1', b'0', 1, '2023-08-14 06:16:56', NULL, '2023-08-16 04:47:26'),
 (4, NULL, 'arfwseert', 'wqew', 'werwerwe@gmail.com', '$2a$10$pLmaV/d27yvvSvgiIMixoOGBMF3Nrns/CrxK9BwBTALx/01/wpt.q', '1997-04-05', b'0', NULL, b'1', b'1', b'0', 1, '2023-08-14 06:17:58', NULL, '2023-08-14 12:31:07'),
@@ -188,22 +188,22 @@ CREATE TABLE `product` (
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `product_tags`, `productName`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
 (1, 18, '1', 'PARLE G Original Gluco Biscuits Plain', 56, 15, 'fwerfwe', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-09-18 12:07:09', 1),
-(2, 19, '4,7', 'Anand Namkeen Thika Meetha mix', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-09-15 15:02:01', 1),
+(2, 19, '4', 'Anand Namkeen Thika Meetha mix', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-09-21 18:14:15', 1),
 (3, 28, '1,2', 'Puma Snikers', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-15 11:40:41', 1),
 (4, 41, '5', 'T-SHIRT', 850, 25, 'test', b'1', b'1', '2023-09-14 14:12:42', 1, '2023-09-20 11:31:49', 1),
 (5, 7, '1,5', 'Samsung Z-fold ', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
-(6, 18, '6', 'Biscuits', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-18 14:41:03', 1),
+(6, 18, '9', 'Biscuits', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-21 16:46:16', 1),
 (7, 21, '10', 'Meggie', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-09-15 15:15:19', 1),
-(8, 18, '8', 'Sona Namkeen', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-09-18 14:41:15', 1),
-(9, 20, '10', 'Taj Mahal Tea', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-09-20 11:14:34', 1),
+(8, 18, '1,9', 'Sona Namkeen', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-09-21 16:47:06', 1),
+(9, 20, '8', 'Taj Mahal Tea', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-09-21 10:50:51', 1),
 (10, 18, '1', 'crack jack', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:06:16', NULL),
 (11, 18, '1', 'Hide & seek', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
-(12, 18, '1,9', 'Oreo', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:53:58', 1),
-(13, 18, '10', 'test', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-18 17:06:19', NULL),
+(12, 18, '1', 'Oreo', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
+(13, 18, '1,9', 'test', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 18:25:36', 1),
 (14, 18, '1', 'Monaco', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:11:38', 1),
-(15, 18, '1', 'Britannia Good Day', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:09:03', 1),
+(15, 18, '1', 'Britannia Good Day', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 16:45:26', 1),
 (16, 18, '1,9', 'Oreo Pink Cream', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:10:44', 1),
-(17, 18, '10', 'Sunfest', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-18 17:11:11', 1);
+(17, 18, '1', 'Sunfest', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1);
 
 -- --------------------------------------------------------
 
@@ -228,10 +228,8 @@ CREATE TABLE `product_image` (
 INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `isActive`, `dateCreated`, `createdBy`) VALUES
 (3, 1, 'ratlami-sev.png', b'0', b'1', '2023-09-13 15:51:58', 1),
 (4, 1, 'anand-nmkieen.png', b'1', b'1', '2023-09-13 15:51:58', 1),
-(5, 2, 'ratlami-sev_d4tkyqcxb7mb.png', b'0', b'1', '2023-09-13 16:03:30', 1),
-(6, 2, 'anand-nmkieen_1nvr14ueh50bq.png', b'0', b'1', '2023-09-13 16:03:30', 1),
+(6, 2, 'anand-nmkieen_1nvr14ueh50bq.png', b'1', b'1', '2023-09-13 16:03:30', 1),
 (7, 2, '50474c.webp', b'0', b'1', '2023-09-13 16:03:30', 1),
-(8, 2, '9fbd36.webp', b'1', b'1', '2023-09-13 16:03:30', 1),
 (9, 3, '69c6589653afdb9a.webp', b'1', b'1', '2023-09-13 18:01:45', 1),
 (11, 4, 'motorcycle-with-helmet.jpg', b'1', b'1', '2023-09-14 14:26:46', 1),
 (12, 5, '22fddf3c7da4c4f4.webp', b'1', b'1', '2023-09-14 14:35:24', 1),
@@ -239,7 +237,6 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (17, 6, '0ff199d1bd27eb98.webp', b'0', b'1', '2023-09-15 16:59:13', 1),
 (18, 8, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf.jpg', b'1', b'1', '2023-09-15 18:30:40', 1),
 (24, 8, 'png-transparent-vegetarian-cuisine-dal-french-fries-ramoji-wafer-and-namkeen-pvt-ltd-food-junk-food-food-recipe-wafer.png', b'0', b'1', '2023-09-15 18:40:02', 1),
-(26, 9, '29327f40e9c4d26b.webp', b'1', b'1', '2023-09-18 11:24:25', 1),
 (27, 6, 'istockphoto-178716575-612x612.jpg', b'1', b'1', '2023-09-18 11:54:00', 1),
 (29, 1, 'download.jpg', b'0', b'1', '2023-09-18 12:07:09', 1),
 (30, 6, '-original-imagpa5fbvqzk2xn.webp', b'0', b'1', '2023-09-18 12:09:15', 1),
@@ -250,7 +247,8 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (38, 15, 'png-transparent-vegetarian-cuisine-dal-french-fries-ramoji-wafer-and-namkeen-pvt-ltd-food-junk-food-food-recipe-wafer_zy613kygnovy.png', b'1', b'1', '2023-09-18 17:09:03', 1),
 (39, 16, 'oreo.jpeg', b'1', b'1', '2023-09-18 17:10:44', 1),
 (40, 17, 'oreo_6wpihl66wp5r.jpeg', b'1', b'1', '2023-09-18 17:11:04', 1),
-(41, 14, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf_18c5p6s3pjp5.jpg', b'1', b'1', '2023-09-18 17:11:38', 1);
+(41, 14, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf_18c5p6s3pjp5.jpg', b'1', b'1', '2023-09-18 17:11:38', 1),
+(42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'1', b'1', '2023-09-21 10:50:37', 1);
 
 -- --------------------------------------------------------
 
@@ -386,7 +384,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `product_tags`

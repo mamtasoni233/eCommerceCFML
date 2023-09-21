@@ -12,7 +12,7 @@
     FROM product P
     LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
     WHERE  1 = 1
-    AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_integer">
+    AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
     AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
 </cfquery>
 <!--- paingnation --->
@@ -22,24 +22,24 @@
     FROM product P
     LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
     WHERE  1 = 1
-    AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_integer">
+    AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
     AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
     LIMIT #startRow#, #maxRows#
 </cfquery>
-<!--- <cfif structKeyExists(url, 'pageNum')>
-    <cfset pageNum = url.pageNum>
-<cfelse>
-    <cfset pageNum = 1>
-</cfif> --->
-<!---end paingnation --->
 <cffunction name="getCategoryResult" access="public" returntype="array">
     <cfargument name="parentId" default="0" required="false" type="numeric"/>
+    <cfargument name="categoryId" default="0" required="false" type="numeric"/>
     <cfargument name="returnArray" required="false" type="array" default="#arrayNew(1)#"/>
-
     <cfset var qryGetCategory = "">
     <cfquery name="qryGetCategory">
-        SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage FROM Category 
-        WHERE parentCategoryId = <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+        SELECT categoryName, PkCategoryId, parentCategoryId, categoryImage 
+        FROM Category
+        WHERE 1 = 1
+        <cfif arguments.categoryId GT 0>
+            AND PkCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">
+        <cfelse>
+            AND parentCategoryId = <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+        </cfif>
         AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfif qryGetCategory.recordCount GT 0>
@@ -52,10 +52,9 @@
             <cfset res['categoryImage'] = qryGetCategory.categoryImage>
             <cfset res['child'] = getCategoryResult(res.PkCategoryId)>
             <cfquery name="countProduct">
-                SELECT COUNT(*) as productCount, C.PkCategoryId, C.parentCategoryId, C.categoryName, P.PkProductId, P.productQty, P.productName
+                SELECT COUNT(P.PkProductId) AS productCount
                 FROM product P
-                LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
-                WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_integer">
+                WHERE P.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
                 AND P.FkCategoryId = <cfqueryparam value="#res['PkCategoryId']#" cfsqltype = "cf_sql_integer">
             </cfquery>
             <cfset res['productCount'] = countProduct.productCount>
@@ -64,7 +63,14 @@
     </cfif>
     <cfreturn arguments.returnArray>
 </cffunction>
-<cfset categoryList = getCategoryResult()>
+
+<cfquery name="qryGetSecLevelCat">
+    SELECT C.parentCategoryId, B.parentCategoryId AS seclevelCat
+    FROM category C, category B
+    WHERE C.PkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+    AND B.PkCategoryId = C.parentCategoryId
+</cfquery>
+<cfset categoryList = getCategoryResult(qryGetSecLevelCat.seclevelCat, qryGetSecLevelCat.parentCategoryId)>
 <cfset parentId = getProduct.parentCategoryId>
 <cfquery name="getProductTag">
     SELECT C.PkCategoryId, C.parentCategoryId, C.categoryName, PT.PkTagId, PT.FkCategoryId, PT.tagName, PT.isActive, PT.isDeleted
@@ -75,19 +81,8 @@
     AND C.parentCategoryId = <cfqueryparam value="#parentId#" cfsqltype = "cf_sql_integer">
 </cfquery>
 <cfoutput>
-    <style>
-        /* Define a transition duration during page visits */
-        html.is-changing .transition-fade {
-            transition: opacity 0.25s;
-            opacity: 1;
-        }
-        /* Define the styles for the unloaded pages */
-        html.is-animating .transition-fade {
-            opacity: 0;
-        }
-    </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
-    <!-- Category Top Banner -->
+        <!-- Category Top Banner -->
         <div class="py-6 bg-img-cover bg-dark bg-overlay-gradient-dark position-relative overflow-hidden mb-4 bg-pos-center-center"
             style="background-image: url('../assets/images/banners/banner-1.jpg');">
             <div class="container position-relative z-index-20" data-aos="fade-right" data-aos-delay="300">
@@ -117,7 +112,6 @@
             </div>
         </div>
         <!-- Category Top Banner -->
-        <!--- <cfdump var="#categoryList#"> --->
         <div class="container">
             <div class="row">
                 <!-- Category Aside/Sidebar -->
@@ -129,30 +123,22 @@
                             <div class="mb-4">
                                 <h2 class="mb-4 fs-6 mt-2 fw-bolder">
                                     <cfloop array="#categoryList#" index="idx">
-                                        <cfloop array="#idx.child#" index="child">
-                                            <cfif child.PkCategoryId EQ getProductPaging.parentCategoryId>
-                                                #child.catName#
-                                            </cfif>
-                                        </cfloop>
+                                        #idx.catName#
                                     </cfloop>
                                 </h2>
                                 <nav>
                                     <ul class="list-unstyled list-default-text">
                                         <cfloop array="#categoryList#" index="idx">
                                             <cfloop array="#idx.child#" index="child">
-                                                <cfif child.PkCategoryId EQ getProductPaging.parentCategoryId>
-                                                    <cfloop array="#child.child#" index="subChild">
-                                                        <li class="mb-2">
-                                                            <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center"
-                                                            href="index.cfm?pg=category&id=#subChild.PkCategoryId#&pageNum=#pageNum#">
-                                                                <span><i class="ri-arrow-right-s-line align-bottom ms-n1"></i> 
-                                                                    #subChild.catName#
-                                                                </span> 
-                                                                <span class="text-muted ms-4">(#subChild.productCount#)</span>
-                                                            </a>
-                                                        </li>
-                                                    </cfloop>
-                                                </cfif>
+                                                <li class="mb-2">
+                                                    <a class="text-decoration-none text-body text-secondary-hover transition-all d-flex justify-content-between align-items-center"
+                                                    href="index.cfm?pg=category&id=#child.PkCategoryId#&pageNum=1">
+                                                        <span><i class="ri-arrow-right-s-line align-bottom ms-n1"></i> 
+                                                            #child.catName#
+                                                        </span> 
+                                                        <span class="text-muted ms-4">(#child.productCount#)</span>
+                                                    </a>
+                                                </li>
                                             </cfloop>
                                         </cfloop>              
                                     </ul>
@@ -276,9 +262,8 @@
                                     <div class="filter-options">
                                         <cfloop query="#getProductTag#">
                                             <div class="form-group form-check mb-0">
-                                                <input type="checkbox" class="form-check-input productType" data-id="#url.id#" id="filter-type-0">
-                                                <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between"
-                                                    for="filter-type-0"> #getProductTag.tagName#</label>
+                                                <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" id="filter-type-0">
+                                                <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-0"> #getProductTag.tagName#</label>
                                             </div>                        
                                         </cfloop>               
                                     </div>
@@ -390,7 +375,7 @@
                 <!-- / Category Aside/Sidebar -->
 
                 <!-- Category Products-->
-                <div id="swup" class="col-12 col-lg-9 transition-fade">
+                <div id="productContainer" class="col-12 col-lg-9 transition-fade">
                     <!-- Top Toolbar-->
                     <div class="mb-4 d-md-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0">
@@ -451,11 +436,11 @@
                                             <cfloop query="#getProductImage#">
                                                 <cfif getProductImage.isDefault EQ 1>
                                                     <picture class="position-relative overflow-hidden d-block bg-light">
-                                                        <img class="vh-25 img-fluid object-fit-contain position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="">
+                                                        <img class="vh-25 img-fluid object-fit-contain position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="" width="300">
                                                     </picture>
                                                 </cfif>
                                                 <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
-                                                    <img class="vh-25 img-fluid object-fit-contain" title="" src="#imagePath##getProductImage.image#" alt="">
+                                                    <img class="vh-25 img-fluid object-fit-contain" title="" src="#imagePath##getProductImage.image#" alt="" width="300">
                                                 </picture>
                                             </cfloop> 
                                             <div class="card-actions">
@@ -491,7 +476,7 @@
                                             <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center" href="">
                                                 #getProductPaging.productName#
                                             </a>
-                                            <p class="fw-bolder m-0 mt-2">$#getProductPaging.productPrice#</p>
+                                            <p class="fw-bolder m-0 mt-2"><i class="fa fa-rupee"></i> #getProductPaging.productPrice#</p>
                                         </div>
                                     </div>
                                     <!--/ Card Product-->
@@ -568,21 +553,28 @@
         </div>
 
         <script> 
-        var #toScript('#pageNum#','pageNum')#;
-            function pushTag(){
-                var path = '';
-                var url = window.location.href;
-                var checkedVals = '';
-                var id = $('.productType').attr('data-id');
-                $('.productType').each(function(){
-                    if(this.checked){
-                        checkedVals = $(':checked').map(function(){ return $(this).val(); }).get().join();
-                        window.history.pushState(null, null,'index.cfm?pg=category&id='+id+'&pageNum='+pageNum+'&tags='+checkedVals);
-                    }
+            var #toScript('#pageNum#','pageNum')#;
+            //var #toScript('#id#','id')#;
+            var value = "";
+            $('.productTag').on('change', function(){
+                var id = $(this).attr('data-id');
+                value = $(':checked').map(function(){ return $(this).val(); }).get().join();
+                console.log(value);
+                /* pushTag(); */
+                $.ajax({  
+                    url: '../ajaxFilterProduct.cfm?productTagValue='+value, 
+                    data: {id:id},
+                    type: 'GET',  
+                    success: function(result) {
+                        console.log(result);
+                       /*  if (data.success == true) { */
+                            //window.location = 'index.cfm?pg=category&id='+id+'&pageNum='+pageNum+'&tags='+value;
+                            $('##productContainer').html(result);     
+                       /*  } */ /* else{
+                            window.location = 'index.cfm?pg=category&id='+id+'&pageNum='+pageNum;
+                        } */
+                    }  
                 });
-            }
-            $('.productType').on('change', function(){
-                pushTag();
             });
         </script> 
 </cfoutput>

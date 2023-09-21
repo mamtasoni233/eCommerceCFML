@@ -58,31 +58,6 @@
     </cfscript>
 </cffunction>
 
-<!--- <cffunction name="getCategoryResult" access="public" returntype="array">
-        <cfargument name="parentId" required="true" type="any"/>
-        <cfargument name="parentName" required="true" type="any"/>
-        <cfargument name="returnArray" required="true" type="any"/>
-
-        <cfset var qryGetCategory = "">
-        <cfquery name="qryGetCategory">
-            SELECT categoryName, PkCategoryId FROM Category 
-            WHERE parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
-            AND isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-        </cfquery>
-        <cfif qryGetCategory.recordCount GT 0>
-            <cfloop query="qryGetCategory">
-                <cfset var res = StructNew()>
-                <cfset res.catName = qryGetCategory.categoryName>
-                <cfset res.PkCategoryId = qryGetCategory.PkCategoryId>
-                <cfif len(arguments.parentName) GT 0>
-                    <cfset res.catName  = arguments.parentName & ' -> ' & qryGetCategory.categoryName>
-                </cfif>       
-                <cfset arrayAppend(arguments.returnArray, res)>         
-                <cfset getCategoryResult(qryGetCategory.PkCategoryId, res.catName, arguments.returnArray)>
-            </cfloop>
-        </cfif>
-        <cfreturn arguments.returnArray>
-</cffunction> --->
 <cffunction name="getCategoryResult" access="public" returntype="array">
         <cfargument name="parentId" default="0" required="true" type="any"/>
         <cfargument name="parentName" required="true" type="any"/>
@@ -95,21 +70,9 @@
             WHERE C.parentCategoryId =  <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
             AND C.isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
         </cfquery>
-        <!--- <cfquery name="qryGetProductTag">
-            SELECT C.categoryName, C.PkCategoryId, P.tagName, P.PkTagId, P.FkCategoryId
-            FROM Category C
-            LEFT JOIN product_tags P ON C.PkCategoryId = P.FkCategoryId
-            WHERE P.FkCategoryId =  <cfqueryparam value="#qryGetCategory.PkCategoryId#" cfsqltype="cf_sql_integer">
-            AND C.isDeleted = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
-        </cfquery> --->
         <cfif qryGetCategory.recordCount GT 0>
             <cfloop query="qryGetCategory">
                 <cfset var res = StructNew()>
-                <!--- <cfloop query="qryGetProductTag"> --->
-                    <!--- <cfset res['PkTagId'] = qryGetProductTag.PkTagId>
-                    <cfset res['tagName'] = qryGetProductTag.tagName>
-                    <cfset res['FkCategoryId'] = qryGetProductTag.FkCategoryId> --->
-                <!---  </cfloop> --->
                 <cfset res['catName'] = qryGetCategory.categoryName>
                 <cfset res['PkCategoryId'] = qryGetCategory.PkCategoryId>
                 <cfset res['parentCategoryId'] = qryGetCategory.parentCategoryId>
