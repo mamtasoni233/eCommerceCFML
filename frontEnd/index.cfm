@@ -25,10 +25,10 @@
             <!--- fontawsome --->
             <script src="https://kit.fontawesome.com/194ef163b5.js" crossorigin="anonymous"></script>
             <!-- Vendor CSS -->
-            <link rel="stylesheet" href="./assets/css/libs.bundle.css"/>
+            <link rel="stylesheet" href="../assets/css/libs.bundle.css"/>
 
             <!-- Main CSS -->
-            <link rel="stylesheet" href="./assets/css/theme.bundle.css"/>
+            <link rel="stylesheet" href="../assets/css/theme.bundle.css"/>
 
             <!-- Google Fonts-->
             <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,12 +38,8 @@
                 rel="stylesheet"
             >
             <!-- jquery -->
-            <script
-                src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-                integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer"
-            ></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+            </script>
             <!-- swup -->
             <script src="https://unpkg.com/swup@4"></script>
             <script>
@@ -895,18 +891,13 @@
             </section>
 
             <!--- jquery validation js --->
-            <script
-                src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"
-                integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA=="
-                crossorigin="anonymous"
-                referrerpolicy="no-referrer"
-            ></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"  integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             
             <!-- Vendor JS -->
-            <script src="./assets/js/vendor.bundle.js"></script>
+            <script src="../assets/js/vendor.bundle.js"></script>
 
             <!-- Theme JS -->
-            <script src="./assets/js/theme.bundle.js"></script>
+            <script src="../assets/js/theme.bundle.js"></script>
         </body>
     </html>
 </cfoutput>

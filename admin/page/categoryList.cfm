@@ -235,13 +235,13 @@
                 { data: 'isActive',
                     render: function (data,type,row) {
                         var returnStr = '';
-                        if(row.isDeleted == 0){
+                        /* if(row.isDeleted == 0){ */
                             if(row.isActive == 1){
                                 returnStr += '<span id="deactive" data-id="'+row.PkCategoryId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
                             }else{
                                 returnStr += '<span id="active" data-id="'+row.PkCategoryId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
                             }
-                        }
+                        /* } */
                         return returnStr;
                     }
                 },
@@ -333,10 +333,12 @@
                         submitCategoryData();
                     }
                 } else{
-                    if ((filepondImageObj.getFiles().length === 0 && imgSrc === '') || $('#parentCategory').val() == 0) {
-                        /* if (filepondImageObj.getFiles().length === 0 && imgSrc === ''){ */
+                    if ((filepondImageObj.getFiles().length === 0 && imgSrc == '') ) {
+                        if ($('#parentCategory').val() == 0){
                             warnToast("Issue!","Please upload Atleast 1 image!!!") 
-                      /*   }  */
+                        } else{
+                            submitCategoryData();
+                        }
                     } else if (removeImageChecked.length > 0) {
                         Swal.fire({
                             title: 'Are you sure?',
@@ -358,7 +360,6 @@
                         submitCategoryData();
                     }
                 }
-                
             }, 
         });
         $('#addCategoryData').on('hidden.bs.modal', function () {
@@ -401,6 +402,9 @@
                         if (parentId > 0 && image.length > 0) {
                             $('#imgPreview').attr('src', imgSrc);
                             $('.removeImageContainer').removeClass('d-none');
+                        } else if (image.length == 0) {
+                            $('#imgPreview').attr('src', '');
+                            $('.removeImageContainer').addClass('d-none');
                         } else {
                             $('#imgPreview').attr('src', imgSrc);
                             $('.removeImageContainer').addClass('d-none');
