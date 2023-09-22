@@ -104,16 +104,17 @@
         ##loading {
             position: absolute;
             width: 100%;
-            height: 100%;
+            height:100%;
            /*  text-align: center; */
             background-color: rgba(255,255,255,0.7);
             z-index: +100 !important;
         }
 
-        ##loading-image {
+        ##loading img {
             position: relative;
-            top:10%;
+            top:20%;
             left:30%;
+            width: 80px;
             /* z-index: 100; */
         }
     </style>
@@ -461,8 +462,8 @@
                     <!--- <div class="ajax-loader">
                         <img src="../assets/images/1amw.gif" class="img-responsive" id="loading-image" style="width:50px; background:transparent" />
                     </div> --->
-                    <div id="loading" class="d-none">
-                        <img src="../assets/images/1amw.gif" class="img-responsive" id="loading-image" style="width:80px; background:transparent" />
+                    <div id="loading" <!--- class="d-none" --->>
+                        <img src="../assets/images/loading.gif" class="img-responsive" id="loading-image" />
                     </div>
                     <cfif getProductPaging.recordCount GT 0>
                         <cfloop query="#getProductPaging#">
@@ -596,10 +597,12 @@
     <script>
         $(document).ready( function () { 
             var #toScript('#pageNum#','pageNum')#;
-            hideLoader();
+            //hideLoader();
             /* $(window).load(function(){
                 showLoader();
             }); */
+            //$('##loading').removeClass('d-none');
+            $('##loading').hide();
             var value = "";
             let productContainer = $('##productContainer').html();
             $('.productTag').on('change', function(){
@@ -613,7 +616,8 @@
                         data: {id:id},
                         type: 'GET', 
                         beforeSend: function(){
-                            $('##loading').removeClass('d-none');
+                            //$('##loading').removeClass('d-none');
+                            setTimeout(function(){ $('##loading').show();},5000);
                         }, 
                         success: function(result) {
                             if (result.success) {
@@ -621,16 +625,22 @@
                             }
                         },
                         complete: function(){
-                            $('##loading').addClass('d-none');
+                            //$('##loading').addClass('d-none');
+                            setTimeout(function(){ $('##loading').hide();},5000)
                         }  
                     });
-                }  
+                    
+                }   
             });
-            /* $(document).ajaxStart(function(){
-                $("##loading").removeClass('d-none');
-            }).ajaxStop(function(){
-                $("##loading").addClass('d-none');
-            }); */
+            $('##loading').bind('ajaxStart', function(){
+                setTimeout(function(){ 
+                    $(this).show();
+                },3000)
+            }).bind('ajaxStop', function(){
+                setTimeout(function(){ 
+                    $(this).hide();
+                },3000)
+            });
         });
         /* function showLoader()
         {
