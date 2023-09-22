@@ -105,7 +105,9 @@
             position: absolute;
             width: 100%;
             height:100%;
-           /*  text-align: center; */
+            /*  left: 0%;
+            top:50%; */
+            /* text-align: center; */
             background-color: rgba(255,255,255,0.7);
             z-index: +100 !important;
         }
@@ -299,8 +301,8 @@
                                 <div class="filter-options">
                                     <cfloop query="#getProductTag#">
                                         <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" id="filter-type-0" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked="true"</cfif>>
-                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-0"> #getProductTag.tagName#</label>
+                                            <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" id="filter-type-#getProductTag.PkTagId#" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked="true"</cfif>>
+                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-#getProductTag.PkTagId#"> #getProductTag.tagName#</label>
                                         </div>
                                     </cfloop>               
                                 </div>
@@ -462,7 +464,7 @@
                     <!--- <div class="ajax-loader">
                         <img src="../assets/images/1amw.gif" class="img-responsive" id="loading-image" style="width:50px; background:transparent" />
                     </div> --->
-                    <div id="loading" <!--- class="d-none" --->>
+                    <div id="loading" class="d-none">
                         <img src="../assets/images/loading.gif" class="img-responsive" id="loading-image" />
                     </div>
                     <cfif getProductPaging.recordCount GT 0>
@@ -599,10 +601,10 @@
             var #toScript('#pageNum#','pageNum')#;
             //hideLoader();
             /* $(window).load(function(){
-                showLoader();
+                $setTimeout(function(){('##loading').removeClass('d-none');},2000);
             }); */
             //$('##loading').removeClass('d-none');
-            $('##loading').hide();
+            //$('##loading').hide();
             var value = "";
             let productContainer = $('##productContainer').html();
             $('.productTag').on('change', function(){
@@ -616,8 +618,8 @@
                         data: {id:id},
                         type: 'GET', 
                         beforeSend: function(){
-                            //$('##loading').removeClass('d-none');
-                            setTimeout(function(){ $('##loading').show();},5000);
+                            setTimeout(function(){ $('##loading').removeClass('d-none');},2000);
+                            //setTimeout(function(){ $('##loading').show();},2000);
                         }, 
                         success: function(result) {
                             if (result.success) {
@@ -625,22 +627,22 @@
                             }
                         },
                         complete: function(){
-                            //$('##loading').addClass('d-none');
-                            setTimeout(function(){ $('##loading').hide();},5000)
+                            setTimeout(function(){('##loading').addClass('d-none');},2000);
+                            //setTimeout(function(){ $('##loading').hide();},2000)
                         }  
                     });
                     
                 }   
             });
-            $('##loading').bind('ajaxStart', function(){
+            /*  $('##loading').bind('ajaxStart', function(){
                 setTimeout(function(){ 
-                    $(this).show();
-                },3000)
+                    $(this).addClass('d-none');
+                },2000)
             }).bind('ajaxStop', function(){
                 setTimeout(function(){ 
-                    $(this).hide();
-                },3000)
-            });
+                    $(this).removeClass('d-none');
+                },2000)
+            }); */
         });
         /* function showLoader()
         {

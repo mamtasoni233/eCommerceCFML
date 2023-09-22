@@ -32,6 +32,8 @@
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+            <!--- toast css --->
+            <link rel="stylesheet" href="../assets/toastify-js/src/toastify.css" />
             <!-- Main CSS -->
             <link rel="stylesheet" href="../assets/css/theme.bundle.css"/>
             <!-- jquery -->
@@ -886,23 +888,27 @@
             <!--- jquery validation js --->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"  integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             
+            <!--- tostify js --->
+            <script src="./assets/toastify-js/src/toastify.js"></script>
             <!-- Vendor JS -->
             <script src="../assets/js/vendor.bundle.js"></script>
-
+            
             <!-- Theme JS -->
             <script src="../assets/js/theme.bundle.js"></script>
+            <script src="./assets/common.js"></script>
 
             <script>
                 var #toScript('#session.customer.saved#','saved')#;
                 var #toScript('#session.customer.firstName#','firstName')#;
                 var #toScript('#session.customer.lastName#','lastName')#;
                 $(document).ready( function () {    
-                    if ( saved === 1) {
-                        successToast("Customer Login!", "Successfully Login!!!");
+                    if (saved === 1) {
+                        successToast(firstName +' '+ lastName +' '+  "Successfully Login!!!");
+                        sessionStorage.removeItem('saved');
                     }
                 });
 
-            </script>
+            </script>   
         </body>
     </html>
 </cfoutput>
