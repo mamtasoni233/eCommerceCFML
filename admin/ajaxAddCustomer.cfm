@@ -100,8 +100,6 @@
                     OR C.email LIKE <cfqueryparam value="%#trim(search)#%">
                     OR C.gender LIKE <cfqueryparam value="%#trim(search)#%">
                     OR C.dob LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
         
@@ -165,7 +163,6 @@
                 firstName = <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
                 , lastName = <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
                 , email = <cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
-                , password = <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
                 , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
                 , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 , updatedDate =  <cfqueryparam value = "#CreateODBCDateTime(now())#" cfsqltype = "cf_sql_datetime">
@@ -201,11 +198,15 @@
             <cfset customerId = addCustomerData.generatedKey>
             <cfset session.customer = {}>
             <cfset session.customer.customerSave = 1>
-            
             <cflocation url="index.cfm?pg=customer&s=customerList" addtoken="false">
         </cfif>
-        
-    
+        <cfif structKeyExists(form, "password") AND len( trim(form.password ) ) GT 0>
+            <cfquery name="qryCategoryUpdateImg" result="qryResultCategoryUpdateImg">
+                UPDATE category SET
+                password = <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
+                WHERE PkCustomerId = <cfqueryparam value="#customerId#" cfsqltype="cf_sql_integer">
+            </cfquery>
+        </cfif>
         <cfif structKeyExists(form, "customerProfile") AND len(form.customerProfile) GT 0>
             <cfset txtcustomerProfile = "">
             <cffile action="upload" destination="#customerProfilePath#" fileField="customerProfile"  nameconflict="makeunique" result="dataImage">

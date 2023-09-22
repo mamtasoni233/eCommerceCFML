@@ -94,6 +94,13 @@
     
     <cfsavecontent  variable="data">
         <cfoutput>
+            <style>
+                img {
+                    width: 200px;
+                    height: 300px;
+                    object-fit: contain;
+                    }
+            </style>
             <!-- Top Toolbar-->
                 <div class="mb-4 d-md-flex justify-content-between align-items-center">
                     <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0">
@@ -150,15 +157,15 @@
                         <div class="col-12 col-sm-6 col-md-4">
                             <!-- Card Product-->
                             <div class="card position-relative h-100 card-listing hover-trigger">
-                                <div class="card-header d-flex align-self-center w-75">
+                                <div class="card-header d-flex align-self-center">
                                     <cfloop query="#getProductImage#">
                                         <cfif getProductImage.isDefault GT 0>
                                             <picture class="position-relative overflow-hidden d-block bg-light">
-                                                <img class="vh-25 img-fluid object-fit-contain position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="" width="300">
+                                                <img class="vh-25 img-fluid position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="">
                                             </picture>
                                         </cfif>
                                         <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
-                                            <img class="vh-25 img-fluid object-fit-contain" title="" src="#imagePath##getProductImage.image#" alt="" width="300">
+                                            <img class="vh-25 img-fluid" title="" src="#imagePath##getProductImage.image#" alt="">
                                         </picture>
                                     </cfloop> 
                                     <div class="card-actions">
@@ -215,7 +222,7 @@
             <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                        <a class="page-link prev" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#url.productTagValue#" data-id="#pageNum#" >
+                        <a class="page-link prev"  href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#url.productTagValue#" data-id="#pageNum#" >
                             <i class="ri-arrow-left-line align-bottom"></i>
                             Prev
                         </a>
@@ -232,7 +239,7 @@
                 </ul>
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                        <a class="page-link next" <!--- href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#" ---> href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#url.productTagValue#">Next 
+                        <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#url.productTagValue#">Next 
                             <i class="ri-arrow-right-line align-bottom"></i>
                         </a>
                     </li>

@@ -1,4 +1,5 @@
 <cfparam name="id" default="#url.id#" />
+<cfparam name="productTagValue" default="" />
 <cfparam name="PkCategoryId" default="" />
 <cfparam name="PkTagId" default="" />
 <cfparam name="PkProductId" default="" />
@@ -81,6 +82,13 @@
     AND C.parentCategoryId = <cfqueryparam value="#parentId#" cfsqltype = "cf_sql_integer">
 </cfquery>
 <cfoutput>
+    <style>
+        img {
+            width: 200px;
+            height: 300px;
+            object-fit: contain;
+            }
+    </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
         <!-- Category Top Banner -->
         <div class="py-6 bg-img-cover bg-dark bg-overlay-gradient-dark position-relative overflow-hidden mb-4 bg-pos-center-center"
@@ -262,9 +270,9 @@
                                     <div class="filter-options">
                                         <cfloop query="#getProductTag#">
                                             <div class="form-group form-check mb-0">
-                                                <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" id="filter-type-0">
+                                                <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" id="filter-type-0" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked="true"</cfif>>
                                                 <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-0"> #getProductTag.tagName#</label>
-                                            </div>                        
+                                            </div>
                                         </cfloop>               
                                     </div>
                                 </div>
@@ -432,15 +440,15 @@
                                 <div class="col-12 col-sm-6 col-md-4">
                                     <!-- Card Product-->
                                     <div class="card position-relative h-100 card-listing hover-trigger">
-                                        <div class="card-header d-flex align-self-center w-75">
+                                        <div class="card-header d-flex align-self-center">
                                             <cfloop query="#getProductImage#">
                                                 <cfif getProductImage.isDefault EQ 1>
                                                     <picture class="position-relative overflow-hidden d-block bg-light">
-                                                        <img class="vh-25 img-fluid object-fit-contain position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="" width="300">
+                                                        <img class="vh-25 img-fluid position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="">
                                                     </picture>
                                                 </cfif>
                                                 <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
-                                                    <img class="vh-25 img-fluid object-fit-contain" title="" src="#imagePath##getProductImage.image#" alt="" width="300">
+                                                    <img class="vh-25 img-fluid" title="" src="#imagePath##getProductImage.image#" alt="">
                                                 </picture>
                                             </cfloop> 
                                             <div class="card-actions">
@@ -498,7 +506,7 @@
                     <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                         <ul class="pagination">
                             <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                                <a class="page-link prev" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#" data-id="#pageNum#" >
+                                <a class="page-link prev" href=<cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)> "index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#getProductTag.PkTagId#" <cfelse> "index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#"</cfif> data-id="#pageNum#" >
                                     <i class="ri-arrow-left-line align-bottom"></i>
                                     Prev
                                 </a>
@@ -507,7 +515,7 @@
                         <ul class="pagination">
                             <cfloop from="1" to="#totalPages#" index="i">
                                 <li class="page-item  <cfif pageNum EQ i>active</cfif> mx-1">
-                                    <a class="page-link" href="index.cfm?pg=category&id=#url.id#&pageNum=#i#">
+                                    <a class="page-link" href=<cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)> "index.cfm?pg=category&id=#url.id#&pageNum=#i#&tags=#getProductTag.PkTagId#"<cfelse>"index.cfm?pg=category&id=#url.id#&pageNum=#i#"</cfif>>
                                         #i#
                                     </a>
                                 </li>
@@ -515,7 +523,7 @@
                         </ul>
                         <ul class="pagination">
                             <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                                <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#">Next 
+                                <a class="page-link next" href=<cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)> "index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#getProductTag.PkTagId#"<cfelse>"index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#"</cfif>>Next 
                                     <i class="ri-arrow-right-line align-bottom"></i>
                                 </a>
                             </li>

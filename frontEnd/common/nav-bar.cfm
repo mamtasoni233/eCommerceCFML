@@ -40,7 +40,7 @@
         <div class="w-100 pb-lg-0 pt-lg-0 pt-4 pb-3">
             <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
                 <!-- Logo-->
-                <a class="navbar-brand fw-bold fs-3 m-0 p-0 flex-shrink-0" href="index.cfm?pg=dashboard">
+                <a class="nav-link fw-bolder navbar-brand fw-bold fs-3 m-0 p-0 flex-shrink-0" href="index.cfm?pg=dashboard">
                     <!-- Start of Logo-->
                     <div class="d-flex align-items-center">
                         <div class="f-w-6 d-flex align-items-center me-2 lh-1">
@@ -67,7 +67,7 @@
                 <div class="ms-5 flex-shrink-0 collapse navbar-collapse navbar-collapse-light w-auto flex-grow-1" id="navbarNavDropdown">
                     <!-- Mobile Nav Toggler-->
                     <button
-                        class="btn btn-link px-2 text-decoration-none navbar-toggler border-0 position-absolute top-0 end-0 mt-3 me-2"
+                        class="nav-link fw-bolder btn btn-link px-2 text-decoration-none navbar-toggler border-0 position-absolute top-0 end-0 mt-3 me-2"
                         data-bs-toggle="collapse"
                         data-bs-target="##navbarNavDropdown"
                         aria-controls="navbarNavDropdown"
@@ -100,18 +100,12 @@
                                                 <div class="row py-lg-5">
                                                     <!-- menu row-->
                                                         <div class="col col-lg-6 mb-5 mb-sm-0">
-                                                            <!--- <h6 class="dropdown-heading">
-                                                                #idx.catName#
-                                                            </h6> --->
                                                             <ul class="list-unstyled">
                                                                 <cfloop array="#idx.child#" index="child">
                                                                     <li class="dropdown-list-item">
                                                                         <h6 class="dropdown-heading mb-2 mt-2 fw-bold">
                                                                             #child.catName#
                                                                         </h6>
-                                                                        <!--- <a class="dropdown-item fw-bold" href="index.cfm?pg=category">
-                                                                            #child.catName#
-                                                                        </a> --->
                                                                         <ul class="list-unstyled">
                                                                             <cfloop array="#child.child#" index="subChild">
                                                                                 <li class="dropdown-list-item">
@@ -154,7 +148,7 @@
                     <!-- Navbar Toggle Icon-->
                     <li class="d-inline-block d-lg-none">
                         <button
-                            class="btn btn-link px-2 text-decoration-none navbar-toggler border-0 d-flex align-items-center"
+                            class="nav-link fw-bolder btn btn-link px-2 text-decoration-none navbar-toggler border-0 d-flex align-items-center"
                             data-bs-toggle="collapse"
                             data-bs-target="##navbarNavDropdown"
                             aria-controls="navbarNavDropdown"
@@ -168,7 +162,7 @@
 
                     <!-- Navbar Search-->
                     <li class="ms-1 d-inline-block">
-                        <button class="btn btn-link px-2 text-decoration-none d-flex align-items-center" data-pr-search >
+                        <button class="nav-link fw-bolder btn btn-link px-2 text-decoration-none d-flex align-items-center" data-pr-search >
                             <i class="ri-search-2-line ri-lg align-middle"></i>
                         </button>
                     </li>
@@ -176,24 +170,57 @@
 
                     <!-- Navbar Wishlist-->
                     <li class="ms-1 d-none d-lg-inline-block">
-                        <a class="btn btn-link px-2 py-0 text-decoration-none d-flex align-items-center" href="##">
+                        <a class="nav-link fw-bolder btn btn-link px-2 py-0 text-decoration-none d-flex align-items-center" href="##">
                             <i class="ri-heart-line ri-lg align-middle"></i>
                         </a>
                     </li>
                     <!-- /Navbar Wishlist-->
 
                     <!-- Navbar Login-->
-                    <li class="ms-1 d-none d-lg-inline-block">
+                    <!---  <li class="ms-1 d-none d-lg-inline-block">
                         <a class="btn btn-link px-2 text-decoration-none d-flex align-items-center" href="../validate.cfm?formAction=logOut">
                             <i class="ri-user-line ri-lg align-middle"></i>
                         </a>
-                    </li>
+                    </li> --->
+                    <li class="nav-item dropdown me-lg-4">
+                            <a class="nav-link fw-bolder btn btn-link px-2 text-decoration-none dropdown-toggle py-lg-4 me-5" href="##" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="ri-user-line ri-lg align-middle"></i> 
+                            </a>
+                            <ul class="dropdown-menu" style="left:-20px">
+                                <li class="mb-2">
+                                    <h4 class="dropdown-header fw-bolder m-0 p-0">
+                                        Hello, #session.customer.firstName# #session.customer.lastName#!!
+                                    </h4>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="index.cfm?pg=dashboard">Homepage</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="">My Profile</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="">Cart</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="">Checkout</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider"/>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="../validate.cfm?formAction=logOut">
+                                        <i class="icon-mid bi bi-box-arrow-left me-2"></i>
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     <!-- /Navbar Login-->
 
                     <!-- Navbar Cart-->
                     <li class="ms-1 d-inline-block position-relative">
                         <button
-                            class="btn btn-link px-2 text-decoration-none d-flex align-items-center disable-child-pointer"
+                            class="nav-link fw-bolder btn btn-link px-2 text-decoration-none d-flex align-items-center disable-child-pointer"
                             data-bs-toggle="offcanvas"
                             data-bs-target="##offcanvasCart"
                             aria-controls="offcanvasCart"

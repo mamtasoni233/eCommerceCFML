@@ -26,7 +26,7 @@
             <script src="https://kit.fontawesome.com/194ef163b5.js" crossorigin="anonymous"></script>
             <!-- Vendor CSS -->
             <link rel="stylesheet" href="../assets/css/libs.bundle.css"/>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+            <!--- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> --->
             
             <!-- Google Fonts-->
             <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,11 +37,6 @@
             <!-- jquery -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer">
             </script>
-            <!-- swup -->
-            <!---  <script src="https://unpkg.com/swup@4"></script> --->
-            <!--- <script> 
-                const swup = new Swup();
-            </script> --->
             <!-- Fix for custom scrollbar if JS is disabled-->
             <noscript>
                 <style>
@@ -67,13 +62,13 @@
             <title>Alpine | Bootstrap 5 Ecommerce HTML Template</title>
         </head>
         <body class="">
-            <cfif structKeyExists(session.customer, "saved") AND session.customer.saved EQ 1 >
+            <!--- <cfif structKeyExists(session.customer, "saved") AND session.customer.saved EQ 1 >
                 <div class="alert alert-success alert-dismissible show fade">
                     <i class="fa fa-check-circle"></i> #session.customer.firstName# #session.customer.lastName# Successfully Login!!!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <cfset StructDelete(session.customer,'saved')>
-            </cfif>
+            </cfif> --->
             <!-- Navbar -->
             <div class="position-relative z-index-30">
                 <!-- Navbar -->
@@ -896,6 +891,18 @@
 
             <!-- Theme JS -->
             <script src="../assets/js/theme.bundle.js"></script>
+
+            <script>
+                var #toScript('#session.customer.saved#','saved')#;
+                var #toScript('#session.customer.firstName#','firstName')#;
+                var #toScript('#session.customer.lastName#','lastName')#;
+                $(document).ready( function () {    
+                    if ( saved === 1) {
+                        successToast("Customer Login!", "Successfully Login!!!");
+                    }
+                });
+
+            </script>
         </body>
     </html>
 </cfoutput>

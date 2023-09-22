@@ -196,7 +196,6 @@
 </cfoutput>
 <script>
 
-
     $(document).ready( function () {    
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
