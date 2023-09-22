@@ -262,9 +262,9 @@
                                     <div class="filter-options">
                                         <cfloop query="#getProductTag#">
                                             <div class="form-group form-check mb-0">
-                                                <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" id="filter-type-0">
-                                                <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-0"> #getProductTag.tagName#</label>
-                                            </div>                        
+                                                <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" id="filter-type-#getProductTag.PkTagId#">
+                                                <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-#getProductTag.PkTagId#"> #getProductTag.tagName#</label>
+                                            </div>
                                         </cfloop>               
                                     </div>
                                 </div>
@@ -556,25 +556,30 @@
             var #toScript('#pageNum#','pageNum')#;
             //var #toScript('#id#','id')#;
             var value = "";
+            let productContainer = $('##productContainer').html();
             $('.productTag').on('change', function(){
                 var id = $(this).attr('data-id');
                 value = $(':checked').map(function(){ return $(this).val(); }).get().join();
-                console.log(value);
-                /* pushTag(); */
-                $.ajax({  
-                    url: '../ajaxFilterProduct.cfm?productTagValue='+value, 
-                    data: {id:id},
-                    type: 'GET',  
-                    success: function(result) {
-                        console.log(result);
-                       /*  if (data.success == true) { */
-                            //window.location = 'index.cfm?pg=category&id='+id+'&pageNum='+pageNum+'&tags='+value;
-                            $('##productContainer').html(result);     
-                       /*  } */ /* else{
-                            window.location = 'index.cfm?pg=category&id='+id+'&pageNum='+pageNum;
-                        } */
-                    }  
-                });
+                if (value.length === 0) {
+                    $('##productContainer').html(productContainer);
+                } else {
+                    /* pushTag(); */
+                    $.ajax({  
+                        url: '../ajaxFilterProduct.cfm?productTagValue='+value, 
+                        data: {id:id},
+                        type: 'GET',  
+                        success: function(result) {
+                            if (result.success) {
+                                $('##productContainer').html(result.html);
+                            }
+                           /*  if (data.success == true) { */
+                                //window.location = 'index.cfm?pg=category&id='+id+'&pageNum='+pageNum+'&tags='+value;
+                           /*  } */ /* else{
+                                window.location = 'index.cfm?pg=category&id='+id+'&pageNum='+pageNum;
+                            } */
+                        }  
+                    });
+                }
             });
         </script> 
 </cfoutput>

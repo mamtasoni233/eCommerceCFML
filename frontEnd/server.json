@@ -1,0 +1,14 @@
+{
+    "app":{
+        "cfengine":"lucee@5.3.10+97"
+    },
+    "name":"frontEnd",
+    "web":{
+        "http":{
+            "port":"50848"
+        },
+        "rewrites":{
+            "enable":"true"
+        }
+    }
+}
