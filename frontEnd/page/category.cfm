@@ -88,19 +88,33 @@
             height: 300px;
             object-fit: contain;
         }
-        .ajax-loader {
-           /*  visibility: hidden; */
+        /* .ajax-loader {
+            visibility: hidden;
             background-color: rgba(255,255,255,0.7);
             position: absolute;
             z-index: +100 !important;
             width: 100%;
             height:100%;
         }
-
         .ajax-loader img {
             position: relative;
             top:10%;
             left:30%;
+        } */
+        ##loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+           /*  text-align: center; */
+            background-color: rgba(255,255,255,0.7);
+            z-index: +100 !important;
+        }
+
+        ##loading-image {
+            position: relative;
+            top:10%;
+            left:30%;
+            /* z-index: 100; */
         }
     </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
@@ -444,8 +458,11 @@
                 <!-- / Top Toolbar-->
                 <!-- Products-->
                 <div class="row g-4 mb-5">
-                    <div class="ajax-loader d-none">
+                    <!--- <div class="ajax-loader">
                         <img src="../assets/images/1amw.gif" class="img-responsive" id="loading-image" style="width:50px; background:transparent" />
+                    </div> --->
+                    <div id="loading" class="d-none">
+                        <img src="../assets/images/1amw.gif" class="img-responsive" id="loading-image" style="width:80px; background:transparent" />
                     </div>
                     <cfif getProductPaging.recordCount GT 0>
                         <cfloop query="#getProductPaging#">
@@ -576,43 +593,52 @@
             <!-- / Category Products-->
         </div>
     </div>
-
-    <script> 
-        var #toScript('#pageNum#','pageNum')#;
-        //var #toScript('#id#','id')#;
-        $(document).ready( function () {
+    <script>
+        $(document).ready( function () { 
+            var #toScript('#pageNum#','pageNum')#;
+            hideLoader();
+            /* $(window).load(function(){
+                showLoader();
+            }); */
             var value = "";
-            /*  $('.ajax-loader').show(); */
-        
+            let productContainer = $('##productContainer').html();
             $('.productTag').on('change', function(){
                 var id = $(this).attr('data-id');
                 value = $(':checked').map(function(){ return $(this).val(); }).get().join();
-                console.log(value);
-                /* pushTag(); */
-                $.ajax({  
-                    url: '../ajaxFilterProduct.cfm?productTagValue='+value, 
-                    data: {id:id},
-                    type: 'GET', 
-                    /* beforeSend: function(){
-                        $('.ajax-loader').css("visibility", "visible");
-                    },  */
-                    success: function(result) {
-                        console.log(result);
-                            $('##productContainer').html(result.html);     
-                        /*  } */ /* else{
-                            window.location = 'index.cfm?pg=category&id='+id+'&pageNum='+pageNum;
-                        } */
-                    },/* 
-                    complete: function(){
-                        $('.ajax-loader').css("visibility", "hidden");
-                    }  */ 
-                });
+                if (value.length === 0) {
+                    $('##productContainer').html(productContainer);
+                } else {
+                    $.ajax({  
+                        url: '../ajaxFilterProduct.cfm?productTagValue='+value, 
+                        data: {id:id},
+                        type: 'GET', 
+                        beforeSend: function(){
+                            $('##loading').removeClass('d-none');
+                        }, 
+                        success: function(result) {
+                            if (result.success) {
+                                $('##productContainer').html(result.html);
+                            }
+                        },
+                        complete: function(){
+                            $('##loading').addClass('d-none');
+                        }  
+                    });
+                }  
             });
-            $('.ajax-loader').bind('ajaxStart', function(){
-                $(this).removeClass('d-none');
-            }).bind('ajaxStop', function(){
-                $(this).addClass('d-none');
-            });
+            /* $(document).ajaxStart(function(){
+                $("##loading").removeClass('d-none');
+            }).ajaxStop(function(){
+                $("##loading").addClass('d-none');
+            }); */
         });
+        /* function showLoader()
+        {
+            $("##loader").removeClass('d-none');
+        }
+        function hideLoader()
+        {
+            $("##loader").addClass('d-none');
+        } */
     </script> 
 </cfoutput>
