@@ -166,6 +166,9 @@
                 , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
                 , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 , updatedDate =  <cfqueryparam value = "#CreateODBCDateTime(now())#" cfsqltype = "cf_sql_datetime">
+                <cfif structKeyExists(form, "password") AND len( trim(form.password ) ) GT 0>
+                    , password = <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
+                </cfif>
                 WHERE PkCustomerId = <cfqueryparam value = "#customerId#" cfsqltype = "cf_sql_integer">
             </cfquery>
             <cfset session.customer = {}>
@@ -179,7 +182,9 @@
                     , email
                     , dob
                     , gender
-                    , password
+                    <cfif structKeyExists(form, "password") AND len( trim(form.password ) ) GT 0>
+                        , password
+                    </cfif>
                     , isActive 
                     , createdBy
                     , createdDate
@@ -189,7 +194,9 @@
                     , <cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
                     , <cfqueryparam value = "#dob#" cfsqltype = "cf_sql_date">
                     , <cfqueryparam value = "#form.gender#" cfsqltype = "cf_sql_bit">
-                    , <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
+                    <cfif structKeyExists(form, "password") AND len( trim(form.password ) ) GT 0>
+                        , <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
+                    </cfif>
                     , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
                     , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_varchar">
                     , <cfqueryparam value = "#CreateODBCDateTime(now())#" cfsqltype = "cf_sql_timestamp">
@@ -201,8 +208,8 @@
             <cflocation url="index.cfm?pg=customer&s=customerList" addtoken="false">
         </cfif>
         <cfif structKeyExists(form, "password") AND len( trim(form.password ) ) GT 0>
-            <cfquery name="qryCategoryUpdateImg" result="qryResultCategoryUpdateImg">
-                UPDATE category SET
+            <cfquery name="qryPassword" result="qryResultPassword">
+                UPDATE customer SET
                 password = <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
                 WHERE PkCustomerId = <cfqueryparam value="#customerId#" cfsqltype="cf_sql_integer">
             </cfquery>

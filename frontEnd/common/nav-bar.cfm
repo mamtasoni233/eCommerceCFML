@@ -103,13 +103,13 @@
                                                             <ul class="list-unstyled">
                                                                 <cfloop array="#idx.child#" index="child">
                                                                     <li class="dropdown-list-item">
-                                                                        <h6 class="dropdown-heading mb-2 mt-2 fw-bold">
+                                                                        <h6 class="fw-bolder mb-2 mt-2 fw-bold">
                                                                             #child.catName#
                                                                         </h6>
                                                                         <ul class="list-unstyled">
                                                                             <cfloop array="#child.child#" index="subChild">
                                                                                 <li class="dropdown-list-item">
-                                                                                    <a class="dropdown-item m-0 p-0" href="index.cfm?pg=category&id=#subChild.PkCategoryId#">
+                                                                                    <a class="dropdown-item" href="index.cfm?pg=category&id=#subChild.PkCategoryId#">
                                                                                         #subChild.catName#
                                                                                     </a>
                                                                                 </li>
