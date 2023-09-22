@@ -598,9 +598,7 @@
                     },  */
                     success: function(result) {
                         console.log(result);
-                        /*  if (data.success == true) { */
-                            //window.location = 'index.cfm?pg=category&id='+id+'&pageNum='+pageNum+'&tags='+value;
-                            $('##productContainer').html(result);     
+                            $('##productContainer').html(result.html);     
                         /*  } */ /* else{
                             window.location = 'index.cfm?pg=category&id='+id+'&pageNum='+pageNum;
                         } */

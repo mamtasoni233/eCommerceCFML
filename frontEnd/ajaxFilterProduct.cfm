@@ -1,6 +1,6 @@
-<!--- <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
+<cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
-<cfcontent reset="true" type="application/json" /> --->
+<cfcontent reset="true" type="application/json" />
 
 <cfparam name="PkProductId" default="" />
 <cfparam name="FkCategoryId" default="" />
@@ -57,8 +57,8 @@
 			return loc.DataArray;
     </cfscript>
 </cffunction>
-<!--- <cfset data = {}>
-<cfset data['success'] = true> --->
+<cfset data = {}>
+<cfset data['success'] = true>
 <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
 <cfif structKeyExists(url, "productTagValue") AND url.productTagValue GT 0>
     <cfquery name="getProduct">
@@ -92,7 +92,7 @@
         LIMIT #startRow#, #maxRows# 
     </cfquery>
     
-    <cfsavecontent  variable="data">
+    <cfsavecontent variable="data['html']">
         <cfoutput>
             <style>
                 img {
@@ -248,8 +248,8 @@
             <!-- / Pagination-->
         </cfoutput>
     </cfsavecontent>
-    <cfset output =  data/>
-    <cfoutput>#rereplace(output,'//','')#</cfoutput>
+    <cfset output =  serializeJSON(data)/>
+    <cfoutput>#output#</cfoutput>
 </cfif>
 
 
