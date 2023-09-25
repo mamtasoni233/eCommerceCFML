@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2023 at 02:59 PM
+-- Generation Time: Sep 25, 2023 at 12:03 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -195,8 +195,8 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `product_tags`, `productNa
 (5, 7, '1,5', 'Samsung Z-fold ', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
 (6, 18, '9', 'Biscuits', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-21 16:46:16', 1),
 (7, 21, '10', 'Meggie', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-09-15 15:15:19', 1),
-(8, 18, '1,9', 'Sona Namkeen', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-09-21 16:47:06', 1),
-(9, 20, '8', 'Taj Mahal Tea', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-09-21 10:50:51', 1),
+(8, 19, '4', 'Sona Namkeen', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-09-25 11:54:41', 1),
+(9, 20, '8', 'Taj Mahal Tea', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-09-25 12:48:12', 1),
 (10, 18, '1', 'crack jack', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:06:16', NULL),
 (11, 18, '1', 'Hide & seek', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, '1', 'Oreo', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
@@ -249,7 +249,8 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (39, 16, 'oreo.jpeg', b'1', b'1', '2023-09-18 17:10:44', 1),
 (40, 17, 'oreo_6wpihl66wp5r.jpeg', b'1', b'1', '2023-09-18 17:11:04', 1),
 (41, 14, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf_18c5p6s3pjp5.jpg', b'1', b'1', '2023-09-18 17:11:38', 1),
-(42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'1', b'1', '2023-09-21 10:50:37', 1);
+(42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'1', b'1', '2023-09-21 10:50:37', 1),
+(43, 9, 'marketing-creative-collage-with-phone.jpg', b'0', b'1', '2023-09-25 12:48:13', 1);
 
 -- --------------------------------------------------------
 
@@ -385,7 +386,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `product_tags`
