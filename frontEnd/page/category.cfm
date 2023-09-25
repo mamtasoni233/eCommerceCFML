@@ -88,41 +88,10 @@
             height: 300px;
             object-fit: contain;
         }
-        /* .ajax-loader {
-            visibility: hidden;
-            background-color: rgba(255,255,255,0.7);
-            position: absolute;
-            z-index: +100 !important;
-            width: 100%;
-            height:100%;
-        }
-        .ajax-loader img {
-            position: relative;
-            top:10%;
-            left:30%;
-        } */
-        <!--- ##loading {
-            position: absolute;
-            width: 100%;
-            height:100%;
-            /*  left: 0%;
-            top:50%; */
-            /* text-align: center; */
-            background-color: rgba(255,255,255,0.7);
-            z-index: 100 !important;
-             /* display:none; */
-        } --->
-
-        <!--- ##loading img {
-            position: relative;
-            top:20%;
-            left:30%;
-            width: 80px;
-        } --->
         ##overlay{	
             position: fixed;
             top: 0;
-            z-index: 100;
+            z-index: +100 !important;
             width: 100%;
             height:100%;
             display: none;
@@ -337,7 +306,7 @@
                                 <div class="filter-options">
                                     <cfloop query="#getProductTag#">
                                         <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" id="filter-type-#getProductTag.PkTagId#" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked="true"</cfif>>
+                                            <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" data-catId ="#url.id#" id="filter-type-#getProductTag.PkTagId#" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked="true"</cfif>>
                                             <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-#getProductTag.PkTagId#"> #getProductTag.tagName#</label>
                                         </div>
                                     </cfloop>               
@@ -451,6 +420,7 @@
 
             <!-- Category Products-->
             <div id="productContainer" class="col-12 col-lg-9 transition-fade">
+                
                 <!-- Top Toolbar-->
                 <div class="mb-4 d-md-flex justify-content-between align-items-center">
                     <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0">
@@ -497,12 +467,18 @@
                 <!-- / Top Toolbar-->
                 <!-- Products-->
                 <div class="row g-4 mb-5">
+                    <!--- <div id="overlay">
+                        <div class="cv-spinner">
+                            <span class="spinner"></span>
+                        </div>
+                    </div> --->
                     <!--- <div class="ajax-loader">
                         <img src="../assets/images/1amw.gif" class="img-responsive" id="loading-image" style="width:50px; background:transparent" />
                     </div> --->
                     <!---  <div id="loading" class="d-none">
                         <img src="../assets/images/loading.gif" class="img-responsive" id="loading-image" />
                     </div> --->
+                    
                     <cfif getProductPaging.recordCount GT 0>
                         <cfloop query="#getProductPaging#">
                             <cfquery name="getProductImage">
@@ -635,78 +611,53 @@
     <script>
         $(document).ready( function () { 
             var #toScript('#pageNum#','pageNum')#;
+            hideLoader();
             $(document).ajaxSend(function() {
-                //$("##overlay").fadeIn(300);
-                $("##overlay").show();
+                showLoader();
             });
             var value = "";
             let productContainer = $('##productContainer').html();
-            // $('##loading').bind('ajaxStart', function(){
-            //     setTimeout(function(){ 
-            //         $(this).removeClass('d-none')
-            //     },500)
-            // }).bind('ajaxStop', function(){
-            //     setTimeout(function(){ 
-            //         $(this).addClass('d-none')
-            //     },500)
-            // });
-            // $(document).ajaxStart(function() {
-            //     setTimeout(function(){ 
-            //         $(this).removeClass('d-none');
-            //     },500)// show the gif image when ajax starts
-            // }).ajaxStop(function() {
-            //     setTimeout(function(){ 
-            //         $(this).addClass('d-none');
-            //     },500) // hide the gif image when ajax completes
-            // });
             $('.productTag').on('change', function(){
+                showLoader();
                 var id = $(this).attr('data-id');
+                var catId = $(this).attr('data-catId');
                 value = $(':checked').map(function(){ return $(this).val(); }).get().join();
                 if (value.length === 0) {
                     $('##productContainer').html(productContainer);
+                    setTimeout(function(){
+                        hideLoader();
+                    },500);
                 } else {
-                    var ajCall = $.ajax({  
+                    $.ajax({  
                         url: '../ajaxFilterProduct.cfm?productTagValue='+value, 
-                        data: {id:id},
-                        type: 'GET', 
+                        data: {id:id, catId:catId},
+                        type: 'GET',
                         success: function(result) {
                             if (result.success) {
                                 $('##productContainer').html(result.html);
                             }
-                            //setTimeout(function(){$('##loading').removeClass('d-none');},500)
                         },
                         beforeSend: function(){
-                            // setTimeout(function(){ $('##loading').removeClass('d-none');},500)
                             setTimeout(function(){
-                                //$("##overlay").fadeOut(500);
-                                $("##overlay").show();
+                                showLoader();
                             },500);
                         }, 
                         complete: function(){
-                            // setTimeout(function(){$('##loading').addClass('d-none');},500)
                             setTimeout(function(){
-                                //$("##overlay").fadeOut(500);
-                                $("##overlay").hide();
+                                hideLoader();
                             },500);
                         }  
-                    });/* .done(function() {
-                        setTimeout(function(){
-                            //$("##overlay").fadeOut(300);
-                            $("##overlay").hide();
-                        },500);
-                    }); */
-                        
+                    });  
                 }   
             });
-            
         });
-        /* function showLoader()
+        function showLoader()
         {
-            $("##loader").removeClass('d-none');
+            $("##overlay").show()
         }
         function hideLoader()
         {
-            $("##loader").addClass('d-none');
-        } */
+            $("##overlay").hide()
+        }
     </script> 
 </cfoutput>
