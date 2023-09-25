@@ -101,7 +101,7 @@
             top:10%;
             left:30%;
         } */
-        ##loading {
+        <!--- ##loading {
             position: absolute;
             width: 100%;
             height:100%;
@@ -109,18 +109,54 @@
             top:50%; */
             /* text-align: center; */
             background-color: rgba(255,255,255,0.7);
-            z-index: +100 !important;
-        }
+            z-index: 100 !important;
+             /* display:none; */
+        } --->
 
-        ##loading img {
+        <!--- ##loading img {
             position: relative;
             top:20%;
             left:30%;
             width: 80px;
-            /* z-index: 100; */
+        } --->
+        ##overlay{	
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            height:100%;
+            display: none;
+            background: rgba(0,0,0,0.6);
+        }
+        .cv-spinner {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;  
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px ##ddd solid;
+            border-top: 4px ##2e93e6 solid;
+            border-radius: 50%;
+            animation: sp-anime 0.8s infinite linear;
+        }
+        @keyframes sp-anime {
+            100% { 
+                transform: rotate(360deg); 
+            }
+        }
+        .is-hide{
+            display:none;
         }
     </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
+    <div id="overlay">
+        <div class="cv-spinner">
+            <span class="spinner"></span>
+        </div>
+    </div>
     <!-- Category Top Banner -->
     <div class="py-6 bg-img-cover bg-dark bg-overlay-gradient-dark position-relative overflow-hidden mb-4 bg-pos-center-center"
         style="background-image: url('../assets/images/banners/banner-1.jpg');">
@@ -464,9 +500,9 @@
                     <!--- <div class="ajax-loader">
                         <img src="../assets/images/1amw.gif" class="img-responsive" id="loading-image" style="width:50px; background:transparent" />
                     </div> --->
-                    <div id="loading" class="d-none">
+                    <!---  <div id="loading" class="d-none">
                         <img src="../assets/images/loading.gif" class="img-responsive" id="loading-image" />
-                    </div>
+                    </div> --->
                     <cfif getProductPaging.recordCount GT 0>
                         <cfloop query="#getProductPaging#">
                             <cfquery name="getProductImage">
@@ -543,7 +579,7 @@
                 <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                     <ul class="pagination">
                         <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                            <a class="page-link prev" href=<cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)> "index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#getProductTag.PkTagId#" <cfelse> "index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#"</cfif> data-id="#pageNum#" >
+                            <a class="page-link prev" <cfif structKeyExists(url, 'tags')> href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#url.tags#"<cfelse> href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#"</cfif>data-id="#pageNum#" >
                                 <i class="ri-arrow-left-line align-bottom"></i>
                                 Prev
                             </a>
@@ -552,7 +588,7 @@
                     <ul class="pagination">
                         <cfloop from="1" to="#totalPages#" index="i">
                             <li class="page-item  <cfif pageNum EQ i>active</cfif> mx-1">
-                                <a class="page-link" href=<cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)> "index.cfm?pg=category&id=#url.id#&pageNum=#i#&tags=#getProductTag.PkTagId#"<cfelse>"index.cfm?pg=category&id=#url.id#&pageNum=#i#"</cfif>>
+                                <a class="page-link" <cfif structKeyExists(url, 'tags')>href="index.cfm?pg=category&id=#url.id#&pageNum=#i#&tags=#url.tags#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#i#"</cfif>>
                                     #i#
                                 </a>
                             </li>
@@ -560,7 +596,7 @@
                     </ul>
                     <ul class="pagination">
                         <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                            <a class="page-link next" href=<cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)> "index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#getProductTag.PkTagId#"<cfelse>"index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#"</cfif>>Next 
+                            <a class="page-link next" <cfif structKeyExists(url, 'tags')>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#url.tags#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#"</cfif>>Next 
                                 <i class="ri-arrow-right-line align-bottom"></i>
                             </a>
                         </li>
@@ -599,50 +635,70 @@
     <script>
         $(document).ready( function () { 
             var #toScript('#pageNum#','pageNum')#;
-            //hideLoader();
-            /* $(window).load(function(){
-                $setTimeout(function(){('##loading').removeClass('d-none');},2000);
-            }); */
-            //$('##loading').removeClass('d-none');
-            //$('##loading').hide();
+            $(document).ajaxSend(function() {
+                //$("##overlay").fadeIn(300);
+                $("##overlay").show();
+            });
             var value = "";
             let productContainer = $('##productContainer').html();
+            // $('##loading').bind('ajaxStart', function(){
+            //     setTimeout(function(){ 
+            //         $(this).removeClass('d-none')
+            //     },500)
+            // }).bind('ajaxStop', function(){
+            //     setTimeout(function(){ 
+            //         $(this).addClass('d-none')
+            //     },500)
+            // });
+            // $(document).ajaxStart(function() {
+            //     setTimeout(function(){ 
+            //         $(this).removeClass('d-none');
+            //     },500)// show the gif image when ajax starts
+            // }).ajaxStop(function() {
+            //     setTimeout(function(){ 
+            //         $(this).addClass('d-none');
+            //     },500) // hide the gif image when ajax completes
+            // });
             $('.productTag').on('change', function(){
                 var id = $(this).attr('data-id');
                 value = $(':checked').map(function(){ return $(this).val(); }).get().join();
                 if (value.length === 0) {
                     $('##productContainer').html(productContainer);
                 } else {
-                    $.ajax({  
+                    var ajCall = $.ajax({  
                         url: '../ajaxFilterProduct.cfm?productTagValue='+value, 
                         data: {id:id},
                         type: 'GET', 
-                        beforeSend: function(){
-                            setTimeout(function(){ $('##loading').removeClass('d-none');},2000);
-                            //setTimeout(function(){ $('##loading').show();},2000);
-                        }, 
                         success: function(result) {
                             if (result.success) {
                                 $('##productContainer').html(result.html);
                             }
+                            //setTimeout(function(){$('##loading').removeClass('d-none');},500)
                         },
+                        beforeSend: function(){
+                            // setTimeout(function(){ $('##loading').removeClass('d-none');},500)
+                            setTimeout(function(){
+                                //$("##overlay").fadeOut(500);
+                                $("##overlay").show();
+                            },500);
+                        }, 
                         complete: function(){
-                            setTimeout(function(){('##loading').addClass('d-none');},2000);
-                            //setTimeout(function(){ $('##loading').hide();},2000)
+                            // setTimeout(function(){$('##loading').addClass('d-none');},500)
+                            setTimeout(function(){
+                                //$("##overlay").fadeOut(500);
+                                $("##overlay").hide();
+                            },500);
                         }  
-                    });
-                    
+                    });/* .done(function() {
+                        setTimeout(function(){
+                            //$("##overlay").fadeOut(300);
+                            $("##overlay").hide();
+                        },500);
+                    }); */
+                        
                 }   
             });
-            /*  $('##loading').bind('ajaxStart', function(){
-                setTimeout(function(){ 
-                    $(this).addClass('d-none');
-                },2000)
-            }).bind('ajaxStop', function(){
-                setTimeout(function(){ 
-                    $(this).removeClass('d-none');
-                },2000)
-            }); */
+            
         });
         /* function showLoader()
         {

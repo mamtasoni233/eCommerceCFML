@@ -66,8 +66,7 @@
         FROM product P
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
-        WHERE  1 = 1
-        AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
+        WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
         AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
     </cfquery>
     <cfquery name="getProduct1">
@@ -75,23 +74,21 @@
         FROM product P
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
-        WHERE  1 = 1
-        AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
+        WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
         AND C.parentCategoryId = <cfqueryparam value="#getProduct.parentCategoryId#" cfsqltype = "cf_sql_integer"> 
         AND P.product_tags IN (<cfqueryparam value=#productTagValue# list="true">)
-    </cfquery>
+    </cfquery>     
     <cfset totalPages = ceiling( getProduct1.recordCount/maxRows )>
     <cfquery name="getProductBaseedTag">
-        SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
+        SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.product_tags, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
         FROM product P 
         INNER JOIN category C ON P.FkCategoryId = C.PkCategoryId 
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
-        WHERE 1 = 1 AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
+        WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
         AND C.parentCategoryId = <cfqueryparam value="#getProduct.parentCategoryId#" cfsqltype = "cf_sql_integer"> 
         AND P.product_tags IN (<cfqueryparam value=#productTagValue# list="true">)
         LIMIT #startRow#, #maxRows# 
     </cfquery>
-    
     <cfsavecontent variable="data['html']">
         <cfoutput>
             <style>
@@ -222,7 +219,7 @@
             <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                        <a class="page-link prev"  href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#url.productTagValue#" data-id="#pageNum#" >
+                        <a class="page-link prev" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#url.productTagValue#"<!--- <cfif structKeyExists(url, 'productTagValue')> href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#url.productTagValue#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#"</cfif> ---> data-id="#pageNum#" >
                             <i class="ri-arrow-left-line align-bottom"></i>
                             Prev
                         </a>
@@ -230,8 +227,8 @@
                 </ul>
                 <ul class="pagination">
                     <cfloop from="1" to="#totalPages#" index="i">
-                        <li class="page-item  <cfif pageNum EQ i>active</cfif> mx-1">
-                            <a class="page-link" href="index.cfm?pg=category&id=#url.id#&pageNum=#i#&tags=#url.productTagValue#">
+                        <li class="page-item <cfif pageNum EQ i>active</cfif> mx-1">
+                            <a class="page-link" href="index.cfm?pg=category&id=#url.id#&pageNum=#i#&tags=#url.productTagValue#"<!--- <cfif structKeyExists(url, 'productTagValue')> href="index.cfm?pg=category&id=#url.id#&pageNum=#i#&tags=#url.productTagValue#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#i#" </cfif> --->>
                                 #i#
                             </a>
                         </li>
@@ -239,7 +236,7 @@
                 </ul>
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                        <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#url.productTagValue#">Next 
+                        <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#url.productTagValue#"<!--- <cfif structKeyExists(url, 'productTagValue')>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#url.productTagValue#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#"</cfif> --->>Next 
                             <i class="ri-arrow-right-line align-bottom"></i>
                         </a>
                     </li>
