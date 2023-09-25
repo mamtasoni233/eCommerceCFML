@@ -90,7 +90,8 @@
         }
         ##overlay{	
             position: fixed;
-            top: 0;
+            top: 30%;
+            left:29%;
             z-index: +100 !important;
             width: 100%;
             height:100%;
@@ -116,16 +117,13 @@
                 transform: rotate(360deg); 
             }
         }
-        .is-hide{
-            display:none;
-        }
     </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
-    <div id="overlay">
+    <!--- <div id="overlay">
         <div class="cv-spinner">
-            <span class="spinner"></span>
+            <span class="spinner me-5"></span>
         </div>
-    </div>
+    </div> --->
     <!-- Category Top Banner -->
     <div class="py-6 bg-img-cover bg-dark bg-overlay-gradient-dark position-relative overflow-hidden mb-4 bg-pos-center-center"
         style="background-image: url('../assets/images/banners/banner-1.jpg');">
@@ -417,8 +415,12 @@
                 </div>
             </div>
             <!-- / Category Aside/Sidebar -->
-
             <!-- Category Products-->
+            <div id="overlay">
+                <div class="cv-spinner  mx-auto">
+                    <span class="spinner"></span>
+                </div>
+            </div>
             <div id="productContainer" class="col-12 col-lg-9 transition-fade">
                 
                 <!-- Top Toolbar-->
@@ -550,7 +552,6 @@
                     </cfif>
                 </div>
                 <!-- / Products-->
-
                 <!-- Pagination-->
                 <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                     <ul class="pagination">

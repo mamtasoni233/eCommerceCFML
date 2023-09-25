@@ -68,7 +68,6 @@
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
         AND P.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype = "cf_sql_integer">
-        AND P.product_tags IN (<cfqueryparam value=#productTagValue# list="true">)
     </cfquery>
     <cfquery name="getProduct1">
         SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
@@ -99,8 +98,6 @@
                     object-fit: contain;
                     }
             </style>
-            <cfdump  var="#url.id#">
-            <cfdump  var="#url.catId#">
             <!-- Top Toolbar-->
                 <div class="mb-4 d-md-flex justify-content-between align-items-center">
                     <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0">
