@@ -450,14 +450,14 @@
                         <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0 d-none" id="productTypeContainer">
                             <small class="d-inline-block fw-bolder">Filtered by:</small>
                             <ul class="list-unstyled d-inline-block mb-0 ms-2">
-                                <!--- <cfloop query="#getProductTag#">
-                                    <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)> --->
+                                <cfloop query="#getProductTag#">
+                                    <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
                                         <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small productType" id="productType" >
-                                            <!--- #getProductTag.tagName# --->
+                                            #getProductTag.tagName#
                                             <i class="ri-close-circle-line align-bottom ms-1"></i>
                                         </li>
-                                        <!--- </cfif>
-                                    </cfloop> --->
+                                        </cfif>
+                                    </cfloop>
                                     <!--- Type: Slip On --->
                             </ul>
                             <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small">
