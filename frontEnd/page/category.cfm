@@ -449,15 +449,15 @@
                     <div class="mb-4 d-md-flex justify-content-between align-items-center" >
                         <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0 d-none" id="productTypeContainer">
                             <small class="d-inline-block fw-bolder">Filtered by:</small>
-                            <ul class="list-unstyled d-inline-block mb-0 ms-2">
-                                <cfloop query="#getProductTag#">
+                            <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
+                                <!--- <cfloop query="#getProductTag#">
                                     <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
                                         <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small productType" id="productType" >
                                             #getProductTag.tagName#
                                             <i class="ri-close-circle-line align-bottom ms-1"></i>
                                         </li>
                                         </cfif>
-                                    </cfloop>
+                                    </cfloop> --->
                                     <!--- Type: Slip On --->
                             </ul>
                             <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small">
@@ -645,7 +645,7 @@
                 var catId = $(this).attr('data-catId');
                 var type = $(this).attr('data-type');
                 value = $(':checked').map(function(){ return $(this).val(); }).get().join(); 
-                console.log("type", type)
+                console.log("type", type);
                 if (value.length === 0) {
                     setTimeout(function(){
                         showLoader();
@@ -660,8 +660,11 @@
                         hideLoader();
                     },500);
                 } else {
-                    
                     $('##productTypeContainer').removeClass('d-none');
+                    // for (var i; i < type.length; i++) {
+                        // console.log('i',i);
+                        $('##productTypeUl').append('<li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small productType">'+type+' <i class="ri-close-circle-line align-bottom ms-1"></i></li>');
+                    // }
                    /*  url = currentUrl +'&tags='+ value; */
                     // function ajaxFilter() {
                         // $.ajax({  
