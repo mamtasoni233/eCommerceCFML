@@ -60,7 +60,7 @@
 <cfset data = {}>
 <cfset data['success'] = true>
 <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
-<cfif structKeyExists(url, "productTagValue") AND url.productTagValue GT 0>
+<!--- <cfif structKeyExists(url, "productTagValue") AND url.productTagValue GT 0> --->
     <!--- <cfquery name="getProduct">
         SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
         FROM product P
@@ -75,12 +75,14 @@
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
         AND P.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype = "cf_sql_integer">
-        AND (
-            P.product_tags LIKE (<cfqueryparam value="%#url.productTagValue#%">)
-            <cfloop list="#productTagValue#" item="item">
-                OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
-            </cfloop>
-        )
+        <cfif len(url.productTagValue) GT 0>
+            AND (
+                P.product_tags LIKE (<cfqueryparam value="%#url.productTagValue#%">)
+                <cfloop list="#productTagValue#" item="item">
+                    OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
+                </cfloop>
+            )
+        </cfif>
     </cfquery>
     <cfset totalPages = ceiling( getProduct1.recordCount/maxRows )>
     <cfquery name="getProductBaseedTag">
@@ -89,16 +91,24 @@
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
         AND P.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype = "cf_sql_integer">
-        AND (
-            P.product_tags LIKE (<cfqueryparam value="%#url.productTagValue#%">)
-            <cfloop list="#productTagValue#" item="item">
-                OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
-            </cfloop>
-        )
+        <cfif len(url.productTagValue) GT 0>
+            AND (
+                P.product_tags LIKE (<cfqueryparam value="%#url.productTagValue#%">)
+                <cfloop list="#productTagValue#" item="item">
+                    OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
+                </cfloop>
+            )
+        </cfif>
         LIMIT #startRow#, #maxRows#
     </cfquery>
     <cfsavecontent variable="data['html']">
         <cfoutput>
+            <cfquery name="qryGetTagName" dbtype="query">
+                SELECT tagName
+                FROM getProductBaseedTag
+                WHERE PkTagId IN (<cfqueryparam value="#url.productTagValue#" list="true">)
+            </cfquery>
+            <cfdump var='#qryGetTagName#'>
             <style>
                 img {
                     width: 200px;
@@ -111,9 +121,9 @@
                     <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0">
                         <small class="d-inline-block fw-bolder">Filtered by:</small>
                         <ul class="list-unstyled d-inline-block mb-0 ms-2">
-                            <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small">Type: Slip On 
+                            <!--- <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small">Type: Slip On 
                                 <i class="ri-close-circle-line align-bottom ms-1"></i>
-                            </li>
+                            </li> --->
                         </ul>
                         <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small">
                             Clear All
@@ -255,6 +265,6 @@
     </cfsavecontent>
     <cfset output =  serializeJSON(data)/>
     <cfoutput>#output#</cfoutput>
-</cfif>
+<!--- </cfif> --->
 
 
