@@ -61,32 +61,40 @@
 <cfset data['success'] = true>
 <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
 <cfif structKeyExists(url, "productTagValue") AND url.productTagValue GT 0>
-    <cfquery name="getProduct">
+    <!--- <cfquery name="getProduct">
         SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
         FROM product P
         LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
         AND P.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype = "cf_sql_integer">
-    </cfquery>
+    </cfquery> --->
     <cfquery name="getProduct1">
-        SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
+        SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
         FROM product P
-        LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
-        AND C.parentCategoryId = <cfqueryparam value="#getProduct.parentCategoryId#" cfsqltype = "cf_sql_integer"> 
-        AND P.product_tags IN (<cfqueryparam value=#productTagValue# list="true">)
-    </cfquery>     
+        AND P.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype = "cf_sql_integer">
+        AND (
+            P.product_tags LIKE (<cfqueryparam value="%#url.productTagValue#%">)
+            <cfloop list="#productTagValue#" item="item">
+                OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
+            </cfloop>
+        )
+    </cfquery>
     <cfset totalPages = ceiling( getProduct1.recordCount/maxRows )>
     <cfquery name="getProductBaseedTag">
-        SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.product_tags, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
-        FROM product P 
-        INNER JOIN category C ON P.FkCategoryId = C.PkCategoryId 
+        SELECT P.PkProductId, P.product_tags, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
+        FROM product P
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
-        AND C.parentCategoryId = <cfqueryparam value="#getProduct.parentCategoryId#" cfsqltype = "cf_sql_integer"> 
-        AND P.product_tags IN (<cfqueryparam value=#productTagValue# list="true">)
+        AND P.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype = "cf_sql_integer">
+        AND (
+            P.product_tags LIKE (<cfqueryparam value="%#url.productTagValue#%">)
+            <cfloop list="#productTagValue#" item="item">
+                OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
+            </cfloop>
+        )
         LIMIT #startRow#, #maxRows#
     </cfquery>
     <cfsavecontent variable="data['html']">
@@ -145,7 +153,7 @@
             <!-- Products-->
             <div class="row g-4 mb-5">
                 <cfif getProductBaseedTag.recordCount GT 0>
-                    <cfloop query="#getProductBaseedTag#">
+                    <cfloop query="getProductBaseedTag">
                         <cfquery name="getProductImage">
                             SELECT image, isDefault
                             FROM product_image
@@ -155,7 +163,7 @@
                             <!-- Card Product-->
                             <div class="card position-relative h-100 card-listing hover-trigger">
                                 <div class="card-header d-flex align-self-center">
-                                    <cfloop query="#getProductImage#">
+                                    <cfloop query="getProductImage">
                                         <cfif getProductImage.isDefault GT 0>
                                             <picture class="position-relative overflow-hidden d-block bg-light">
                                                 <img class="vh-25 img-fluid position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="">
@@ -219,7 +227,7 @@
             <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                        <a class="page-link prev" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum-1#&tags=#url.productTagValue#"<!--- <cfif structKeyExists(url, 'productTagValue')> href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#url.productTagValue#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#"</cfif> ---> data-id="#pageNum#" >
+                        <a class="page-link prev" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif>" data-id="#pageNum#" >
                             <i class="ri-arrow-left-line align-bottom"></i>
                             Prev
                         </a>
@@ -228,7 +236,7 @@
                 <ul class="pagination">
                     <cfloop from="1" to="#totalPages#" index="i">
                         <li class="page-item <cfif pageNum EQ i>active</cfif> mx-1">
-                            <a class="page-link" href="index.cfm?pg=category&id=#url.catId#&pageNum=#i#&tags=#url.productTagValue#"<!--- <cfif structKeyExists(url, 'productTagValue')> href="index.cfm?pg=category&id=#url.id#&pageNum=#i#&tags=#url.productTagValue#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#i#" </cfif> --->>
+                            <a class="page-link" href="index.cfm?pg=category&id=#url.catId#&pageNum=#i#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif>">
                                 #i#
                             </a>
                         </li>
@@ -236,7 +244,7 @@
                 </ul>
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                        <a class="page-link next" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum+1#&tags=#url.productTagValue#"<!--- <cfif structKeyExists(url, 'productTagValue')>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#url.productTagValue#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#"</cfif> --->>Next 
+                        <a class="page-link next" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif>">Next 
                             <i class="ri-arrow-right-line align-bottom"></i>
                         </a>
                     </li>

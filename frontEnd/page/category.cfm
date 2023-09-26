@@ -8,23 +8,54 @@
 <cfparam name="pageNum" default="1">
 <cfparam name="maxRows" default="9">
 <cfset startRow = ( pageNum-1 ) * maxRows>
-<cfquery name="getProduct">
+<!--- <cfquery name="getProduct">
     SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
     FROM product P
     LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
     WHERE  1 = 1
     AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
     AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+</cfquery> --->
+<cfquery name="getProduct">
+    SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
+    FROM product P
+    LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
+    WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
+    AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+    <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
+        AND (
+            P.product_tags LIKE (<cfqueryparam value="%#url.tags#%">)
+            <cfloop list="#tags#" item="item">
+                OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
+            </cfloop>
+        )
+    </cfif>
 </cfquery>
 <!--- paingnation --->
 <cfset totalPages = ceiling( getProduct.recordCount/maxRows )>
-<cfquery name="getProductPaging">
+<!--- <cfquery name="getProductPaging">
     SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
     FROM product P
     LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
     WHERE  1 = 1
     AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
     AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+    LIMIT #startRow#, #maxRows#
+</cfquery> --->
+<cfquery name="getProductPaging">
+    SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
+    FROM product P
+    LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
+    WHERE  P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
+    AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+    <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
+        AND (
+            P.product_tags LIKE (<cfqueryparam value="%#url.tags#%">)
+            <cfloop list="#tags#" item="item">
+                OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
+            </cfloop>
+        )
+    </cfif>
     LIMIT #startRow#, #maxRows#
 </cfquery>
 <cffunction name="getCategoryResult" access="public" returntype="array">
@@ -64,22 +95,20 @@
     </cfif>
     <cfreturn arguments.returnArray>
 </cffunction>
-
 <cfquery name="qryGetSecLevelCat">
-    SELECT C.parentCategoryId, B.parentCategoryId AS seclevelCat
+    SELECT C.parentCategoryId, C.categoryName, B.parentCategoryId AS seclevelCat
     FROM category C, category B
     WHERE C.PkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
     AND B.PkCategoryId = C.parentCategoryId
 </cfquery>
 <cfset categoryList = getCategoryResult(qryGetSecLevelCat.seclevelCat, qryGetSecLevelCat.parentCategoryId)>
-<cfset parentId = getProduct.parentCategoryId>
+<!--- <cfset parentId = getProduct.parentCategoryId> --->
 <cfquery name="getProductTag">
-    SELECT C.PkCategoryId, C.parentCategoryId, C.categoryName, PT.PkTagId, PT.FkCategoryId, PT.tagName, PT.isActive, PT.isDeleted
+    SELECT PT.PkTagId, PT.FkCategoryId, PT.tagName, PT.isActive, PT.isDeleted
     FROM product_tags PT
-    LEFT JOIN category C ON PT.FkCategoryId = C.PkCategoryId
     WHERE PT.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
     AND PT.isActive = <cfqueryparam value="1" cfsqltype = "cf_sql_bit">
-    AND C.parentCategoryId = <cfqueryparam value="#parentId#" cfsqltype = "cf_sql_integer">
+    AND PT.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype="cf_sql_integer">
 </cfquery>
 <cfoutput>
     <style>
@@ -118,11 +147,6 @@
         }
     </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
-    <!--- <div id="overlay">
-        <div class="cv-spinner">
-            <span class="spinner me-5"></span>
-        </div>
-    </div> --->
     <!-- Category Top Banner -->
     <div class="py-6 bg-img-cover bg-dark bg-overlay-gradient-dark position-relative overflow-hidden mb-4 bg-pos-center-center"
         style="background-image: url('../assets/images/banners/banner-1.jpg');">
@@ -133,13 +157,13 @@
                     <li class="breadcrumb-item breadcrumb-light">
                         <cfloop array="#categoryList#" index="idx">
                             <cfloop array="#idx.child#" index="child">
-                                <cfif child.PkCategoryId EQ getProductPaging.parentCategoryId>
+                                <cfif child.PkCategoryId EQ qryGetSecLevelCat.parentCategoryId>
                                     #child.catName#
                                 </cfif>
                             </cfloop>
                         </cfloop>    
                     </li>
-                    <li class="breadcrumb-item active breadcrumb-light" aria-current="page">#getProductPaging.categoryName#</li>
+                    <li class="breadcrumb-item active breadcrumb-light" aria-current="page">#qryGetSecLevelCat.categoryName#</li>
                 </ol>
             </nav>                
             <h1 class="fw-bold display-6 mb-4 text-white">Latest Arrivals (121)</h1>
@@ -186,7 +210,6 @@
                             </nav>
                         </div>
                         <!-- / Filter Category-->
-                    
                         <!-- Price Filter -->
                         <!--- <div class="py-4 widget-filter widget-filter-price border-top">
                             <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
@@ -303,7 +326,7 @@
                                 <div class="filter-options">
                                     <cfloop query="#getProductTag#">
                                         <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-id="#getProductTag.PkCategoryId#" data-catId ="#url.id#" id="filter-type-#getProductTag.PkTagId#" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked="true"</cfif>>
+                                            <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-type="#getProductTag.tagName#" data-catId ="#url.id#" id="filter-type-#getProductTag.PkTagId#" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked</cfif>>
                                             <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-#getProductTag.PkTagId#"> #getProductTag.tagName#</label>
                                         </div>
                                     </cfloop>               
@@ -416,11 +439,6 @@
             <!-- / Category Aside/Sidebar -->
             <!-- Category Products-->
             <div class="col-12 col-lg-9 transition-fade">
-                <!--- <div id="overlay">
-                    <div class="cv-spinner mx-auto">
-                        <span class="spinner"></span>
-                    </div>
-                </div> --->
                 <div id="overlay" class="d-flex align-items-center justify-content-center d-none">
 					<div class="cv-spinner d-flex align-items-center justify-content-center mx-auto">
                         <span class="spinner"></span>
@@ -428,13 +446,19 @@
 				</div>
                 <div id="productContainer" class="">
                     <!-- Top Toolbar-->
-                    <div class="mb-4 d-md-flex justify-content-between align-items-center">
-                        <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0">
+                    <div class="mb-4 d-md-flex justify-content-between align-items-center" >
+                        <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0 d-none" id="productTypeContainer">
                             <small class="d-inline-block fw-bolder">Filtered by:</small>
                             <ul class="list-unstyled d-inline-block mb-0 ms-2">
-                                <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small">Type: Slip On 
-                                    <i class="ri-close-circle-line align-bottom ms-1"></i>
-                                </li>
+                                <!--- <cfloop query="#getProductTag#">
+                                    <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)> --->
+                                        <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small productType" id="productType" >
+                                            <!--- #getProductTag.tagName# --->
+                                            <i class="ri-close-circle-line align-bottom ms-1"></i>
+                                        </li>
+                                        <!--- </cfif>
+                                    </cfloop> --->
+                                    <!--- Type: Slip On --->
                             </ul>
                             <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small">
                                 Clear All
@@ -473,30 +497,18 @@
                     <!-- / Top Toolbar-->
                     <!-- Products-->
                     <div class="row g-4 mb-5">
-                        <!--- <div id="overlay">
-                            <div class="cv-spinner">
-                                <span class="spinner"></span>
-                            </div>
-                        </div> --->
-                        <!--- <div class="ajax-loader">
-                            <img src="../assets/images/1amw.gif" class="img-responsive" id="loading-image" style="width:50px; background:transparent" />
-                        </div> --->
-                        <!---  <div id="loading" class="d-none">
-                            <img src="../assets/images/loading.gif" class="img-responsive" id="loading-image" />
-                        </div> --->
-                        
                         <cfif getProductPaging.recordCount GT 0>
-                            <cfloop query="#getProductPaging#">
+                            <cfloop query="getProductPaging">
                                 <cfquery name="getProductImage">
                                     SELECT image, isDefault
                                     FROM product_image
                                     WHERE FkProductId = <cfqueryparam value="#getProductPaging.PkProductId#" cfsqltype = "cf_sql_integer">
                                 </cfquery>
-                                <div class="col-12 col-sm-6 col-md-4">
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-4">
                                     <!-- Card Product-->
                                     <div class="card position-relative h-100 card-listing hover-trigger">
                                         <div class="card-header d-flex align-self-center">
-                                            <cfloop query="#getProductImage#">
+                                            <cfloop query="getProductImage">
                                                 <cfif getProductImage.isDefault EQ 1>
                                                     <picture class="position-relative overflow-hidden d-block bg-light">
                                                         <img class="vh-25 img-fluid position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="">
@@ -560,7 +572,7 @@
                     <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                         <ul class="pagination">
                             <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                                <a class="page-link prev" <cfif structKeyExists(url, 'tags')> href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#&tags=#url.tags#"<cfelse> href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#"</cfif>data-id="#pageNum#" >
+                                <a class="page-link prev"  href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif>" data-id="#pageNum#">
                                     <i class="ri-arrow-left-line align-bottom"></i>
                                     Prev
                                 </a>
@@ -568,8 +580,8 @@
                         </ul>
                         <ul class="pagination">
                             <cfloop from="1" to="#totalPages#" index="i">
-                                <li class="page-item  <cfif pageNum EQ i>active</cfif> mx-1">
-                                    <a class="page-link" <cfif structKeyExists(url, 'tags')>href="index.cfm?pg=category&id=#url.id#&pageNum=#i#&tags=#url.tags#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#i#"</cfif>>
+                                <li class="page-item <cfif pageNum EQ i>active</cfif> mx-1">
+                                    <a class="page-link" href="index.cfm?pg=category&id=#url.id#&pageNum=#i#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif>">
                                         #i#
                                     </a>
                                 </li>
@@ -577,14 +589,13 @@
                         </ul>
                         <ul class="pagination">
                             <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                                <a class="page-link next" <cfif structKeyExists(url, 'tags')>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#&tags=#url.tags#"<cfelse>href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#"</cfif>>Next 
+                                <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif>">Next 
                                     <i class="ri-arrow-right-line align-bottom"></i>
                                 </a>
                             </li>
                         </ul>
                     </nav>                    
                     <!-- / Pagination-->
-
                     <!-- Related Categories-->
                     <!--- <div class="border-top mt-5 pt-5">
                         <p class="lead fw-bolder">Related Categories</p>
@@ -616,51 +627,104 @@
         </div>
     </div>
     <script>
+        var #toScript('#pageNum#','pageNum')#;
+        var #toScript('#pg#','pg')#;
+        var #toScript('#id#','id')#;
         $(document).ready( function () { 
-            var #toScript('#pageNum#','pageNum')#;
             hideLoader();
-            $(document).ajaxSend(function() {
+            /* $(document).ajaxSend(function() {
                 showLoader();
-            });
+            }); */
             var value = "";
-            let productContainer = $('##productContainer').html();
+            //let productContainer = $('##productContainer').html();
+            //var currentUrl = location.href;
+            var url = "";
+            //ajaxFilter(value,id);
             $('.productTag').on('change', function(){
                 showLoader();
-                var id = $(this).attr('data-id');
                 var catId = $(this).attr('data-catId');
-                value = $(':checked').map(function(){ return $(this).val(); }).get().join();
+                var type = $(this).attr('data-type');
+                value = $(':checked').map(function(){ return $(this).val(); }).get().join(); 
+                console.log("type", type)
                 if (value.length === 0) {
                     setTimeout(function(){
                         showLoader();
                     },500);
-                    $('##productContainer').html(productContainer);
+                    $('##productTypeContainer').addClass('d-none');
+                    //$(".productType").text('');
+                    //$('##productContainer').html(productContainer);
+                    ajaxFilter(value,catId);
+                    let defaultURL = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum;
+                    window.history.pushState(null, null, defaultURL);
                     setTimeout(function(){
                         hideLoader();
                     },500);
                 } else {
-                    $.ajax({  
-                        url: '../ajaxFilterProduct.cfm?productTagValue='+value, 
-                        data: {id:id, catId:catId},
-                        type: 'GET',
-                        success: function(result) {
-                            if (result.success) {
-                                $('##productContainer').html(result.html);
-                            }
-                        },
-                        beforeSend: function(){
-                            setTimeout(function(){
-                                showLoader();
-                            },500);
-                        }, 
-                        complete: function(){
-                            setTimeout(function(){
-                                hideLoader();
-                            },500);
-                        }  
-                    });  
-                }   
+                    
+                    $('##productTypeContainer').removeClass('d-none');
+                   /*  url = currentUrl +'&tags='+ value; */
+                    // function ajaxFilter() {
+                        // $.ajax({  
+                        //     url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
+                        //     data: {catId:catId, value:value},
+                        //     type: 'GET',
+                        //     cache: false,
+                        //     success: function(result) {
+                        //         if (result.success) {
+                        //             // url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
+                        //             url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
+                        //             $('##productContainer').html(result.html);
+                        //             window.history.pushState(null, null,url);
+                        //         }
+                        //     },
+                        //     beforeSend: function(){
+                        //         setTimeout(function(){
+                        //             showLoader();
+                        //         },500);
+                        //     }, 
+                        //     complete: function(){
+                        //         setTimeout(function(){
+                        //             hideLoader();
+                        //         },500);
+                        //     }  
+                        // });  
+                    // }
+                    ajaxFilter(value,catId);
+                }
+                //ajaxFilter(value,catId);
             });
         });
+        function ajaxFilter(value,id) {
+            console.log(arguments);
+            $.ajax({  
+                url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
+                data: {catId:id, value:value},
+                type: 'GET',
+                // cache: false,
+                success: function(result) {
+                    if (result.success) {
+                        // url = "currentUrl +'&tags=' + value;
+                        $('##productContainer').html(result.html);
+                        url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
+                        window.history.pushState(null, null,url);
+                    } /* else{
+                        url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
+                        $('##productContainer').html(result.html);
+                        window.history.pushState(null, null,url);
+                    } */
+                },
+                beforeSend: function(){
+                    setTimeout(function(){
+                        showLoader();
+                    },500);
+                }, 
+                complete: function(){
+                    setTimeout(function(){
+                        hideLoader();
+                    },500);
+                }  
+            });  
+        }
         function showLoader() {
             $("##overlay").removeClass("d-none");
         }

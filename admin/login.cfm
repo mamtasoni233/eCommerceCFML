@@ -19,7 +19,7 @@
             WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar">
         </cfquery>
         <cfif login.recordCount EQ 1>
-            <!--- <cfset hashPassword = bcrypt.hashpw(login.password, gensalt)> --->
+            <!--- <cfset hashPassword = bcrypt.hashpw(password, gensalt)> --->
             <cfset checkPassword = bcrypt.checkpw(password, login.password)>
             <cfif checkPassword EQ true>
                 <cfset session.user = {}>

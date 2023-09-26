@@ -110,6 +110,7 @@
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR P.productName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR C.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productPrice LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productQty LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productDescription LIKE <cfqueryparam value="%#trim(search)#%">
@@ -134,6 +135,7 @@
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR P.productName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR C.categoryName LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productPrice LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productQty LIKE <cfqueryparam value="%#trim(search)#%">
                     OR P.productDescription LIKE <cfqueryparam value="%#trim(search)#%">
