@@ -22,6 +22,9 @@
             </cfloop>
         )
     </cfif>
+    <cfif structKeyExists(url, 'tags') AND len(url.sorting) GT 0>
+        ORDER BY <cfqueryparam value="#url.sorting#" cfsqltype="cf_sql_varchar">
+    </cfif>
 </cfquery>
 <!--- paingnation --->
 <cfset totalPages = ceiling( getProduct.recordCount/maxRows )>
@@ -31,13 +34,16 @@
     LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
     WHERE  P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
     AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
-    <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
+    <cfif structKeyExists(url, 'sorting') AND url.tags GT 0>
         AND (
             P.product_tags LIKE (<cfqueryparam value="%#url.tags#%">)
             <cfloop list="#tags#" item="item">
                 OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
             </cfloop>
         )
+    </cfif>
+    <cfif structKeyExists(url, 'sorting') AND len(url.sorting) GT 0>
+        ORDER BY <cfqueryparam value="#url.sorting#" cfsqltype="cf_sql_varchar">
     </cfif>
     LIMIT #startRow#, #maxRows#
 </cfquery>
@@ -450,7 +456,7 @@
                                 </span>
                             </cfif>
                         </div>
-                        <div class="d-flex align-items-center flex-column flex-md-row" id="priceFilterContainer">
+                        <div class="d-flex align-items-center flex-column flex-md-row" id="sortingFilterContainer">
                             <!-- Filter Trigger-->
                             <button class="btn bg-light p-3 d-flex d-lg-none align-items-center fs-xs fw-bold text-uppercase w-100 mb-2 mb-md-0 w-md-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="##offcanvasFilters" aria-controls="offcanvasFilters">
                                 <i class="ri-equalizer-line me-2"></i> Filters
@@ -460,19 +466,19 @@
                                 <p class="fs-xs fw-bold text-uppercase text-muted-hover p-0 m-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Sort By <i class="ri-arrow-drop-down-line ri-lg align-bottom"></i>
                                 </p>
-                                <ul class="dropdown-menu" id="priceFilterUl">
+                                <ul class="dropdown-menu" id="sortingFilterUl">
                                     <li>
-                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productPrice DESC">
+                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice DESC">
                                             Price: Hi Low
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productPrice ASC">
+                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice ASC">
                                             Price: Low Hi
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productName ASC">
+                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productName ASC">
                                             Name
                                         </a>
                                     </li>
@@ -617,6 +623,7 @@
         var #toScript('#id#','id')#;
         var value = "";
         var url = "";
+        var sorting = "";
         $(document).ready( function () { 
             hideLoader();
             //ajaxFilter(value,id);
@@ -628,48 +635,41 @@
                     setTimeout(function(){
                         showLoader();
                     },500);
-                    ajaxFilter(value,catId);
+                    ajaxFilter(value,catId, '');
                     let defaultURL = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum;
                     window.history.pushState(null, null, defaultURL);
                     setTimeout(function(){
                         hideLoader();
                     },500);
                 } else {
-                    ajaxFilter(value,catId);
+                    ajaxFilter(value,catId, '');
                 }
             });
         });
         $(document).on("click", '##deleteAllProductTag', function () {
             $('.productTag').prop("checked", false);
-            ajaxFilter('', id);
+            ajaxFilter('', id, '');
         });
         $(document).on('click', '.deleteProductTag', function () {
             var tagIds = $(this).attr('data-id');
-            console.log(tagIds);
             $('##filter-type-'+tagIds).prop("checked", false);
             var tId = $("input:checkbox[name=productTag]:checked").val();
-            console.log(tId);
             if(tId > 0){
-                ajaxFilter(tId, id);
+                ajaxFilter(tId, id, '');
             }else{
-                ajaxFilter('', id);
+                ajaxFilter('', id, '');
             }
         });
-        $(document).on("click", '.priceFilter', function () {
-            var sortId = $(this).attr('data-id');
+        $(document).on("click", '.sortingFilter', function () {
+            var sortId = $(this).attr('data-order');
             console.log(sortId);
+            ajaxFilter('', id, sortId);
         });
         
-        function ajaxFilter(value,id) {
-            // var productName = $('.productName').attr('data-order');
-            // var productPriceDESC = $('.productPriceDESC').attr('data-order');
-            // var productPriceASC = $('.productPriceASC').attr('data-order');
-            // console.log(productName);
-            // console.log(productPriceDESC);
-            // console.log(productPriceASC);
+        function ajaxFilter(value,id,sorting) {
             $.ajax({  
                 url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
-                data: {catId:id, value:value},
+                data: {catId:id, value:value, sorting:sorting},
                 type: 'GET',
                 success: function(result) {
                     if (result.success) {

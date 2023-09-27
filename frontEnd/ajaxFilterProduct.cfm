@@ -61,14 +61,6 @@
 <cfset data['success'] = true>
 <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
 <cftry>
-    <!--- <cfquery name="getProduct">
-        SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
-        FROM product P
-        LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
-        LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
-        WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
-        AND P.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype = "cf_sql_integer">
-    </cfquery> --->
     <cfquery name="getProduct1">
         SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
         FROM product P
@@ -82,6 +74,9 @@
                     OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
                 </cfloop>
             )
+        </cfif>
+        <cfif len(url.sorting) GT 0>
+            ORDER BY <cfqueryparam value="#url.sorting#" cfsqltype="cf_sql_varchar">
         </cfif>
     </cfquery>
     <cfset totalPages = ceiling( getProduct1.recordCount/maxRows )>
@@ -99,6 +94,9 @@
                 </cfloop>
             )
         </cfif>
+        <cfif len(url.sorting) GT 0>
+            ORDER BY <cfqueryparam value="#url.sorting#" cfsqltype="cf_sql_varchar">
+        </cfif>
         LIMIT #startRow#, #maxRows#
     </cfquery>
     <cfquery name="getProductTag">
@@ -110,7 +108,7 @@
     </cfquery>
     <cfsavecontent variable="data['html']">
         <cfoutput>
-            
+            <cfdump  var="#url#">
             <style>
                 img {
                     width: 200px;
@@ -150,7 +148,7 @@
                             </span>
                         </cfif>
                     </div>
-                    <div class="d-flex align-items-center flex-column flex-md-row" id="priceFilterContainer">
+                    <div class="d-flex align-items-center flex-column flex-md-row" id="sortingFilterContainer">
                         <!-- Filter Trigger-->
                         <button class="btn bg-light p-3 d-flex d-lg-none align-items-center fs-xs fw-bold text-uppercase w-100 mb-2 mb-md-0 w-md-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="##offcanvasFilters" aria-controls="offcanvasFilters">
                             <i class="ri-equalizer-line me-2"></i> Filters
@@ -160,19 +158,19 @@
                             <p class="fs-xs fw-bold text-uppercase text-muted-hover p-0 m-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Sort By <i class="ri-arrow-drop-down-line ri-lg align-bottom"></i>
                             </p>
-                            <ul class="dropdown-menu" id="priceFilterUl">
+                            <ul class="dropdown-menu" id="sortingFilterUl">
                                 <li>
-                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productPrice DESC">
+                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice DESC">
                                         Price: Hi Low
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productPrice ASC">
+                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice ASC">
                                         Price: Low Hi
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productName ASC">
+                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productName ASC">
                                         Name
                                     </a>
                                 </li>
