@@ -60,7 +60,7 @@
 <cfset data = {}>
 <cfset data['success'] = true>
 <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
-<!--- <cfif structKeyExists(url, "productTagValue") AND url.productTagValue GT 0> --->
+<cftry>
     <!--- <cfquery name="getProduct">
         SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
         FROM product P
@@ -101,14 +101,16 @@
         </cfif>
         LIMIT #startRow#, #maxRows#
     </cfquery>
+    <cfquery name="getProductTag">
+        SELECT PT.PkTagId, PT.FkCategoryId, PT.tagName, PT.isActive, PT.isDeleted
+        FROM product_tags PT
+        WHERE PT.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+        AND PT.isActive = <cfqueryparam value="1" cfsqltype = "cf_sql_bit">
+        AND PT.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype="cf_sql_integer">
+    </cfquery>
     <cfsavecontent variable="data['html']">
         <cfoutput>
-            <cfquery name="qryGetTagName" dbtype="query">
-                SELECT tagName
-                FROM getProductBaseedTag
-                WHERE PkTagId IN (<cfqueryparam value="#url.productTagValue#" list="true">)
-            </cfquery>
-            <cfdump var='#qryGetTagName#'>
+            
             <style>
                 img {
                     width: 200px;
@@ -120,14 +122,35 @@
                 <div class="mb-4 d-md-flex justify-content-between align-items-center">
                     <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0">
                         <small class="d-inline-block fw-bolder">Filtered by:</small>
-                        <ul class="list-unstyled d-inline-block mb-0 ms-2">
-                            <!--- <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small">Type: Slip On 
-                                <i class="ri-close-circle-line align-bottom ms-1"></i>
-                            </li> --->
-                        </ul>
-                        <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small">
-                            Clear All
-                        </span>
+                        <cfif len(url.productTagValue) GT 0>
+                            <cfquery name="qryGetTagName" dbtype="query">
+                                SELECT tagName, PkTagId
+                                FROM getProductTag
+                                WHERE PkTagId IN (<cfqueryparam value="#url.productTagValue#" list="true">)
+                            </cfquery>
+                            <!--- <cfset tagList = valueList(qryGetTagName.tagName)>
+                            <cfset tagNameList = listRemoveDuplicates(tagList)> --->
+                            <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
+                                <cfloop query="qryGetTagName">
+                                    <cfset tagList = valueList(qryGetTagName.tagName)>
+                                    <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
+                                        #listRemoveDuplicates(tagList)#
+                                        <i class="ri-close-circle-line align-bottom mt-1" id="deleteProductTag" data-id="#getProductTag.PkTagId#"></i>
+                                        <cfdump var="#getProductTag.PkTagId#">
+                                    </li>
+                                </cfloop>
+                                <!---  <cfloop list="#tagNameList#" index="item">
+                                    <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
+                                        #item#
+                                        <i class="ri-close-circle-line align-bottom mt-1" id="deleteProductTag" data-id="#getProductTag.PkTagId#"></i>
+                                        <cfdump var="#getProductTag.PkTagId#">
+                                    </li>
+                                </cfloop> --->
+                            </ul>
+                            <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small" id="deleteAllProductTag">
+                                Clear All
+                            </span>
+                        </cfif>
                     </div>
                     <div class="d-flex align-items-center flex-column flex-md-row">
                         <!-- Filter Trigger-->
@@ -263,8 +286,12 @@
             <!-- / Pagination-->
         </cfoutput>
     </cfsavecontent>
-    <cfset output =  serializeJSON(data)/>
-    <cfoutput>#output#</cfoutput>
-<!--- </cfif> --->
+    <cfcatch>
+        <cfset data['success'] = false>
+        <cfset data['error'] = cfcatch>
+    </cfcatch>
+</cftry>
+<cfset output =  serializeJSON(data)/>
+<cfoutput>#output#</cfoutput>
 
 

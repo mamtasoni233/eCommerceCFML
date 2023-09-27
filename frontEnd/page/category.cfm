@@ -102,7 +102,6 @@
     AND B.PkCategoryId = C.parentCategoryId
 </cfquery>
 <cfset categoryList = getCategoryResult(qryGetSecLevelCat.seclevelCat, qryGetSecLevelCat.parentCategoryId)>
-<!--- <cfset parentId = getProduct.parentCategoryId> --->
 <cfquery name="getProductTag">
     SELECT PT.PkTagId, PT.FkCategoryId, PT.tagName, PT.isActive, PT.isDeleted
     FROM product_tags PT
@@ -327,7 +326,7 @@
                                     <cfloop query="#getProductTag#">
                                         <div class="form-group form-check mb-0">
                                             <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-type="#getProductTag.tagName#" data-catId ="#url.id#" id="filter-type-#getProductTag.PkTagId#" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked</cfif>>
-                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-#getProductTag.PkTagId#"> #getProductTag.tagName#</label>
+                                            <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-#getProductTag.PkTagId#">#getProductTag.tagName#</label>
                                         </div>
                                     </cfloop>               
                                 </div>
@@ -447,22 +446,37 @@
                 <div id="productContainer" class="">
                     <!-- Top Toolbar-->
                     <div class="mb-4 d-md-flex justify-content-between align-items-center" >
-                        <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0 d-none" id="productTypeContainer">
+                        <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0" id="productTagContainer">
                             <small class="d-inline-block fw-bolder">Filtered by:</small>
-                            <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
-                                <!--- <cfloop query="#getProductTag#">
-                                    <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
-                                        <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small productType" id="productType" >
-                                            #getProductTag.tagName#
-                                            <i class="ri-close-circle-line align-bottom ms-1"></i>
+                            <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
+                                <cfquery name="qryGetTagName" dbtype="query">
+                                        SELECT tagName, PkTagId
+                                        FROM getProductTag
+                                        WHERE PkTagId IN (<cfqueryparam value="#url.tags#" list="true">)
+                                </cfquery>
+                                <!--- <cfset tagList = valueList(qryGetTagName.tagName)>
+                                <cfset tagNameList = listRemoveDuplicates(tagList)> --->
+                                <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
+                                    <cfloop query="qryGetTagName">
+                                        <cfset tagList = valueList(qryGetTagName.tagName)>
+                                        <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
+                                            #listRemoveDuplicates(tagList)#
+                                            <i class="ri-close-circle-line align-bottom mt-1" id="deleteProductTag" data-id="#getProductTag.PkTagId#"></i>
+                                            <cfdump var="#getProductTag.PkTagId#">
                                         </li>
-                                        </cfif>
+                                    </cfloop>
+                                    <!--- <cfloop list="#tagNameList#" index="item">
+                                        <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
+                                            #item#
+                                            <i class="ri-close-circle-line align-bottom mt-1" id="deleteProductTag" data-id="#getProductTag.PkTagId#"></i>
+                                            <cfdump var="#getProductTag.PkTagId#">
+                                        </li>
                                     </cfloop> --->
-                                    <!--- Type: Slip On --->
-                            </ul>
-                            <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small">
-                                Clear All
-                            </span>
+                                </ul>
+                                <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small" id="deleteAllProductTag">
+                                    Clear All
+                                </span>
+                            </cfif>
                         </div>
                         <div class="d-flex align-items-center flex-column flex-md-row">
                             <!-- Filter Trigger-->
@@ -622,7 +636,6 @@
                     <!-- Related Categories-->
                 </div>
             </div>
-            
             <!-- / Category Products-->
         </div>
     </div>
@@ -632,27 +645,17 @@
         var #toScript('#id#','id')#;
         $(document).ready( function () { 
             hideLoader();
-            /* $(document).ajaxSend(function() {
-                showLoader();
-            }); */
             var value = "";
-            //let productContainer = $('##productContainer').html();
-            //var currentUrl = location.href;
             var url = "";
             //ajaxFilter(value,id);
             $('.productTag').on('change', function(){
                 showLoader();
                 var catId = $(this).attr('data-catId');
-                var type = $(this).attr('data-type');
-                value = $(':checked').map(function(){ return $(this).val(); }).get().join(); 
-                console.log("type", type);
+                value = $(':checked').map(function(){ return $(this).val(); }).get().join();
                 if (value.length === 0) {
                     setTimeout(function(){
                         showLoader();
                     },500);
-                    $('##productTypeContainer').addClass('d-none');
-                    //$(".productType").text('');
-                    //$('##productContainer').html(productContainer);
                     ajaxFilter(value,catId);
                     let defaultURL = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum;
                     window.history.pushState(null, null, defaultURL);
@@ -660,42 +663,50 @@
                         hideLoader();
                     },500);
                 } else {
-                    $('##productTypeContainer').removeClass('d-none');
-                    // for (var i; i < type.length; i++) {
-                        // console.log('i',i);
-                        $('##productTypeUl').append('<li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block me-1 small productType">'+type+' <i class="ri-close-circle-line align-bottom ms-1"></i></li>');
-                    // }
-                   /*  url = currentUrl +'&tags='+ value; */
-                    // function ajaxFilter() {
-                        // $.ajax({  
-                        //     url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
-                        //     data: {catId:catId, value:value},
-                        //     type: 'GET',
-                        //     cache: false,
-                        //     success: function(result) {
-                        //         if (result.success) {
-                        //             // url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
-                        //             url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
-                        //             $('##productContainer').html(result.html);
-                        //             window.history.pushState(null, null,url);
-                        //         }
-                        //     },
-                        //     beforeSend: function(){
-                        //         setTimeout(function(){
-                        //             showLoader();
-                        //         },500);
-                        //     }, 
-                        //     complete: function(){
-                        //         setTimeout(function(){
-                        //             hideLoader();
-                        //         },500);
-                        //     }  
-                        // });  
-                    // }
                     ajaxFilter(value,catId);
                 }
-                //ajaxFilter(value,catId);
             });
+            $('span##deleteAllProductTag').on('click', function () {
+                console.log("hooo")
+                $('.productTag').prop("checked", false);
+                ajaxFilter(value,id);
+            });
+            $('##productTypeUl li>i##deleteProductTag').on('click', function () {
+                console.log('mamtaaaa');
+                var tagIds = $(this).attr('data-id');
+                console.log(tagIds);
+                //e.preventDefault();
+                //var tagValue = $("input:checkbox[name=productTag]:checked").map(function(i, e) {return e.value}).toArray();
+                // console.log(tagValue);
+                // console.log(tagValue.length);
+                /* for (let j = 0; j < tagValue.length; j++) {
+                    console.log('j',j);
+                    console.log('tagValue[j]', tagValue[j]);
+                    console.log(tagValue[j] == tagValue);
+                    console.log($(tagValue[j]).prop("checked"));
+                    if (tagValue[j] == tagValue[j]) {
+                        $(tagValue[j]).prop("checked", false);
+                    }
+                } */
+                // if (tagValue[] == tagValue[]) {
+                //     $(tagValue).prop("checked", false);
+                //     ajaxFilter(value,id);
+                // }
+                /* if (tagIds  == tagIds) {
+                    $(tagIds).prop("checked", false);
+                    ajaxFilter(value,id);
+                } */
+                //$(tagIds).prop("checked", false);
+            });
+            // $('.deleteProductTag').on('click', function () {
+            //     alert("hiiii");
+            //     $('.productTag').prop("checked", false);
+            //     /* if (value.checked == true) {
+            //         $(value).prop('checked', false);
+            //     } else {
+            //         $(value).prop('checked', true);
+            //     } */
+            // });
         });
         function ajaxFilter(value,id) {
             console.log(arguments);
@@ -703,18 +714,16 @@
                 url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
                 data: {catId:id, value:value},
                 type: 'GET',
-                // cache: false,
                 success: function(result) {
                     if (result.success) {
-                        // url = "currentUrl +'&tags=' + value;
                         $('##productContainer').html(result.html);
                         url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
                         window.history.pushState(null, null,url);
-                    } /* else{
-                        url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
-                        $('##productContainer').html(result.html);
-                        window.history.pushState(null, null,url);
-                    } */
+                        /* $('span##deleteAllProductTag').on('click', function () {
+                            //alert("hiiii");
+                            $('.productTag').prop("checked", false);
+                        }); */
+                    }
                 },
                 beforeSend: function(){
                     setTimeout(function(){
