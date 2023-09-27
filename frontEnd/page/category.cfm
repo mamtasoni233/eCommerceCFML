@@ -8,14 +8,6 @@
 <cfparam name="pageNum" default="1">
 <cfparam name="maxRows" default="9">
 <cfset startRow = ( pageNum-1 ) * maxRows>
-<!--- <cfquery name="getProduct">
-    SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
-    FROM product P
-    LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
-    WHERE  1 = 1
-    AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
-    AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
-</cfquery> --->
 <cfquery name="getProduct">
     SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
     FROM product P
@@ -33,15 +25,6 @@
 </cfquery>
 <!--- paingnation --->
 <cfset totalPages = ceiling( getProduct.recordCount/maxRows )>
-<!--- <cfquery name="getProductPaging">
-    SELECT C.PkCategoryId, C.categoryName, C.parentCategoryId, P.PkProductId, P.productQty, P.productName, P.productPrice
-    FROM product P
-    LEFT JOIN category C ON P.FkCategoryId = C.PkCategoryId
-    WHERE  1 = 1
-    AND P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
-    AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
-    LIMIT #startRow#, #maxRows#
-</cfquery> --->
 <cfquery name="getProductPaging">
     SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
     FROM product P
@@ -111,7 +94,7 @@
 </cfquery>
 <cfoutput>
     <style>
-        img {
+        img{
             width: 200px;
             height: 300px;
             object-fit: contain;
@@ -454,31 +437,20 @@
                                         FROM getProductTag
                                         WHERE PkTagId IN (<cfqueryparam value="#url.tags#" list="true">)
                                 </cfquery>
-                                <!--- <cfset tagList = valueList(qryGetTagName.tagName)>
-                                <cfset tagNameList = listRemoveDuplicates(tagList)> --->
                                 <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
                                     <cfloop query="qryGetTagName">
-                                        <cfset tagList = valueList(qryGetTagName.tagName)>
                                         <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
-                                            #listRemoveDuplicates(tagList)#
-                                            <i class="ri-close-circle-line align-bottom mt-1" id="deleteProductTag" data-id="#getProductTag.PkTagId#"></i>
-                                            <cfdump var="#getProductTag.PkTagId#">
+                                            #qryGetTagName.tagName#
+                                            <i class="ri-close-circle-line align-bottom mt-1 deleteProductTag" data-id="#qryGetTagName.PkTagId#"></i>
                                         </li>
                                     </cfloop>
-                                    <!--- <cfloop list="#tagNameList#" index="item">
-                                        <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
-                                            #item#
-                                            <i class="ri-close-circle-line align-bottom mt-1" id="deleteProductTag" data-id="#getProductTag.PkTagId#"></i>
-                                            <cfdump var="#getProductTag.PkTagId#">
-                                        </li>
-                                    </cfloop> --->
                                 </ul>
                                 <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small" id="deleteAllProductTag">
                                     Clear All
                                 </span>
                             </cfif>
                         </div>
-                        <div class="d-flex align-items-center flex-column flex-md-row">
+                        <div class="d-flex align-items-center flex-column flex-md-row" id="priceFilterContainer">
                             <!-- Filter Trigger-->
                             <button class="btn bg-light p-3 d-flex d-lg-none align-items-center fs-xs fw-bold text-uppercase w-100 mb-2 mb-md-0 w-md-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="##offcanvasFilters" aria-controls="offcanvasFilters">
                                 <i class="ri-equalizer-line me-2"></i> Filters
@@ -488,19 +460,19 @@
                                 <p class="fs-xs fw-bold text-uppercase text-muted-hover p-0 m-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Sort By <i class="ri-arrow-drop-down-line ri-lg align-bottom"></i>
                                 </p>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" id="priceFilterUl">
                                     <li>
-                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2" href="##">
+                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productPrice DESC">
                                             Price: Hi Low
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2" href="##">
+                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productPrice ASC">
                                             Price: Low Hi
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2"href="##">
+                                        <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productName ASC">
                                             Name
                                         </a>
                                     </li>
@@ -525,7 +497,7 @@
                                             <cfloop query="getProductImage">
                                                 <cfif getProductImage.isDefault EQ 1>
                                                     <picture class="position-relative overflow-hidden d-block bg-light">
-                                                        <img class="vh-25 img-fluid position-relative z-index-10" title="" src="#imagePath##getProductImage.image#" alt="">
+                                                        <img class="vh-25 img-fluid position-relative z-index-10 productImg" title="" src="#imagePath##getProductImage.image#" alt="">
                                                     </picture>
                                                 </cfif>
                                                 <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
@@ -643,10 +615,10 @@
         var #toScript('#pageNum#','pageNum')#;
         var #toScript('#pg#','pg')#;
         var #toScript('#id#','id')#;
+        var value = "";
+        var url = "";
         $(document).ready( function () { 
             hideLoader();
-            var value = "";
-            var url = "";
             //ajaxFilter(value,id);
             $('.productTag').on('change', function(){
                 showLoader();
@@ -666,50 +638,35 @@
                     ajaxFilter(value,catId);
                 }
             });
-            $('span##deleteAllProductTag').on('click', function () {
-                console.log("hooo")
-                $('.productTag').prop("checked", false);
-                ajaxFilter(value,id);
-            });
-            $('##productTypeUl li>i##deleteProductTag').on('click', function () {
-                console.log('mamtaaaa');
-                var tagIds = $(this).attr('data-id');
-                console.log(tagIds);
-                //e.preventDefault();
-                //var tagValue = $("input:checkbox[name=productTag]:checked").map(function(i, e) {return e.value}).toArray();
-                // console.log(tagValue);
-                // console.log(tagValue.length);
-                /* for (let j = 0; j < tagValue.length; j++) {
-                    console.log('j',j);
-                    console.log('tagValue[j]', tagValue[j]);
-                    console.log(tagValue[j] == tagValue);
-                    console.log($(tagValue[j]).prop("checked"));
-                    if (tagValue[j] == tagValue[j]) {
-                        $(tagValue[j]).prop("checked", false);
-                    }
-                } */
-                // if (tagValue[] == tagValue[]) {
-                //     $(tagValue).prop("checked", false);
-                //     ajaxFilter(value,id);
-                // }
-                /* if (tagIds  == tagIds) {
-                    $(tagIds).prop("checked", false);
-                    ajaxFilter(value,id);
-                } */
-                //$(tagIds).prop("checked", false);
-            });
-            // $('.deleteProductTag').on('click', function () {
-            //     alert("hiiii");
-            //     $('.productTag').prop("checked", false);
-            //     /* if (value.checked == true) {
-            //         $(value).prop('checked', false);
-            //     } else {
-            //         $(value).prop('checked', true);
-            //     } */
-            // });
         });
+        $(document).on("click", '##deleteAllProductTag', function () {
+            $('.productTag').prop("checked", false);
+            ajaxFilter('', id);
+        });
+        $(document).on('click', '.deleteProductTag', function () {
+            var tagIds = $(this).attr('data-id');
+            console.log(tagIds);
+            $('##filter-type-'+tagIds).prop("checked", false);
+            var tId = $("input:checkbox[name=productTag]:checked").val();
+            console.log(tId);
+            if(tId > 0){
+                ajaxFilter(tId, id);
+            }else{
+                ajaxFilter('', id);
+            }
+        });
+        $(document).on("click", '.priceFilter', function () {
+            var sortId = $(this).attr('data-id');
+            console.log(sortId);
+        });
+        
         function ajaxFilter(value,id) {
-            console.log(arguments);
+            // var productName = $('.productName').attr('data-order');
+            // var productPriceDESC = $('.productPriceDESC').attr('data-order');
+            // var productPriceASC = $('.productPriceASC').attr('data-order');
+            // console.log(productName);
+            // console.log(productPriceDESC);
+            // console.log(productPriceASC);
             $.ajax({  
                 url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
                 data: {catId:id, value:value},
@@ -719,10 +676,6 @@
                         $('##productContainer').html(result.html);
                         url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
                         window.history.pushState(null, null,url);
-                        /* $('span##deleteAllProductTag').on('click', function () {
-                            //alert("hiiii");
-                            $('.productTag').prop("checked", false);
-                        }); */
                     }
                 },
                 beforeSend: function(){

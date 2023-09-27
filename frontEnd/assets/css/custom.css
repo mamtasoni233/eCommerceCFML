@@ -20,3 +20,8 @@
   background-position: 100% 0%;
   transition: all 0.5s linear;
 }
+/* .object-fit{
+  width: 200px;
+  height: 300px;
+  object-fit: contain;
+} */

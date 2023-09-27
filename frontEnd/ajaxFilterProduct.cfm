@@ -116,7 +116,7 @@
                     width: 200px;
                     height: 300px;
                     object-fit: contain;
-                    }
+                }
             </style>
             <!-- Top Toolbar-->
                 <div class="mb-4 d-md-flex justify-content-between align-items-center">
@@ -132,11 +132,9 @@
                             <cfset tagNameList = listRemoveDuplicates(tagList)> --->
                             <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
                                 <cfloop query="qryGetTagName">
-                                    <cfset tagList = valueList(qryGetTagName.tagName)>
                                     <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
-                                        #listRemoveDuplicates(tagList)#
-                                        <i class="ri-close-circle-line align-bottom mt-1" id="deleteProductTag" data-id="#getProductTag.PkTagId#"></i>
-                                        <cfdump var="#getProductTag.PkTagId#">
+                                        #qryGetTagName.tagName#
+                                        <i class="ri-close-circle-line align-bottom mt-1 deleteProductTag" data-id="#qryGetTagName.PkTagId#"></i>
                                     </li>
                                 </cfloop>
                                 <!---  <cfloop list="#tagNameList#" index="item">
@@ -152,7 +150,7 @@
                             </span>
                         </cfif>
                     </div>
-                    <div class="d-flex align-items-center flex-column flex-md-row">
+                    <div class="d-flex align-items-center flex-column flex-md-row" id="priceFilterContainer">
                         <!-- Filter Trigger-->
                         <button class="btn bg-light p-3 d-flex d-lg-none align-items-center fs-xs fw-bold text-uppercase w-100 mb-2 mb-md-0 w-md-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="##offcanvasFilters" aria-controls="offcanvasFilters">
                             <i class="ri-equalizer-line me-2"></i> Filters
@@ -162,19 +160,19 @@
                             <p class="fs-xs fw-bold text-uppercase text-muted-hover p-0 m-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Sort By <i class="ri-arrow-drop-down-line ri-lg align-bottom"></i>
                             </p>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" id="priceFilterUl">
                                 <li>
-                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2" href="##">
+                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productPrice DESC">
                                         Price: Hi Low
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2" href="##">
+                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productPrice ASC">
                                         Price: Low Hi
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2"href="##">
+                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 priceFilter" data-order="productName ASC">
                                         Name
                                     </a>
                                 </li>
