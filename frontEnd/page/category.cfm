@@ -204,8 +204,8 @@
                                 </ul>
                             </nav>
                         </div>
-                        <!-- / Filter Category-->
-                        <!-- Price Range Filter -->
+                        <!--- / Filter Category --->
+                        <!--- Price Range Filter --->
                         <div class="py-4 widget-filter widget-filter-price border-top">
                             <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                 data-bs-toggle="collapse" href="##filter-price" role="button" aria-expanded="true"
@@ -230,8 +230,8 @@
                                 </div>        
                             </div>
                         </div>
-                        <!-- / Price Range Filter -->   
-                        <!-- Brands Filter -->
+                        <!--- / Price Range Filter --->   
+                        <!--- Brands Filter --->
                         <!--- <div class="py-4 widget-filter border-top">
                             <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                 data-bs-toggle="collapse" href="##filter-brands" role="button" aria-expanded="true"
@@ -309,8 +309,8 @@
                                 </div>
                             </div>
                         </div> --->
-                        <!-- / Brands Filter -->
-                        <!-- Type Filter -->
+                        <!--- / Brands Filter --->
+                        <!--- Type Filter --->
                         <div class="py-4 widget-filter border-top">
                             <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                 data-bs-toggle="collapse" href="##filter-type" role="button" aria-expanded="true"
@@ -332,7 +332,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- / Type Filter -->
+                        <!--- / Type Filter --->
                         <!-- Sizes Filter -->
                         <!--- <div class="py-4 widget-filter border-top">
                             <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
@@ -389,8 +389,8 @@
                                 </div>
                             </div>
                         </div> --->
-                        <!-- / Sizes Filter -->
-                        <!-- Colour Filter -->
+                        <!--- / Sizes Filter --->
+                        <!--- Colour Filter --->
                         <!--- <div class="py-4 widget-filter border-top">
                             <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                 data-bs-toggle="collapse" href="##filter-colour" role="button" aria-expanded="true"
@@ -430,13 +430,13 @@
                                     </div>
                             </div>
                         </div> --->
-                        <!-- / Colour Filter -->
+                        <!--- / Colour Filter --->
                     </aside>
-                    <!-- / Category Aside-->                    
+                    <!--- / Category Aside --->                    
                 </div>
             </div>
-            <!-- / Category Aside/Sidebar -->
-            <!-- Category Products-->
+            <!--- / Category Aside/Sidebar --->
+            <!--- Category Products --->
             <div class="col-12 col-lg-9 transition-fade">
                 <div id="overlay" class="d-flex align-items-center justify-content-center d-none">
 					<div class="cv-spinner d-flex align-items-center justify-content-center mx-auto">
@@ -465,11 +465,11 @@
                             </span>
                         </cfif>
                     </div>
-                    <!-- Filter Trigger-->
+                    <!--- Filter Trigger --->
                     <button class="btn bg-light p-3 d-flex d-lg-none align-items-center fs-xs fw-bold text-uppercase w-100 mb-2 mb-md-0 w-md-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="##offcanvasFilters" aria-controls="offcanvasFilters">
                         <i class="ri-equalizer-line me-2"></i> Filters
                     </button>
-                    <!-- / Filter Trigger-->
+                    <!--- / Filter Trigger --->
                     <div class="dropdown ms-md-2 lh-1 p-3 bg-light w-100 mb-2 mb-md-0 w-md-auto">
                         <p class="fs-xs fw-bold text-uppercase text-muted-hover p-0 m-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Sort By <i class="ri-arrow-drop-down-line ri-lg align-bottom"></i>
@@ -494,11 +494,11 @@
                     </div>
                 </div>
                 <div id="productContainer" class="">
-                    <!-- Top Toolbar-->
+                    <!--- Top Toolbar --->
                     <!---   <div class="mb-4 d-md-flex justify-content-between align-items-center" >
                     </div>    --->                 
-                    <!-- / Top Toolbar-->
-                    <!-- Products-->
+                    <!--- / Top Toolbar --->
+                    <!--- Products --->
                     <div class="row g-4 mb-5">
                         <cfif getProductPaging.recordCount GT 0>
                             <cfloop query="getProductPaging">
@@ -508,7 +508,7 @@
                                     WHERE FkProductId = <cfqueryparam value="#getProductPaging.PkProductId#" cfsqltype = "cf_sql_integer">
                                 </cfquery>
                                 <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-                                    <!-- Card Product-->
+                                    <!--- Card Product --->
                                     <div class="card position-relative h-100 card-listing hover-trigger">
                                         <div class="card-header d-flex align-self-center">
                                             <cfloop query="getProductImage">
@@ -532,7 +532,7 @@
                                         </div>
                                         <div class="card-body px-0 text-center">
                                             <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
-                                                <!-- Review Stars Small-->
+                                                <!--- Review Stars Small --->
                                                 <div class="rating position-relative d-table">
                                                     <div class="position-absolute stars" style="width: 90%">
                                                         <i class="ri-star-fill text-dark mr-1"></i>
@@ -557,7 +557,7 @@
                                             <p class="fw-bolder m-0 mt-2"><i class="fa fa-rupee"></i> #getProductPaging.productPrice#</p>
                                         </div>
                                     </div>
-                                    <!--/ Card Product-->
+                                    <!--- / Card Product --->
                                 </div>
                             </cfloop>
                         <cfelse>
@@ -570,8 +570,8 @@
                             </div>
                         </cfif>
                     </div>
-                    <!-- / Products-->
-                    <!-- Pagination-->
+                    <!--- / Products --->
+                    <!--- Pagination --->
                     <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                         <ul class="pagination">
                             <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
@@ -598,8 +598,8 @@
                             </li>
                         </ul>
                     </nav>                    
-                    <!-- / Pagination-->
-                    <!-- Related Categories-->
+                    <!--- / Pagination --->
+                    <!--- Related Categories --->
                     <!--- <div class="border-top mt-5 pt-5">
                         <p class="lead fw-bolder">Related Categories</p>
                         <div class="d-flex flex-wrap justify-content-start align-items-center">
@@ -622,10 +622,10 @@
                                 href="##">Rugsacks</a>
                         </div>
                     </div> --->
-                    <!-- Related Categories-->
+                    <!--- Related Categories --->
                 </div>
             </div>
-            <!-- / Category Products-->
+            <!--- / Category Products --->
         </div>
     </div>
     <script>
