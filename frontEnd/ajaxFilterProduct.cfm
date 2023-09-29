@@ -75,8 +75,8 @@
                 </cfloop>
             )
         </cfif>
-        <cfif len(url.sorting) GT 0>
-            ORDER BY <cfqueryparam value="#url.sorting#" cfsqltype="cf_sql_varchar">
+        <cfif structKeyExists(url, "sorting") AND len(url.sorting) GT 0>
+            ORDER BY #url.sorting#
         </cfif>
     </cfquery>
     <cfset totalPages = ceiling( getProduct1.recordCount/maxRows )>
@@ -94,8 +94,8 @@
                 </cfloop>
             )
         </cfif>
-        <cfif len(url.sorting) GT 0>
-            ORDER BY <cfqueryparam value="#url.sorting#" cfsqltype="cf_sql_varchar">
+        <cfif structKeyExists(url, "sorting") AND len(url.sorting) GT 0>
+            ORDER BY #url.sorting#
         </cfif>
         LIMIT #startRow#, #maxRows#
     </cfquery>
