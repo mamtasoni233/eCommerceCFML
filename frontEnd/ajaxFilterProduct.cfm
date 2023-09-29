@@ -1,6 +1,6 @@
-<!--- <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
+<cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
-<cfcontent reset="true" type="application/json" /> --->
+<cfcontent reset="true" type="application/json" />
 
 <cfparam name="PkProductId" default="" />
 <cfparam name="FkCategoryId" default="" />

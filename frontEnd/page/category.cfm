@@ -678,29 +678,33 @@
             ajaxFilter(value, id, sortingValue,);
         });
         $(document).on("change", '##filterPriceMax', function () {
-            var filterPriceMaxValue = $(this).val();
-            var filterPriceMinVal = $('##filterPriceMin').val();
+            var filterPriceMaxValue = parseFloat($(this).val());
+            var filterPriceMinVal = parseFloat($('##filterPriceMin').val());
             ajaxFilter(value, id, sorting, filterPriceMinVal, filterPriceMaxValue);
         });
         $(document).on("change", '.filter-price', function () {
-            var filterPriceMaxValue = $(this).val();
-            var filterPriceMinVal = $('##filterPriceMin').val();
+            var filterPriceMaxValue = parseFloat($(this).val());
+            var filterPriceMinVal = parseFloat($('##filterPriceMin').val());
             ajaxFilter(value, id, sorting, filterPriceMinVal, filterPriceMaxValue);
         });
         $(document).on("change", '##filterPriceMin', function () {
-            var filterPriceMinValue = $(this).val();
-            var filterPriceMaxVal = $('##filterPriceMax').val();
+            var filterPriceMinValue = parseFloat($(this).val());
+            var filterPriceMaxVal = parseFloat($('##filterPriceMax').val());
             ajaxFilter(value, id, sorting, filterPriceMinValue, filterPriceMaxVal);
         });
         function ajaxFilter(value, id, sorting, minPrice = '', maxPrice = '') {
             var tagName = $('.productTag').attr('data-tagName');
             var data = {"catId":id, "value":value, "sorting":sorting};
-            // if(minPrice != "" && jQuery.type(minPrice) === 'number' ){
-            //     data[ "minPrice"] = minPrice;
-            // }
-            // if(maxPrice != '' && jQuery.type(maxPrice) === 'number' ){
-            //     data[ "maxPrice"] = maxPrice;
-            // }
+            // console.log(minPrice)
+            // console.log(maxPrice)
+            // console.log(jQuery.type(minPrice))
+            // console.log(jQuery.type(maxPrice))
+            if(minPrice != "" && jQuery.type(minPrice) == 'number' ){
+                data[ "minPrice"] = minPrice;
+            }
+            if(maxPrice != '' && jQuery.type(maxPrice) == 'number' ){
+                data[ "maxPrice"] = maxPrice;
+            }
             $.ajax({  
                 url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
                 // data: {catId:id, value:value, sorting:sorting, minPrice:minPrice, maxPrice:maxPrice},
@@ -733,5 +737,5 @@
         function hideLoader() {
             $("##overlay").addClass("d-none");
         }
-    </script> 
+    </script>
 </cfoutput>
