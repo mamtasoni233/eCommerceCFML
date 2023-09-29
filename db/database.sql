@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2023 at 12:03 PM
+-- Generation Time: Sep 29, 2023 at 01:45 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -204,7 +204,8 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `product_tags`, `productNa
 (14, 18, '1', 'Monaco', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:11:38', 1),
 (15, 18, '1', 'Britannia Good Day', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 16:45:26', 1),
 (16, 18, '1,9', 'Oreo Pink Cream', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:10:44', 1),
-(17, 18, '1', 'Sunfest', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1);
+(17, 18, '1', 'Sunfest', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
+(18, 18, '1', 'Choco Lava Cake', 850, 20, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-09-29 11:21:52', 1);
 
 -- --------------------------------------------------------
 
@@ -250,7 +251,9 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (40, 17, 'oreo_6wpihl66wp5r.jpeg', b'1', b'1', '2023-09-18 17:11:04', 1),
 (41, 14, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf_18c5p6s3pjp5.jpg', b'1', b'1', '2023-09-18 17:11:38', 1),
 (42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'1', b'1', '2023-09-21 10:50:37', 1),
-(43, 9, 'marketing-creative-collage-with-phone.jpg', b'0', b'1', '2023-09-25 12:48:13', 1);
+(43, 9, 'marketing-creative-collage-with-phone.jpg', b'0', b'1', '2023-09-25 12:48:13', 1),
+(44, 18, '4c7dd5.webp', b'0', b'1', '2023-09-29 11:19:48', 1),
+(45, 18, 'electric-blender-mixer-juicer-set.jpg', b'1', b'1', '2023-09-29 11:21:44', 1);
 
 -- --------------------------------------------------------
 
@@ -315,7 +318,7 @@ INSERT INTO `users` (`PkUserId`, `token`, `firstName`, `lastName`, `email`, `dob
 (4, NULL, 'test', 'test', 'mamta@gmail.com', '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL),
 (5, NULL, 'Mamta', 'soni', '', '2006-04-11', b'0', '$2a$10$v3izpn/ocmrASfYmYtHp1uVb4fHokoD944y26vToQM9hbq/dDzBMa', NULL),
 (6, NULL, 'fgujhg', 'gjg', 'ravina@gmail.com', '2007-08-15', b'0', '$2a$10$TUDPhJfaJHKxx3hNiHOy6.wWbD6ROhZFXd7mSBaN0qD4mOU.nXyQi', NULL),
-(7, NULL, 'Vishal Kumar', 'Khatri', 'vishal.k@lucidsolutions.in', '1995-08-20', b'1', '$2a$10$Yv3.NlUCfjCk0tk9dKBGe.uTdwnt.jeViWQlbYUJc5MTCqrhxrBwy', NULL);
+(7, NULL, 'Vishal Kumar', 'Khatri', 'vishal.k@lucidsolutions.in', '1995-08-20', b'1', '$2a$10$vOKOnWE1xfkbLT0YuXRVtuCXH09oSE7WWnDJ50gUSrXtGNCefhVte', NULL);
 
 --
 -- Indexes for dumped tables
@@ -380,13 +383,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `product_tags`
