@@ -61,13 +61,13 @@
 <cfset data['success'] = true>
 <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
 <cftry>
-    <cfquery name="getProduct1">
+    <cfquery name="getProduct">
         SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
         FROM product P
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
         AND P.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype = "cf_sql_integer">
-        <cfif len(url.productTagValue) GT 0>
+        <cfif structKeyExists(url, "productTagValue") AND len(url.productTagValue) GT 0>
             AND (
                 P.product_tags LIKE (<cfqueryparam value="%#url.productTagValue#%">)
                 <cfloop list="#productTagValue#" item="item">
@@ -75,24 +75,30 @@
                 </cfloop>
             )
         </cfif>
+        <cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
+            AND P.productPrice BETWEEN <cfqueryparam value="#url.minPrice#" cfsqltype = "cf_sql_float"> AND <cfqueryparam value="#url.maxPrice#" cfsqltype = "cf_sql_float"> 
+        </cfif>
         <cfif structKeyExists(url, "sorting") AND len(url.sorting) GT 0>
             ORDER BY #url.sorting#
         </cfif>
     </cfquery>
-    <cfset totalPages = ceiling( getProduct1.recordCount/maxRows )>
+    <cfset totalPages = ceiling( getProduct.recordCount/maxRows )>
     <cfquery name="getProductBaseedTag">
         SELECT P.PkProductId, P.product_tags, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
         FROM product P
         LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
         WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
         AND P.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype = "cf_sql_integer">
-        <cfif len(url.productTagValue) GT 0>
+        <cfif structKeyExists(url, "productTagValue") AND  len(url.productTagValue) GT 0>
             AND (
                 P.product_tags LIKE (<cfqueryparam value="%#url.productTagValue#%">)
                 <cfloop list="#productTagValue#" item="item">
                     OR P.product_tags LIKE (<cfqueryparam value="%#item#%">)
                 </cfloop>
             )
+        </cfif>
+        <cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
+            AND P.productPrice BETWEEN <cfqueryparam value="#url.minPrice#" cfsqltype = "cf_sql_float"> AND <cfqueryparam value="#url.maxPrice#" cfsqltype = "cf_sql_float"> 
         </cfif>
         <cfif structKeyExists(url, "sorting") AND len(url.sorting) GT 0>
             ORDER BY #url.sorting#
@@ -108,7 +114,6 @@
     </cfquery>
     <cfsavecontent variable="data['html']">
         <cfoutput>
-            <cfdump  var="#url#">
             <style>
                 img {
                     width: 200px;
@@ -116,8 +121,66 @@
                     object-fit: contain;
                 }
             </style>
+            <!--- <div class="d-flex align-items-center flex-column flex-md-row justify-content-between" id="sortingFilterContainer">
+                <small class="d-inline-block fw-bolder">Filtered by:</small>
+                <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0" id="productTagContainer">
+                    <cfif tructKeyExists(url, "productTagValue") AND len(url.productTagValue) GT 0>
+                        <cfquery name="qryGetTagName" dbtype="query">
+                            SELECT tagName, PkTagId
+                            FROM getProductTag
+                            WHERE PkTagId IN (<cfqueryparam value="#url.productTagValue#" list="true">)
+                        </cfquery>
+                        <!--- <cfset tagList = valueList(qryGetTagName.tagName)>
+                        <cfset tagNameList = listRemoveDuplicates(tagList)> --->
+                        <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
+                            <cfloop query="qryGetTagName">
+                                <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
+                                    #qryGetTagName.tagName#
+                                    <i class="ri-close-circle-line align-bottom mt-1 deleteProductTag" data-id="#qryGetTagName.PkTagId#"></i>
+                                </li>
+                            </cfloop>
+                            <!---  <cfloop list="#tagNameList#" index="item">
+                                <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
+                                    #item#
+                                    <i class="ri-close-circle-line align-bottom mt-1" id="deleteProductTag" data-id="#getProductTag.PkTagId#"></i>
+                                </li>
+                            </cfloop> --->
+                        </ul>
+                        <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small" id="deleteAllProductTag">
+                            Clear All
+                        </span>
+                    </cfif>
+                </div>
+                <!-- Filter Trigger-->
+                <button class="btn bg-light p-3 d-flex d-lg-none align-items-center fs-xs fw-bold text-uppercase w-100 mb-2 mb-md-0 w-md-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="##offcanvasFilters" aria-controls="offcanvasFilters">
+                    <i class="ri-equalizer-line me-2"></i> Filters
+                </button>
+                <!-- / Filter Trigger-->
+                <div class="dropdown ms-md-2 lh-1 p-3 bg-light w-100 mb-2 mb-md-0 w-md-auto">
+                    <p class="fs-xs fw-bold text-uppercase text-muted-hover p-0 m-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort By <i class="ri-arrow-drop-down-line ri-lg align-bottom"></i>
+                    </p>
+                    <ul class="dropdown-menu" id="sortingFilterUl">
+                        <li>
+                            <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice DESC">
+                                Price: Hi Low
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice ASC">
+                                Price: Low Hi
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productName ASC">
+                                Name
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div> --->
             <!-- Top Toolbar-->
-                <div class="mb-4 d-md-flex justify-content-between align-items-center">
+                <!--- <div class="mb-4 d-md-flex justify-content-between align-items-center">
                     <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0">
                         <small class="d-inline-block fw-bolder">Filtered by:</small>
                         <cfif len(url.productTagValue) GT 0>
@@ -139,7 +202,6 @@
                                     <li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
                                         #item#
                                         <i class="ri-close-circle-line align-bottom mt-1" id="deleteProductTag" data-id="#getProductTag.PkTagId#"></i>
-                                        <cfdump var="#getProductTag.PkTagId#">
                                     </li>
                                 </cfloop> --->
                             </ul>
@@ -148,7 +210,7 @@
                             </span>
                         </cfif>
                     </div>
-                    <div class="d-flex align-items-center flex-column flex-md-row" id="sortingFilterContainer">
+                    <div class="d-flex align-items-center flex-column flex-md-row" >
                         <!-- Filter Trigger-->
                         <button class="btn bg-light p-3 d-flex d-lg-none align-items-center fs-xs fw-bold text-uppercase w-100 mb-2 mb-md-0 w-md-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="##offcanvasFilters" aria-controls="offcanvasFilters">
                             <i class="ri-equalizer-line me-2"></i> Filters
@@ -159,25 +221,25 @@
                                 Sort By <i class="ri-arrow-drop-down-line ri-lg align-bottom"></i>
                             </p>
                             <ul class="dropdown-menu" id="sortingFilterUl">
-                                <li>
-                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice DESC">
+                                <li class="dropdown-list-item">
+                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productPrice DESC'>active</cfif>" data-order="productPrice DESC">
                                         Price: Hi Low
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice ASC">
+                                <li class="dropdown-list-item">
+                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productPrice ASC'>active</cfif>" data-order="productPrice ASC">
                                         Price: Low Hi
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productName ASC">
+                                <li class="dropdown-list-item">
+                                    <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productName ASC'>active</cfif>" data-order="productName ASC">
                                         Name
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                    </div>
-                </div>                    
+                    </div> 
+                </div> --->                    
             <!-- / Top Toolbar-->
             <!-- Products-->
             <div class="row g-4 mb-5">
@@ -256,7 +318,7 @@
             <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                        <a class="page-link prev" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif>" data-id="#pageNum#" >
+                        <a class="page-link prev" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>" data-id="#pageNum#" >
                             <i class="ri-arrow-left-line align-bottom"></i>
                             Prev
                         </a>
@@ -265,7 +327,7 @@
                 <ul class="pagination">
                     <cfloop from="1" to="#totalPages#" index="i">
                         <li class="page-item <cfif pageNum EQ i>active</cfif> mx-1">
-                            <a class="page-link" href="index.cfm?pg=category&id=#url.catId#&pageNum=#i#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif>">
+                            <a class="page-link" href="index.cfm?pg=category&id=#url.catId#&pageNum=#i#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>">
                                 #i#
                             </a>
                         </li>
@@ -273,7 +335,7 @@
                 </ul>
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                        <a class="page-link next" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif>">Next 
+                        <a class="page-link next" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>">Next 
                             <i class="ri-arrow-right-line align-bottom"></i>
                         </a>
                     </li>

@@ -22,8 +22,11 @@
             </cfloop>
         )
     </cfif>
-    <cfif structKeyExists(url, 'tags') AND len(url.sorting) GT 0>
-        ORDER BY <cfqueryparam value="#url.sorting#" cfsqltype="cf_sql_varchar">
+    <cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
+        AND P.productPrice BETWEEN <cfqueryparam value="#url.minPrice#" cfsqltype = "cf_sql_float"> AND <cfqueryparam value="#url.maxPrice#" cfsqltype = "cf_sql_float"> 
+    </cfif>
+    <cfif structKeyExists(url, 'sorting') AND len(url.sorting) GT 0>
+        ORDER BY #url.sorting#
     </cfif>
 </cfquery>
 <!--- paingnation --->
@@ -34,7 +37,7 @@
     LEFT JOIN product_tags PT ON PT.PkTagId = P.product_tags 
     WHERE  P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
     AND P.FkCategoryId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
-    <cfif structKeyExists(url, 'sorting') AND url.tags GT 0>
+    <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
         AND (
             P.product_tags LIKE (<cfqueryparam value="%#url.tags#%">)
             <cfloop list="#tags#" item="item">
@@ -42,8 +45,11 @@
             </cfloop>
         )
     </cfif>
+    <cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
+        AND P.productPrice BETWEEN <cfqueryparam value="#url.minPrice#" cfsqltype = "cf_sql_float"> AND <cfqueryparam value="#url.maxPrice#" cfsqltype = "cf_sql_float"> 
+    </cfif>
     <cfif structKeyExists(url, 'sorting') AND len(url.sorting) GT 0>
-        ORDER BY <cfqueryparam value="#url.sorting#" cfsqltype="cf_sql_varchar">
+        ORDER BY #url.sorting#
     </cfif>
     LIMIT #startRow#, #maxRows#
 </cfquery>
@@ -198,8 +204,8 @@
                             </nav>
                         </div>
                         <!-- / Filter Category-->
-                        <!-- Price Filter -->
-                        <!--- <div class="py-4 widget-filter widget-filter-price border-top">
+                        <!-- Price Range Filter -->
+                        <div class="py-4 widget-filter widget-filter-price border-top">
                             <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
                                 data-bs-toggle="collapse" href="##filter-price" role="button" aria-expanded="true"
                                 aria-controls="filter-price">
@@ -207,19 +213,23 @@
                             </a>
                             <div id="filter-price" class="collapse show">
                                 <div class="filter-price mt-6"></div>
-                                <div class="d-flex justify-content-between align-items-center mt-7">
+                                <div class="d-flex justify-content-between align-items-center mt-7" id="">
                                     <div class="input-group mb-0 me-2 border">
-                                        <span class="input-group-text bg-transparent fs-7 p-2 text-muted border-0">$</span>
-                                        <input type="number" min="00" max="1000" step="1" class="filter-min form-control-sm border flex-grow-1 text-muted border-0">
+                                        <span class="input-group-text bg-transparent fs-7 p-2 text-muted border-0">
+                                            <i class="fa fa-rupee"></i>
+                                        </span>
+                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMin" step="1" class="filter-min form-control-sm border flex-grow-1 text-muted border-0" id="filterPriceMin">
                                     </div>   
                                     <div class="input-group mb-0 ms-2 border">
-                                        <span class="input-group-text bg-transparent fs-7 p-2 text-muted border-0">$</span>
-                                        <input type="number" min="00" max="1000" step="1" class="filter-max form-control-sm flex-grow-1 text-muted border-0">
+                                        <span class="input-group-text bg-transparent fs-7 p-2 text-muted border-0">
+                                            <i class="fa fa-rupee"></i>
+                                        </span>
+                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMax" step="1" class="filter-max form-control-sm flex-grow-1 text-muted border-0" id="filterPriceMax">
                                     </div>                
                                 </div>        
                             </div>
-                        </div> --->
-                        <!-- / Price Filter -->   
+                        </div>
+                        <!-- / Price Range Filter -->   
                         <!-- Brands Filter -->
                         <!--- <div class="py-4 widget-filter border-top">
                             <a class="small text-body text-decoration-none text-secondary-hover transition-all transition-all fs-6 fw-bolder d-block collapse-icon-chevron"
@@ -464,18 +474,18 @@
                             Sort By <i class="ri-arrow-drop-down-line ri-lg align-bottom"></i>
                         </p>
                         <ul class="dropdown-menu" id="sortingFilterUl">
-                            <li>
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice DESC">
+                            <li class="dropdown-list-item">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productPrice DESC'>active</cfif>" data-order="productPrice DESC">
                                     Price: Hi Low
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productPrice ASC">
+                            <li class="dropdown-list-item">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productPrice ASC'>active</cfif>" data-order="productPrice ASC">
                                     Price: Low Hi
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter" data-order="productName ASC">
+                            <li class="dropdown-list-item">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productName ASC'>active</cfif>" data-order="productName ASC">
                                     Name
                                 </a>
                             </li>
@@ -484,9 +494,8 @@
                 </div>
                 <div id="productContainer" class="">
                     <!-- Top Toolbar-->
-                    <div class="mb-4 d-md-flex justify-content-between align-items-center" >
-                        
-                    </div>                    
+                    <!---   <div class="mb-4 d-md-flex justify-content-between align-items-center" >
+                    </div>    --->                 
                     <!-- / Top Toolbar-->
                     <!-- Products-->
                     <div class="row g-4 mb-5">
@@ -565,7 +574,7 @@
                     <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                         <ul class="pagination">
                             <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                                <a class="page-link prev"  href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif>" data-id="#pageNum#">
+                                <a class="page-link prev"  href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>" data-id="#pageNum#">
                                     <i class="ri-arrow-left-line align-bottom"></i>
                                     Prev
                                 </a>
@@ -574,7 +583,7 @@
                         <ul class="pagination">
                             <cfloop from="1" to="#totalPages#" index="i">
                                 <li class="page-item <cfif pageNum EQ i>active</cfif> mx-1">
-                                    <a class="page-link" href="index.cfm?pg=category&id=#url.id#&pageNum=#i#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif>">
+                                    <a class="page-link" href="index.cfm?pg=category&id=#url.id#&pageNum=#i#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>">
                                         #i#
                                     </a>
                                 </li>
@@ -582,7 +591,7 @@
                         </ul>
                         <ul class="pagination">
                             <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                                <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif>">Next 
+                                <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>">Next 
                                     <i class="ri-arrow-right-line align-bottom"></i>
                                 </a>
                             </li>
@@ -636,47 +645,93 @@
                     setTimeout(function(){
                         showLoader();
                     },500);
-                    ajaxFilter(value,catId, '');
+                    ajaxFilter(value, catId, sorting);
                     let defaultURL = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum;
                     window.history.pushState(null, null, defaultURL);
                     setTimeout(function(){
                         hideLoader();
                     },500);
                 } else {
-                    ajaxFilter(value,catId, '');
+                    ajaxFilter(value, catId, sorting);
                 }
             });
         });
         $(document).on("click", '##deleteAllProductTag', function () {
             $('.productTag').prop("checked", false);
-            ajaxFilter('', id, '');
+            ajaxFilter(value, id, sorting);
         });
         $(document).on('click', '.deleteProductTag', function () {
             var tagIds = $(this).attr('data-id');
             $('##filter-type-'+tagIds).prop("checked", false);
             var tId = $("input:checkbox[name=productTag]:checked").val();
             if(tId > 0){
-                ajaxFilter(tId, id, '');
+                ajaxFilter(tId, id, sorting);
             }else{
-                ajaxFilter('', id, '');
+                ajaxFilter(value, id, sorting);
             }
         });
         $(document).on("click", '.sortingFilter', function () {
-            var sortId = $(this).attr('data-order');
-            console.log(sortId);
-            ajaxFilter('', id, sortId);
+            var sortingValue = $(this).attr('data-order');
+            ajaxFilter(value, id, sortingValue,);
+        });
+        $(document).on("change", '##filterPriceMax', function () {
+            var filterPriceMaxValue = $(this).val();
+            var filterPriceMinVal = $('##filterPriceMin').val();
+            ajaxFilter(value, id, sorting, filterPriceMinVal, filterPriceMaxValue);
+        });
+        $(document).on("change", '##filterPriceMin', function () {
+            var filterPriceMinValue = $(this).val();
+            var filterPriceMaxVal = $('##filterPriceMax').val();
+            ajaxFilter(value, id, sorting, filterPriceMinValue, filterPriceMaxVal);
         });
         
-        function ajaxFilter(value,id,sorting) {
+        /*  function ajaxFilter(value, id, sorting, filterPriceMin = 0, filterPriceMax = 0) {
             $.ajax({  
                 url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
-                data: {catId:id, value:value, sorting:sorting},
+                data: {catId:id, value:value, sorting:sorting, filterPriceMin:filterPriceMin, filterPriceMax:filterPriceMax},
                 type: 'GET',
                 success: function(result) {
                     if (result.success) {
                         $('##productContainer').html(result.html);
-                        url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value;
+                        url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value +'&sorting=' + sorting + '&minPrice=' + filterPriceMin + '&maxPrice=' + filterPriceMax;
                         window.history.pushState(null, null,url);
+                        console.log("result", result);
+                        // $('##sortingFilterContainer').addClass('d-none');
+                    }
+                },
+                beforeSend: function(){
+                    setTimeout(function(){
+                        showLoader();
+                    },500);
+                }, 
+                complete: function(){
+                    setTimeout(function(){
+                        hideLoader();
+                    },500);
+                }  
+            });  
+        } */
+        function ajaxFilter(value, id, sorting, filterPriceMin = '', filterPriceMax = '') {
+
+            var data = {catId:id, value:value, sorting:sorting};
+            if(filterPriceMin === 'number'){
+                data[ filterPriceMin] = filterPriceMin;
+            }
+            if(filterPriceMax === 'number'){
+                data[ filterPriceMax] = filterPriceMax;
+            }
+            $.ajax({  
+                url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
+                // data: {catId:id, value:value, sorting:sorting, filterPriceMin:filterPriceMin, filterPriceMax:filterPriceMax},
+                data: data,
+                type: 'GET',
+                success: function(result) {
+                    if (result.success) {
+                        $('##productContainer').html(result.html);
+                        url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value +'&sorting=' + sorting + '&minPrice=' + filterPriceMin + '&maxPrice=' + filterPriceMax;
+                        window.history.pushState(null, null,url);
+                        console.log("result", result);
+                        // $('##sortingFilterContainer').addClass('d-none');
                     }
                 },
                 beforeSend: function(){
