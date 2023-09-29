@@ -695,12 +695,12 @@
         function ajaxFilter(value, id, sorting, minPrice = '', maxPrice = '') {
             var tagName = $('.productTag').attr('data-tagName');
             var data = {"catId":id, "value":value, "sorting":sorting};
-            if(minPrice != "" && jQuery.type(minPrice) === 'number' ){
-                data[ "minPrice"] = minPrice;
-            }
-            if(maxPrice != '' && jQuery.type(maxPrice) === 'number' ){
-                data[ "maxPrice"] = maxPrice;
-            }
+            // if(minPrice != "" && jQuery.type(minPrice) === 'number' ){
+            //     data[ "minPrice"] = minPrice;
+            // }
+            // if(maxPrice != '' && jQuery.type(maxPrice) === 'number' ){
+            //     data[ "maxPrice"] = maxPrice;
+            // }
             $.ajax({  
                 url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
                 // data: {catId:id, value:value, sorting:sorting, minPrice:minPrice, maxPrice:maxPrice},
