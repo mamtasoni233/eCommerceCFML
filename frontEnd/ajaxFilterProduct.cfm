@@ -1,6 +1,6 @@
-<cfsetting enablecfoutputonly="true" showdebugoutput="false" />
+<!--- <cfsetting enablecfoutputonly="true" showdebugoutput="false" />
 <cfheader statuscode="200" statustext="OK" />
-<cfcontent reset="true" type="application/json" />
+<cfcontent reset="true" type="application/json" /> --->
 
 <cfparam name="PkProductId" default="" />
 <cfparam name="FkCategoryId" default="" />
@@ -112,6 +112,7 @@
         AND PT.isActive = <cfqueryparam value="1" cfsqltype = "cf_sql_bit">
         AND PT.FkCategoryId = <cfqueryparam value="#url.catId#" cfsqltype="cf_sql_integer">
     </cfquery>
+    <cfdump  var="#url#">
     <cfsavecontent variable="data['html']">
         <cfoutput>
             <style>
@@ -121,6 +122,7 @@
                     object-fit: contain;
                 }
             </style>
+            <cfdump  var="#getProductBaseedTag#"> <cfabort>
             <!--- <div class="d-flex align-items-center flex-column flex-md-row justify-content-between" id="sortingFilterContainer">
                 <small class="d-inline-block fw-bolder">Filtered by:</small>
                 <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0" id="productTagContainer">

@@ -53,6 +53,7 @@
     </cfif>
     LIMIT #startRow#, #maxRows#
 </cfquery>
+<cfdump  var="#getProductPaging#">
 <cffunction name="getCategoryResult" access="public" returntype="array">
     <cfargument name="parentId" default="0" required="false" type="numeric"/>
     <cfargument name="categoryId" default="0" required="false" type="numeric"/>
@@ -324,7 +325,7 @@
                                 <div class="filter-options">
                                     <cfloop query="#getProductTag#">
                                         <div class="form-group form-check mb-0">
-                                            <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-type="#getProductTag.tagName#" data-catId ="#url.id#" id="filter-type-#getProductTag.PkTagId#" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked</cfif>>
+                                            <input type="checkbox" class="form-check-input productTag" name="productTag" value="#getProductTag.PkTagId#" data-tagName="#getProductTag.tagName#" data-catId ="#url.id#" id="filter-type-#getProductTag.PkTagId#" <cfif structKeyExists(url, 'tags') AND listFindNoCase(url.tags, getProductTag.PkTagId)>checked</cfif>>
                                             <label class="form-check-label fw-normal text-body flex-grow-1 d-flex justify-content-between" for="filter-type-#getProductTag.PkTagId#">#getProductTag.tagName#</label>
                                         </div>
                                     </cfloop>               
@@ -638,6 +639,7 @@
             hideLoader();
             //ajaxFilter(value,id);
             $('.productTag').on('change', function(){
+                // var tagName = $(this).attr('data-tagName');
                 showLoader();
                 var catId = $(this).attr('data-catId');
                 value = $(':checked').map(function(){ return $(this).val(); }).get().join();
@@ -653,6 +655,7 @@
                     },500);
                 } else {
                     ajaxFilter(value, catId, sorting);
+                    // $("##productTypeUl").append('<li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">' + tagName +' <i class="ri-close-circle-line align-bottom mt-1 deleteProductTag" data-id=""></i></li>');
                 }
             });
         });
@@ -679,58 +682,36 @@
             var filterPriceMinVal = $('##filterPriceMin').val();
             ajaxFilter(value, id, sorting, filterPriceMinVal, filterPriceMaxValue);
         });
+        $(document).on("change", '.filter-price', function () {
+            var filterPriceMaxValue = $(this).val();
+            var filterPriceMinVal = $('##filterPriceMin').val();
+            ajaxFilter(value, id, sorting, filterPriceMinVal, filterPriceMaxValue);
+        });
         $(document).on("change", '##filterPriceMin', function () {
             var filterPriceMinValue = $(this).val();
             var filterPriceMaxVal = $('##filterPriceMax').val();
             ajaxFilter(value, id, sorting, filterPriceMinValue, filterPriceMaxVal);
         });
-        
-        /*  function ajaxFilter(value, id, sorting, filterPriceMin = 0, filterPriceMax = 0) {
-            $.ajax({  
-                url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
-                data: {catId:id, value:value, sorting:sorting, filterPriceMin:filterPriceMin, filterPriceMax:filterPriceMax},
-                type: 'GET',
-                success: function(result) {
-                    if (result.success) {
-                        $('##productContainer').html(result.html);
-                        url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value +'&sorting=' + sorting + '&minPrice=' + filterPriceMin + '&maxPrice=' + filterPriceMax;
-                        window.history.pushState(null, null,url);
-                        console.log("result", result);
-                        // $('##sortingFilterContainer').addClass('d-none');
-                    }
-                },
-                beforeSend: function(){
-                    setTimeout(function(){
-                        showLoader();
-                    },500);
-                }, 
-                complete: function(){
-                    setTimeout(function(){
-                        hideLoader();
-                    },500);
-                }  
-            });  
-        } */
-        function ajaxFilter(value, id, sorting, filterPriceMin = '', filterPriceMax = '') {
-
-            var data = {catId:id, value:value, sorting:sorting};
-            if(filterPriceMin === 'number'){
-                data[ filterPriceMin] = filterPriceMin;
+        function ajaxFilter(value, id, sorting, minPrice = '', maxPrice = '') {
+            var tagName = $('.productTag').attr('data-tagName');
+            var data = {"catId":id, "value":value, "sorting":sorting};
+            if(minPrice != "" && jQuery.type(minPrice) === 'number' ){
+                data[ "minPrice"] = minPrice;
             }
-            if(filterPriceMax === 'number'){
-                data[ filterPriceMax] = filterPriceMax;
+            if(maxPrice != '' && jQuery.type(maxPrice) === 'number' ){
+                data[ "maxPrice"] = maxPrice;
             }
             $.ajax({  
                 url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
-                // data: {catId:id, value:value, sorting:sorting, filterPriceMin:filterPriceMin, filterPriceMax:filterPriceMax},
+                // data: {catId:id, value:value, sorting:sorting, minPrice:minPrice, maxPrice:maxPrice},
                 data: data,
                 type: 'GET',
                 success: function(result) {
                     if (result.success) {
                         $('##productContainer').html(result.html);
-                        url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value +'&sorting=' + sorting + '&minPrice=' + filterPriceMin + '&maxPrice=' + filterPriceMax;
+                        url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value +'&sorting=' + sorting + '&minPrice=' + minPrice + '&maxPrice=' + maxPrice;
                         window.history.pushState(null, null,url);
-                        console.log("result", result);
+                        $("##productTypeUl").append('<li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">' + tagName +' <i class="ri-close-circle-line align-bottom mt-1 deleteProductTag" data-id=""></i></li>');
                         // $('##sortingFilterContainer').addClass('d-none');
                     }
                 },
