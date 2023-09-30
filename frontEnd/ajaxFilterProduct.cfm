@@ -97,7 +97,7 @@
                 </cfloop>
             )
         </cfif>
-        <cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
+        <cfif (structKeyExists(url, "minPrice") AND url.minPrice GT 0) OR (structKeyExists(url, "maxPrice") AND url.maxPrice GT 0)>
             AND P.productPrice BETWEEN <cfqueryparam value="#url.minPrice#" cfsqltype = "cf_sql_float"> AND <cfqueryparam value="#url.maxPrice#" cfsqltype = "cf_sql_float"> 
         </cfif>
         <cfif structKeyExists(url, "sorting") AND len(url.sorting) GT 0>
