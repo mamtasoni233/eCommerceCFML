@@ -219,15 +219,18 @@
                                         <span class="input-group-text bg-transparent fs-7 p-2 text-muted border-0">
                                             <i class="fa fa-rupee"></i>
                                         </span>
-                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMin" step="1" class="filter-min form-control-sm border flex-grow-1 text-muted border-0" id="filterPriceMin">
+                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMin" step="1" class="filter-min form-control-sm w-50 text-muted border-0 flex-grow-1" id="filterPriceMin">
                                     </div>   
                                     <div class="input-group mb-0 ms-2 border">
                                         <span class="input-group-text bg-transparent fs-7 p-2 text-muted border-0">
                                             <i class="fa fa-rupee"></i>
                                         </span>
-                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMax" step="1" class="filter-max form-control-sm flex-grow-1 text-muted border-0" id="filterPriceMax">
-                                    </div>                
-                                </div>        
+                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMax" step="1" class="filter-max form-control-sm w-50 text-muted border-0 flex-grow-1" id="filterPriceMax">
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-sm mt-3 btn-dark" id="applyPriceFilter">Apply Price Filter</button>
+                                </div>
                             </div>
                         </div>
                         <!--- / Price Range Filter --->   
@@ -443,27 +446,33 @@
                         <span class="spinner"></span>
                     </div>
 				</div>
-                <div class="d-flex align-items-center flex-column flex-md-row justify-content-between" id="sortingFilterContainer">
-                    <small class="d-inline-block fw-bolder">Filtered by:</small>
-                    <div class="d-flex justify-content-start align-items-center flex-grow-1 mb-4 mb-md-0" id="productTagContainer">
-                        <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
-                            <cfquery name="qryGetTagName" dbtype="query">
-                                    SELECT tagName, PkTagId
-                                    FROM getProductTag
-                                    WHERE PkTagId IN (<cfqueryparam value="#url.tags#" list="true">)
-                            </cfquery>
-                            <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
+                <div class="d-flex align-items-center flex-column flex-md-row justify-content-end">
+                    <cfset displayClass = "d-none">
+                    <cfif structKeyExists(url, 'tags') AND url.tags GT 0>
+                        <cfquery name="qryGetTagName" dbtype="query">
+                            SELECT tagName, PkTagId
+                            FROM getProductTag
+                            WHERE PkTagId IN (<cfqueryparam value="#url.tags#" list="true">)
+                        </cfquery>
+                        <cfset displayClass = "">
+                    <cfelseif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice")>
+                        <cfset displayClass = "">
+                    </cfif>
+                    <div class="align-items-center flex-grow-1 mb-4 mb-md-0 #displayClass#" id="productTagContainer">
+                        <small class="d-inline-block fw-bolder">Filtered by:</small>
+                        <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
+                            <cfif structKeyExists(variables, "qryGetTagName") AND qryGetTagName.recordCount GT 0>
                                 <cfloop query="qryGetTagName">
-                                    <li id="tagNameLi-#qryGetTagName.PkTagId#" data-name="#qryGetTagName.tagName#" class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">
-                                        #qryGetTagName.tagName#
-                                        <i class="ri-close-circle-line align-bottom mt-1 deleteProductTag" data-id="#qryGetTagName.PkTagId#"></i>
-                                    </li>
+                                    <li id="tagNameLi-#qryGetTagName.PkTagId#" data-name="#qryGetTagName.tagName#" class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1">Type: #qryGetTagName.tagName#<i class="ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag" data-id="#qryGetTagName.PkTagId#"></i></li>
                                 </cfloop>
-                            </ul>
-                            <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small" id="deleteAllProductTag">
-                                Clear All
-                            </span>
-                        </cfif> 
+                            </cfif>
+                            <cfif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice")>
+                                <li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> #url.minPrice# - <i class='fa fa-rupee'></i> #url.maxPrice#<i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag'></i></li>
+                            </cfif>
+                        </ul>
+                        <cfif (structKeyExists(variables, "qryGetTagName") AND qryGetTagName.recordCount GT 0) OR (structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice"))>
+                            <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>
+                        </cfif>
                     </div>
                     <!--- Filter Trigger --->
                     <button class="btn bg-light p-3 d-flex d-lg-none align-items-center fs-xs fw-bold text-uppercase w-100 mb-2 mb-md-0 w-md-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="##offcanvasFilters" aria-controls="offcanvasFilters">
@@ -493,7 +502,7 @@
                         </ul>
                     </div>
                 </div>
-                <div id="productContainer" class="">
+                <div id="productContainer" class="mt-3">
                     <!--- Top Toolbar --->
                     <!---   <div class="mb-4 d-md-flex justify-content-between align-items-center" >
                     </div>    --->                 
@@ -635,49 +644,78 @@
         var value = "";
         var url = "";
         var sorting = "";
+        var minPrice = "";
+        var maxPrice = "";
         $(document).ready( function () { 
-            hideLoader();
             //ajaxFilter(value,id);
             $('.productTag').on('change', function(){
-                // var tagName = $(this).attr('data-tagName');
-                showLoader();
+                let tagName = $(this).attr('data-tagName');
                 var catId = $(this).attr('data-catId');
-                value = $(':checked').map(function(){ return $(this).val(); }).get().join();
+                value = $('.productTag:checked').map(function(){ return $(this).val(); }).get().join();
+                if (!$(this).prop("checked") && $('##tagNameLi-' + $(this).val()).length === 1) {
+                    $('##tagNameLi-' + $(this).val()).remove();
+                }
+
+                if ($('##deleteAllProductTag').length === 0) {
+                    $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
+                }
+
                 if (value.length === 0) {
+                    $('##productTagContainer').addClass('d-none');
                     setTimeout(function(){
                         showLoader();
-                    },500);
+                    }, 500);
                     ajaxFilter(value, catId, sorting);
-                    let defaultURL = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum;
-                    window.history.pushState(null, null, defaultURL);
                     setTimeout(function(){
                         hideLoader();
-                    },500);
+                    }, 500);
                 } else {
-                    ajaxFilter(value, catId, sorting);
-                    // $("##productTypeUl").append('<li class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block">' + tagName +' <i class="ri-close-circle-line align-bottom mt-1 deleteProductTag" data-id=""></i></li>');
+                    $('##productTagContainer').removeClass('d-none');
+                    if ($(this).prop("checked") && $('##tagNameLi-' + $(this).val()).length === 0) {
+                        $("##productTypeUl").append("<li id='tagNameLi-"+ $(this).val() +"' data-name='" + tagName + "' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Type: " + tagName + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='" + $(this).val() + "'></i></li>");
+                    }
+                    ajaxFilter(value, catId, sorting, minPrice, maxPrice);
                 }
+            });
+            $('##applyPriceFilter').click(function() {
+                maxPrice = parseFloat($('##filterPriceMax').val());
+                minPrice = parseFloat($('##filterPriceMin').val());
+                $('##productTagContainer').removeClass('d-none');
+                if ($('##deleteAllProductTag').length === 0) {
+                    $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
+                }
+                $('##priceLi').remove();
+                $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
+                ajaxFilter(value, id, sorting, minPrice, maxPrice);
             });
         });
         $(document).on("click", '##deleteAllProductTag', function () {
             $('.productTag').prop("checked", false);
-            ajaxFilter(value, id, sorting);
+            $('##productTypeUl').html('');
+            $('##productTagContainer').addClass('d-none');
+            value = "";
+            ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
         $(document).on('click', '.deleteProductTag', function () {
             var tagIds = $(this).attr('data-id');
-            $('##filter-type-'+tagIds).prop("checked", false);
-            var tId = $("input:checkbox[name=productTag]:checked").val();
-            if(tId > 0){
-                ajaxFilter(tId, id, sorting);
-            }else{
-                ajaxFilter(value, id, sorting);
+            if (tagIds > 0) {
+                $('##tagNameLi-' + tagIds).remove();
+            } else {
+                $('##priceLi').remove();
             }
+            $('##filter-type-'+tagIds).prop("checked", false);
+            value = $('.productTag:checked').map(function(){ return $(this).val(); }).get().join();
+            if (value === "") {
+                $('##productTagContainer').addClass('d-none');
+            }
+            ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
+        
         $(document).on("click", '.sortingFilter', function () {
-            var sortingValue = $(this).attr('data-order');
-            ajaxFilter(value, id, sortingValue,);
+            sorting = $(this).attr('data-order');
+            ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
-        $(document).on("change", '##filterPriceMax', function () {
+        /* $(document).on("change", '##filterPriceMax', function () {
             var filterPriceMaxValue = parseFloat($(this).val());
             var filterPriceMinVal = parseFloat($('##filterPriceMin').val());
             ajaxFilter(value, id, sorting, filterPriceMinVal, filterPriceMaxValue);
@@ -691,7 +729,7 @@
             var filterPriceMinValue = parseFloat($(this).val());
             var filterPriceMaxVal = parseFloat($('##filterPriceMax').val());
             ajaxFilter(value, id, sorting, filterPriceMinValue, filterPriceMaxVal);
-        });
+        }); */
         function ajaxFilter(value, id, sorting, minPrice = '', maxPrice = '') {
             /* var tagName = $('.productTag').attr('data-tagName'); */
             /*  var tagIds = value = $(':checked').map(function(){ return $('.productTag').val(); }).get().join();
@@ -711,24 +749,25 @@
                 url: '../ajaxFilterProduct.cfm?productTagValue='+ value, 
                 data: data,
                 type: 'GET',
+                async: false,
+                beforeSend: function(){
+                    showLoader();
+                },
                 success: function(result) {
                     if (result.success) {
                         $('##productContainer').html(result.html);
                         url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value +'&sorting=' + sorting + '&minPrice=' + minPrice + '&maxPrice=' + maxPrice;
-                        window.history.pushState(null, null,url);
-                        $("##productTypeUl").append('<li id="tagNameLi" class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block"> <i class="ri-close-circle-line align-bottom mt-1 deleteProductTag"></i></li>');
+                        if (value === "" && sorting === "" && minPrice === "" && maxPrice === "") {
+                            url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum;
+                        }
+                        window.history.pushState(null, null, url);
                     }
                 },
-                beforeSend: function(){
-                    setTimeout(function(){
-                        showLoader();
-                    },500);
-                }, 
                 complete: function(){
                     setTimeout(function(){
                         hideLoader();
-                    },500);
-                }  
+                    }, 500);
+                } 
             });  
         }
         function showLoader() {

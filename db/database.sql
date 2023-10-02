@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 29, 2023 at 01:45 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Oct 02, 2023 at 03:20 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `vishal_db`
+-- Database: `ecommerce`
 --
 
 -- --------------------------------------------------------
@@ -194,9 +194,9 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `product_tags`, `productNa
 (4, 41, '5', 'T-SHIRT', 850, 25, 'test', b'1', b'1', '2023-09-14 14:12:42', 1, '2023-09-20 11:31:49', 1),
 (5, 7, '1,5', 'Samsung Z-fold ', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
 (6, 18, '9', 'Biscuits', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-21 16:46:16', 1),
-(7, 21, '10', 'Meggie', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-09-15 15:15:19', 1),
+(7, 21, '10', 'Meggie', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-02 18:20:34', 7),
 (8, 19, '4', 'Sona Namkeen', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-09-25 11:54:41', 1),
-(9, 20, '8', 'Taj Mahal Tea', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-09-25 12:48:12', 1),
+(9, 20, '8', 'Taj Mahal Tea', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-02 18:20:28', 7),
 (10, 18, '1', 'crack jack', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:06:16', NULL),
 (11, 18, '1', 'Hide & seek', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, '1', 'Oreo', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
@@ -205,7 +205,8 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `product_tags`, `productNa
 (15, 18, '1', 'Britannia Good Day', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 16:45:26', 1),
 (16, 18, '1,9', 'Oreo Pink Cream', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:10:44', 1),
 (17, 18, '1', 'Sunfest', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
-(18, 18, '1', 'Choco Lava Cake', 850, 20, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-09-29 11:21:52', 1);
+(18, 18, '1', 'Choco Lava Cake', 850, 20, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-09-29 11:21:52', 1),
+(19, 19, '4,11', 'Bhujia Sev', 150, 10, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-10-02 18:21:02', 7);
 
 -- --------------------------------------------------------
 
@@ -253,7 +254,9 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'1', b'1', '2023-09-21 10:50:37', 1),
 (43, 9, 'marketing-creative-collage-with-phone.jpg', b'0', b'1', '2023-09-25 12:48:13', 1),
 (44, 18, '4c7dd5.webp', b'0', b'1', '2023-09-29 11:19:48', 1),
-(45, 18, 'electric-blender-mixer-juicer-set.jpg', b'1', b'1', '2023-09-29 11:21:44', 1);
+(45, 18, 'electric-blender-mixer-juicer-set.jpg', b'1', b'1', '2023-09-29 11:21:44', 1),
+(46, 19, 'Bhujia_Sev.jpg', b'0', b'1', '2023-10-01 22:45:57', 7),
+(47, 19, 'bhujiya_sev_1.webp', b'1', b'1', '2023-10-01 22:45:57', 7);
 
 -- --------------------------------------------------------
 
@@ -281,13 +284,14 @@ INSERT INTO `product_tags` (`PkTagId`, `FkCategoryId`, `tagName`, `isActive`, `i
 (1, 18, 'biscuits', b'1', b'0', '2023-09-11 10:57:18', 1, '2023-09-11 10:58:46', NULL),
 (2, 36, 'printers', b'1', b'0', '2023-09-11 10:57:45', 1, NULL, NULL),
 (3, 10, 'food', b'1', b'0', '2023-09-11 10:58:38', 1, '2023-09-14 16:36:40', 1),
-(4, 19, 'nmkin', b'1', b'0', '2023-09-14 11:23:59', 1, '2023-09-14 16:36:49', 1),
+(4, 19, 'Namkin', b'1', b'0', '2023-09-14 11:23:59', 1, '2023-10-01 22:44:26', 7),
 (5, 41, 'sports', b'1', b'0', '2023-09-14 14:10:34', 1, NULL, NULL),
 (6, 17, 'camera', b'1', b'0', '2023-09-14 14:10:43', 1, '2023-09-14 16:36:31', 1),
 (7, 19, 'mixer', b'1', b'0', '2023-09-14 17:09:22', 1, NULL, NULL),
 (8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-09-14 18:11:30', 1),
 (9, 18, 'butter buiscuit', b'1', b'0', '2023-09-14 18:11:51', 1, NULL, NULL),
-(10, 21, 'Noodles', b'1', b'0', '2023-09-15 15:14:51', 1, NULL, NULL);
+(10, 21, 'Noodles', b'1', b'0', '2023-09-15 15:14:51', 1, NULL, NULL),
+(11, 19, 'Sev', b'1', b'0', '2023-10-02 00:09:42', 7, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -383,19 +387,19 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `product_tags`
 --
 ALTER TABLE `product_tags`
-  MODIFY `PkTagId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `PkTagId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`

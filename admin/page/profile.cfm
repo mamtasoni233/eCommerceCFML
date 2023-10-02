@@ -32,19 +32,19 @@
         }
 
        /* HIDE RADIO */
-        [type=radio] { 
+        input[name="avtarProfile"] { 
             position: absolute;
             opacity: 0;
             width: 0;
             height: 0;
         }
         /* IMAGE STYLES */
-        [type=radio] + img {
+        input[name="avtarProfile"] + img {
             cursor: pointer;
         }
 
         /* CHECKED STYLES */
-        [type=radio]:checked + img {
+        input[name="avtarProfile"]:checked + img {
             border: 5px solid rgb(83, 91, 244);
            /*  outline: 10px solid ##0000; */
         }
