@@ -155,7 +155,7 @@
                                                 <th>Image</th>
                                                 <th>Create By</th>
                                                 <th>Create Date</th>
-                                                <th>Status</th>
+                                                <th>Default Image</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -180,7 +180,7 @@
                                     <th>Create Date</th>
                                     <th>Update By</th>
                                     <th>Update Date</th>
-                                    <th>Deafult</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -415,7 +415,7 @@
             validator.resetForm();
             $('.productImageContainer').addClass('d-none');
             $("#category").val(); 
-            $("#productTags").val().trigger("change");
+            $("#productTags").val('').trigger("change");
             FilePond.destroy(); 
         });
         $("select").on("select2:close", function (e) {  
@@ -539,7 +539,7 @@
                                 var checked = $(this).prop('checked');
                                 if (checked == false) {
                                     $.ajax({  
-                                        url: '../ajaxAddProduct.cfm?&productId='+pId+'&defaultId='+id,  
+                                        url: '../ajaxAddProduct.cfm?&productId='+pId+'&defaultImageId='+id,  
                                         type: 'POST', 
                                         success: function(data) {
                                             successToast("Activated!","Product Image Is Default Set Successfully");
@@ -556,7 +556,7 @@
                                         }).then((result) => {
                                         if (result.isConfirmed) {
                                             $.ajax({  
-                                                url: '../ajaxAddProduct.cfm?&productId='+pId+'&defaultId='+id,  
+                                                url: '../ajaxAddProduct.cfm?&productId='+pId+'&defaultImageId='+id,  
                                                 type: 'POST', 
                                                 success: function(data) {
                                                     successToast("Activated!","Product Image Is Default Set Successfully");
@@ -579,7 +579,7 @@
                             $('.productImageContainer').addClass('d-none');
                             $(".modal-title").html("Add Product");
                             $("#category").val();  
-                            $("#productTags").val().trigger("change");
+                            $("#productTags").val('').trigger("change");
                         });
                     }
                 }   
@@ -729,7 +729,7 @@
                 }
             });
         } else {
-            $("#productTags").val().trigger("change");
+            $("#productTags").val('').trigger("change");
         }
     }
     function submitProductData() {
@@ -748,7 +748,7 @@
             success: function(result) {
                 if ($('#PkProductId').val() > 0) {
                     successToast("Product Updated!","Product Successfully Updated");
-                    if (result.json.isDefault == 0) {
+                    if (result.json.defaultCounter == 0) {
                         warnToast("Issue!","Default image is not selected!!!");
                     }
                 } else{

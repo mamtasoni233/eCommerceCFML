@@ -22,7 +22,7 @@
             </cfloop>
         )
     </cfif>
-    <cfif (structKeyExists(url, "minPrice") AND url.minPrice GT 0) OR (structKeyExists(url, "maxPrice") AND url.maxPrice GT 0)>
+    <cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
         AND P.productPrice BETWEEN <cfqueryparam value="#url.minPrice#" cfsqltype = "cf_sql_float"> AND <cfqueryparam value="#url.maxPrice#" cfsqltype = "cf_sql_float"> 
     </cfif>
     <cfif structKeyExists(url, 'sorting') AND len(url.sorting) GT 0>
@@ -219,13 +219,13 @@
                                         <span class="input-group-text bg-transparent fs-7 p-2 text-muted border-0">
                                             <i class="fa fa-rupee"></i>
                                         </span>
-                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMin" step="1" class="filter-min form-control-sm w-50 text-muted border-0 flex-grow-1" id="filterPriceMin">
+                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMin" step="1" value="<cfif structKeyExists(url, 'minPrice')>#url.minPrice#</cfif>" class="filter-min form-control-sm w-50 text-muted border-0 flex-grow-1" id="filterPriceMin">
                                     </div>   
                                     <div class="input-group mb-0 ms-2 border">
                                         <span class="input-group-text bg-transparent fs-7 p-2 text-muted border-0">
                                             <i class="fa fa-rupee"></i>
                                         </span>
-                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMax" step="1" class="filter-max form-control-sm w-50 text-muted border-0 flex-grow-1" id="filterPriceMax">
+                                        <input type="number" min="00" max="1000" data-priceRange="filterPriceMax" step="1" value="<cfif structKeyExists(url, 'maxPrice')>#url.maxPrice#</cfif>" class="filter-max form-control-sm w-50 text-muted border-0 flex-grow-1" id="filterPriceMax">
                                     </div>
                                 </div>
                                 <div>
@@ -584,7 +584,7 @@
                     <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                         <ul class="pagination">
                             <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                                <a class="page-link prev"  href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>" data-id="#pageNum#">
+                                <a class="page-link prev"  href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif><cfif structKeyExists(url, 'minPrice')>&minPrice=#url.minPrice#</cfif><cfif structKeyExists(url, 'maxPrice')>&maxPrice=#url.maxPrice#</cfif>" data-id="#pageNum#">
                                     <i class="ri-arrow-left-line align-bottom"></i>
                                     Prev
                                 </a>
@@ -593,7 +593,7 @@
                         <ul class="pagination">
                             <cfloop from="1" to="#totalPages#" index="i">
                                 <li class="page-item <cfif pageNum EQ i>active</cfif> mx-1">
-                                    <a class="page-link" href="index.cfm?pg=category&id=#url.id#&pageNum=#i#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>">
+                                    <a class="page-link" href="index.cfm?pg=category&id=#url.id#&pageNum=#i#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif><cfif structKeyExists(url, 'minPrice')>&minPrice=#url.minPrice#</cfif><cfif structKeyExists(url, 'maxPrice')>&maxPrice=#url.maxPrice#</cfif>">
                                         #i#
                                     </a>
                                 </li>
@@ -601,7 +601,7 @@
                         </ul>
                         <ul class="pagination">
                             <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                                <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>">Next 
+                                <a class="page-link next" href="index.cfm?pg=category&id=#url.id#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'tags')>&tags=#url.tags#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif><cfif structKeyExists(url, 'minPrice')>&minPrice=#url.minPrice#</cfif><cfif structKeyExists(url, 'maxPrice')>&maxPrice=#url.maxPrice#</cfif>">Next 
                                     <i class="ri-arrow-right-line align-bottom"></i>
                                 </a>
                             </li>
@@ -647,7 +647,6 @@
         var minPrice = "";
         var maxPrice = "";
         $(document).ready( function () { 
-            //ajaxFilter(value,id);
             $('.productTag').on('change', function(){
                 let tagName = $(this).attr('data-tagName');
                 var catId = $(this).attr('data-catId');
@@ -683,9 +682,12 @@
                 $('##productTagContainer').removeClass('d-none');
                 if ($('##deleteAllProductTag').length === 0) {
                     $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
+                }else{
+                    $('##priceLi').remove();
                 }
-                $('##priceLi').remove();
                 $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
+                // $('##filterPriceMax').val(maxPrice);
+                // $('##filterPriceMin').val(minPrice);
                 ajaxFilter(value, id, sorting, minPrice, maxPrice);
             });
         });
@@ -694,8 +696,25 @@
             $('##productTypeUl').html('');
             $('##productTagContainer').addClass('d-none');
             value = "";
+            minPrice = "";
+            maxPrice = "";
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
+        // $(document).on("click", '##applyPriceFilter', function () {
+        //     maxPrice = parseFloat($('##filterPriceMax').val());
+        //     minPrice = parseFloat($('##filterPriceMin').val());
+        //     $('##productTagContainer').removeClass('d-none');
+        //     if ($('##deleteAllProductTag').length === 0) {
+        //         $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
+        //     }else{
+        //         $('##priceLi').remove();
+        //     }
+        //     $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
+            // $('##filterPriceMax').val(maxPrice);
+            // $('##filterPriceMin').val(minPrice);
+        //     ajaxFilter(value, id, sorting, minPrice, maxPrice);
+            
+        // });
         $(document).on('click', '.deleteProductTag', function () {
             var tagIds = $(this).attr('data-id');
             if (tagIds > 0) {
@@ -705,9 +724,13 @@
             }
             $('##filter-type-'+tagIds).prop("checked", false);
             value = $('.productTag:checked').map(function(){ return $(this).val(); }).get().join();
-            if (value === "") {
+
+            if (value === ""  && minPrice === "" && maxPrice === "") {
                 $('##productTagContainer').addClass('d-none');
-            }
+            } 
+            /* if (minPrice === "" && maxPrice === "") {
+                $('##productTagContainer').addClass('d-none');
+            } */
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
         
@@ -731,18 +754,11 @@
             ajaxFilter(value, id, sorting, filterPriceMinValue, filterPriceMaxVal);
         }); */
         function ajaxFilter(value, id, sorting, minPrice = '', maxPrice = '') {
-            /* var tagName = $('.productTag').attr('data-tagName'); */
-            /*  var tagIds = value = $(':checked').map(function(){ return $('.productTag').val(); }).get().join();
-            //var tagNameLi = $('##tagNameLi').attr('data-name');
-            console.log(tagIds);
-            $('##tagNameLi-'+tagIds).text(); */
-            //console.log($('##tagNameLi-'+tagName).text());
-            // var tagId = $(':checked').map(function(){ return $('.productTag').val(); }).get().join();
             var data = {"catId":id, "value":value, "sorting":sorting};
-            if(minPrice != "" && jQuery.type(minPrice) == 'number' ){
+            if(minPrice !== "" && jQuery.type(minPrice) === 'number' ){
                 data[ "minPrice"] = minPrice;
             }
-            if(maxPrice != '' && jQuery.type(maxPrice) == 'number' ){
+            if(maxPrice !== '' && jQuery.type(maxPrice) === 'number' ){
                 data[ "maxPrice"] = maxPrice;
             }
             $.ajax({  
@@ -759,7 +775,7 @@
                         url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value +'&sorting=' + sorting + '&minPrice=' + minPrice + '&maxPrice=' + maxPrice;
                         if (value === "" && sorting === "" && minPrice === "" && maxPrice === "") {
                             url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum;
-                        }
+                        } 
                         window.history.pushState(null, null, url);
                     }
                 },

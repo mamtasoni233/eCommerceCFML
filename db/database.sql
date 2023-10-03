@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2023 at 03:20 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Oct 03, 2023 at 03:30 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ecommerce`
+-- Database: `vishal_db`
 --
 
 -- --------------------------------------------------------
@@ -170,8 +170,8 @@ INSERT INTO `customer` (`PkCustomerId`, `token`, `firstName`, `lastName`, `email
 CREATE TABLE `product` (
   `PkProductId` int(11) UNSIGNED NOT NULL,
   `FkCategoryId` int(11) UNSIGNED NOT NULL,
-  `product_tags` mediumtext DEFAULT NULL,
   `productName` varchar(100) NOT NULL,
+  `product_tags` mediumtext DEFAULT NULL,
   `productPrice` float NOT NULL,
   `productQty` int(11) NOT NULL,
   `productDescription` text DEFAULT NULL,
@@ -187,26 +187,28 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `product_tags`, `productName`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, '1', 'PARLE G Original Gluco Biscuits Plain', 56, 15, 'fwerfwe', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-09-18 12:07:09', 1),
-(2, 19, '4', 'Anand Namkeen Thika Meetha mix', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-09-21 18:14:15', 1),
-(3, 28, '1,2', 'Puma Snikers', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-15 11:40:41', 1),
-(4, 41, '5', 'T-SHIRT', 850, 25, 'test', b'1', b'1', '2023-09-14 14:12:42', 1, '2023-09-20 11:31:49', 1),
-(5, 7, '1,5', 'Samsung Z-fold ', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
-(6, 18, '9', 'Biscuits', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-21 16:46:16', 1),
-(7, 21, '10', 'Meggie', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-02 18:20:34', 7),
-(8, 19, '4', 'Sona Namkeen', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-09-25 11:54:41', 1),
-(9, 20, '8', 'Taj Mahal Tea', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-02 18:20:28', 7),
-(10, 18, '1', 'crack jack', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:06:16', NULL),
-(11, 18, '1', 'Hide & seek', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
-(12, 18, '1', 'Oreo', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
-(13, 18, '1,9', 'test', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 18:25:36', 1),
-(14, 18, '1', 'Monaco', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:11:38', 1),
-(15, 18, '1', 'Britannia Good Day', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 16:45:26', 1),
-(16, 18, '1,9', 'Oreo Pink Cream', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:10:44', 1),
-(17, 18, '1', 'Sunfest', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
-(18, 18, '1', 'Choco Lava Cake', 850, 20, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-09-29 11:21:52', 1),
-(19, 19, '4,11', 'Bhujia Sev', 150, 10, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-10-02 18:21:02', 7);
+INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_tags`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 15, 'fwerfwe', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-09-18 12:07:09', 1),
+(2, 19, 'Anand Namkeen Thika Meetha mix', '4', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-10-03 10:40:06', 1),
+(3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-15 11:40:41', 1),
+(4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'1', '2023-09-14 14:12:42', 1, '2023-09-20 11:31:49', 1),
+(5, 7, 'Samsung Z-fold ', '1,5', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
+(6, 18, 'Biscuits', '9', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-21 16:46:16', 1),
+(7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
+(8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-03 10:40:30', 1),
+(9, 20, 'Taj Mahal Tea', '8', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-03 14:12:05', 1),
+(10, 18, 'crack jack', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:06:16', NULL),
+(11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
+(12, 18, 'Oreo', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
+(13, 18, 'test', '1,9', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 18:25:36', 1),
+(14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:11:38', 1),
+(15, 18, 'Britannia Good Day', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 16:45:26', 1),
+(16, 18, 'Oreo Pink Cream', '1,9', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:10:44', 1),
+(17, 18, 'Sunfest', '1', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
+(18, 18, 'Choco Lava Cake', '9', 850, 20, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-10-03 14:08:12', 1),
+(19, 19, 'Bhujia Sev', '4,11', 150, 10, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-10-02 18:21:02', 7),
+(20, 20, 'Wagh bakri Chai', '8', 1000, 25, 'Waagbakri Chai', b'1', b'0', '2023-10-03 10:45:41', 1, '2023-10-03 14:13:56', 1),
+(21, 19, '5555555555', NULL, 55000, 20, 'ewe', b'1', b'0', '2023-10-03 12:43:57', 1, '2023-10-03 14:14:04', 1);
 
 -- --------------------------------------------------------
 
@@ -251,12 +253,15 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (39, 16, 'oreo.jpeg', b'1', b'1', '2023-09-18 17:10:44', 1),
 (40, 17, 'oreo_6wpihl66wp5r.jpeg', b'1', b'1', '2023-09-18 17:11:04', 1),
 (41, 14, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf_18c5p6s3pjp5.jpg', b'1', b'1', '2023-09-18 17:11:38', 1),
-(42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'1', b'1', '2023-09-21 10:50:37', 1),
-(43, 9, 'marketing-creative-collage-with-phone.jpg', b'0', b'1', '2023-09-25 12:48:13', 1),
+(42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'0', b'1', '2023-09-21 10:50:37', 1),
+(43, 9, 'marketing-creative-collage-with-phone.jpg', b'1', b'1', '2023-09-25 12:48:13', 1),
 (44, 18, '4c7dd5.webp', b'0', b'1', '2023-09-29 11:19:48', 1),
 (45, 18, 'electric-blender-mixer-juicer-set.jpg', b'1', b'1', '2023-09-29 11:21:44', 1),
 (46, 19, 'Bhujia_Sev.jpg', b'0', b'1', '2023-10-01 22:45:57', 7),
-(47, 19, 'bhujiya_sev_1.webp', b'1', b'1', '2023-10-01 22:45:57', 7);
+(47, 19, 'bhujiya_sev_1.webp', b'1', b'1', '2023-10-01 22:45:57', 7),
+(48, 20, 'wagh-bakri-tea.jpg', b'1', b'1', '2023-10-03 10:45:41', 1),
+(49, 20, '070417TeaShops01.jpg', b'0', b'1', '2023-10-03 10:46:25', 1),
+(50, 21, '070417TeaShops01_1d31cbb8hepx1.jpg', b'1', b'1', '2023-10-03 12:43:57', 1);
 
 -- --------------------------------------------------------
 
@@ -316,7 +321,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`PkUserId`, `token`, `firstName`, `lastName`, `email`, `dob`, `gender`, `password`, `image`) VALUES
-(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', 'avatar-3_16m9kqfyf69nz.jpg'),
+(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '3.jpg'),
 (2, NULL, 'Nanu', 'Soni', 'nanu@gmail.com', '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL),
 (3, NULL, 'gvedrfg', 'dftgd', 'admin@gmail.com', '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', NULL),
 (4, NULL, 'test', 'test', 'mamta@gmail.com', '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL),
@@ -387,13 +392,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `product_tags`

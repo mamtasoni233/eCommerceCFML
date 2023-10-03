@@ -318,7 +318,7 @@
             <nav class="border-top mt-5 pt-5 d-flex justify-content-between align-items-center" aria-label="Category Pagination">
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                        <a class="page-link prev" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>" data-id="#pageNum#" >
+                        <a class="page-link prev" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum-1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif><cfif structKeyExists(url, 'minPrice')>&minPrice=#url.minPrice#</cfif><cfif structKeyExists(url, 'maxPrice')>&maxPrice=#url.maxPrice#</cfif>" data-id="#pageNum#" >
                             <i class="ri-arrow-left-line align-bottom"></i>
                             Prev
                         </a>
@@ -327,7 +327,7 @@
                 <ul class="pagination">
                     <cfloop from="1" to="#totalPages#" index="i">
                         <li class="page-item <cfif pageNum EQ i>active</cfif> mx-1">
-                            <a class="page-link" href="index.cfm?pg=category&id=#url.catId#&pageNum=#i#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>">
+                            <a class="page-link" href="index.cfm?pg=category&id=#url.catId#&pageNum=#i#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif><cfif structKeyExists(url, 'minPrice')>&minPrice=#url.minPrice#</cfif><cfif structKeyExists(url, 'maxPrice')>&maxPrice=#url.maxPrice#</cfif>">
                                 #i#
                             </a>
                         </li>
@@ -335,7 +335,7 @@
                 </ul>
                 <ul class="pagination">
                     <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                        <a class="page-link next" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif>">Next 
+                        <a class="page-link next" href="index.cfm?pg=category&id=#url.catId#&pageNum=#pageNum+1#<cfif structKeyExists(url, 'productTagValue')>&tags=#url.productTagValue#</cfif><cfif structKeyExists(url, 'sorting')>&sorting=#url.sorting#</cfif><cfif structKeyExists(url, 'minPrice')>&minPrice=#url.minPrice#</cfif><cfif structKeyExists(url, 'maxPrice')>&maxPrice=#url.maxPrice#</cfif>">Next 
                             <i class="ri-arrow-right-line align-bottom"></i>
                         </a>
                     </li>

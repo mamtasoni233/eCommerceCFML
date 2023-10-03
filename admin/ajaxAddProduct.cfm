@@ -174,8 +174,8 @@
 
 <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
     <cfquery name="editProductData">
-        SELECT P.PkProductId, P.productName, P.productPrice,productQty, P.productDescription, P.isActive, PI.FkProductId, P.FkCategoryId, P.product_tags, PI.isDefault
-        FROM product P LEFT JOIN product_image PI ON P.PkProductId = PI.FkProductId
+        SELECT (SELECT COUNT(isDefault) FROM product_image WHERE isDefault = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> AND FkProductId = <cfqueryparam value="#url.PkProductId#" cfsqltype="cf_sql_integer">) AS 'defaultCounter', P.PkProductId, P.productName, P.productPrice,productQty, P.productDescription, P.isActive, P.FkCategoryId, P.product_tags
+        FROM product P 
         WHERE PkProductId = <cfqueryparam value="#PkProductId#" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfset data['json'] = {}>
@@ -186,10 +186,9 @@
     <cfset data['json']['productQty'] = editProductData.productQty>
     <cfset data['json']['productDescription'] = editProductData.productDescription>
     <cfset data['json']['isActive'] = editProductData.isActive>
-    <cfset data['json']['isDefault'] = editProductData.isDefault>
+    <cfset data['json']['defaultCounter'] = editProductData.defaultCounter>
     <cfset data['json']['product_tags'] = listToArray(editProductData.product_tags)>
 </cfif>
-
 
 <cfif structKeyExists(form, "productName") AND len(trim(form.productName)) GT 0>
     <cfif NOT structKeyExists(form, "isActive")>
@@ -363,18 +362,17 @@
         PkImageId = <cfqueryparam value="#url.delPkImageId#" cfsqltype = "cf_sql_integer">
     </cfquery>
 </cfif>
-
-<cfif structKeyExists(url, "defaultId") AND url.defaultId GT 0>
+<cfif structKeyExists(url, "defaultImageId") AND url.defaultImageId GT 0>
     <cfquery name="changeDefault">
         UPDATE product_image SET
         isDefault = <cfqueryparam value = "1" cfsqltype = "cf_sql_bit">
-        WHERE PkImageId = <cfqueryparam value = "#url.defaultId#" cfsqltype = "cf_sql_integer">
+        WHERE PkImageId = <cfqueryparam value = "#url.defaultImageId#" cfsqltype = "cf_sql_integer">
         AND FkProductId = <cfqueryparam value = "#url.productId#" cfsqltype = "cf_sql_integer">
     </cfquery>
     <cfquery name="changeDefaultValue">
         UPDATE product_image SET
         isDefault = <cfqueryparam value = "0" cfsqltype = "cf_sql_bit">
-        WHERE PkImageId != <cfqueryparam value = "#url.defaultId#" cfsqltype = "cf_sql_integer">
+        WHERE PkImageId != <cfqueryparam value = "#url.defaultImageId#" cfsqltype = "cf_sql_integer">
         AND FkProductId = <cfqueryparam value = "#url.productId#" cfsqltype = "cf_sql_integer">
     </cfquery>
 </cfif>
