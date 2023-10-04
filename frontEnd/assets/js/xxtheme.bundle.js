@@ -363,14 +363,16 @@
           });
         });
     });
+
     var p = o(121),
       h = o.n(p);
     document.addEventListener('DOMContentLoaded', () => {
       var e = document.querySelectorAll('.filter-price') || [];
+      priceSliders = e;
       const t = (e) => {
         const t = e.closest('.widget-filter-price');
         h.a.create(e, {
-          start: [60, 900],
+          start: [60, 950],
           connect: !0,
           tooltips: [!0, !0],
           range: { min: 0, max: 1e3 },

@@ -46,7 +46,7 @@
                     * Reinstate scrolling for non-JS clients
                     */
                     .simplebar-content-wrapper {
-                    overflow: auto;
+                        overflow: auto;
                     }
                     /* Define a transition duration during page visits */
                     html.is-changing .transition-fade {
@@ -894,8 +894,8 @@
             <script src="../assets/js/vendor.bundle.js"></script>
             
             <!-- Theme JS -->
-            <script src="../assets/js/theme.bundle.js"></script>
-            <script src="./assets/common.js"></script>
+            <script src="../assets/js/xxtheme.bundle.js"></script>
+            <script src="../assets/common.js"></script>
 
     <!---   <script> 
                 var #toScript('#session.customer.saved#','saved')#;

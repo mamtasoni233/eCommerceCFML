@@ -8,6 +8,13 @@
 <cfparam name="pageNum" default="1">
 <cfparam name="maxRows" default="9">
 <cfset startRow = ( pageNum-1 ) * maxRows>
+
+<cfparam name="minPriceUrl" default="">
+<cfparam name="maxPriceUrl" default="">
+<cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
+    <cfset minPriceUrl ="#url.minPrice#">
+    <cfset maxPriceUrl ="#url.maxPrice#">
+</cfif>
 <cfquery name="getProduct">
     SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
     FROM product P
@@ -637,16 +644,22 @@
             <!--- / Category Products --->
         </div>
     </div>
+    
     <script>
+
         var #toScript('#pageNum#','pageNum')#;
         var #toScript('#pg#','pg')#;
         var #toScript('#id#','id')#;
+        var #toScript('#minPriceUrl#','minPriceUrl')#;
+        var #toScript('#maxPriceUrl#','maxPriceUrl')#;
         var value = "";
         var url = "";
         var sorting = "";
         var minPrice = "";
         var maxPrice = "";
+        var priceSliders = "";
         $(document).ready( function () { 
+            
             $('.productTag').on('change', function(){
                 let tagName = $(this).attr('data-tagName');
                 var catId = $(this).attr('data-catId');
@@ -654,17 +667,22 @@
                 if (!$(this).prop("checked") && $('##tagNameLi-' + $(this).val()).length === 1) {
                     $('##tagNameLi-' + $(this).val()).remove();
                 }
-
+        
                 if ($('##deleteAllProductTag').length === 0) {
+                    $('##productTagContainer').addClass('d-none');
                     $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
                 }
-
+        
                 if (value.length === 0) {
-                    $('##productTagContainer').addClass('d-none');
+                    maxPrice = parseFloat($('##filterPriceMax').val());
+                    minPrice = parseFloat($('##filterPriceMin').val());
+                    $('##tagNameLi-' + value).remove();
+                    // $('##productTagContainer').addClass('d-none');
                     setTimeout(function(){
                         showLoader();
                     }, 500);
-                    ajaxFilter(value, catId, sorting);
+                    //ajaxFilter(value, catId,sorting);
+                    ajaxFilter(value, catId, sorting, minPrice, maxPrice);
                     setTimeout(function(){
                         hideLoader();
                     }, 500);
@@ -676,20 +694,42 @@
                     ajaxFilter(value, catId, sorting, minPrice, maxPrice);
                 }
             });
-            $('##applyPriceFilter').click(function() {
-                maxPrice = parseFloat($('##filterPriceMax').val());
+            // $('##applyPriceFilter').click(function() {
+            //     maxPrice = parseFloat($('##filterPriceMax').val());
+            //     minPrice = parseFloat($('##filterPriceMin').val());
+            //     $('##productTagContainer').removeClass('d-none');
+            //     if ($('##deleteAllProductTag').length === 0) {
+            //         $('##productTagContainer').addClass('d-none');
+            //         $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
+            //     } else {
+            //         $('##priceLi').remove();
+            //     }
+            //     $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
+            //     /* if ($('##priceLi').length === 0) {
+            //         $('##productTagContainer').addClass('d-none');
+            //     } */
+            //     ajaxFilter(value, id, sorting, minPrice, maxPrice);
+            // });
+            if (minPriceUrl !== '' && maxPriceUrl !== '') {
+                priceSliders[0].noUiSlider.set([minPriceUrl, maxPriceUrl]);
+            }
+        });
+        $(document).on("click", '##applyPriceFilter', function () {
+            maxPrice = parseFloat($('##filterPriceMax').val());
                 minPrice = parseFloat($('##filterPriceMin').val());
-                $('##productTagContainer').removeClass('d-none');
-                if ($('##deleteAllProductTag').length === 0) {
-                    $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
-                }else{
-                    $('##priceLi').remove();
-                }
-                $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
-                // $('##filterPriceMax').val(maxPrice);
-                // $('##filterPriceMin').val(minPrice);
-                ajaxFilter(value, id, sorting, minPrice, maxPrice);
-            });
+            $('##productTagContainer').removeClass('d-none');
+            if ($('##deleteAllProductTag').length === 0) {
+                $('##productTagContainer').addClass('d-none');
+                $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
+            } else {
+                $('##priceLi').remove();
+            }
+            $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
+            /* if ($('##priceLi').length === 0) {
+                $('##productTagContainer').addClass('d-none');
+            } */
+            ajaxFilter(value, id, sorting, minPrice, maxPrice);
+            
         });
         $(document).on("click", '##deleteAllProductTag', function () {
             $('.productTag').prop("checked", false);
@@ -699,22 +739,8 @@
             minPrice = "";
             maxPrice = "";
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
+            priceSliders[0].noUiSlider.set([60, 950]);
         });
-        // $(document).on("click", '##applyPriceFilter', function () {
-        //     maxPrice = parseFloat($('##filterPriceMax').val());
-        //     minPrice = parseFloat($('##filterPriceMin').val());
-        //     $('##productTagContainer').removeClass('d-none');
-        //     if ($('##deleteAllProductTag').length === 0) {
-        //         $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
-        //     }else{
-        //         $('##priceLi').remove();
-        //     }
-        //     $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
-            // $('##filterPriceMax').val(maxPrice);
-            // $('##filterPriceMin').val(minPrice);
-        //     ajaxFilter(value, id, sorting, minPrice, maxPrice);
-            
-        // });
         $(document).on('click', '.deleteProductTag', function () {
             var tagIds = $(this).attr('data-id');
             if (tagIds > 0) {
@@ -722,15 +748,17 @@
             } else {
                 $('##priceLi').remove();
             }
+            if (tagIds == 0) {
+                maxPrice = '';
+                minPrice = '';
+                priceSliders[0].noUiSlider.set([60, 950]);
+            }
             $('##filter-type-'+tagIds).prop("checked", false);
             value = $('.productTag:checked').map(function(){ return $(this).val(); }).get().join();
-
-            if (value === ""  && minPrice === "" && maxPrice === "") {
+            if (value === "" && minPrice === "" && maxPrice === ""){
                 $('##productTagContainer').addClass('d-none');
-            } 
-            /* if (minPrice === "" && maxPrice === "") {
-                $('##productTagContainer').addClass('d-none');
-            } */
+                priceSliders[0].noUiSlider.set([60, 950]);
+            }
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
         
@@ -738,21 +766,6 @@
             sorting = $(this).attr('data-order');
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
-        /* $(document).on("change", '##filterPriceMax', function () {
-            var filterPriceMaxValue = parseFloat($(this).val());
-            var filterPriceMinVal = parseFloat($('##filterPriceMin').val());
-            ajaxFilter(value, id, sorting, filterPriceMinVal, filterPriceMaxValue);
-        });
-        $(document).on("change", '.filter-price', function () {
-            var filterPriceMaxValue = parseFloat($(this).val());
-            var filterPriceMinVal = parseFloat($('##filterPriceMin').val());
-            ajaxFilter(value, id, sorting, filterPriceMinVal, filterPriceMaxValue);
-        });
-        $(document).on("change", '##filterPriceMin', function () {
-            var filterPriceMinValue = parseFloat($(this).val());
-            var filterPriceMaxVal = parseFloat($('##filterPriceMax').val());
-            ajaxFilter(value, id, sorting, filterPriceMinValue, filterPriceMaxVal);
-        }); */
         function ajaxFilter(value, id, sorting, minPrice = '', maxPrice = '') {
             var data = {"catId":id, "value":value, "sorting":sorting};
             if(minPrice !== "" && jQuery.type(minPrice) === 'number' ){
