@@ -26,16 +26,14 @@
             <script src="https://kit.fontawesome.com/194ef163b5.js" crossorigin="anonymous"></script>
             <!-- Vendor CSS -->
             <link rel="stylesheet" href="../assets/css/libs.bundle.css"/>
-            <!--- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> --->
-            
-            <!-- Google Fonts-->
-            <link rel="preconnect" href="https://fonts.googleapis.com">
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
             <!--- toast css --->
             <link rel="stylesheet" href="../assets/toastify-js/src/toastify.css" />
             <!-- Main CSS -->
             <link rel="stylesheet" href="../assets/css/theme.bundle.css"/>
+            <!-- Google Fonts-->
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
             <!-- jquery -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer">
             </script>
@@ -87,7 +85,10 @@
                         <cfinclude template="./page/dashboard.cfm">
                     </cfcase>
                     <cfcase value="category">
-                    <cfinclude template="./page/category.cfm">
+                        <cfinclude template="./page/category.cfm">
+                    </cfcase>
+                    <cfcase value="product">
+                        <cfinclude template="./page/product.cfm">
                     </cfcase>
                 </cfswitch>
                 <!-- /Page Content -->
@@ -889,13 +890,13 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"  integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             
             <!--- tostify js --->
-            <script src="./assets/toastify-js/src/toastify.js"></script>
+            <script src="assets/toastify-js/src/toastify.js"></script>
             <!-- Vendor JS -->
-            <script src="../assets/js/vendor.bundle.js"></script>
+            <script src="assets/js/vendor.bundle.js"></script>
             
             <!-- Theme JS -->
-            <script src="../assets/js/xxtheme.bundle.js"></script>
-            <script src="../assets/common.js"></script>
+            <script src="assets/js/xxtheme.bundle.js"></script>
+            <script src="assets/common.js"></script>
 
     <!---   <script> 
                 var #toScript('#session.customer.saved#','saved')#;

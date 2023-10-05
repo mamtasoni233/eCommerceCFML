@@ -367,6 +367,8 @@
     var p = o(121),
       h = o.n(p);
     document.addEventListener('DOMContentLoaded', () => {
+      var priceSliders = '';
+      console.log("mammta");
       var e = document.querySelectorAll('.filter-price') || [];
       priceSliders = e;
       const t = (e) => {

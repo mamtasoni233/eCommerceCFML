@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 03, 2023 at 03:30 PM
+-- Generation Time: Oct 05, 2023 at 03:44 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -20,6 +20,25 @@ SET time_zone = "+00:00";
 --
 -- Database: `vishal_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `PkCartId` int(11) UNSIGNED NOT NULL,
+  `FkProductId` int(11) UNSIGNED NOT NULL,
+  `FkCustomerId` int(11) UNSIGNED NOT NULL,
+  `quantity` varchar(255) DEFAULT NULL,
+  `price` bit(1) NOT NULL DEFAULT b'1',
+  `isDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
+  `createdBy` int(11) NOT NULL,
+  `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `updatedBy` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -188,12 +207,12 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_tags`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 15, 'fwerfwe', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-09-18 12:07:09', 1),
+(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 15, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-05 12:45:40', 1),
 (2, 19, 'Anand Namkeen Thika Meetha mix', '4', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-10-03 10:40:06', 1),
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-15 11:40:41', 1),
 (4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'1', '2023-09-14 14:12:42', 1, '2023-09-20 11:31:49', 1),
 (5, 7, 'Samsung Z-fold ', '1,5', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
-(6, 18, 'Biscuits', '9', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-09-21 16:46:16', 1),
+(6, 18, 'Cookie', '9', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-10-05 14:18:40', 1),
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-03 10:40:30', 1),
 (9, 20, 'Taj Mahal Tea', '8', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-03 14:12:05', 1),
@@ -201,7 +220,7 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, 'Oreo', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
 (13, 18, 'test', '1,9', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 18:25:36', 1),
-(14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:11:38', 1),
+(14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-05 14:15:39', 1),
 (15, 18, 'Britannia Good Day', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 16:45:26', 1),
 (16, 18, 'Oreo Pink Cream', '1,9', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:10:44', 1),
 (17, 18, 'Sunfest', '1', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
@@ -231,8 +250,6 @@ CREATE TABLE `product_image` (
 --
 
 INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `isActive`, `dateCreated`, `createdBy`) VALUES
-(3, 1, 'ratlami-sev.png', b'0', b'1', '2023-09-13 15:51:58', 1),
-(4, 1, 'anand-nmkieen.png', b'1', b'1', '2023-09-13 15:51:58', 1),
 (6, 2, 'anand-nmkieen_1nvr14ueh50bq.png', b'1', b'1', '2023-09-13 16:03:30', 1),
 (7, 2, '50474c.webp', b'0', b'1', '2023-09-13 16:03:30', 1),
 (9, 3, '69c6589653afdb9a.webp', b'1', b'1', '2023-09-13 18:01:45', 1),
@@ -243,7 +260,6 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (18, 8, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf.jpg', b'1', b'1', '2023-09-15 18:30:40', 1),
 (24, 8, 'png-transparent-vegetarian-cuisine-dal-french-fries-ramoji-wafer-and-namkeen-pvt-ltd-food-junk-food-food-recipe-wafer.png', b'0', b'1', '2023-09-15 18:40:02', 1),
 (27, 6, 'istockphoto-178716575-612x612.jpg', b'1', b'1', '2023-09-18 11:54:00', 1),
-(29, 1, 'download.jpg', b'0', b'1', '2023-09-18 12:07:09', 1),
 (30, 6, '-original-imagpa5fbvqzk2xn.webp', b'0', b'1', '2023-09-18 12:09:15', 1),
 (32, 10, 'download_erhh4bljuzrf.jpg', b'1', b'1', '2023-09-18 16:51:22', 1),
 (33, 11, 'b7ade9.webp', b'1', b'1', '2023-09-18 16:52:51', 1),
@@ -261,7 +277,11 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (47, 19, 'bhujiya_sev_1.webp', b'1', b'1', '2023-10-01 22:45:57', 7),
 (48, 20, 'wagh-bakri-tea.jpg', b'1', b'1', '2023-10-03 10:45:41', 1),
 (49, 20, '070417TeaShops01.jpg', b'0', b'1', '2023-10-03 10:46:25', 1),
-(50, 21, '070417TeaShops01_1d31cbb8hepx1.jpg', b'1', b'1', '2023-10-03 12:43:57', 1);
+(50, 21, '070417TeaShops01_1d31cbb8hepx1.jpg', b'1', b'1', '2023-10-03 12:43:57', 1),
+(54, 1, 'b5c22e_3f0bf41ae1c84a9e8fe6f505f80580d5_mv2_500x.webp', b'0', b'1', '2023-10-05 11:50:05', 1),
+(55, 1, '46b798_0412c5d3a7c7497c883a2dfdc7aed925_mv2_500x.webp', b'1', b'1', '2023-10-05 11:50:05', 1),
+(57, 1, '925036427-3444501-1.jpg', b'0', b'1', '2023-10-05 12:05:04', 1),
+(58, 14, '070417TeaShops01_ey82bknl49ky.jpg', b'0', b'1', '2023-10-05 14:15:39', 1);
 
 -- --------------------------------------------------------
 
@@ -334,6 +354,14 @@ INSERT INTO `users` (`PkUserId`, `token`, `firstName`, `lastName`, `email`, `dob
 --
 
 --
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`PkCartId`),
+  ADD KEY `FkCustomerId` (`FkCustomerId`),
+  ADD KEY `FkProductId` (`FkProductId`);
+
+--
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
@@ -377,6 +405,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
@@ -398,7 +432,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `product_tags`
@@ -415,6 +449,13 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`),
+  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`);
 
 --
 -- Constraints for table `product`

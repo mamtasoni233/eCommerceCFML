@@ -158,11 +158,9 @@
                     <li class="breadcrumb-item breadcrumb-light"><a href="index.cfm?pg=dashboard">Home</a></li>
                     <li class="breadcrumb-item breadcrumb-light">
                         <cfloop array="#categoryList#" index="idx">
-                            <cfloop array="#idx.child#" index="child">
-                                <cfif child.PkCategoryId EQ qryGetSecLevelCat.parentCategoryId>
-                                    #child.catName#
-                                </cfif>
-                            </cfloop>
+                            <cfif idx.PkCategoryId EQ qryGetSecLevelCat.parentCategoryId>
+                                #idx.catName#
+                            </cfif>
                         </cfloop>    
                     </li>
                     <li class="breadcrumb-item active breadcrumb-light" aria-current="page">#qryGetSecLevelCat.categoryName#</li>
@@ -567,7 +565,7 @@
                                                 </div> 
                                                 <span class="small fw-bolder ms-2 text-muted"> 4.7 (456)</span>
                                             </div>
-                                            <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center" href="">
+                                            <a class="mb-0 mx-2 mx-md-4 fs-p link-cover text-decoration-none d-block text-center" href="index.cfm?pg=product&id=#getProductPaging.PkProductId#">
                                                 #getProductPaging.productName#
                                             </a>
                                             <p class="fw-bolder m-0 mt-2"><i class="fa fa-rupee"></i> #getProductPaging.productPrice#</p>
