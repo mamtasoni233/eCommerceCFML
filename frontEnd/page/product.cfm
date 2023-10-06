@@ -74,10 +74,7 @@
         img{
             object-fit: contain;
         }
-        .quantity {
-            padding-top: 20px;
-            margin-right: 60px;
-        }
+        
         .quantity input {
             -webkit-appearance: none;
             border: none;
@@ -87,25 +84,12 @@
             color: ##0a0a0a;
             font-weight: 900;
         }
-        /* .quantity button[class*=btn] {
-            width: 30px;
-            height: 30px;
-            background-color: ##E1E8EE;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-        } */
         .minus-btn img {
             margin-bottom: 3px;
         }
         .plus-btn img {
             margin-top: 2px;
         }
-        
-        /* .quantity button:focus,
-            input:focus {
-            outline:0;
-        } */
     </style>
     <!-- Product Top-->
     <section class="container">
@@ -212,7 +196,7 @@
                         </div>
                     </div>
                     <!-- Add To Cart-->
-                    <div class="d-flex justify-content-between mt-5">
+                    <div class="d-flex justify-content-between mt-4">
                         <button class="btn btn-dark btn-dark-chunky flex-grow-1 me-2 text-white addToCartBtn">Add To Cart</button>
                         <button class="btn btn-orange btn-orange-chunky"><i class="ri-heart-line"></i></button>
                     </div>
@@ -788,15 +772,14 @@
         var #toScript('#productPrice#', 'productPrice')#
         var #toScript('#id#', 'productId')#
         var #toScript('#customerId#', 'customerId')#
-        console.log('productQty', productQty);
-        console.log('productPrice', productPrice);
-        console.log('productId', productId);
-        console.log('customerId', customerId);
         $(document).ready( function () { 
-            $('##productQuantity').on('change', function() {
-                alert("hiiii")
-                if ($(this).value >= productQty ) {
+            $('##productQuantity').on('keyup', function() {
+                if ( $(this).val() > productQty ) {
                     warnToast("Not allowed to add this product");
+                    $(this).val(productQty);
+                    $('.plus-btn').addClass('disabled');
+                    $('.minus-btn').removeClass('disabled');
+                    //( $(this).val() === productQty) && $('.plus-btn').addClass('disabled');
                 }
                 
             });
@@ -829,17 +812,17 @@
                 $input.val(value);
             });
 
-            $('.addToCart').on('click', function (e) {
+            $('.addToCartBtn').on('click', function (e) {
                 e.preventDefault();
                 var quantity = $('##productQuantity').val();
-                var price = productPrice;
                 $.ajax({  
                     url: '../ajaxAddToCart.cfm?ProductId='+ productId, 
-                    data: {'quantity':quantity, 'productPrice':productPrice},
-                    type: 'GET',
+                    data: {'productQty':quantity, 'productPrice':productPrice, 'customerId' : customerId},
+                    type: 'POST',
                     async: false,
                     success: function(result) {
                         if (result.success) {
+                            successToast("Great!! You were " + quantity + " product added in to cart");
                         }
                     },
                 });  

@@ -508,10 +508,6 @@
                     </div>
                 </div>
                 <div id="productContainer" class="mt-3">
-                    <!--- Top Toolbar --->
-                    <!---   <div class="mb-4 d-md-flex justify-content-between align-items-center" >
-                    </div>    --->                 
-                    <!--- / Top Toolbar --->
                     <!--- Products --->
                     <div class="row g-4 mb-5">
                         <cfif getProductPaging.recordCount GT 0>
@@ -675,11 +671,9 @@
                     maxPrice = parseFloat($('##filterPriceMax').val());
                     minPrice = parseFloat($('##filterPriceMin').val());
                     $('##tagNameLi-' + value).remove();
-                    // $('##productTagContainer').addClass('d-none');
                     setTimeout(function(){
                         showLoader();
                     }, 500);
-                    //ajaxFilter(value, catId,sorting);
                     ajaxFilter(value, catId, sorting, minPrice, maxPrice);
                     setTimeout(function(){
                         hideLoader();
@@ -692,22 +686,6 @@
                     ajaxFilter(value, catId, sorting, minPrice, maxPrice);
                 }
             });
-            // $('##applyPriceFilter').click(function() {
-            //     maxPrice = parseFloat($('##filterPriceMax').val());
-            //     minPrice = parseFloat($('##filterPriceMin').val());
-            //     $('##productTagContainer').removeClass('d-none');
-            //     if ($('##deleteAllProductTag').length === 0) {
-            //         $('##productTagContainer').addClass('d-none');
-            //         $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
-            //     } else {
-            //         $('##priceLi').remove();
-            //     }
-            //     $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
-            //     /* if ($('##priceLi').length === 0) {
-            //         $('##productTagContainer').addClass('d-none');
-            //     } */
-            //     ajaxFilter(value, id, sorting, minPrice, maxPrice);
-            // });
             if (minPriceUrl !== '' && maxPriceUrl !== '') {
                 priceSliders[0].noUiSlider.set([minPriceUrl, maxPriceUrl]);
             }

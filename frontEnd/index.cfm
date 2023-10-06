@@ -2,6 +2,10 @@
     <cfif NOT StructKeyExists(session, "customer")>
         <cflocation url="login.cfm" addtoken="false">
     </cfif>
+    <cfparam name = "productIdURL" default = '' >
+    <cfif StructKeyExists(url, "ProductId")>
+        <cfset productIdURL =  url.ProductId>
+    </cfif>
     <cfparam name="pg" default="">
     <!doctype html>
     <html lang="en">
@@ -25,11 +29,13 @@
             <!--- fontawsome --->
             <script src="https://kit.fontawesome.com/194ef163b5.js" crossorigin="anonymous"></script>
             <!-- Vendor CSS -->
-            <link rel="stylesheet" href="../assets/css/libs.bundle.css"/>
+            <link rel="stylesheet" href="./assets/css/libs.bundle.css"/>
             <!--- toast css --->
-            <link rel="stylesheet" href="../assets/toastify-js/src/toastify.css" />
+            <link rel="stylesheet" href="./assets/toastify-js/src/toastify.css" />
             <!-- Main CSS -->
-            <link rel="stylesheet" href="../assets/css/theme.bundle.css"/>
+            <link rel="stylesheet" href="./assets/css/theme.bundle.css"/>
+            <link rel="stylesheet" href="./assets/css/custom.css"/>
+            <link rel="stylesheet" href="./assets/css/sweetalert2.min.css"/>
             <!-- Google Fonts-->
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -98,97 +104,10 @@
             <!-- Footer-->
             <cfinclude template="./common/footer.cfm">
             <!-- / Footer-->
-
+            
             <!-- Offcanvas Imports-->
             <!-- Cart Offcanvas-->
-            <div class="offcanvas offcanvas-end d-none" tabindex="-1" id="offcanvasCart">
-                <div class="offcanvas-header d-flex align-items-center">
-                    <h5 class="offcanvas-title" id="offcanvasCartLabel">Your Cart</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div class="d-flex flex-column justify-content-between w-100 h-100">
-                        <div>
-                            <div class="mt-4 mb-5">
-                                <p class="mb-2 fs-6">
-                                    <i class="ri-truck-line align-bottom me-2"></i><span class="fw-bolder">$22</span> away
-                                    from free delivery
-                                </p>
-                                <div class="progress f-h-1">
-                                    <div
-                                        class="progress-bar bg-success"
-                                        role="progressbar" style="width: 25%"
-                                        aria-valuenow="25"
-                                        aria-valuemin="0"
-                                        aria-valuemax="100"
-                                    ></div>
-                                </div>
-                            </div>
-                            <!-- Cart Product-->
-                            <div class="row mx-0 pb-4 mb-4 border-bottom">
-                                <div class="col-3">
-                                    <picture class="d-block bg-light">
-                                        <img
-                                            class="img-fluid"
-                                            src="./assets/images/products/product-1.jpg"
-                                            alt="Bootstrap 5 Template by Pixel Rocket"
-                                        >
-                                    </picture>
-                                </div>
-                                <div class="col-9">
-                                    <div>
-                                        <h6 class="justify-content-between d-flex align-items-start mb-2">
-                                            Mens StormBreaker Jacket
-                                            <i class="ri-close-line"></i>
-                                        </h6>
-                                        <small class="d-block text-muted fw-bolder">Size: Medium</small>
-                                        <small class="d-block text-muted fw-bolder">Qty: 1</small>
-                                    </div>
-                                    <p class="fw-bolder text-end m-0">$85.00</p>
-                                </div>
-                            </div>
-
-                            <!-- Cart Product-->
-                            <div class="row mx-0 pb-4 mb-4 border-bottom">
-                                <div class="col-3">
-                                    <picture class="d-block bg-light">
-                                        <img
-                                            class="img-fluid"
-                                            src="./assets/images/products/product-2.jpg"
-                                            alt="Bootstrap 5 Template by Pixel Rocket"
-                                        >
-                                    </picture>
-                                </div>
-                                <div class="col-9">
-                                    <div>
-                                        <h6 class="justify-content-between d-flex align-items-start mb-2">
-                                            Mens Torrent Terrain Jacket
-                                            <i class="ri-close-line"></i>
-                                        </h6>
-                                        <small class="d-block text-muted fw-bolder">Size: Medium</small>
-                                        <small class="d-block text-muted fw-bolder">Qty: 1</small>
-                                    </div>
-                                    <p class="fw-bolder text-end m-0">$99.00</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="border-top pt-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="m-0 fw-bolder">Subtotal</p>
-                                <p class="m-0 fw-bolder">$233.33</p>
-                            </div>
-                            <a
-                                href="./checkout.html"
-                                class="btn btn-orange btn-orange-chunky mt-5 mb-2 d-block text-center"
-                            >Checkout</a>
-                            <a
-                                href="./cart.html"
-                                class="btn btn-dark fw-bolder d-block text-center transition-all opacity-50-hover"
-                            >View Cart</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="offcanvas offcanvas-end d-none" tabindex="-1" id="offcanvasCart"></div>
             <!-- Filters Offcanvas-->
             <div class="offcanvas offcanvas-end d-none" tabindex="-1" id="offcanvasFilters">
                 <div class="offcanvas-header d-flex align-items-center">
@@ -890,13 +809,15 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"  integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             
             <!--- tostify js --->
-            <script src="assets/toastify-js/src/toastify.js"></script>
+            <script src="./assets/toastify-js/src/toastify.js"></script>
             <!-- Vendor JS -->
-            <script src="assets/js/vendor.bundle.js"></script>
+            <script src="./assets/js/vendor.bundle.js"></script>
+
+            <script src="./assets/js/sweetalert2.min.js"></script>
             
             <!-- Theme JS -->
-            <script src="assets/js/xxtheme.bundle.js"></script>
-            <script src="assets/common.js"></script>
+            <script src="./assets/js/xxtheme.bundle.js"></script>
+            <script src="./assets/common.js"></script>
 
     <!---   <script> 
                 var #toScript('#session.customer.saved#','saved')#;
@@ -909,6 +830,50 @@
                     }
                 });
             </script>    --->
+            <script>
+                var #toScript('#productIdURL#','ProductId')#;
+                $(document).ready( function () { 
+                    $('##offcanvasCartBtn').on('click', function (e) {
+                        $.ajax({  
+                            url: '../ajaxAddToCart.cfm?geDetail=getCartData', 
+                            type: 'GET',
+                            async: false,
+                            success: function(result) {
+                                if (result.success) {
+                                    $('##offcanvasCart').html(result.html);
+                                }
+                            },
+                        });  
+
+                        var proId = $('.removeCartProduct').attr('data-productId');
+                        $('##removeCartProduct-'+ proId).on('click', function () {
+                            var pId = $(this).attr('data-productId');
+                            var name = $(this).attr('data-name');
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You want to delete this product ' + '"' +  name + '"',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '##dc3545',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({  
+                                        url: '../ajaxAddToCart.cfm?removeCartProduct=' + pId, 
+                                        type: 'GET',
+                                        async: false,
+                                        success: function(result) {
+                                            if (result.success) {
+                                                dangerToast("Your product is successfully deleted!");
+                                            }
+                                        },
+                                    });
+                                }
+                            });
+                        });
+                    });
+                });
+            </script>
         </body>
     </html>
 </cfoutput>

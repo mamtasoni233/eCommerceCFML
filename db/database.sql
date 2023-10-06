@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 05, 2023 at 03:44 PM
+-- Generation Time: Oct 06, 2023 at 03:11 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -29,16 +29,25 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `cart` (
   `PkCartId` int(11) UNSIGNED NOT NULL,
-  `FkProductId` int(11) UNSIGNED NOT NULL,
   `FkCustomerId` int(11) UNSIGNED NOT NULL,
+  `FkProductId` int(11) UNSIGNED NOT NULL,
   `quantity` varchar(255) DEFAULT NULL,
-  `price` bit(1) NOT NULL DEFAULT b'1',
+  `price` float NOT NULL,
   `isDeleted` bit(1) NOT NULL DEFAULT b'0',
   `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
   `createdBy` int(11) NOT NULL,
   `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `updatedBy` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(2, 11, 1, '5', 56, b'0', '2023-10-06 16:57:50', 11, '2023-10-06 18:37:42', 11),
+(3, 11, 20, '4', 1000, b'0', '2023-10-06 17:07:17', 11, '2023-10-06 17:07:24', 11),
+(4, 11, 9, '5', 100, b'0', '2023-10-06 18:37:09', 11, '2023-10-06 18:40:45', 11);
 
 -- --------------------------------------------------------
 
@@ -207,7 +216,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_tags`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 15, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-05 12:45:40', 1),
+(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 15, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-06 15:30:52', 1),
 (2, 19, 'Anand Namkeen Thika Meetha mix', '4', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-10-03 10:40:06', 1),
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-09-15 11:40:41', 1),
 (4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'1', '2023-09-14 14:12:42', 1, '2023-09-20 11:31:49', 1),
@@ -256,7 +265,6 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (11, 4, 'motorcycle-with-helmet.jpg', b'1', b'1', '2023-09-14 14:26:46', 1),
 (12, 5, '22fddf3c7da4c4f4.webp', b'1', b'1', '2023-09-14 14:35:24', 1),
 (15, 7, 'anand-nmkieen_1gfgiz2rj7f68.png', b'1', b'1', '2023-09-15 15:14:31', 1),
-(17, 6, '0ff199d1bd27eb98.webp', b'0', b'1', '2023-09-15 16:59:13', 1),
 (18, 8, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf.jpg', b'1', b'1', '2023-09-15 18:30:40', 1),
 (24, 8, 'png-transparent-vegetarian-cuisine-dal-french-fries-ramoji-wafer-and-namkeen-pvt-ltd-food-junk-food-food-recipe-wafer.png', b'0', b'1', '2023-09-15 18:40:02', 1),
 (27, 6, 'istockphoto-178716575-612x612.jpg', b'1', b'1', '2023-09-18 11:54:00', 1),
@@ -269,8 +277,8 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (39, 16, 'oreo.jpeg', b'1', b'1', '2023-09-18 17:10:44', 1),
 (40, 17, 'oreo_6wpihl66wp5r.jpeg', b'1', b'1', '2023-09-18 17:11:04', 1),
 (41, 14, '360_F_228074132_GXAkRxpdhNIUd7E6Sv3XEwybixD8Z1yf_18c5p6s3pjp5.jpg', b'1', b'1', '2023-09-18 17:11:38', 1),
-(42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'0', b'1', '2023-09-21 10:50:37', 1),
-(43, 9, 'marketing-creative-collage-with-phone.jpg', b'1', b'1', '2023-09-25 12:48:13', 1),
+(42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'1', b'1', '2023-09-21 10:50:37', 1),
+(43, 9, 'marketing-creative-collage-with-phone.jpg', b'0', b'1', '2023-09-25 12:48:13', 1),
 (44, 18, '4c7dd5.webp', b'0', b'1', '2023-09-29 11:19:48', 1),
 (45, 18, 'electric-blender-mixer-juicer-set.jpg', b'1', b'1', '2023-09-29 11:21:44', 1),
 (46, 19, 'Bhujia_Sev.jpg', b'0', b'1', '2023-10-01 22:45:57', 7),
@@ -278,8 +286,8 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (48, 20, 'wagh-bakri-tea.jpg', b'1', b'1', '2023-10-03 10:45:41', 1),
 (49, 20, '070417TeaShops01.jpg', b'0', b'1', '2023-10-03 10:46:25', 1),
 (50, 21, '070417TeaShops01_1d31cbb8hepx1.jpg', b'1', b'1', '2023-10-03 12:43:57', 1),
-(54, 1, 'b5c22e_3f0bf41ae1c84a9e8fe6f505f80580d5_mv2_500x.webp', b'0', b'1', '2023-10-05 11:50:05', 1),
-(55, 1, '46b798_0412c5d3a7c7497c883a2dfdc7aed925_mv2_500x.webp', b'1', b'1', '2023-10-05 11:50:05', 1),
+(54, 1, 'b5c22e_3f0bf41ae1c84a9e8fe6f505f80580d5_mv2_500x.webp', b'1', b'1', '2023-10-05 11:50:05', 1),
+(55, 1, '46b798_0412c5d3a7c7497c883a2dfdc7aed925_mv2_500x.webp', b'0', b'1', '2023-10-05 11:50:05', 1),
 (57, 1, '925036427-3444501-1.jpg', b'0', b'1', '2023-10-05 12:05:04', 1),
 (58, 14, '070417TeaShops01_ey82bknl49ky.jpg', b'0', b'1', '2023-10-05 14:15:39', 1);
 
@@ -408,7 +416,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -432,7 +440,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `product_tags`
