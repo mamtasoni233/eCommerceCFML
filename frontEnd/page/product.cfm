@@ -702,14 +702,14 @@
                                         </picture>
                                     </cfif>
                                 </cfloop>
-                                <div class="card-actions">
+                                <!--- <div class="card-actions">
                                     <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
                                     <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
                                         <button class="btn btn-outline-dark btn-sm mx-2">S</button>
                                         <button class="btn btn-outline-dark btn-sm mx-2">M</button>
                                         <button class="btn btn-outline-dark btn-sm mx-2">L</button>
                                     </div>
-                                </div>
+                                </div> --->
                             </div>
                             <div class="card-body px-0 text-center">
                                 <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
@@ -819,7 +819,6 @@
                     url: '../ajaxAddToCart.cfm?ProductId='+ productId, 
                     data: {'productQty':quantity, 'productPrice':productPrice, 'customerId' : customerId},
                     type: 'POST',
-                    async: false,
                     success: function(result) {
                         if (result.success) {
                             successToast("Great!! You were " + quantity + " product added in to cart");

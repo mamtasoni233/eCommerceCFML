@@ -10,6 +10,7 @@
 <cfparam name="startRow" default="">
 <cfparam name="pageNum" default="1">
 <cfparam name="maxRows" default="9">
+<cfparam name="sorting" default="P.productName ASC">
 <cfset startRow = ( pageNum-1 ) * maxRows>
 
 <cffunction name="convertToObject" access="public" returntype="any" output="false"
@@ -78,8 +79,10 @@
         <cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
             AND P.productPrice BETWEEN <cfqueryparam value="#url.minPrice#" cfsqltype = "cf_sql_float"> AND <cfqueryparam value="#url.maxPrice#" cfsqltype = "cf_sql_float"> 
         </cfif>
-        <cfif structKeyExists(url, "sorting") AND len(url.sorting) GT 0>
+        <cfif structKeyExists(url, 'sorting') AND len(url.sorting) GT 0>
             ORDER BY #url.sorting#
+        <cfelse>
+            ORDER BY #sorting#
         </cfif>
     </cfquery>
     <cfset totalPages = ceiling( getProduct.recordCount/maxRows )>
@@ -100,8 +103,10 @@
         <cfif (structKeyExists(url, "minPrice") AND url.minPrice GT 0) OR (structKeyExists(url, "maxPrice") AND url.maxPrice GT 0)>
             AND P.productPrice BETWEEN <cfqueryparam value="#url.minPrice#" cfsqltype = "cf_sql_float"> AND <cfqueryparam value="#url.maxPrice#" cfsqltype = "cf_sql_float"> 
         </cfif>
-        <cfif structKeyExists(url, "sorting") AND len(url.sorting) GT 0>
+        <cfif structKeyExists(url, 'sorting') AND len(url.sorting) GT 0>
             ORDER BY #url.sorting#
+        <cfelse>
+            ORDER BY #sorting#
         </cfif>
         LIMIT #startRow#, #maxRows#
     </cfquery>

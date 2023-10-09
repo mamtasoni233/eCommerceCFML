@@ -107,9 +107,9 @@
             
             <!-- Offcanvas Imports-->
             <!-- Cart Offcanvas-->
-            <div class="offcanvas offcanvas-end d-none" tabindex="-1" id="offcanvasCart"></div>
+            <div class="offcanvas offcanvas-end d-none" data-backdrop="false" tabindex="-1" id="offcanvasCart"></div>
             <!-- Filters Offcanvas-->
-            <div class="offcanvas offcanvas-end d-none" tabindex="-1" id="offcanvasFilters">
+            <div class="offcanvas offcanvas-end d-none" aria-labelledby="offcanvasCartLabel" tabindex="-1" id="offcanvasFilters">
                 <div class="offcanvas-header d-flex align-items-center">
                     <h5 class="offcanvas-title" id="offcanvasFiltersLabel">Category Filters</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -816,7 +816,7 @@
             <script src="./assets/js/sweetalert2.min.js"></script>
             
             <!-- Theme JS -->
-            <script src="./assets/js/xxtheme.bundle.js"></script>
+            <script src="./assets/js/theme.bundle.js?version=#createUUID()#"></script>
             <script src="./assets/common.js"></script>
 
     <!---   <script> 
@@ -844,9 +844,7 @@
                                 }
                             },
                         });  
-
-                        var proId = $('.removeCartProduct').attr('data-productId');
-                        $('##removeCartProduct-'+ proId).on('click', function () {
+                        $('.removeCartProduct').on('click', function () {
                             var pId = $(this).attr('data-productId');
                             var name = $(this).attr('data-name');
                             Swal.fire({
@@ -868,6 +866,9 @@
                                             }
                                         },
                                     });
+                                } else{
+                                    /* $('##offcanvasCart').removeClass('d-none');
+                                    $(body).addClass('offcanvas-backdrop'); */
                                 }
                             });
                         });

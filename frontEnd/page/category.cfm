@@ -7,14 +7,17 @@
 <cfparam name="startRow" default="">
 <cfparam name="pageNum" default="1">
 <cfparam name="maxRows" default="9">
+<cfparam name="sorting" default="P.productName ASC">
 <cfset startRow = ( pageNum-1 ) * maxRows>
 
-<cfparam name="minPriceUrl" default="">
-<cfparam name="maxPriceUrl" default="">
-<cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
+<cfparam name="minPrice" default="">
+<cfparam name="maxPrice" default="">
+<cfdump var="#minPrice#">
+<cfdump var="#maxPrice#">
+<!--- <cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
     <cfset minPriceUrl ="#url.minPrice#">
     <cfset maxPriceUrl ="#url.maxPrice#">
-</cfif>
+</cfif> --->
 <cfquery name="getProduct">
     SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
     FROM product P
@@ -34,6 +37,8 @@
     </cfif>
     <cfif structKeyExists(url, 'sorting') AND len(url.sorting) GT 0>
         ORDER BY #url.sorting#
+    <cfelse>
+        ORDER BY #sorting#
     </cfif>
 </cfquery>
 <!--- paingnation --->
@@ -57,6 +62,8 @@
     </cfif>
     <cfif structKeyExists(url, 'sorting') AND len(url.sorting) GT 0>
         ORDER BY #url.sorting#
+    <cfelse>
+        ORDER BY #sorting#
     </cfif>
     LIMIT #startRow#, #maxRows#
 </cfquery>
@@ -462,9 +469,13 @@
                         <cfset displayClass = "">
                     <cfelseif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice")>
                         <cfset displayClass = "">
+                    <cfelse>
+                        <cfset displayClass = "d-none">
                     </cfif>
                     <div class="align-items-center flex-grow-1 mb-4 mb-md-0 #displayClass#" id="productTagContainer">
-                        <small class="d-inline-block fw-bolder">Filtered by:</small>
+                        <cfif (structKeyExists(variables, "qryGetTagName") AND qryGetTagName.recordCount GT 0) OR ((structKeyExists(url, "minPrice") AND url.minPrice NEQ '') AND (structKeyExists(url, "maxPrice") AND url.minPrice NEQ ''))>
+                            <small class="d-inline-block fw-bolder #displayClass#">Filtered by:</small>
+                        </cfif>
                         <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
                             <cfif structKeyExists(variables, "qryGetTagName") AND qryGetTagName.recordCount GT 0>
                                 <cfloop query="qryGetTagName">
@@ -475,8 +486,8 @@
                                 <li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> #url.minPrice# - <i class='fa fa-rupee'></i> #url.maxPrice#<i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag'></i></li>
                             </cfif>
                         </ul>
-                        <cfif (structKeyExists(variables, "qryGetTagName") AND qryGetTagName.recordCount GT 0) OR (structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice"))>
-                            <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>
+                        <cfif (structKeyExists(variables, "qryGetTagName") AND qryGetTagName.recordCount GT 0) OR ((structKeyExists(url, "minPrice") AND url.minPrice NEQ '') AND (structKeyExists(url, "maxPrice") AND url.minPrice NEQ ''))>
+                            <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1 #displayClass#" id="deleteAllProductTag">Clear All</span>
                         </cfif>
                     </div>
                     <!--- Filter Trigger --->
@@ -490,17 +501,17 @@
                         </p>
                         <ul class="dropdown-menu" id="sortingFilterUl">
                             <li class="dropdown-list-item">
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productPrice DESC'>active</cfif>" data-order="productPrice DESC">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'P.productPrice DESC'>active</cfif>" data-order="P.productPrice DESC">
                                     Price: Hi Low
                                 </a>
                             </li>
                             <li class="dropdown-list-item">
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productPrice ASC'>active</cfif>" data-order="productPrice ASC">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'P.productPrice ASC'>active</cfif>" data-order="P.productPrice ASC">
                                     Price: Low Hi
                                 </a>
                             </li>
                             <li class="dropdown-list-item">
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productName ASC'>active</cfif>" data-order="productName ASC">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productName ASC'>active </cfif>" data-order="productName ASC">
                                     Name
                                 </a>
                             </li>
@@ -531,14 +542,14 @@
                                                     <img class="vh-25 img-fluid" title="" src="#imagePath##getProductImage.image#" alt="">
                                                 </picture>
                                             </cfloop> 
-                                            <div class="card-actions">
+                                            <!---  <div class="card-actions">
                                                 <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
                                                 <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
                                                     <button class="btn btn-outline-dark btn-sm mx-2">S</button>
                                                     <button class="btn btn-outline-dark btn-sm mx-2">M</button>
                                                     <button class="btn btn-outline-dark btn-sm mx-2">L</button>
                                                 </div>
-                                            </div>
+                                            </div> --->
                                         </div>
                                         <div class="card-body px-0 text-center">
                                             <div class="d-flex justify-content-center align-items-center mx-auto mb-1">
@@ -638,22 +649,18 @@
             <!--- / Category Products --->
         </div>
     </div>
-    
     <script>
-
         var #toScript('#pageNum#','pageNum')#;
         var #toScript('#pg#','pg')#;
         var #toScript('#id#','id')#;
-        var #toScript('#minPriceUrl#','minPriceUrl')#;
-        var #toScript('#maxPriceUrl#','maxPriceUrl')#;
+        var #toScript('#minPrice#','minPrice')#;
+        var #toScript('#maxPrice#','maxPrice')#;
+        var #toScript('#sorting#','sortingVar')#;
         var value = "";
         var url = "";
-        var sorting = "";
-        var minPrice = "";
-        var maxPrice = "";
+        var sorting = sortingVar;
         var priceSliders = "";
         $(document).ready( function () { 
-            
             $('.productTag').on('change', function(){
                 let tagName = $(this).attr('data-tagName');
                 var catId = $(this).attr('data-catId');
@@ -686,24 +693,29 @@
                     ajaxFilter(value, catId, sorting, minPrice, maxPrice);
                 }
             });
-            if (minPriceUrl !== '' && maxPriceUrl !== '') {
-                priceSliders[0].noUiSlider.set([minPriceUrl, maxPriceUrl]);
+            console.log(maxPrice);
+            if (minPrice !== undefined && minPrice !== '' && maxPrice !== undefined && maxPrice !== '') {
+                priceSliders[0].noUiSlider.set([minPrice, maxPrice]);
+            } else{
+                $('##priceLi').remove();
             }
+            /* if (value === "" && sorting === "" && minPrice === "" && maxPrice === "") {
+                $('##productTagContainer').addClass('d-none');
+            } */ 
         });
         $(document).on("click", '##applyPriceFilter', function () {
             maxPrice = parseFloat($('##filterPriceMax').val());
-                minPrice = parseFloat($('##filterPriceMin').val());
+            minPrice = parseFloat($('##filterPriceMin').val());
             $('##productTagContainer').removeClass('d-none');
             if ($('##deleteAllProductTag').length === 0) {
                 $('##productTagContainer').addClass('d-none');
                 $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
-            } else {
+            }/*  else {
                 $('##priceLi').remove();
-            }
-            $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
-            /* if ($('##priceLi').length === 0) {
-                $('##productTagContainer').addClass('d-none');
             } */
+            $('##priceLi').remove();
+            
+            $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
             
         });
@@ -740,9 +752,12 @@
         
         $(document).on("click", '.sortingFilter', function () {
             sorting = $(this).attr('data-order');
+            $('##sortingFilterUl').find('.active').removeClass('active');
+            $(this).addClass('active');
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
         function ajaxFilter(value, id, sorting, minPrice = '', maxPrice = '') {
+            console.log(arguments);
             var data = {"catId":id, "value":value, "sorting":sorting};
             if(minPrice !== "" && jQuery.type(minPrice) === 'number' ){
                 data[ "minPrice"] = minPrice;
@@ -760,11 +775,13 @@
                 },
                 success: function(result) {
                     if (result.success) {
+                        // $('.productNameASC').removeClass('active');
                         $('##productContainer').html(result.html);
                         url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value +'&sorting=' + sorting + '&minPrice=' + minPrice + '&maxPrice=' + maxPrice;
                         if (value === "" && sorting === "" && minPrice === "" && maxPrice === "") {
                             url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum;
                         } 
+                        
                         window.history.pushState(null, null, url);
                     }
                 },

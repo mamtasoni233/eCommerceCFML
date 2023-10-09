@@ -220,6 +220,7 @@
                     <li class="ms-1 d-inline-block position-relative">
                         <button
                             class="nav-link fw-bolder btn btn-link px-2 text-decoration-none d-flex align-items-center disable-child-pointer"
+                            type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="##offcanvasCart"
                             aria-controls="offcanvasCart"

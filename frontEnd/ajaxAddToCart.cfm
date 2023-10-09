@@ -11,6 +11,7 @@
 <cfparam name="startRow" default="">
 <cfparam name="pageNum" default="1">
 <cfparam name="maxRows" default="9">
+
 <cfset startRow = ( pageNum-1 ) * maxRows>
 
 <cffunction name="convertToObject" access="public" returntype="any" output="false"
@@ -70,18 +71,17 @@
             SELECT PkCartId, FkCustomerId, FkProductId, quantity, price
             FROM cart 
             WHERE FkProductId = <cfqueryparam value = "#url.ProductId#" cfsqltype = "cf_sql_integer">
-            AND FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            AND FkCustomerId = <cfqueryparam value = "#form.customerId#" cfsqltype = "cf_sql_integer">
         </cfquery>
         <cfif getCartProductQry.FkProductId EQ url.ProductId>
             <cfset updateProductQty = getCartProductQry.quantity + form.productQty>
-            <cfquery name="updateCartProductData">
+            <cfquery result="updateCartProductData">
                 UPDATE cart SET
                 quantity =  <cfqueryparam value = "#updateProductQty#" cfsqltype = "cf_sql_integer">
                 , updatedBy =  <cfqueryparam value = "#form.customerId#" cfsqltype = "cf_sql_integer">
                 , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-                WHERE FkProductId = <cfqueryparam value = "#getCartProductQry.FkProductId#" cfsqltype = "cf_sql_integer">
+                WHERE PkCartId = <cfqueryparam value = "#getCartProductQry.PkCartId#" cfsqltype = "cf_sql_integer">
             </cfquery>
-            <cfset PkCartId = updateCartProductData.PkCartId>
         <cfelse>
             <cfquery result="addToCartData">
                 INSERT INTO cart (
@@ -102,7 +102,6 @@
                     , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
                 )
             </cfquery>
-            <cfset PkCartId = addToCartData.generatedKey>
         </cfif>
 
     </cfif>
@@ -145,7 +144,6 @@
                                 <!-- Cart Product-->
                                 <cfset productSubTotal = 0>
                                 <cfloop query="getCartProductQry">
-                                    <!--- <cfset pId = getCartProductQry.FkProductId> --->
                                     <cfset priceTotal = getCartProductQry.quantity * getCartProductQry.price>
                                     <cfset productSubTotal +=  priceTotal >
                                     <cfquery name="getProductImage">
