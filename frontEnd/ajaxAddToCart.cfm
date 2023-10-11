@@ -115,6 +115,12 @@
         <cfset cartCount = getCartProductQry.recordCount>
         <cfset session.cart = {}>
         <cfset session.cart.cartId = getCartProductQry.PkCartId>
+        <cfset session.cart.cartCount = getCartProductQry.recordCount>
+        <!---  <cflock timeout="1" scope="session" type="exclusive"> 
+            <cfset session.cart = {}>
+            <cfset session.cart.cartId = getCartProductQry.PkCartId>
+            <cfset session.cart.cartCount = getCartProductQry.recordCount>
+        </cflock> --->
         <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
         <cfsavecontent variable="data['html']">
             <cfoutput>
@@ -208,6 +214,16 @@
             DELETE FROM cart 
             WHERE FkProductId = <cfqueryparam value = "#url.removeCartProduct#" cfsqltype = "cf_sql_integer">
         </cfquery>
+    </cfif>
+    <cfif structKeyExists(url, "getCartCountValue") AND url.getCartCountValue EQ "cartCounter">
+        <cfquery name="getCartCount">
+            SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.quantity, C.price, P.PkProductId, P.productName, P.productPrice, P.productQty, P.productDescription
+            FROM cart C
+            LEFT JOIN product P ON C.FkProductId = P.PkProductId
+            WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+        <cfset data['cartCountValue'] = getCartCount.recordCount>
+        <cfset session.cart.cartCount = getCartCount.recordCount>
     </cfif>
     <cfcatch>
         <cfset data['success'] = false>

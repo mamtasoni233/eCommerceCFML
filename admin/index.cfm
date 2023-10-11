@@ -17,8 +17,6 @@
             <link rel="stylesheet" href="./assets/compiled/css/iconly.css"/>
             <link rel="stylesheet" href="./assets/extensions/@fortawesome/fontawesome-free/css/all.min.css" />
             <link rel="stylesheet" href="./assets/extensions/@fortawesome/fontawesome-free/css/fontawesome.min.css" />
-            <!--- <link rel="stylesheet" href="../assets/extensions/choices.js/public/assets/styles/choices.css"/> --->
-            <!---  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> --->
             <!--fancybox css -->
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
             <!--- select 2 css --->

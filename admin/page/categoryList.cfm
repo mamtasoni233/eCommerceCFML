@@ -250,7 +250,7 @@
                     {
                         var returnStr = '';
                         if(row.isDeleted == 1){
-                            returnStr += '<a data-id="'+ row.PkCategoryId + '" data-name="'+row.categoryName+'" id="restoreCategory" class="border-none btn btn-sm btn-warning text-white mt-1 restoreCategory"><i class="fas fa-trash-restore"></i></a>'	
+                            returnStr += '<a data-id="'+ row.PkCategoryId + '" data-name="'+row.categoryName+'" id="restoreCategory" class="border-none btn btn-sm btn-warning text-white mt-1 restoreCategory"><i class="fas fa-undo"></i></a>'	
                         } else{
                             returnStr += '<a data-id="'+row.PkCategoryId+'" data-parentid="' + row.parentCategoryId + '" id="editCategory" class="border-none btn btn-sm btn-success text-white mt-1 editCategory" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+ row.PkCategoryId + '" data-name="'+row.categoryName+'" id="deleteCategory" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCategory" > <i class="bi bi-trash"></i></a>'				
                         }
@@ -286,9 +286,9 @@
                     required: true
                 }
             },
-            errorPlacement: function (error, element) {
+            /* errorPlacement: function (error, element) {
                 error.insertAfter($(element).parent('div')); 
-            },
+            }, */
             messages: {
                 categoryName: {
                     required: "Please enter category name",                    

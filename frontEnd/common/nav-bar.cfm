@@ -227,11 +227,19 @@
                             id="offcanvasCartBtn"
                         >
                             <i class="ri-shopping-cart-2-line ri-lg align-middle position-relative z-index-10"></i>
-                            <span
-                                class="fs-xs fw-bolder f-w-5 f-h-5 bg-orange rounded-lg d-block lh-1 pt-1 position-absolute top-0 end-0 z-index-20 mt-2 text-white"
-                            >
-                                2
-                            </span>
+                            <cfset displayClass = 'd-none'>
+                            <cfset cartVal =  ''>
+                            <cfif StructKeyExists(session, "cart")  AND StructKeyExists(session.cart, "cartCount") EQ session.cart.cartCount> 
+                                <cfset displayClass = 'd-block'>
+                                <cfset cartVal =  session.cart.cartCount>
+                            </cfif>
+                            <!---  <cfif StructKeyExists(session, "cart")  AND StructKeyExists(session.cart, "cartCount") EQ session.cart.cartCount> --->
+                                <span
+                                    class="fs-xs fw-bolder f-w-5 f-h-5 bg-orange rounded-lg #displayClass# lh-1 pt-1 position-absolute top-0 end-0 z-index-20 mt-2 text-white cartCounter"
+                                >
+                                    #cartVal#
+                                </span>
+                            <!---  </cfif> --->
                         </button>
                     </li>
                     <!-- /Navbar Cart-->

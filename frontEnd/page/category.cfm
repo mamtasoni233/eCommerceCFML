@@ -12,12 +12,6 @@
 
 <cfparam name="minPrice" default="">
 <cfparam name="maxPrice" default="">
-<cfdump var="#minPrice#">
-<cfdump var="#maxPrice#">
-<!--- <cfif (structKeyExists(url, "minPrice") AND len(url.minPrice) GT 0) AND (structKeyExists(url, "maxPrice") AND len(url.maxPrice) GT 0)>
-    <cfset minPriceUrl ="#url.minPrice#">
-    <cfset maxPriceUrl ="#url.maxPrice#">
-</cfif> --->
 <cfquery name="getProduct">
     SELECT P.PkProductId, P.productQty, P.productName, P.productPrice, PT.PkTagId, PT.tagName 
     FROM product P
@@ -67,7 +61,6 @@
     </cfif>
     LIMIT #startRow#, #maxRows#
 </cfquery>
-<!--- <cfdump  var="#getProductPaging#"> --->
 <cffunction name="getCategoryResult" access="public" returntype="array">
     <cfargument name="parentId" default="0" required="false" type="numeric"/>
     <cfargument name="categoryId" default="0" required="false" type="numeric"/>
@@ -467,28 +460,24 @@
                             WHERE PkTagId IN (<cfqueryparam value="#url.tags#" list="true">)
                         </cfquery>
                         <cfset displayClass = "">
-                    <cfelseif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice")>
+                    <cfelseif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice") AND url.minPrice GT 0 AND url.maxPrice GT 0>
                         <cfset displayClass = "">
                     <cfelse>
                         <cfset displayClass = "d-none">
                     </cfif>
                     <div class="align-items-center flex-grow-1 mb-4 mb-md-0 #displayClass#" id="productTagContainer">
-                        <cfif (structKeyExists(variables, "qryGetTagName") AND qryGetTagName.recordCount GT 0) OR ((structKeyExists(url, "minPrice") AND url.minPrice NEQ '') AND (structKeyExists(url, "maxPrice") AND url.minPrice NEQ ''))>
-                            <small class="d-inline-block fw-bolder #displayClass#">Filtered by:</small>
-                        </cfif>
+                        <small class="d-inline-block fw-bolder">Filtered by:</small>
                         <ul class="list-unstyled d-inline-block mb-0 ms-2" id="productTypeUl">
                             <cfif structKeyExists(variables, "qryGetTagName") AND qryGetTagName.recordCount GT 0>
                                 <cfloop query="qryGetTagName">
                                     <li id="tagNameLi-#qryGetTagName.PkTagId#" data-name="#qryGetTagName.tagName#" class="bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1">Type: #qryGetTagName.tagName#<i class="ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag" data-id="#qryGetTagName.PkTagId#"></i></li>
                                 </cfloop>
                             </cfif>
-                            <cfif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice")>
-                                <li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> #url.minPrice# - <i class='fa fa-rupee'></i> #url.maxPrice#<i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag'></i></li>
+                            <cfif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice") AND url.minPrice GT 0 AND url.maxPrice GT 0>
+                                <li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer ms-1'>Price: <i class='fa fa-rupee'></i> #url.minPrice# - <i class='fa fa-rupee'></i> #url.maxPrice#<i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag'></i></li>
                             </cfif>
                         </ul>
-                        <cfif (structKeyExists(variables, "qryGetTagName") AND qryGetTagName.recordCount GT 0) OR ((structKeyExists(url, "minPrice") AND url.minPrice NEQ '') AND (structKeyExists(url, "maxPrice") AND url.minPrice NEQ ''))>
-                            <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1 #displayClass#" id="deleteAllProductTag">Clear All</span>
-                        </cfif>
+                        <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1 d-inline-block" id="deleteAllProductTag">Clear All</span>
                     </div>
                     <!--- Filter Trigger --->
                     <button class="btn bg-light p-3 d-flex d-lg-none align-items-center fs-xs fw-bold text-uppercase w-100 mb-2 mb-md-0 w-md-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="##offcanvasFilters" aria-controls="offcanvasFilters">
@@ -670,7 +659,7 @@
                 }
         
                 if ($('##deleteAllProductTag').length === 0) {
-                    $('##productTagContainer').addClass('d-none');
+                    /* $('##productTagContainer').addClass('d-none'); */
                     $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
                 }
         
@@ -693,28 +682,22 @@
                     ajaxFilter(value, catId, sorting, minPrice, maxPrice);
                 }
             });
-            console.log(maxPrice);
             if (minPrice !== undefined && minPrice !== '' && maxPrice !== undefined && maxPrice !== '') {
                 priceSliders[0].noUiSlider.set([minPrice, maxPrice]);
             } else{
                 $('##priceLi').remove();
             }
-            /* if (value === "" && sorting === "" && minPrice === "" && maxPrice === "") {
-                $('##productTagContainer').addClass('d-none');
-            } */ 
         });
         $(document).on("click", '##applyPriceFilter', function () {
             maxPrice = parseFloat($('##filterPriceMax').val());
             minPrice = parseFloat($('##filterPriceMin').val());
             $('##productTagContainer').removeClass('d-none');
             if ($('##deleteAllProductTag').length === 0) {
-                $('##productTagContainer').addClass('d-none');
                 $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
-            }/*  else {
+            } else {
                 $('##priceLi').remove();
-            } */
+            }
             $('##priceLi').remove();
-            
             $("##productTypeUl").append("<li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer d-inline-block ms-1'>Price: <i class='fa fa-rupee'></i> " + minPrice + " - <i class='fa fa-rupee'></i> " + maxPrice + " <i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag' data-id='0'></i></li>");
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
             
@@ -735,18 +718,16 @@
                 $('##tagNameLi-' + tagIds).remove();
             } else {
                 $('##priceLi').remove();
-            }
-            if (tagIds == 0) {
                 maxPrice = '';
                 minPrice = '';
                 priceSliders[0].noUiSlider.set([60, 950]);
-            }
+            } 
             $('##filter-type-'+tagIds).prop("checked", false);
             value = $('.productTag:checked').map(function(){ return $(this).val(); }).get().join();
             if (value === "" && minPrice === "" && maxPrice === ""){
                 $('##productTagContainer').addClass('d-none');
                 priceSliders[0].noUiSlider.set([60, 950]);
-            }
+            } 
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
         
@@ -757,7 +738,6 @@
             ajaxFilter(value, id, sorting, minPrice, maxPrice);
         });
         function ajaxFilter(value, id, sorting, minPrice = '', maxPrice = '') {
-            console.log(arguments);
             var data = {"catId":id, "value":value, "sorting":sorting};
             if(minPrice !== "" && jQuery.type(minPrice) === 'number' ){
                 data[ "minPrice"] = minPrice;

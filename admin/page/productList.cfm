@@ -63,7 +63,7 @@
                                     <div class="row g-3">
                                         <div class="col-md-12">
                                             <lable class="fw-bold form-label" for="category">Category Name</lable>
-                                            <div class="form-group">
+                                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                                 <select name="category" id="category" class="form-control" data-placeholder="Select Category">
                                                 </select>
                                             </div>
@@ -107,18 +107,8 @@
                                         <div class="col-md-12">
                                             <lable class="fw-bold form-label" for="productTags">Product Tags</lable>
                                             <div class="form-group">
-                                                <!--- <cfquery name="getProductTag">
-                                                    SELECT C.PkCategoryId, C.categoryName, PT.PkTagId, PT.FkCategoryId, PT.tagName, PT.isActive, PT.isDeleted
-                                                    FROM product_tags PT
-                                                    LEFT JOIN category C ON PT.FkCategoryId = C.PkCategoryId
-                                                    WHERE PT.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
-                                                    AND PT.isActive = <cfqueryparam value="1" cfsqltype = "cf_sql_bit">
-                                                </cfquery> --->
                                                 <select name="productTags" id="productTags" class="form-control productTagMultiple" data-placeholder="Select Product Tags" multiple>
                                                     <option></option>
-                                                    <!--- <cfloop query="getProductTag">
-                                                        <option value="#getProductTag.PkTagId#">#getProductTag.tagName#</option>
-                                                    </cfloop> --->
                                                 </select>
                                             </div>
                                         </div>
@@ -374,6 +364,7 @@
             ignore: [],
             errorElement: 'span',
             errorPlacement: function (error, element) {
+                console.log(element);
                 var elem = $(element);
                 if (elem.hasClass("select2-hidden-accessible")) {
                     element = element.siblings(".select2");
@@ -387,7 +378,6 @@
                 if ($(element).hasClass('select2-hidden-accessible')) {
                     $(element).siblings('.select2').children('span').children('span.select2-selection').addClass("invalidCs")
                 } 
-    
                 $(element).addClass('is-invalid');
             },
             unhighlight: function (element, errorClass, validClass) {

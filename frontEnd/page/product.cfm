@@ -822,6 +822,19 @@
                     success: function(result) {
                         if (result.success) {
                             successToast("Great!! You were " + quantity + " product added in to cart");
+                            $.ajax({  
+                                url: '../ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
+                                type: 'GET',
+                                success: function(result) {
+                                    if (result.success) {
+                                        $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
+                                        $('##offcanvasCartBtn > span.cartCounter').text(result.cartCountValue);
+                                    } else {
+                                        $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
+                                        $('##offcanvasCartBtn span.cartCounter').text('');
+                                    }
+                                },
+                            });  
                         }
                     },
                 });  

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 09, 2023 at 03:27 PM
+-- Generation Time: Oct 11, 2023 at 03:28 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -47,8 +47,7 @@ CREATE TABLE `cart` (
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
 (3, 11, 20, '4', 1000, b'0', '2023-10-06 17:07:17', 11, '2023-10-06 17:07:24', 11),
 (4, 11, 9, '5', 100, b'0', '2023-10-06 18:37:09', 11, '2023-10-06 18:40:45', 11),
-(11, 1, 10, '1', 30, b'0', '2023-10-09 17:22:33', 1, NULL, NULL),
-(12, 1, 1, '3', 56, b'0', '2023-10-09 17:22:39', 1, '2023-10-09 17:22:41', 1);
+(59, 1, 10, '1', 30, b'0', '2023-10-11 18:57:08', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -220,11 +219,11 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 15, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-06 15:30:52', 1),
 (2, 19, 'Anand Namkeen Thika Meetha mix', '4', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-10-03 10:40:06', 1),
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-10-09 14:56:23', 1),
-(4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'1', '2023-09-14 14:12:42', 1, '2023-09-20 11:31:49', 1),
+(4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-10-11 12:37:30', 1),
 (5, 7, 'Samsung Z-fold ', '1,5', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
 (6, 18, 'Cookie', '9', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-10-05 14:18:40', 1),
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
-(8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-03 10:40:30', 1),
+(8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
 (9, 20, 'Taj Mahal Tea', '8', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-03 14:12:05', 1),
 (10, 18, 'crack jack', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:06:16', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
@@ -280,8 +279,8 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (42, 9, 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'1', b'1', '2023-09-21 10:50:37', 1),
 (43, 9, 'marketing-creative-collage-with-phone.jpg', b'0', b'1', '2023-09-25 12:48:13', 1),
 (45, 18, 'electric-blender-mixer-juicer-set.jpg', b'1', b'1', '2023-09-29 11:21:44', 1),
-(46, 19, 'Bhujia_Sev.jpg', b'0', b'1', '2023-10-01 22:45:57', 7),
-(47, 19, 'bhujiya_sev_1.webp', b'1', b'1', '2023-10-01 22:45:57', 7),
+(46, 19, 'Bhujia_Sev.jpg', b'1', b'1', '2023-10-01 22:45:57', 7),
+(47, 19, 'bhujiya_sev_1.webp', b'0', b'1', '2023-10-01 22:45:57', 7),
 (48, 20, 'wagh-bakri-tea.jpg', b'1', b'1', '2023-10-03 10:45:41', 1),
 (49, 20, '070417TeaShops01.jpg', b'0', b'1', '2023-10-03 10:46:25', 1),
 (50, 21, '070417TeaShops01_1d31cbb8hepx1.jpg', b'1', b'1', '2023-10-03 12:43:57', 1),
@@ -321,10 +320,10 @@ INSERT INTO `product_tags` (`PkTagId`, `FkCategoryId`, `tagName`, `isActive`, `i
 (5, 41, 'sports', b'1', b'0', '2023-09-14 14:10:34', 1, NULL, NULL),
 (6, 17, 'camera', b'1', b'0', '2023-09-14 14:10:43', 1, '2023-09-14 16:36:31', 1),
 (7, 19, 'mixer', b'1', b'0', '2023-09-14 17:09:22', 1, NULL, NULL),
-(8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-09-14 18:11:30', 1),
+(8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-10-11 16:28:55', 1),
 (9, 18, 'butter buiscuit', b'1', b'0', '2023-09-14 18:11:51', 1, NULL, NULL),
 (10, 21, 'Noodles', b'1', b'0', '2023-09-15 15:14:51', 1, NULL, NULL),
-(11, 19, 'Sev', b'1', b'0', '2023-10-02 00:09:42', 7, NULL, NULL);
+(11, 19, 'Sev', b'1', b'0', '2023-10-02 00:09:42', 7, '2023-10-11 12:43:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -416,7 +415,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `category`

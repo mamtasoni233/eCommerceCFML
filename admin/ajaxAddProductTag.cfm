@@ -225,11 +225,19 @@
 </cfif>
 
 <cfif structKeyExists(url, 'delPkTagId') AND url.delPkTagId GT 0>
-        <cfquery result="deleteProductData">
-            UPDATE product_tags SET
-            isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
-            WHERE PkTagId = <cfqueryparam value="#url.delPkTagId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
-    </cfif>
+    <cfquery result="deleteProductData">
+        UPDATE product_tags SET
+        isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_bit">
+        WHERE PkTagId = <cfqueryparam value="#url.delPkTagId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+</cfif>
+<cfif structKeyExists(url, 'restorePkTagId') AND url.restorePkTagId GT 0>
+    <cfquery result="restorePRoductTagData">
+        UPDATE product_tags SET
+        isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+        WHERE PkTagId = <cfqueryparam value="#url.restorePkTagId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+</cfif>
+
 <cfset output = serializeJson(data) />
 <cfoutput>#rereplace(output,'//','')#</cfoutput>

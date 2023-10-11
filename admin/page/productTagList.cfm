@@ -39,7 +39,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header d-flex justify-content-end">
-                    <button class="btn btn-primary editProduct"  name="addProductTag" data-bs-toggle="model" id="addProductTag" data-id="0">
+                    <button class="btn btn-primary editProductTag"  name="addProductTag" data-bs-toggle="model" id="addProductTag" data-id="0">
                         <i class="bi bi-plus-lg "></i><span class="ms-2 pt-1">Add Product Tag</span>
                     </button>
                 </div>
@@ -60,7 +60,7 @@
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="category">Category Name</lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <select name="category" id="category" class="form-control-xl" >
+                                            <select name="category" id="category" class="form-control" data-placeholder="Select Category">
                                             </select>
                                         </div>
                                     </div>
@@ -97,7 +97,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped nowrap table-dark" id="productTagDataTable">
+                        <table class="table nowrap" id="productTagDataTable">
                             <thead>
                                 <tr>
                                     <th>Product Tag Name</th>
@@ -123,7 +123,11 @@
 <script>
     $(document).ready( function () {
         $('#category').select2({
-            width: '100%' 
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            dropdownParent: $('#addProductTagData'),
+            allowClear: true,
         });
         $('#productTagDataTable').DataTable({
             processing: true,
@@ -176,13 +180,19 @@
                 { data: 'PkTagId',
                     render: function(data, type, row, meta)
                     {
-                        return '<a data-id="'+row.PkTagId+'"  id="editProduct" class="border-none btn btn-sm btn-success text-white mt-1 editProduct" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkTagId+'" data-name="'+row.tagName+'" id="deleteProduct" class="border-none btn btn-sm btn-danger text-white mt-1 deleteProduct" > <i class="bi bi-trash"></i></a>'				
+                        var returnStr = '';
+                        if(row.isDeleted == 1){
+                            returnStr += '<a data-id="'+ row.PkTagId + '" data-name="'+row.tagName+'" id="restoreProductTag" class="border-none btn btn-sm btn-warning text-white mt-1 restoreProductTag"><i class="fas fa-undo"></i></a>'	
+                        } else{
+                            returnStr += '<a data-id="'+row.PkTagId+'"  id="editProductTag" class="border-none btn btn-sm btn-success text-white mt-1 editProductTag" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkTagId+'" data-name="'+row.tagName+'" id="deleteProductTag" class="border-none btn btn-sm btn-danger text-white mt-1 deleteProductTag" > <i class="bi bi-trash"></i></a>'				
+                        }
+                        return returnStr;
                     }
                 },
             ],
             rowCallback: function( row, data ) {
                 if ( data.isDeleted === 1 ) {
-                    $(row).addClass('text-danger');
+                    $(row).addClass('table-danger');
                 }
             }
         });
@@ -192,18 +202,18 @@
         $('#isDeleted').change(function () {
             $('#productTagDataTable').DataTable().ajax.reload();
         });
-        // open add category model
+        // open add product tag model
         $("#addProductTag").on("click", function () {
             $("#addProductTagData").modal('show');
             $('#PkTagId').val(0);
             getCategory();
         });
-        $("#addProductTagForm").validate({
+        var validator = $("#addProductTagForm").validate({
             rules: {
-                tagName: {
+                category: {
                     required: true
                 },
-                category: {
+                tagName: {
                     required: true
                 }
             },
@@ -211,11 +221,11 @@
                 error.insertAfter($(element).parent('div')); 
             },
             messages: {
-                tagName: {
-                    required: "Please enter tag name",                    
-                },
                 category: {
                     required: "Please select category",                    
+                },
+                tagName: {
+                    required: "Please enter tag name"                   
                 }
             },
             ignore: [],
@@ -228,13 +238,12 @@
                 } else {
                     error.insertAfter(element);
                 }
-                error.addClass('invalid-feedback'); 
+                error.addClass('invalid-feedback');
             },
             highlight: function (element, errorClass, validClass) {
                 if ($(element).hasClass('select2-hidden-accessible')) {
                     $(element).siblings('.select2').children('span').children('span.select2-selection').addClass("invalidCs")
                 } 
-    
                 $(element).addClass('is-invalid');
             },
             unhighlight: function (element, errorClass, validClass) {
@@ -258,10 +267,6 @@
                             successToast("Product Tag Add!","Product Tag Successfully Added");
                         }
                         $("#addProductTagData").modal('hide');
-                        $('#addProductTagData').on('hidden.bs.modal', function () {
-                            $("#addProductTagForm").trigger('reset');
-                            $("#category").val(''); 
-                        });
                         $('#productTagDataTable').DataTable().ajax.reload();   
                     }
                 });
@@ -270,11 +275,17 @@
         $("select").on("select2:close", function (e) {  
             $(this).valid(); 
         });
-        $("#productTagDataTable").on("click", ".editProduct", function () { 
+        $('#addProductTagData').on('hidden.bs.modal', function () {
+            $("#addProductTagForm").trigger('reset');
+            validator.resetForm();
+            $("#category").val(); 
+            $(".modal-title").html("Add Product Tag");
+        });
+        $("#productTagDataTable").on("click", ".editProductTag", function () { 
             var id = $(this).attr("data-id");
             $("#addProductTagData").modal('show');
             $('#PkTagId').val(id);
-            $(".modal-title").html("Update Category");
+            $(".modal-title").html("Update Product Tag");
             $.ajax({
                 type: "GET",
                 url: "../ajaxAddProductTag.cfm?PkTagId="+ id,
@@ -292,13 +303,15 @@
                         }
                         $('#addProductTagData').on('hidden.bs.modal', function () {
                             $("#addProductTagForm").trigger('reset');
-                            $("#category").val(''); 
+                            validator.resetForm();
+                            $(".modal-title").html("Add Product Tag");
+                            $("#category").val();  
                         });
                     }
                 }   
             });
         }); 
-        $("#productTagDataTable").on("click", ".deleteProduct", function () { 
+        $("#productTagDataTable").on("click", ".deleteProductTag", function () { 
             var id = $(this).attr("data-id");
             var name = $(this).data("name");
             Swal.fire({
@@ -320,7 +333,7 @@
                     });
                 }
             });
-        }); 
+        });
         $("#productTagDataTable").on("click", ".changeStatus", function () {
             var id = $(this).attr("data-id");
             var name = $(this).attr("data-name");
@@ -366,7 +379,29 @@
                     }
                 });
             }
-        });
+        }); 
+        $("#productTagDataTable").on("click", ".restoreProductTag", function () {
+            var id = $(this).attr("data-id");
+            var name = $(this).data("name");
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You want to restore product tag record for ' + '"' +  name + '"',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Restore it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({  
+                        url: '../ajaxAddProductTag.cfm?restorePkTagId='+id, 
+                        type: 'GET',  
+                        success: function(data) {
+                            dangerToast("Restore!","Product Tag Restore Successfully");
+                            $('#productTagDataTable').DataTable().ajax.reload();               
+                        }  
+                    });
+                }
+            });
+        }); 
     });
     function getCategory(catId=0) {
         $.ajax({    
@@ -379,7 +414,7 @@
                 if (dataRecord.success) {
                     $('#category').html('');
                     var html = "";
-                    var html = "<option>Select Category</option>";
+                    var html = "<option value=''></option>";
                     for (var i = 0; i < dataRecord.categoryList.length; i++) {
                         html += "<option value="+dataRecord.categoryList[i].PkCategoryId+" >"+dataRecord.categoryList[i].catName+"</option>";
                     }
@@ -390,7 +425,6 @@
                         $('#category').val();
                     }
                 }
-                
             }
         }); 
     }

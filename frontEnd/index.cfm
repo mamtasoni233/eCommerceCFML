@@ -833,6 +833,7 @@
             <script>
                 var #toScript('#productIdURL#','ProductId')#;
                 $(document).ready( function () { 
+                    //$('##offcanvasCartBtn span.cartCounter').addClass('d-none');
                     $('##offcanvasCartBtn').on('click', function (e) {
                         $.ajax({  
                             url: '../ajaxAddToCart.cfm?geDetail=getCartData', 
@@ -863,12 +864,22 @@
                                         success: function(result) {
                                             if (result.success) {
                                                 dangerToast("Your product is successfully deleted!");
+                                                $.ajax({  
+                                                    url: '../ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
+                                                    type: 'GET',
+                                                    success: function(result) {
+                                                        if (result.success) {
+                                                            $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
+                                                            $('##offcanvasCartBtn span.cartCounter').text(result.cartCountValue);
+                                                        } else{
+                                                            $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
+                                                            $('##offcanvasCartBtn span.cartCounter').text('');
+                                                        }
+                                                    },
+                                                });  
                                             }
                                         },
                                     });
-                                } else{
-                                    /* $('##offcanvasCart').removeClass('d-none');
-                                    $(body).addClass('offcanvas-backdrop'); */
                                 }
                             });
                         });
