@@ -84,12 +84,6 @@
             color: ##0a0a0a;
             font-weight: 900;
         }
-        .minus-btn img {
-            margin-bottom: 3px;
-        }
-        .plus-btn img {
-            margin-top: 2px;
-        }
     </style>
     <!-- Product Top-->
     <section class="container">
@@ -779,7 +773,6 @@
                     $(this).val(productQty);
                     $('.plus-btn').addClass('disabled');
                     $('.minus-btn').removeClass('disabled');
-                    //( $(this).val() === productQty) && $('.plus-btn').addClass('disabled');
                 }
                 
             });

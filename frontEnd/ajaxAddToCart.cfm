@@ -112,15 +112,12 @@
             LEFT JOIN product P ON C.FkProductId = P.PkProductId
             WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
         </cfquery>
-        <cfset cartCount = getCartProductQry.recordCount>
+        <cfquery name="getCartCount">
+            SELECT SUM(quantity) AS 'totalCartValue' FROM cart WHERE FkCustomerId = <cfqueryparam value = "#getCartProductQry.FkCustomerId#" cfsqltype = "cf_sql_integer"> 
+        </cfquery>
         <cfset session.cart = {}>
-        <cfset session.cart.cartId = getCartProductQry.PkCartId>
-        <cfset session.cart.cartCount = getCartProductQry.recordCount>
-        <!---  <cflock timeout="1" scope="session" type="exclusive"> 
-            <cfset session.cart = {}>
-            <cfset session.cart.cartId = getCartProductQry.PkCartId>
-            <cfset session.cart.cartCount = getCartProductQry.recordCount>
-        </cflock> --->
+        <cfset session.cart.cartCount = getCartCount.totalCartValue>
+        
         <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
         <cfsavecontent variable="data['html']">
             <cfoutput>
@@ -191,11 +188,11 @@
                                     <p class="m-0 fw-bolder"><i class="fa fa-rupee"></i> #productSubTotal#</p>
                                 </div>
                                 <a
-                                    href="./checkout.html"
+                                    href="index.cfm?pg=checkOut"
                                     class="btn btn-orange btn-orange-chunky mt-5 mb-2 d-block text-center"
                                 >Checkout</a>
                                 <a
-                                    href="./cart.html"
+                                    href="index.cfm?pg=cart"
                                     class="btn btn-dark fw-bolder d-block text-center transition-all opacity-50-hover"
                                 >View Cart</a>
                             </div>
@@ -217,13 +214,12 @@
     </cfif>
     <cfif structKeyExists(url, "getCartCountValue") AND url.getCartCountValue EQ "cartCounter">
         <cfquery name="getCartCount">
-            SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.quantity, C.price, P.PkProductId, P.productName, P.productPrice, P.productQty, P.productDescription
-            FROM cart C
-            LEFT JOIN product P ON C.FkProductId = P.PkProductId
-            WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            SELECT SUM(quantity) AS 'totalCartValue' FROM cart WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer"> 
         </cfquery>
-        <cfset data['cartCountValue'] = getCartCount.recordCount>
-        <cfset session.cart.cartCount = getCartCount.recordCount>
+        <cfset data['cartCountValue'] = getCartCount.totalCartValue>
+        <cflock timeout="1" scope="session" type="exclusive"> 
+            <cfset session.cart.cartCount = getCartCount.totalCartValue>
+        </cflock>
     </cfif>
     <cfcatch>
         <cfset data['success'] = false>

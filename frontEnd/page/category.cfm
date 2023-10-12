@@ -490,17 +490,17 @@
                         </p>
                         <ul class="dropdown-menu" id="sortingFilterUl">
                             <li class="dropdown-list-item">
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'P.productPrice DESC'>active</cfif>" data-order="P.productPrice DESC">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif sorting EQ 'P.productPrice DESC'>active</cfif>" data-order="P.productPrice DESC">
                                     Price: Hi Low
                                 </a>
                             </li>
                             <li class="dropdown-list-item">
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'P.productPrice ASC'>active</cfif>" data-order="P.productPrice ASC">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif sorting EQ 'P.productPrice ASC'>active</cfif>" data-order="P.productPrice ASC">
                                     Price: Low Hi
                                 </a>
                             </li>
                             <li class="dropdown-list-item">
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif structKeyExists(url, 'sorting') AND url.sorting EQ 'productName ASC'>active </cfif>" data-order="productName ASC">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif sorting EQ 'P.productName ASC'>active</cfif>" data-order="P.productName ASC">
                                     Name
                                 </a>
                             </li>

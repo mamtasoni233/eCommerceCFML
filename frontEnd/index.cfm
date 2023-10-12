@@ -96,6 +96,12 @@
                     <cfcase value="product">
                         <cfinclude template="./page/product.cfm">
                     </cfcase>
+                    <cfcase value="cart">
+                        <cfinclude template="./page/cart.cfm">
+                    </cfcase>
+                    <cfcase value="checkOut">
+                        <cfinclude template="./page/checkOut.cfm">
+                    </cfcase>
                 </cfswitch>
                 <!-- /Page Content -->
             </section>
@@ -803,8 +809,6 @@
                     </div>
                 </div>
             </section>
-
-            <!--- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> --->
             <!--- jquery validation js --->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"  integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             
@@ -831,12 +835,11 @@
                 });
             </script>    --->
             <script>
-                var #toScript('#productIdURL#','ProductId')#;
+                // var #toScript('#productIdURL#','ProductId')#;
                 $(document).ready( function () { 
-                    //$('##offcanvasCartBtn span.cartCounter').addClass('d-none');
                     $('##offcanvasCartBtn').on('click', function (e) {
                         $.ajax({  
-                            url: '../ajaxAddToCart.cfm?geDetail=getCartData', 
+                            url: './ajaxAddToCart.cfm?geDetail=getCartData', 
                             type: 'GET',
                             async: false,
                             success: function(result) {
@@ -858,14 +861,14 @@
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     $.ajax({  
-                                        url: '../ajaxAddToCart.cfm?removeCartProduct=' + pId, 
+                                        url: './ajaxAddToCart.cfm?removeCartProduct=' + pId, 
                                         type: 'GET',
                                         async: false,
                                         success: function(result) {
                                             if (result.success) {
                                                 dangerToast("Your product is successfully deleted!");
                                                 $.ajax({  
-                                                    url: '../ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
+                                                    url: './ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
                                                     type: 'GET',
                                                     success: function(result) {
                                                         if (result.success) {
