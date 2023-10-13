@@ -10,6 +10,11 @@
     WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
 </cfquery>
 <cfoutput>
+    <style>
+        .form-control{
+            border-radius: 0 !important;
+        }
+    </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
     <!-- Cart Container-->
     <section class="container mt5">
@@ -59,20 +64,9 @@
                                         <!-- Details -->
                                         <!-- Qty -->
                                             <td>
-                                                <!--- <div class="d-flex pe-3">
-                                                    <div class="quantity">
-                                                        <button class="btn btn-sm btn-dark minus-btn" data-pId ="#getAllCartProductQry.FkProductId#" data-pQty ="#getAllCartProductQry.productQty#" type="button" name="button">
-                                                            <i class="fa fa-minus"></i>
-                                                        </button>
-                                                        <input type="text" class="productQuantity" name="quantity" data-pId ="#getAllCartProductQry.FkProductId#" data-pQty ="#getAllCartProductQry.productQty#" value="#getAllCartProductQry.quantity#" id="productQuantity-#getAllCartProductQry.FkProductId#">
-                                                        <button class="btn btn-sm btn-dark plus-btn" id ="plus-btn-#getAllCartProductQry.FkProductId#" onClick="addCartProduct(#getAllCartProductQry.FkProductId#)" data-pQty ="#getAllCartProductQry.productQty#"  type="button" name="button">
-                                                            <i class="fa fa-plus"></i>
-                                                        </button>
-                                                    </div> --->
-                                                    <div class="ps-2">
-                                                        <p class="fw-bolder mt-3 m-sm-0">#getAllCartProductQry.quantity#  </p>
-                                                    </div>
-                                                <!--- </div> --->
+                                                <div class="ps-2">
+                                                    <p class="fw-bolder mt-3 m-sm-0">#getAllCartProductQry.quantity#  </p>
+                                                </div>
                                             </td>
                                         <!-- /Qty -->
                                         <!-- Actions -->
@@ -125,9 +119,8 @@
                             <div class="card card-body bg-transparent p-0">
                                 <div class="input-group mb-0 mt-2">
                                     <input type="text" class="form-control border-0" placeholder="Enter coupon code">
-                                    <button class="btn btn-white text-dark mx-2 border rounded-3 btn-sm border-0 d-flex justify-content-center align-items-center">
-                                        <i class="ri-checkbox-circle-line ri-lg"></i>
-                                    </button>
+                                    <button class="btn btn-white text-dark px-3 btn-sm border-0 d-flex justify-content-center align-items-center">
+                                        <i class="ri-checkbox-circle-line ri-lg"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -158,50 +151,6 @@
 
     <script>
         $(document).ready( function () { 
-            /*  var productId = $('.productQuantity').attr('data-pId');
-            var productQty = $('.productQuantity').attr('data-pQty');
-            console.log(productId);
-            console.log(productQty);
-            console.log('##productQuantity-'+productId); */
-            // $('##productQuantity-'+productId).on('keyup', function() {
-            //     if ( $(this).val() > productQty ) {
-            //         warnToast("Not allowed to add this product");
-            //         $(this).val(productQty);
-            //         $('.plus-btn').addClass('disabled');
-            //         $('.minus-btn').removeClass('disabled');
-            //     }
-                
-            // });
-            /* $('.minus-btn').on('click', function(e) {
-                e.preventDefault();
-                var $input = $(this).closest('div').find('input');
-                var value = parseInt($input.val());
-                $('.plus-btn').removeClass('disabled');
-                if ( value > 1) {
-                    value = value - 1;
-                    $(this).removeClass('disabled');
-                    (value === 1) &&  $(this).addClass('disabled');
-                }
-                $input.val(value);
-            }); */
-            
-            /* $('.plus-btn').on('click', function(e) {
-                e.preventDefault();
-                var $input = $(this).closest('div').find('input');
-                var value = parseInt($input.val());
-                $('.minus-btn').removeClass('disabled');
-                if (value <= productQty) {
-                    value = value + 1;
-                    $(this).removeClass('disabled');
-                    (value === productQty) &&  $(this).addClass('disabled');
-                } else {
-                    value = productQty;
-                    $(this).addClass('disabled');
-                }
-                $input.val(value);
-
-            }); */
-            // console.log($('##cartAllProductContainer').length );
             $('.removeCartProduct').on('click', function () {
                 var pId = $(this).attr('data-productId');
                 var name = $(this).attr('data-name');
@@ -251,20 +200,5 @@
                 });
             });
         });
-        /* function addCartProduct(id) {
-            var productQty = $('##plus-btn-'+id).attr('data-pQty');
-            var $input = $('##plus-btn-'+id).closest('div').find('input');
-            var value = parseInt($input.val());
-            $('.minus-btn').removeClass('disabled');
-            if (value <= productQty) {
-                value = value + 1;
-                $('##plus-btn-'+id).removeClass('disabled');
-                (value === productQty) &&  $('##plus-btn-'+id).addClass('disabled');
-            } else {
-                value = productQty;
-                $('##plus-btn-'+id).addClass('disabled');
-            }
-            $input.val(value);
-        }  */
     </script>
 </cfoutput>

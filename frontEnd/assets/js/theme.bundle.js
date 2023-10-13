@@ -89,9 +89,10 @@
     !(function () {
       const e = document.querySelector('#same-address'),
         t = document.querySelector('.billing-address'),
-        o = document.querySelectorAll('[name="checkoutPaymentMethod"]') || [],
+        o = document.querySelectorAll('[name="paymentMethod"]') || [],
         n = document.querySelector('.card-details'),
-        s = document.querySelector('.paypal-details');
+        s = document.querySelector('.cod-details'),
+        u = document.querySelector('.upi-details');
       e &&
         t &&
         e.addEventListener('change', (e) => {
@@ -105,10 +106,34 @@
               e &&
                 e.target &&
                 e.target.id &&
+                e.target.checked &&
                 (({ type: e }) => {
-                  'checkoutPaymentStripe' === e
-                    ? (s.classList.add('d-none'), n.classList.remove('d-none'))
-                    : (s.classList.remove('d-none'), n.classList.add('d-none'));
+                  if (e === 'cod') {
+                    n.classList.add('d-none');
+                    u.classList.add('d-none');
+                    s.classList.remove('d-none');
+                  } else if (e === 'creditCard') {
+                    s.classList.add('d-none');
+                    u.classList.add('d-none');
+                    n.classList.remove('d-none');
+                  } else {
+                    s.classList.add('d-none');
+                    n.classList.add('d-none');
+                    u.classList.remove('d-none');
+                  }
+                  /* if (e === 'creditCard') {
+                    s.classList.add('d-none');
+                    u.classList.add('d-none');
+                    n.classList.remove('d-none');
+                  } else if (e === 'cod') {
+                    n.classList.add('d-none');
+                    u.classList.add('d-none');
+                    s.classList.remove('d-none');
+                  } else {
+                    s.classList.add('d-none');
+                    n.classList.add('d-none');
+                    u.classList.remove('d-none');
+                  } */
                 })({ type: e.target.id });
             });
           });

@@ -158,81 +158,6 @@
                     </div>
                 </div>
             </section>
-            <!---  <section class="d-flex justify-content-center align-items-center p-5">
-                <!-- Page Content Goes Here -->
-                <!-- Login Form-->
-                <div class="col col-md-8 col-lg-6 col-xxl-6 ">
-                    <!--- <!-- Logo-->
-                    <a
-                        class="navbar-brand fw-bold fs-3 flex-shrink-0 order-0 align-self-center justify-content-center d-flex mx-0 px-0"
-                        href="./index.cfm"
-                    >
-                        <div class="d-flex align-items-center">
-                            <div class="f-w-6 d-flex align-items-center me-2 lh-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 194 194">
-                                    <path
-                                        fill="currentColor"
-                                        class="svg-logo-white"
-                                        d="M47.45,60l1.36,27.58,53.41-51.66,50.87,50,3.84-26L194,100.65V31.94A31.94,31.94,0,0,0,162.06,0H31.94A31.94,31.94,0,0,0,0,31.94v82.57Z"
-                                    />
-                                    <path
-                                        fill="currentColor"
-                                        class="svg-logo-dark"
-                                        d="M178.8,113.19l1,34.41L116.3,85.92l-14.12,15.9L88.07,85.92,24.58,147.53l.93-34.41L0,134.86v27.2A31.94,31.94,0,0,0,31.94,194H162.06A31.94,31.94,0,0,0,194,162.06V125.83Z"
-                                    />
-                                </svg>
-                            </div>
-                            <span class="fs-5">Alpine</span>
-                        </div>
-                    </a>
-                    <!-- / Logo--> --->
-                    <div class="shadow-xl p-5 p-lg-5 bg-white rounded-3">
-                        <cfif structKeyExists(url,"saved") AND url.saved EQ 4>
-                            <div class="alert alert-light-success alert-dismissible show fade">
-                                <i class="bi bi-check-circle"></i> Your password is succesfully set!!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                </button>
-                            </div>
-                        <cfelseif structKeyExists(url,"error") AND url.error EQ 1>
-                            <div class="alert alert-light-danger alert-dismissible show fade">
-                                <i class="bi bi-exclamation-circle"></i> Invalid User Name/Password!!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                </button>
-                            </div>
-                        </cfif>
-                        <h1 class="text-center fw-bold mb-5 fs-2">Login Form</h1>
-                        <p class="auth-subtitle mb-5">
-                            Log in with your data that you entered during registration.
-                        </p>
-                        <form class="form" id="loginForm" method="POST">
-                            <div class="form-group">
-                                <label class="form-label" for="login-email">Email address</label>
-                                <input type="email" class="form-control" name="email" id="email" placeholder="name@email.com">
-                            </div>
-                            <div class="form-group">
-                                <label
-                                    for="login-password"
-                                    class="form-label d-flex justify-content-between align-items-center"
-                                >
-                                    Password
-                                    <a href="##" class="text-muted small">Forgot your password?</a>
-                                </label>
-                                <input
-                                    type="password"
-                                    class="form-control" name="password" id="password"
-                                    placeholder="Enter your password"
-                                >
-                            </div>
-                            <button type="submit" class="btn btn-dark d-block w-100 my-4">Login</button>
-                        </form>
-                        <p class="d-block text-center text-muted">
-                            New customer? <a class="text-dark" href="sign-up.cfm">Sign up for an account</a>
-                        </p>
-                    </div>
-                </div>
-                <!-- / Login Form-->
-                <!-- /Page Content -->
-            </section> --->
             <!-- / Main Section-->
             <!--- jquery validation js --->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -244,7 +169,6 @@
 
             <script>
                 $( document ).ready(function() {
-                    console.log('hiiiii');
                     $("##loginForm").validate({
                         rules: {
                             email: {

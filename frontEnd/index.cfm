@@ -32,6 +32,9 @@
             <link rel="stylesheet" href="./assets/css/libs.bundle.css"/>
             <!--- toast css --->
             <link rel="stylesheet" href="./assets/toastify-js/src/toastify.css" />
+            <!--- select 2 css --->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
             <!-- Main CSS -->
             <link rel="stylesheet" href="./assets/css/theme.bundle.css"/>
             <link rel="stylesheet" href="./assets/css/custom.css"/>
@@ -67,7 +70,7 @@
             <!-- Page Title -->
             <title>Alpine | Bootstrap 5 Ecommerce HTML Template</title>
         </head>
-        <body class="">
+        <body >
             <cfif structKeyExists(session.customer, "saved") AND session.customer.saved EQ 1 >
                 <div class="alert alert-success alert-dismissible show fade">
                     <i class="fa fa-check-circle"></i> #session.customer.firstName# #session.customer.lastName# Successfully Login!!!
@@ -816,14 +819,16 @@
             <script src="./assets/toastify-js/src/toastify.js"></script>
             <!-- Vendor JS -->
             <script src="./assets/js/vendor.bundle.js"></script>
-
+            <!--- sweetalert2 js --->
             <script src="./assets/js/sweetalert2.min.js"></script>
+            <!--- select2 js --->
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
             
             <!-- Theme JS -->
             <script src="./assets/js/theme.bundle.js?version=#createUUID()#"></script>
             <script src="./assets/common.js"></script>
 
-    <!---   <script> 
+            <!---   <script> 
                 var #toScript('#session.customer.saved#','saved')#;
                 var #toScript('#session.customer.firstName#','firstName')#;
                 var #toScript('#session.customer.lastName#','lastName')#;
@@ -836,7 +841,29 @@
             </script>    --->
             <script>
                 // var #toScript('#productIdURL#','ProductId')#;
+                function loadAjax() {
+                    $.ajax({  
+                        url: './ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
+                        type: 'GET',
+                        success: function(result) {
+                            if (result.success) {
+                                console.log('loadd');
+                                $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
+                                $('##offcanvasCartBtn span.cartCounter').text(result.cartCountValue);
+                            }
+                        },
+                    }); 
+                }
+                // window.onload = function() {
+                //     loadAjax();
+                // };
+                // $(document).load( function () { 
+                //     setTimeout(function(){
+                //         loadAjax();
+                //     },500); // milliseconds
+                // });
                 $(document).ready( function () { 
+                    loadAjax();
                     $('##offcanvasCartBtn').on('click', function (e) {
                         $.ajax({  
                             url: './ajaxAddToCart.cfm?geDetail=getCartData', 

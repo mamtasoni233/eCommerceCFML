@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 11, 2023 at 03:28 PM
+-- Generation Time: Oct 13, 2023 at 03:27 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -45,9 +45,9 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(3, 11, 20, '4', 1000, b'0', '2023-10-06 17:07:17', 11, '2023-10-06 17:07:24', 11),
-(4, 11, 9, '5', 100, b'0', '2023-10-06 18:37:09', 11, '2023-10-06 18:40:45', 11),
-(59, 1, 10, '1', 30, b'0', '2023-10-11 18:57:08', 1, NULL, NULL);
+(135, 1, 13, '4', 500, b'0', '2023-10-12 18:17:31', 1, NULL, NULL),
+(137, 1, 11, '1', 30, b'0', '2023-10-12 18:21:51', 1, NULL, NULL),
+(138, 1, 1, '1', 56, b'0', '2023-10-12 18:26:17', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -188,6 +188,45 @@ INSERT INTO `customer` (`PkCustomerId`, `firstName`, `token`, `lastName`, `email
 (9, 'thyrtf', NULL, 'erty', 'yogesh.m@gmail.com', '$2a$10$Nvroj5URmsNzMxLmUGz3Ru0jwI1o6RR9v0pAsEpdpd9TWd6bXGQ9C', '2001-03-08', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:54:49', NULL, NULL),
 (10, 'tyrty', NULL, 'tyrty', 'yogesh.m@gmail.com', '$2a$10$dHnyMAEyGhgYEJRCdiDpsut8iAzWco/17W0QTzDPfFjVTXx2VbVue', '2010-05-15', b'1', '', b'0', b'1', b'1', 1, '2023-08-14 06:59:29', 1, '2023-08-14 12:19:47'),
 (11, 'Vishal', NULL, 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '$2a$10$EfdmrcOB8W5uHX/oGIIl8uJZxzpEQSFRNOGXkkqfHdDEW4qfJpQ5a', '1995-08-20', b'1', NULL, b'0', b'1', b'0', 0, '2023-09-22 05:57:59', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order`
+--
+
+CREATE TABLE `order` (
+  `PkOrderId` int(10) UNSIGNED NOT NULL,
+  `FkCustomerId` int(10) UNSIGNED NOT NULL,
+  `FkProductId` int(10) UNSIGNED NOT NULL,
+  `firstName` varchar(100) NOT NULL,
+  `lastName` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `mobile` varchar(50) NOT NULL,
+  `address` text NOT NULL,
+  `state` varchar(100) NOT NULL,
+  `zipCode` int(6) NOT NULL,
+  `billingFirstName` varchar(100) DEFAULT NULL,
+  `billingLastName` varchar(100) DEFAULT NULL,
+  `billingEmail` varchar(100) DEFAULT NULL,
+  `billingMobile` varchar(50) DEFAULT NULL,
+  `billingAddress` text DEFAULT NULL,
+  `billingState` varchar(100) DEFAULT NULL,
+  `billingZipCode` int(6) DEFAULT NULL,
+  `shipping` varchar(10) DEFAULT NULL,
+  `paymentMethod` varchar(50) DEFAULT NULL,
+  `UPIID` varchar(50) DEFAULT NULL,
+  `creditCardName` varchar(100) DEFAULT NULL,
+  `creditCardNumber` varchar(50) DEFAULT NULL,
+  `cardExpieryDate` date DEFAULT NULL,
+  `cvv` int(3) NOT NULL,
+  `isActive` bit(1) NOT NULL DEFAULT b'1',
+  `isDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `createdBy` int(10) UNSIGNED NOT NULL,
+  `createdDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedBy` int(10) DEFAULT NULL,
+  `updatedDate` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -348,7 +387,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`PkUserId`, `token`, `firstName`, `lastName`, `email`, `dob`, `gender`, `password`, `image`) VALUES
-(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '3.jpg'),
+(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '1.jpg'),
 (2, NULL, 'Nanu', 'Soni', 'nanu@gmail.com', '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL),
 (3, NULL, 'gvedrfg', 'dftgd', 'admin@gmail.com', '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', NULL),
 (4, NULL, 'test', 'test', 'mamta@gmail.com', '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL),
@@ -379,6 +418,14 @@ ALTER TABLE `category`
 --
 ALTER TABLE `customer`
   ADD PRIMARY KEY (`PkCustomerId`);
+
+--
+-- Indexes for table `order`
+--
+ALTER TABLE `order`
+  ADD PRIMARY KEY (`PkOrderId`),
+  ADD KEY `FkCustomerId` (`FkCustomerId`),
+  ADD KEY `FkProductId` (`FkProductId`);
 
 --
 -- Indexes for table `product`
@@ -415,7 +462,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -428,6 +475,12 @@ ALTER TABLE `category`
 --
 ALTER TABLE `customer`
   MODIFY `PkCustomerId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `order`
+--
+ALTER TABLE `order`
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -463,6 +516,13 @@ ALTER TABLE `users`
 ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`),
   ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`);
+
+--
+-- Constraints for table `order`
+--
+ALTER TABLE `order`
+  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`),
+  ADD CONSTRAINT `order_ibfk_2` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`);
 
 --
 -- Constraints for table `product`
