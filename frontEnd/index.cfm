@@ -85,7 +85,7 @@
                 <!-- / Navbar-->
             </div>
             <!-- / Navbar-->
-
+            <cfdump  var="#session#">
             <!-- Main Section-->
             <section class="mt-0 ">
                 <!-- Page Content Goes Here -->
@@ -889,6 +889,42 @@
                                 if (result.isConfirmed) {
                                     $.ajax({  
                                         url: './ajaxAddToCart.cfm?removeCartProduct=' + pId, 
+                                        type: 'GET',
+                                        async: false,
+                                        success: function(result) {
+                                            if (result.success) {
+                                                dangerToast("Your product is successfully deleted!");
+                                                $.ajax({  
+                                                    url: './ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
+                                                    type: 'GET',
+                                                    success: function(result) {
+                                                        if (result.success) {
+                                                            $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
+                                                            $('##offcanvasCartBtn span.cartCounter').text(result.cartCountValue);
+                                                        } else{
+                                                            $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
+                                                            $('##offcanvasCartBtn span.cartCounter').text('');
+                                                        }
+                                                    },
+                                                });  
+                                            }
+                                        },
+                                    });
+                                }
+                            });
+                        });
+                        $('##removeAllCartValue').on('click', function () {
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You want to remove all products',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '##dc3545',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({  
+                                        url: './ajaxAddToCart.cfm?removeAllCartValue=removeAllProductToCart', 
                                         type: 'GET',
                                         async: false,
                                         success: function(result) {

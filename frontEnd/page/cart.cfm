@@ -26,13 +26,18 @@
                 <!-- Cart Items -->
                 <div class="col-12 col-lg-6 col-xl-7">
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table" id="productTable">
                             <thead>
                                 <tr>
                                     <th class="d-none d-sm-table-cell"></th>
                                     <th class="ps-sm-3">Details</th>
                                     <th>Quantities</th>
-                                    <th></th>
+                                    <th class="ps-sm-3">
+                                        <button class="btn-outline-none bg-light border-0 removeCartProduct" id="removeAllCartValue">
+                                            Remove All
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,7 +76,7 @@
                                         <!-- /Qty -->
                                         <!-- Actions -->
                                             <td>
-                                                <div class="d-flex justify-content-between align-items-center h-100">
+                                                <div class="d-flex align-items-center h-100 ps-4">
                                                     <p class="fw-bolder m-sm-0"><i class="fa fa-rupee"></i> <span class="perProductPrice">#priceTotal#</span></p>
                                                     <button class="btn btn-sm btn-outline-none bg-light border-0 removeCartProduct" id="removeCartProduct-#getAllCartProductQry.FkProductId#" data-productId ="#getAllCartProductQry.FkProductId#" data-name="#getAllCartProductQry.productName#">
                                                         <i class="fw-bold ri-close-line"></i>
@@ -180,6 +185,45 @@
                                         priceVal += parseFloat($(this).html());
                                     });
                                     $('.priceSubtotal').html(priceVal);
+                                    $.ajax({  
+                                        url: './ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
+                                        type: 'GET',
+                                        success: function(result) {
+                                            if (result.success) {
+                                                $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
+                                                $('##offcanvasCartBtn span.cartCounter').text(result.cartCountValue);
+                                            } else{
+                                                $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
+                                                $('##offcanvasCartBtn span.cartCounter').text('');
+                                            }
+                                        },
+                                    });  
+                                }
+                            },
+                        });
+                    }
+                });
+            });
+            $('##removeAllCartValue').on('click', function () {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to remove all products',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '##dc3545',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({  
+                            url: './ajaxAddToCart.cfm?removeAllCartValue=removeAllProductToCart', 
+                            type: 'GET',
+                            async: false,
+                            success: function(result) {
+                                if (result.success) {
+                                    dangerToast("Your product is successfully deleted!");
+                                    $('##productTable').remove();
+                                    $('.cartHeading').text('Your Cart Is Empty');
+                                        $('##cartAllProductContainer').addClass('d-none');
                                     $.ajax({  
                                         url: './ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
                                         type: 'GET',

@@ -539,7 +539,7 @@
                     },
                     UPIID: {
                         required: function(){
-                            if( $('##upi' ).prop('checked') == false){
+                            if( $('##upi' ).prop('checked') == true){
                                 return true;
                             }else{
                                 return false;
@@ -606,7 +606,6 @@
                 ignore: [],
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
-                    console.log(element);
                     var elem = $(element);
                     if (elem.hasClass("select2-hidden-accessible")) {
                         element = element.siblings(".select2");
@@ -630,6 +629,7 @@
                 },
                 submitHandler: function (form) {
                     event.preventDefault();
+                    submitProductData();
                     
                 }, 
             });
@@ -643,7 +643,7 @@
             }
         }
         function checkRequireCreditCard() {
-            if( $('##creditCard' ).prop('checked') == false){
+            if( $('##creditCard' ).prop('checked') == true){
                 return true;
             }else{
                 return false;
@@ -658,7 +658,10 @@
                 contentType: false,
                 processData: false,
                 success: function(result) {
-                    
+                    console.log(result);
+                    if (result.success) {
+                        successToast("Your order is successfully completed!");
+                    }
                 }
             });
         }

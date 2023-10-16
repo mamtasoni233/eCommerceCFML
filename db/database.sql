@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 13, 2023 at 03:27 PM
+-- Generation Time: Oct 16, 2023 at 03:02 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -45,9 +45,8 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(135, 1, 13, '4', 500, b'0', '2023-10-12 18:17:31', 1, NULL, NULL),
-(137, 1, 11, '1', 30, b'0', '2023-10-12 18:21:51', 1, NULL, NULL),
-(138, 1, 1, '1', 56, b'0', '2023-10-12 18:26:17', 1, NULL, NULL);
+(189, 1, 10, '5', 30, b'0', '2023-10-16 17:32:43', 1, '2023-10-16 17:34:37', 1),
+(190, 1, 1, '2', 56, b'0', '2023-10-16 17:34:54', 1, '2023-10-16 17:35:00', 1);
 
 -- --------------------------------------------------------
 
@@ -198,7 +197,6 @@ INSERT INTO `customer` (`PkCustomerId`, `firstName`, `token`, `lastName`, `email
 CREATE TABLE `order` (
   `PkOrderId` int(10) UNSIGNED NOT NULL,
   `FkCustomerId` int(10) UNSIGNED NOT NULL,
-  `FkProductId` int(10) UNSIGNED NOT NULL,
   `firstName` varchar(100) NOT NULL,
   `lastName` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -219,13 +217,30 @@ CREATE TABLE `order` (
   `creditCardName` varchar(100) DEFAULT NULL,
   `creditCardNumber` varchar(50) DEFAULT NULL,
   `cardExpieryDate` date DEFAULT NULL,
-  `cvv` int(3) NOT NULL,
+  `cvv` int(3) DEFAULT NULL,
   `isActive` bit(1) NOT NULL DEFAULT b'1',
   `isDeleted` bit(1) NOT NULL DEFAULT b'0',
   `createdBy` int(10) UNSIGNED NOT NULL,
   `createdDate` timestamp NOT NULL DEFAULT current_timestamp(),
   `updatedBy` int(10) DEFAULT NULL,
   `updatedDate` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_item`
+--
+
+CREATE TABLE `order_item` (
+  `PkItemId` int(11) UNSIGNED NOT NULL,
+  `FkCustomerId` int(11) UNSIGNED NOT NULL,
+  `FkOrderId` int(11) UNSIGNED NOT NULL,
+  `FkProductId` int(11) UNSIGNED NOT NULL,
+  `totalQuantity` int(50) NOT NULL,
+  `totalCost` double NOT NULL,
+  `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
+  `createdBy` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -424,7 +439,15 @@ ALTER TABLE `customer`
 --
 ALTER TABLE `order`
   ADD PRIMARY KEY (`PkOrderId`),
+  ADD KEY `FkCustomerId` (`FkCustomerId`);
+
+--
+-- Indexes for table `order_item`
+--
+ALTER TABLE `order_item`
+  ADD PRIMARY KEY (`PkItemId`),
   ADD KEY `FkCustomerId` (`FkCustomerId`),
+  ADD KEY `FkOrderId` (`FkOrderId`),
   ADD KEY `FkProductId` (`FkProductId`);
 
 --
@@ -462,7 +485,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=191;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -481,6 +504,12 @@ ALTER TABLE `customer`
 --
 ALTER TABLE `order`
   MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `order_item`
+--
+ALTER TABLE `order_item`
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -521,8 +550,15 @@ ALTER TABLE `cart`
 -- Constraints for table `order`
 --
 ALTER TABLE `order`
-  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`),
-  ADD CONSTRAINT `order_ibfk_2` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`);
+  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`);
+
+--
+-- Constraints for table `order_item`
+--
+ALTER TABLE `order_item`
+  ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`),
+  ADD CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`FkOrderId`) REFERENCES `order` (`PkOrderId`),
+  ADD CONSTRAINT `order_item_ibfk_3` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`);
 
 --
 -- Constraints for table `product`

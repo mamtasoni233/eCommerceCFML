@@ -136,7 +136,6 @@
             ORDER BY #form.order#
         </cfif>
         LIMIT #form.start#, #form.length#
-       
     </cfquery>
     <cfset data['data'] = []>
     <cfset data['recordsFiltered'] = getCategoryDataRows.recordCount>

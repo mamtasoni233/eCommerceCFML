@@ -28,6 +28,8 @@
                 <cfset session.customer.dob = login.dob>
                 <cfset session.customer.profile = login.profile>
                 <cfset session.customer.saved = 1>
+                <cfset session.cart = {}>
+                <cfset session.cart.product = []>
                 <cflocation url="index.cfm?pg=dashboard" addtoken="false">
             <cfelse>
                 <cflocation url="login.cfm?error=1" addtoken="false">
