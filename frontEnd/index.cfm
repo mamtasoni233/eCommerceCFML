@@ -64,6 +64,9 @@
                     html.is-animating .transition-fade {
                         opacity: 0;
                     }
+                    /*  .invalidCs{
+                        border:1px solid red !important;
+                    } */
                 </style>
             </noscript>
 
@@ -847,7 +850,6 @@
                         type: 'GET',
                         success: function(result) {
                             if (result.success) {
-                                console.log('loadd');
                                 $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
                                 $('##offcanvasCartBtn span.cartCounter').text(result.cartCountValue);
                             }

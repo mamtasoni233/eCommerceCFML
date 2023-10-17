@@ -69,17 +69,19 @@
             <cflocation url="login.cfm" addtoken="false">
         </cfif>
         <cfquery name="getCartProductQry">
-            SELECT PkCartId, FkCustomerId, FkProductId, quantity, price
-            FROM cart 
-            WHERE FkProductId = <cfqueryparam value = "#url.ProductId#" cfsqltype = "cf_sql_integer">
-            AND FkCustomerId = <cfqueryparam value = "#form.customerId#" cfsqltype = "cf_sql_integer">
+            SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.quantity, C.price
+            FROM cart C
+            WHERE C.FkProductId = <cfqueryparam value = "#url.ProductId#" cfsqltype = "cf_sql_integer">
+            AND C.FkCustomerId = <cfqueryparam value = "#form.customerId#" cfsqltype = "cf_sql_integer">
         </cfquery>
+        
         <cfif getCartProductQry.FkProductId EQ url.ProductId>
             <cfset totalProductQty = getCartProductQry.quantity + form.productQty>
             <cfset totalPrice = getCartProductQry.price + form.productPrice>
             <cfquery result="updateCartProductData">
                 UPDATE cart SET
                 quantity =  <cfqueryparam value = "#totalProductQty#" cfsqltype = "cf_sql_integer">
+                , price =  <cfqueryparam value = "#totalPrice#" cfsqltype = "cf_sql_float">
                 , updatedBy =  <cfqueryparam value = "#form.customerId#" cfsqltype = "cf_sql_integer">
                 , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
                 WHERE PkCartId = <cfqueryparam value = "#getCartProductQry.PkCartId#" cfsqltype = "cf_sql_integer">
@@ -107,8 +109,6 @@
             <cfset totalProductQty = form.productQty>
             <cfset totalPrice = form.productPrice>
         </cfif>
-        <!---  <cfset dataRecord = {}> --->
-        <!--- <cfset session.cart['product'] = []> --->
         <cfset checkProdArray = arrayFilter(session.cart.product, function(idx) {
             return idx['FkProductId'] EQ url.ProductId
         })>
@@ -120,6 +120,13 @@
             <cfset dataRecord['FkProductId'] = url.ProductId>
             <cfset dataRecord['TotalCost'] = totalPrice>
             <cfset dataRecord['Quantity'] = totalProductQty>
+            <cfquery name="qryGetImage">
+                SELECT P.image
+                FROM product_image P
+                WHERE P.FkProductId = <cfqueryparam value="#url.ProductId#" cfsqltype="cf_sql_integer">
+                AND P.isDefault = 1
+            </cfquery>
+            <cfset dataRecord['Image'] = qryGetImage.image>
             <cfset arrayAppend(session.cart['PRODUCT'], dataRecord)>
         </cfif>
     </cfif>
@@ -133,17 +140,19 @@
         <cfquery name="getCartCount">
             SELECT SUM(quantity) AS 'totalCartValue' FROM cart WHERE FkCustomerId = <cfqueryparam value = "#getCartProductQry.FkCustomerId#" cfsqltype = "cf_sql_integer"> 
         </cfquery>
+        <!--- <cfset totalProductQty = getCartProductQry.quantity>
+        <cfset totalPrice = getCartProductQry.price> --->
         <!--- <cfset session.cart = {}>
         <cfset session.cart.cartCount = getCartCount.totalCartValue> --->
-        <!--- <cfset checkProdArray = arrayFilter(session.cart.product, function(idx) {
-            return idx['FkProductId'] EQ url.ProductId
+        <!---  <cfset checkProdArray = arrayFilter(session.cart.product, function(idx) {
+            return idx['FkProductId'] EQ getCartProductQry.FkProductId
         })>
         <cfif arrayLen(checkProdArray) EQ 1>
             <cfset checkProdArray[1]['Quantity'] = totalProductQty>
             <cfset checkProdArray[1]['TotalCost'] = totalPrice>
         <cfelseif arrayLen(checkProdArray) EQ 0>
             <cfset dataRecord = {}>
-            <cfset dataRecord['FkProductId'] = url.ProductId>
+            <cfset dataRecord['FkProductId'] = getCartProductQry.FkProductId>
             <cfset dataRecord['TotalCost'] = totalPrice>
             <cfset dataRecord['Quantity'] = totalProductQty>
             <cfset arrayAppend(session.cart['PRODUCT'], dataRecord)>
@@ -242,6 +251,10 @@
         </cfsavecontent>
     </cfif>
     <cfif structKeyExists(url, "removeCartProduct")>
+        <cfset checkProdArray = arrayFind(session.cart.product, function(idx) {
+            return idx['FkProductId'] EQ url.removeCartProduct
+        })>
+        <cfset arrayDeleteAt(session.cart.product,checkProdArray)>
         <cfquery name="deleteCartProduct">
             DELETE FROM cart 
             WHERE FkProductId = <cfqueryparam value = "#url.removeCartProduct#" cfsqltype = "cf_sql_integer">
@@ -252,7 +265,7 @@
             DELETE FROM cart 
             WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
         </cfquery>
-        <cfset session.cart['product'] = []>
+        <cfset session.cart['PRODUCT'] = []>
     </cfif>
     <cfif structKeyExists(url, "getCartCountValue") AND url.getCartCountValue EQ "cartCounter">
         <cfquery name="getCartCount">

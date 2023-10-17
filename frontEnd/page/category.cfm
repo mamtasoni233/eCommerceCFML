@@ -755,7 +755,6 @@
                 },
                 success: function(result) {
                     if (result.success) {
-                        // $('.productNameASC').removeClass('active');
                         $('##productContainer').html(result.html);
                         url = "index.cfm?pg=" + pg + "&id=" + id + "&pageNum=" + pageNum +'&tags=' + value +'&sorting=' + sorting + '&minPrice=' + minPrice + '&maxPrice=' + maxPrice;
                         if (value === "" && sorting === "" && minPrice === "" && maxPrice === "") {

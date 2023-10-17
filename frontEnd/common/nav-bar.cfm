@@ -231,7 +231,7 @@
                                 <span
                                     class="fs-xs fw-bolder f-w-5 f-h-5 bg-orange rounded-lg d-block lh-1 pt-1 position-absolute top-0 end-0 z-index-20 mt-2 text-white cartCounter"
                                 >
-                                    <!--- #session.cart.cartCountValue# --->
+                                    <!---   #session.cart.cartCountValue# --->
                                 </span>
                             </cfif>
                         </button>

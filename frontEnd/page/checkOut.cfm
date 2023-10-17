@@ -35,10 +35,10 @@
                                     <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com">
                                 </div>
                                 <!-- Mailing List Signup-->
-                                <div class="form-group form-check m-0">
+                                <!---  <div class="form-group form-check m-0">
                                     <input type="checkbox" class="form-check-input" id="add-mailinglist" checked>
                                     <label class="form-check-label" for="add-mailinglist">Keep me updated with your latest news and offers</label>
-                                </div>
+                                </div> --->
                             </div>
                         </div>
                     </div>
@@ -230,7 +230,7 @@
                     
                         <!-- Free Shipping Option-->
                         <div class="form-check form-group form-check-custom form-radio-custom mb-3">
-                            <input class="form-check-input" type="radio" name="shipping" id="freeShipping" value="free" checked>
+                            <input class="form-check-input" type="radio" name="shipping" id="freeShipping" data-value="00.00" value="free" checked>
                             <label class="form-check-label" for="freeShipping">
                                 <span class="d-flex justify-content-between align-items-start w-100">
                                     <span>
@@ -244,28 +244,34 @@
                     
                         <!-- Nest Day Shipping Option-->
                         <div class="form-check form-group form-check-custom form-radio-custom mb-3">
-                            <input class="form-check-input" type="radio" name="shipping" id="nextDay" value="nextDay">
+                            <input class="form-check-input" type="radio" name="shipping" id="nextDay" data-value="100.00" value="nextDay">
                             <label class="form-check-label" for="nextDay">
                                 <span class="d-flex justify-content-between align-items-start">
                                     <span>
                                         <span class="mb-0 fw-bolder d-block">UPS Next Day</span>
                                         <small class="fw-bolder">For all orders placed before 1pm Monday to Thursday</small>
                                     </span>
-                                    <span class="small fw-bolder text-uppercase"><i class="fa fa-rupee"></i> 100.00</span>
+                                    <span class="small fw-bolder text-uppercase">
+                                        <i class="fa fa-rupee"></i> 
+                                        <span>100.00</span>
+                                    </span>
                                 </span>
                             </label>
                         </div>
                     
                         <!-- courier Shipping Option-->
                         <div class="form-check form-group form-check-custom form-radio-custom mb-3">
-                            <input class="form-check-input" type="radio" name="shipping" id="courier" value="courier">
+                            <input class="form-check-input" type="radio" name="shipping" id="courier" data-value="50.00" value="courier">
                             <label class="form-check-label" for="courier">
                                 <span class="d-flex justify-content-between align-items-start">
                                     <span>
                                         <span class="mb-0 fw-bolder d-block">DHL Priority Service</span>
                                         <small class="fw-bolder">24 - 36 hour delivery</small>
                                     </span>
-                                    <span class="small fw-bolder text-uppercase"><i class="fa fa-rupee"></i> 50.00</span>
+                                    <span class="small fw-bolder text-uppercase">
+                                        <i class="fa fa-rupee"></i> 
+                                        <span>50.00</span> 
+                                    </span>
                                 </span>
                             </label>
                         </div>
@@ -415,7 +421,7 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center ">
                                 <p class="m-0 fw-bolder fs-6">Shipping</p>
-                                <p class="m-0 fs-6 fw-bolder">$8.95</p>
+                                <p class="m-0 fs-6 fw-bolder"><i class="fa fa-rupee"></i> <span id="shippingTotal">00.00</span></p>
                             </div>
                         </div>
                         <div class="py-3 border-bottom">
@@ -423,7 +429,7 @@
                                 <div>
                                     <p class="m-0 fw-bold fs-5">Grand Total</p>
                                 </div>
-                                <p class="m-0 fs-5 fw-bold"><i class="fa fa-rupee"></i> <span>#productSubTotal#</span></p>
+                                <p class="m-0 fs-5 fw-bold"><i class="fa fa-rupee"></i> <span id="grandTotal">#productSubTotal#</span></p>
                             </div>
                         </div>
                         <div class="py-3 border-bottom">
@@ -461,6 +467,24 @@
                 placeholder: $( this ).data( 'placeholder' ),
                 allowClear: true,
             });
+            let totalPrice = $('##grandTotal').html();
+            $('input[name=shipping]').on("click", function () {
+                var value = $(this).attr('data-value');
+                //var grandTotal = $('##grandTotal').html();
+                totalPrice += parseFloat(value);
+                // totalPrice += parseFloat(value) + parseFloat(grandTotal);
+                console.log(grandTotal, 'grandTotal');
+                console.log(totalPrice, 'totalPrice');
+                /* let priceVal=0;
+                $('.this').each(function() {
+                    priceVal += parseFloat($(this).html());
+                }); */
+                parseFloat($('##shippingTotal').html(value));
+                // if (condition) {
+                    $('##grandTotal').html(totalPrice);
+                // }
+            });
+            
             var validator = $("##addOrderForm").validate({
                 rules: {
                     email: {
@@ -622,12 +646,32 @@
                     $(element).addClass('is-invalid');
                 },
                 unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
                     if ($(element).hasClass('select2-hidden-accessible')) {
                         $(element).siblings('.select2').children('span').children('span.select2-selection').removeClass("invalidCs");
                     }
+                    $(element).removeClass('is-invalid');
+                  /*   $(element).hasClass('select2-hidden-accessible').removeClass("is-invalid"); */
+                    /* if ($(element).hasClass('form-select')) {
+                        $(element).removeClass("is-invalid");
+                    } */
+                    
                 },
                 submitHandler: function (form) {
+                    if( $('##same-address' ).prop('checked') == true ){
+                        var firstName = $('##firstName').val();
+                        var lastName = $('##lastName').val();
+                        var mobile = $('##mobile').val();
+                        var zipCode = $('##zipCode').val();
+                        var state = $('##state').val();
+                        var address = $('##address').val();
+                        $('##billingFirstName').val(firstName);
+                        $('##billingLastName').val(lastName);
+                        console.log($('##billingFirstName').val(firstName));
+                        $('##billingMobile').val(mobile);
+                        $('##billingZipCode').val(zipCode);
+                        $('##billingState').val(state);
+                        $('##billingAddress').val(address);
+                    }
                     event.preventDefault();
                     submitProductData();
                     
@@ -650,6 +694,7 @@
             }
         }
         function submitProductData() {
+            
             var formData = new FormData($('##addOrderForm')[0]);
             $.ajax({
                 type: "POST",

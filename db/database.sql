@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 16, 2023 at 03:02 PM
+-- Generation Time: Oct 17, 2023 at 03:26 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -39,14 +39,6 @@ CREATE TABLE `cart` (
   `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `updatedBy` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(189, 1, 10, '5', 30, b'0', '2023-10-16 17:32:43', 1, '2023-10-16 17:34:37', 1),
-(190, 1, 1, '2', 56, b'0', '2023-10-16 17:34:54', 1, '2023-10-16 17:35:00', 1);
 
 -- --------------------------------------------------------
 
@@ -191,10 +183,10 @@ INSERT INTO `customer` (`PkCustomerId`, `firstName`, `token`, `lastName`, `email
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order`
+-- Table structure for table `orders`
 --
 
-CREATE TABLE `order` (
+CREATE TABLE `orders` (
   `PkOrderId` int(10) UNSIGNED NOT NULL,
   `FkCustomerId` int(10) UNSIGNED NOT NULL,
   `firstName` varchar(100) NOT NULL,
@@ -206,7 +198,6 @@ CREATE TABLE `order` (
   `zipCode` int(6) NOT NULL,
   `billingFirstName` varchar(100) DEFAULT NULL,
   `billingLastName` varchar(100) DEFAULT NULL,
-  `billingEmail` varchar(100) DEFAULT NULL,
   `billingMobile` varchar(50) DEFAULT NULL,
   `billingAddress` text DEFAULT NULL,
   `billingState` varchar(100) DEFAULT NULL,
@@ -225,6 +216,13 @@ CREATE TABLE `order` (
   `updatedBy` int(10) DEFAULT NULL,
   `updatedDate` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
+(1, 1, 'Mamta', 'Soni', 'mamta@gmail.com', '7896541230', 'Ratanada 5555', 'RJ', 342001, 'Mamta', 'Soni', '7896541230', 'Ratanada 5555', 'RJ', 342001, 'nextDay', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 1, '2023-10-17 10:09:04', 1, '2023-10-17 10:09:17');
 
 -- --------------------------------------------------------
 
@@ -435,9 +433,9 @@ ALTER TABLE `customer`
   ADD PRIMARY KEY (`PkCustomerId`);
 
 --
--- Indexes for table `order`
+-- Indexes for table `orders`
 --
-ALTER TABLE `order`
+ALTER TABLE `orders`
   ADD PRIMARY KEY (`PkOrderId`),
   ADD KEY `FkCustomerId` (`FkCustomerId`);
 
@@ -485,7 +483,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=191;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=236;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -500,10 +498,10 @@ ALTER TABLE `customer`
   MODIFY `PkCustomerId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `order`
+-- AUTO_INCREMENT for table `orders`
 --
-ALTER TABLE `order`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `orders`
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `order_item`
@@ -547,17 +545,17 @@ ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`);
 
 --
--- Constraints for table `order`
+-- Constraints for table `orders`
 --
-ALTER TABLE `order`
-  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`);
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`);
 
 --
 -- Constraints for table `order_item`
 --
 ALTER TABLE `order_item`
   ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`),
-  ADD CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`FkOrderId`) REFERENCES `order` (`PkOrderId`),
+  ADD CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`FkOrderId`) REFERENCES `orders` (`PkOrderId`),
   ADD CONSTRAINT `order_item_ibfk_3` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`);
 
 --

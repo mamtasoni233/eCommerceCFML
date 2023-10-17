@@ -65,58 +65,89 @@
         <cfif NOT StructKeyExists(session, "customer")>
             <cflocation url="login.cfm" addtoken="false">
         </cfif>
-        <cfquery result="addToOrder">
-            INSERT INTO order (
-                FkCustomerId
-                , firstName
-                , lastName
-                , email
-                , mobile
-                , address
-                , state
-                , zipCode
-                , billingFirstName
-                , billingLastName
-                , billingMobile
-                , billingAddress
-                , billingState
-                , billingZipCode
-                , shipping
-                , paymentMethod
-                , UPIID
-                , creditCardName
-                , creditCardNumber
-                , cardExpieryDate
-                , cvv
-                , createdBy
-                , dateCreated
-            ) VALUES (
-                <cfqueryparam value = "#url.customerId#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.mobile#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.address#" cfsqltype = "cf_sql_text">
-                , <cfqueryparam value = "#form.state#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.zipCode#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#form.billingFirstName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.billingLastName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.billingMobile#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.billingAddress#" cfsqltype = "cf_sql_text">
-                , <cfqueryparam value = "#form.billingState#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.billingZipCode#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#form.shipping#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.paymentMethod#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.UPIID#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.creditCardName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.creditCardNumber#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.cardExpieryDate#" cfsqltype = "cf_sql_date">
-                , <cfqueryparam value = "#cvv#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-            )
+        <cfquery name="getOrdersQry">
+            SELECT PkOrderId, FkCustomerId
+            FROM orders 
+            WHERE FkCustomerId = <cfqueryparam value = "#url.customerId#" cfsqltype = "cf_sql_integer">
         </cfquery>
-
+        <cfif getOrdersQry.recordCount GT 0>
+            <cfquery result="UpdateToOrder">
+                UPDATE orders SET
+                firstName=  <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
+                , lastName=  <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
+                , email=  <cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
+                , mobile=  <cfqueryparam value = "#form.mobile#" cfsqltype = "cf_sql_varchar">
+                , address=  <cfqueryparam value = "#form.address#" cfsqltype = "cf_sql_text">
+                , state=  <cfqueryparam value = "#form.state#" cfsqltype = "cf_sql_varchar">
+                , zipCode=  <cfqueryparam value = "#form.zipCode#" cfsqltype = "cf_sql_integer">
+                , billingFirstName=  <cfqueryparam value = "#form.billingFirstName#" cfsqltype = "cf_sql_varchar">
+                , billingLastName=  <cfqueryparam value = "#form.billingLastName#" cfsqltype = "cf_sql_varchar">
+                , billingMobile=  <cfqueryparam value = "#form.billingMobile#" cfsqltype = "cf_sql_varchar">
+                , billingAddress=  <cfqueryparam value = "#form.billingAddress#" cfsqltype = "cf_sql_text">
+                , billingState=  <cfqueryparam value = "#form.billingState#" cfsqltype = "cf_sql_varchar">
+                , billingZipCode= <cfqueryparam value = "#form.billingZipCode#" cfsqltype = "cf_sql_integer" null="#NOT len(form.billingZipCode)#">
+                , shipping=  <cfqueryparam value = "#form.shipping#" cfsqltype = "cf_sql_varchar">
+                , paymentMethod=  <cfqueryparam value = "#form.paymentMethod#" cfsqltype = "cf_sql_varchar">
+                , UPIID=  <cfqueryparam value = "#form.UPIID#" cfsqltype = "cf_sql_varchar">
+                , creditCardName=  <cfqueryparam value = "#form.creditCardName#" cfsqltype = "cf_sql_varchar">
+                , creditCardNumber=  <cfqueryparam value = "#form.creditCardNumber#" cfsqltype = "cf_sql_varchar" null="#NOT len(form.creditCardNumber)#">
+                , cardExpieryDate=  <cfqueryparam value = "#form.cardExpieryDate#" cfsqltype = "cf_sql_date" null="#NOT len(form.cardExpieryDate)#">
+                , cvv=  <cfqueryparam value = "#form.cvv#" cfsqltype = "cf_sql_integer" null="#NOT len(form.cvv)#">
+                , updatedBy =  <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                WHERE PkOrderId = <cfqueryparam value = "#getOrdersQry.PkOrderId#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+        <cfelse>
+            <cfquery result="addToOrder">
+                INSERT INTO orders (
+                    FkCustomerId
+                    , firstName
+                    , lastName
+                    , email
+                    , mobile
+                    , address
+                    , state
+                    , zipCode
+                    , billingFirstName
+                    , billingLastName
+                    , billingMobile
+                    , billingAddress
+                    , billingState
+                    , billingZipCode
+                    , shipping
+                    , paymentMethod
+                    , UPIID
+                    , creditCardName
+                    , creditCardNumber
+                    , cardExpieryDate
+                    , cvv
+                    , createdBy
+                ) VALUES (
+                    <cfqueryparam value = "#url.customerId#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.mobile#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.address#" cfsqltype = "cf_sql_text">
+                    , <cfqueryparam value = "#form.state#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.zipCode#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#form.billingFirstName#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.billingLastName#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.billingMobile#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.billingAddress#" cfsqltype = "cf_sql_text">
+                    , <cfqueryparam value = "#form.billingState#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.billingZipCode#" cfsqltype = "cf_sql_integer" null="#NOT len(form.billingZipCode)#">
+                    , <cfqueryparam value = "#form.shipping#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.paymentMethod#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.UPIID#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.creditCardName#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.creditCardNumber#" cfsqltype = "cf_sql_varchar" null="#NOT len(form.creditCardNumber)#">
+                    , <cfqueryparam value = "#form.cardExpieryDate#" cfsqltype = "cf_sql_date" null="#NOT len(form.cardExpieryDate)#">
+                    , <cfqueryparam value = "#form.cvv#" cfsqltype = "cf_sql_integer" null="#NOT len(form.cvv)#">
+                    , <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                )
+            </cfquery>
+            <cfset PkOrderId = addToOrder.generatedKey>
+        </cfif>
     </cfif>
     <cfcatch>
         <cfset data['success'] = false>

@@ -18,7 +18,7 @@
         <cfif login.recordCount EQ 1>
             <!--- <cfset hashPassword = bcrypt.hashpw(login.password, gensalt)> --->
             <cfset checkPassword = bcrypt.checkpw(password, login.password)>
-            <cfif checkPassword EQ true>
+            <cfif checkPassword>
                 <cfset session.customer = {}>
                 <cfset session.customer.isLoggedIn = login.PkCustomerId>
                 <cfset session.customer.firstName = login.firstName>
@@ -30,6 +30,27 @@
                 <cfset session.customer.saved = 1>
                 <cfset session.cart = {}>
                 <cfset session.cart.product = []>
+                <cfquery name="getCartProductQry">
+                    SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.quantity, C.price
+                    FROM cart C
+                    WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                </cfquery>
+                <cfif getCartProductQry.recordCount GT 0>
+                    <cfloop query="getCartProductQry">
+                        <cfset dataRecord = {}>
+                        <cfset dataRecord['FkProductId'] = getCartProductQry.FkProductId>
+                        <cfset dataRecord['TotalCost'] = getCartProductQry.price>
+                        <cfset dataRecord['Quantity'] = getCartProductQry.quantity>
+                        <cfquery name="qryGetImage">
+                            SELECT P.image
+                            FROM product_image P
+                            WHERE P.FkProductId = <cfqueryparam value="#getCartProductQry.FkProductId#" cfsqltype="cf_sql_integer">
+                            AND P.isDefault = 1
+                        </cfquery>
+                        <cfset dataRecord['Image'] = qryGetImage.image>
+                        <cfset arrayAppend(session.cart['PRODUCT'], dataRecord)>
+                    </cfloop>
+                </cfif>
                 <cflocation url="index.cfm?pg=dashboard" addtoken="false">
             <cfelse>
                 <cflocation url="login.cfm?error=1" addtoken="false">
