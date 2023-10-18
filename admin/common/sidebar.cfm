@@ -99,6 +99,12 @@
                             <span>Product Tags</span>
                         </a>
                     </li>
+                    <li class="sidebar-item <cfif pg EQ 'order'>active</cfif>">
+                        <a href="index.cfm?pg=order&s=orderList" class="sidebar-link">
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Orders</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 17, 2023 at 03:26 PM
+-- Generation Time: Oct 18, 2023 at 03:40 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -222,7 +222,10 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 1, 'Mamta', 'Soni', 'mamta@gmail.com', '7896541230', 'Ratanada 5555', 'RJ', 342001, 'Mamta', 'Soni', '7896541230', 'Ratanada 5555', 'RJ', 342001, 'nextDay', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 1, '2023-10-17 10:09:04', 1, '2023-10-17 10:09:17');
+(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Ratanada', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Ratanada', 'RJ', 342001, 'courier', 'creditCard', '', 'Mamta Soni', '777777777777', '2028-04-30', 321, b'1', b'0', 1, '2023-10-18 06:54:00', NULL, NULL),
+(2, 1, 'Ravina', 'Soni', 'ravina@gmail.com', '564695165', 'test', 'HR', 342008, 'werfwe', 'werwe', '564695165', 'test', 'HR', 342008, 'nextDay', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 1, '2023-10-18 07:23:29', NULL, '2023-10-18 10:53:22'),
+(3, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 349001, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 349001, 'free', 'upi', '8122891132', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-18 09:11:46', NULL, NULL),
+(4, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 349001, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 349001, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-18 09:13:18', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -237,9 +240,25 @@ CREATE TABLE `order_item` (
   `FkProductId` int(11) UNSIGNED NOT NULL,
   `totalQuantity` int(50) NOT NULL,
   `totalCost` double NOT NULL,
+  `statusId` int(1) UNSIGNED NOT NULL DEFAULT 0,
   `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
-  `createdBy` int(11) NOT NULL
+  `createdBy` int(11) NOT NULL,
+  `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `updatedBy` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_item`
+--
+
+INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`, `totalQuantity`, `totalCost`, `statusId`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(1, 1, 1, 1, 1, 56, 0, '2023-10-18 12:24:00', 1, NULL, NULL),
+(2, 1, 1, 10, 3, 30, 0, '2023-10-18 12:24:00', 1, NULL, NULL),
+(3, 1, 1, 6, 6, 1000, 0, '2023-10-18 12:24:00', 1, NULL, NULL),
+(4, 1, 2, 6, 1, 1000, 0, '2023-10-18 12:53:29', 1, NULL, NULL),
+(5, 11, 3, 9, 3, 100, 1, '2023-10-18 14:41:46', 11, '2023-10-18 17:54:16', NULL),
+(6, 11, 3, 20, 1, 1000, 1, '2023-10-18 14:41:46', 11, '2023-10-18 17:54:19', NULL),
+(7, 11, 4, 2, 2, 800, 0, '2023-10-18 14:43:18', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -483,7 +502,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=236;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=249;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -501,13 +520,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `product`

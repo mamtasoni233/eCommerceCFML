@@ -96,6 +96,9 @@
                             <cfcase value="productTag">
                                 <cfinclude template="./page/productTag.cfm">
                             </cfcase>
+                            <cfcase value="order">
+                                <cfinclude template="./page/order.cfm">
+                            </cfcase>
                         </cfswitch>
                     </div>
                     <!--- start footer --->

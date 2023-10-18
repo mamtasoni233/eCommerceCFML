@@ -88,7 +88,6 @@
                 <!-- / Navbar-->
             </div>
             <!-- / Navbar-->
-            <cfdump  var="#session#">
             <!-- Main Section-->
             <section class="mt-0 ">
                 <!-- Page Content Goes Here -->

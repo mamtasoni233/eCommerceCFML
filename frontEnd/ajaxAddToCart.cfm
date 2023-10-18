@@ -60,7 +60,6 @@
     </cfscript>
 </cffunction>
 <cfset data = {}>
-<!--- <cfset session.cart['product'].dataRecord = {}> --->
 <cfset data['success'] = true>
 <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
 <cftry>
@@ -121,11 +120,13 @@
             <cfset dataRecord['TotalCost'] = totalPrice>
             <cfset dataRecord['Quantity'] = totalProductQty>
             <cfquery name="qryGetImage">
-                SELECT P.image
-                FROM product_image P
-                WHERE P.FkProductId = <cfqueryparam value="#url.ProductId#" cfsqltype="cf_sql_integer">
-                AND P.isDefault = 1
+                SELECT PI.image, P.productName, P.PkProductId
+                FROM product_image PI 
+                LEFT JOIN product P ON PI.FkProductId = P.PkProductId AND P.isDeleted = 0
+                WHERE PI.FkProductId = <cfqueryparam value="#url.ProductId#" cfsqltype="cf_sql_integer">
+                AND PI.isDefault = 1
             </cfquery>
+            <cfset dataRecord['Name'] = qryGetImage.productName>
             <cfset dataRecord['Image'] = qryGetImage.image>
             <cfset arrayAppend(session.cart['PRODUCT'], dataRecord)>
         </cfif>
@@ -140,24 +141,6 @@
         <cfquery name="getCartCount">
             SELECT SUM(quantity) AS 'totalCartValue' FROM cart WHERE FkCustomerId = <cfqueryparam value = "#getCartProductQry.FkCustomerId#" cfsqltype = "cf_sql_integer"> 
         </cfquery>
-        <!--- <cfset totalProductQty = getCartProductQry.quantity>
-        <cfset totalPrice = getCartProductQry.price> --->
-        <!--- <cfset session.cart = {}>
-        <cfset session.cart.cartCount = getCartCount.totalCartValue> --->
-        <!---  <cfset checkProdArray = arrayFilter(session.cart.product, function(idx) {
-            return idx['FkProductId'] EQ getCartProductQry.FkProductId
-        })>
-        <cfif arrayLen(checkProdArray) EQ 1>
-            <cfset checkProdArray[1]['Quantity'] = totalProductQty>
-            <cfset checkProdArray[1]['TotalCost'] = totalPrice>
-        <cfelseif arrayLen(checkProdArray) EQ 0>
-            <cfset dataRecord = {}>
-            <cfset dataRecord['FkProductId'] = getCartProductQry.FkProductId>
-            <cfset dataRecord['TotalCost'] = totalPrice>
-            <cfset dataRecord['Quantity'] = totalProductQty>
-            <cfset arrayAppend(session.cart['PRODUCT'], dataRecord)>
-        </cfif> --->
-        
         <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
         <cfsavecontent variable="data['html']">
             <cfoutput>
@@ -261,19 +244,25 @@
         </cfquery>
     </cfif>
     <cfif structKeyExists(url, "removeAllCartValue") AND url.removeAllCartValue EQ "removeAllProductToCart">
+        <cfset session.cart['PRODUCT'] = []>
         <cfquery name="deleteCartProduct">
             DELETE FROM cart 
             WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
         </cfquery>
-        <cfset session.cart['PRODUCT'] = []>
     </cfif>
     <cfif structKeyExists(url, "getCartCountValue") AND url.getCartCountValue EQ "cartCounter">
         <cfquery name="getCartCount">
             SELECT SUM(quantity) AS 'totalCartValue' FROM cart WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer"> 
         </cfquery>
-        <cfset data['cartCountValue'] = getCartCount.totalCartValue>
-        <!---   <cflock timeout="1" scope="session" type="exclusive">  --->
-            <!---   <cfset session.cart.cartCount = getCartCount.totalCartValue> --->
+        
+    <cfset data['cartCountValue'] = getCartCount.totalCartValue>
+        <!--- <cfif getCartCount.recordCount GT 0>
+            <cfset data['cartCountValue'] = getCartCount.totalCartValue>
+        <cfelse>
+            <cfset data['cartCountValue'] = 0>
+        </cfif> --->
+        <!---  <cflock timeout="1" scope="session" type="exclusive">  --->
+            <!--- <cfset session.cart.cartCount = getCartCount.totalCartValue> --->
             <!--- <cfset totalQuantity = {}>
             <cfset totalQuantity = getCartCount.totalCartValue> --->
             <!--- <cfset session.cart.product = [{'FkProductId':getCartProductQry.FkProductId,'Quantity':getCartCount.totalCartValue, 'totalCost':''}]> --->

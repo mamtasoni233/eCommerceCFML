@@ -65,13 +65,13 @@
         <cfif NOT StructKeyExists(session, "customer")>
             <cflocation url="login.cfm" addtoken="false">
         </cfif>
-        <cfquery name="getOrdersQry">
+        <!--- <cfquery name="getOrdersQry">
             SELECT PkOrderId, FkCustomerId
             FROM orders 
             WHERE FkCustomerId = <cfqueryparam value = "#url.customerId#" cfsqltype = "cf_sql_integer">
         </cfquery>
-        <cfif getOrdersQry.recordCount GT 0>
-            <cfquery result="UpdateToOrder">
+        <cfif getOrdersQry.recordCount GT 0> --->
+            <!--- <cfquery result="UpdateToOrder">
                 UPDATE orders SET
                 firstName=  <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
                 , lastName=  <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
@@ -96,7 +96,7 @@
                 , updatedBy =  <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 WHERE PkOrderId = <cfqueryparam value = "#getOrdersQry.PkOrderId#" cfsqltype = "cf_sql_integer">
             </cfquery>
-        <cfelse>
+        <cfelse> --->
             <cfquery result="addToOrder">
                 INSERT INTO orders (
                     FkCustomerId
@@ -147,7 +147,38 @@
                 )
             </cfquery>
             <cfset PkOrderId = addToOrder.generatedKey>
-        </cfif>
+            <cfquery name="getOrderItemQry">
+                SELECT PkItemId , FkOrderId 
+                FROM order_item 
+                WHERE FkOrderId  = <cfqueryparam value = "#PkOrderId#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+            <cfif getOrderItemQry.recordCount EQ 0>
+                <cfloop array="#session.cart.product#" item="item">
+                    <cfquery result="addOrderItem">
+                        INSERT INTO order_item (
+                            FkCustomerId
+                            , FkOrderId
+                            , FkProductId
+                            , totalQuantity
+                            , totalCost
+                            , createdBy
+                        ) VALUES (
+                            <cfqueryparam value = "#url.customerId#" cfsqltype = "cf_sql_integer">
+                            , <cfqueryparam value = "#PkOrderId#" cfsqltype = "cf_sql_integer">
+                            , <cfqueryparam value = "#item.FkProductId#" cfsqltype = "cf_sql_integer">
+                            , <cfqueryparam value = "#item.Quantity#" cfsqltype = "cf_sql_integer">
+                            , <cfqueryparam value = "#item.TotalCost#" cfsqltype = "cf_sql_float">
+                            , <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                        )
+                    </cfquery>
+                </cfloop>
+                <cfset session.cart['PRODUCT'] = []>
+                <cfquery name="deleteCartProduct">
+                    DELETE FROM cart 
+                    WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                </cfquery>
+            </cfif>
+        <!---  </cfif> --->
     </cfif>
     <cfcatch>
         <cfset data['success'] = false>
