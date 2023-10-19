@@ -395,7 +395,7 @@
                         url: '../ajaxAddProductTag.cfm?restorePkTagId='+id, 
                         type: 'GET',  
                         success: function(data) {
-                            dangerToast("Restore!","Product Tag Restore Successfully");
+                            successToast("Restore!","Product Tag Restore Successfully");
                             $('#productTagDataTable').DataTable().ajax.reload();               
                         }  
                     });

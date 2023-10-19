@@ -83,26 +83,34 @@
                     </li>
                     <li class="sidebar-item <cfif pg EQ 'product'>active</cfif>">
                         <a href="index.cfm?pg=product&s=productList" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                             <span>Product</span>
                         </a>
                     </li>
                     <li class="sidebar-item <cfif pg EQ 'customer'>active</cfif>">
                         <a href="index.cfm?pg=customer&s=customerList" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="fa fa-user" aria-hidden="true"></i>
                             <span>Customer</span>
                         </a>
                     </li>
                     <li class="sidebar-item <cfif pg EQ 'productTag'>active</cfif>">
                         <a href="index.cfm?pg=productTag&s=productTagList" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="fa fa-tags" aria-hidden="true"></i>
                             <span>Product Tags</span>
                         </a>
                     </li>
                     <li class="sidebar-item <cfif pg EQ 'order'>active</cfif>">
                         <a href="index.cfm?pg=order&s=orderList" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="fas fa-cart-plus"></i>
                             <span>Orders</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item <cfif pg EQ 'coupon'>active</cfif>">
+                        <a href="index.cfm?pg=coupon&s=couponList" class="sidebar-link">
+                            <!--- <i class="fa fa-gift-card" aria-hidden="true"></i> --->
+                            <!--- <i class="fas fa-gift"></i> --->
+                            <i class="fas fa-percent"></i>
+                            <span>Coupons </span>
                         </a>
                     </li>
                 </ul>

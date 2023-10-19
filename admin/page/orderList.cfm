@@ -78,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModal" aria-hidden="true">
+                <!--- <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModal" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-primary">
@@ -92,79 +92,20 @@
                             <div class="modal-body">
                                 <form class="form p-3" id="addStatusForm" method="POST" action="" enctype="multipart/form-data">
                                     <input type="hidden" id="PkItemId" value="" name="PkItemId">
-                                    <div class="row g-3">
-                                        <div class="col-md-6" id="shippingAddressContainer">
-                                            <h4 class="fw-bold form-label" for="category">Shipping Address</h4>
-                                            <div class="mb-4 mt-2" id="shippingAddress"></div>
-                                        </div>
-                                        <div class="col-md-6" id="billingAddressContainer">
-                                            <h4 class="fw-bold form-label" for="category">Billing Address</h4>
-                                            <div class="mb-4 mt-2" id="billingAddress"></div>
-                                        </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="status" class="form-label text-dark fw-bold">Status</label>
+                                        <select name="complainStatus" id="complainStatus" class="form-select">
+                                            <option selected disabled value="">Select Status</option>
+                                            <!--- <cfloop query="prc.complainStatus">
+                                                <OPTION VALUE="#prc.complainStatus.PkStatusId#">
+                                                    #prc.complainStatus.name#</OPTION>
+                                            </cfloop> --->
+                                        </select>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block">Close</span>
-                                        </button>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary" id="complaintHistory" >Save</button>
                                     </div>
                                 </form>
-                                <div class="table-responsive orderItemContainer">
-                                    <table class="table" id="orderItemeDataTable">
-                                        <thead>
-                                            <tr>
-                                                <th>SI No.</th>
-                                                <th>Image</th>
-                                                <th>Product Name</th>
-                                                <th>Quantity</th>
-                                                <th>Price</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--- <div class="modal fade" id="statusModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="signInLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="signInLabel">Status</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <form enctype="" class="row g-3 needs-validation" novalidate method="POST" id="complaintForm">
-                                            <input type="hidden" name="FkComplaintId" id="FkComplaintId" value="">
-                                            <div class="col-12 mb-3">
-                                                <label for="status" class="form-label text-dark fw-bold">Status</label>
-                                                <select name="complainStatus" id="complainStatus" class="form-select">
-                                                    <option selected disabled value="">Select Status</option>
-                                                    <cfloop query="prc.complainStatus">
-                                                        <OPTION VALUE="#prc.complainStatus.PkStatusId#">
-                                                            #prc.complainStatus.name#</OPTION>
-                                                    </cfloop>
-                                                </select>
-                                            </div>
-                                            <div class="col-12 mb-3">
-                                                <label for="comment" class="form-label text-dark fw-bold">Comment</label>
-                                                <textarea id="comment" class="form-control"
-                                                name="comment" required></textarea>
-                                                <!--- <input type="comment" id="comment" class="form-control"
-                                                    name="comment" placeholder="Enter Your Comment" required> --->
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button type="submit" class="btn btn-primary" id="complaintHistory" >Save</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -327,7 +268,7 @@
                                     { data: 'PkItemId',
                                         render: function(data, type, row, meta)
                                         {
-                                            return '<a class="border-none btn btn-sm btn-primary text-white mt-1 status" data-toggle="modal" data-id="'+row.PkItemId+'" data-name="'+row.productName+'" data-target="#statusModal" id="status" data-bs-toggle="tooltip" data-bs-html="true" title="Change Status" data-bs-placement="bottom"><i class="fa fa-edit fs-5"></i></a>'			
+                                            return '<a class="border-none btn btn-sm btn-primary text-white mt-1 status" data-toggle="modal" data-id="'+row.PkItemId+'" data-name="'+row.productName+'" id="status" data-bs-toggle="tooltip" data-bs-html="true" title="Change Status" data-bs-placement="bottom"><i class="fa fa-edit fs-5"></i></a>'			
                                         }
                                     },
                                 ],
@@ -337,8 +278,49 @@
                                 },
                             });
                             $("#orderItemeDataTable").on("click", ".status", function () {
-                                $("#statusModal").modal('show');
-                                $("#PkItemId").val($(this).data("id"));
+                                // $("#statusModal").modal('show');
+                                // $("#PkItemId").val($(this).data("id"));
+                                var id = $(this).data("id");
+                                var name = $(this).data("name");
+                                Swal.fire({
+                                    title: "Status",
+                                    input: "select",
+                                    inputOptions: {
+                                        0: "Pending",
+                                        1: "In-Progress",
+                                        2: "Dispatched",
+                                        3: "Delivered",
+                                    },
+                                    inputPlaceholder: "Select Status",
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Change Status',
+                                    inputValidator: function (value) {
+                                        return new Promise(function (resolve, reject) {
+                                            if (value === "") {
+                                                resolve("You need to select status")
+                                            } else{
+                                                resolve()
+                                            }
+                                        })
+                                    }
+                                }).then(function (result) {
+                                    console.log(result);
+                                    /* Swal.fire({
+                                        type: 'success',
+                                        html: 'You selected: ' + result.value
+                                    }) */
+                                    if (result.isConfirmed) {
+                                        $.ajax({  
+                                            url: '../ajaxOrder.cfm?statusId='+id, 
+                                            data: {value:result.value},
+                                            type: 'POST',  
+                                            success: function(data) {
+                                                infoToast("Changed!","status Changed Be Sucessfully!");
+                                                $('#orderItemeDataTable').DataTable().ajax.reload();               
+                                            }  
+                                        });
+                                    }
+                                })
                             });
                         }
                     }

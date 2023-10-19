@@ -195,6 +195,14 @@
             <cfset arrayAppend(data['data'], dataRecord)>
         </cfloop>
     </cfif>
+
+    <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
+        <cfquery name="changeStatus">
+            UPDATE order_item SET
+            statusId = <cfqueryparam value = "#form.value#" cfsqltype = "cf_sql_integer">
+            WHERE PkItemId = <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+    </cfif>
     <cfcatch>
         <cfset data['success'] = false>
         <cfset data['error'] = cfcatch>

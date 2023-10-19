@@ -314,7 +314,7 @@
         $('#isDeleted').change(function () {
             $('#productDataTable').DataTable().ajax.reload();
         });
-        // open add category model
+        // open add product model
         $("#addProduct").on("click", function () {
             $("#addProductData").modal('show');
             $('#PkProductId').val(0);
@@ -659,7 +659,7 @@
                         url: '../ajaxAddProduct.cfm?restorePkProductId='+id, 
                         type: 'GET',  
                         success: function(data) {
-                            dangerToast("Restore!","Product Restore Successfully");
+                            successToast("Restore!","Product Restore Successfully");
                             $('#productDataTable').DataTable().ajax.reload();               
                         }  
                     });

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2023 at 03:40 PM
+-- Generation Time: Oct 19, 2023 at 03:27 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -141,6 +141,36 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `coupons`
+--
+
+CREATE TABLE `coupons` (
+  `PkCouponId` int(11) UNSIGNED NOT NULL,
+  `couponName` varchar(100) DEFAULT NULL,
+  `couponCode` varchar(50) NOT NULL,
+  `discountValue` float NOT NULL,
+  `discountType` int(1) UNSIGNED NOT NULL,
+  `couponStartDate` date NOT NULL,
+  `couponExpDate` date NOT NULL,
+  `repeatRestriction` int(1) UNSIGNED NOT NULL DEFAULT 0,
+  `isActive` bit(1) NOT NULL DEFAULT b'1',
+  `isDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
+  `createdBy` int(11) UNSIGNED NOT NULL,
+  `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `updatedBy` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `coupons`
+--
+
+INSERT INTO `coupons` (`PkCouponId`, `couponName`, `couponCode`, `discountValue`, `discountType`, `couponStartDate`, `couponExpDate`, `repeatRestriction`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(1, 'test', 'ry20', 200, 2, '2023-10-26', '2023-11-02', 2, b'1', b'0', '2023-10-19 18:32:58', 1, '2023-10-19 18:57:04', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `customer`
 --
 
@@ -168,7 +198,7 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`PkCustomerId`, `firstName`, `token`, `lastName`, `email`, `password`, `dob`, `gender`, `profile`, `isBlcoked`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 'Mamta', '7F9C4237-1606-47C0-A96CAEEAC7311144', 'Soni', 'mamta.s@lucidsolutions.in', '$2a$10$EIMyk7EYrrx8WxTBnbROn.0pJ89u/lEZWSqSisWSgV7GjzY.Tzw4u', '2001-07-16', b'0', NULL, b'0', b'1', b'0', 0, '2023-08-11 08:05:50', 1, '2023-09-22 08:50:02'),
+(1, 'Mamta', '7F9C4237-1606-47C0-A96CAEEAC7311144', 'Soni', 'mamta.s@lucidsolutions.in', '$2a$10$EIMyk7EYrrx8WxTBnbROn.0pJ89u/lEZWSqSisWSgV7GjzY.Tzw4u', '2001-07-16', b'0', NULL, b'0', b'1', b'0', 0, '2023-08-11 08:05:50', 1, '2023-10-19 07:06:04'),
 (2, 'test', NULL, 'test', 'mamta@yahoo.in', '$2a$10$qvrxiNNJUOrAY7s2pPLKcemxkZo85eZ0V2eC0ARMXLU0oAZtIho9K', '1996-03-04', b'1', '', b'0', b'1', b'1', 1, '2023-08-14 06:13:06', NULL, '2023-08-16 04:47:11'),
 (3, 'test', NULL, 'test', 'ravi@gmail.com', '$2a$10$A7SBFgAOmO8DAQVc8lFoAuFSRq5zctd5GzcNRo.XE8ZHIbF3NMzfC', '1996-03-04', b'1', NULL, b'1', b'1', b'0', 1, '2023-08-14 06:16:56', NULL, '2023-08-16 04:47:26'),
 (4, 'arfwseert', NULL, 'wqew', 'werwerwe@gmail.com', '$2a$10$pLmaV/d27yvvSvgiIMixoOGBMF3Nrns/CrxK9BwBTALx/01/wpt.q', '1997-04-05', b'0', NULL, b'1', b'1', b'0', 1, '2023-08-14 06:17:58', NULL, '2023-08-14 12:31:07'),
@@ -225,7 +255,12 @@ INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `ema
 (1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Ratanada', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Ratanada', 'RJ', 342001, 'courier', 'creditCard', '', 'Mamta Soni', '777777777777', '2028-04-30', 321, b'1', b'0', 1, '2023-10-18 06:54:00', NULL, NULL),
 (2, 1, 'Ravina', 'Soni', 'ravina@gmail.com', '564695165', 'test', 'HR', 342008, 'werfwe', 'werwe', '564695165', 'test', 'HR', 342008, 'nextDay', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 1, '2023-10-18 07:23:29', NULL, '2023-10-18 10:53:22'),
 (3, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 349001, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 349001, 'free', 'upi', '8122891132', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-18 09:11:46', NULL, NULL),
-(4, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 349001, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 349001, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-18 09:13:18', NULL, NULL);
+(4, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 349001, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 349001, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-18 09:13:18', NULL, NULL),
+(5, 11, 'Veshali', 'Bhati', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'AR', 342001, 'Veshali', 'Bhati', '8122891132', 'Chennai', 'AR', 342001, 'nextDay', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:37:39', NULL, NULL),
+(6, 11, 'test', 'test', 'yogesh.m@gmail.com', '1234560799', 'test', 'AS', 342008, 'test', 'test', '1234560799', 'test', 'AS', 342008, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:39:03', NULL, NULL),
+(7, 11, 'test', 'test', 'yogesh.m@gmail.com', '1234560799', 'test', 'AS', 342008, 'test', 'test', '1234560799', 'test', 'AS', 342008, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:39:13', NULL, NULL),
+(8, 11, 'test', 'test', 'yogesh.m@gmail.com', '1234560799', 'test', 'AS', 342008, 'test', 'test', '1234560799', 'test', 'AS', 342008, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:40:18', NULL, NULL),
+(9, 11, 'abc', 'rtyr', 'tes13t@gm.com', '78964521230', 'yry', 'BR', 349001, 'abc', 'rtyr', '78964521230', 'yry', 'BR', 349001, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:41:28', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -258,7 +293,15 @@ INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`
 (4, 1, 2, 6, 1, 1000, 0, '2023-10-18 12:53:29', 1, NULL, NULL),
 (5, 11, 3, 9, 3, 100, 1, '2023-10-18 14:41:46', 11, '2023-10-18 17:54:16', NULL),
 (6, 11, 3, 20, 1, 1000, 1, '2023-10-18 14:41:46', 11, '2023-10-18 17:54:19', NULL),
-(7, 11, 4, 2, 2, 800, 0, '2023-10-18 14:43:18', 11, NULL, NULL);
+(7, 11, 4, 2, 2, 800, 0, '2023-10-18 14:43:18', 11, NULL, NULL),
+(8, 11, 5, 16, 2, 60, 0, '2023-10-19 14:07:39', 11, NULL, NULL),
+(9, 11, 5, 12, 4, 30, 0, '2023-10-19 14:07:39', 11, NULL, NULL),
+(10, 11, 5, 1, 1, 56, 0, '2023-10-19 14:07:39', 11, NULL, NULL),
+(11, 11, 6, 1, 1, 56, 0, '2023-10-19 14:09:03', 11, NULL, NULL),
+(12, 11, 7, 1, 1, 56, 0, '2023-10-19 14:09:13', 11, NULL, NULL),
+(13, 11, 8, 1, 1, 56, 0, '2023-10-19 14:10:18', 11, NULL, NULL),
+(14, 11, 9, 10, 2, 30, 0, '2023-10-19 14:11:28', 11, NULL, NULL),
+(15, 11, 9, 1, 2, 56, 0, '2023-10-19 14:11:28', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -287,7 +330,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_tags`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 15, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-06 15:30:52', 1),
+(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 12, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-19 14:11:28', 1),
 (2, 19, 'Anand Namkeen Thika Meetha mix', '4', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-10-03 10:40:06', 1),
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-10-09 14:56:23', 1),
 (4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-10-11 12:37:30', 1),
@@ -296,7 +339,7 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
 (9, 20, 'Taj Mahal Tea', '8', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-03 14:12:05', 1),
-(10, 18, 'crack jack', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:06:16', NULL),
+(10, 18, 'crack jack', '1', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-19 14:11:28', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, 'Oreo', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
 (13, 18, 'test', '1,9', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 18:25:36', 1),
@@ -331,7 +374,6 @@ CREATE TABLE `product_image` (
 
 INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `isActive`, `dateCreated`, `createdBy`) VALUES
 (6, 2, 'anand-nmkieen_1nvr14ueh50bq.png', b'1', b'1', '2023-09-13 16:03:30', 1),
-(7, 2, '50474c.webp', b'0', b'1', '2023-09-13 16:03:30', 1),
 (11, 4, 'motorcycle-with-helmet.jpg', b'1', b'1', '2023-09-14 14:26:46', 1),
 (12, 5, '22fddf3c7da4c4f4.webp', b'1', b'1', '2023-09-14 14:35:24', 1),
 (15, 7, 'anand-nmkieen_1gfgiz2rj7f68.png', b'1', b'1', '2023-09-15 15:14:31', 1),
@@ -391,7 +433,7 @@ INSERT INTO `product_tags` (`PkTagId`, `FkCategoryId`, `tagName`, `isActive`, `i
 (5, 41, 'sports', b'1', b'0', '2023-09-14 14:10:34', 1, NULL, NULL),
 (6, 17, 'camera', b'1', b'0', '2023-09-14 14:10:43', 1, '2023-09-14 16:36:31', 1),
 (7, 19, 'mixer', b'1', b'0', '2023-09-14 17:09:22', 1, NULL, NULL),
-(8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-10-11 16:28:55', 1),
+(8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-10-19 12:33:27', 1),
 (9, 18, 'butter buiscuit', b'1', b'0', '2023-09-14 18:11:51', 1, NULL, NULL),
 (10, 21, 'Noodles', b'1', b'0', '2023-09-15 15:14:51', 1, NULL, NULL),
 (11, 19, 'Sev', b'1', b'0', '2023-10-02 00:09:42', 7, '2023-10-11 12:43:00', NULL);
@@ -444,6 +486,12 @@ ALTER TABLE `cart`
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`PkCategoryId`);
+
+--
+-- Indexes for table `coupons`
+--
+ALTER TABLE `coupons`
+  ADD PRIMARY KEY (`PkCouponId`);
 
 --
 -- Indexes for table `customer`
@@ -502,13 +550,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=249;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=255;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
   MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+
+--
+-- AUTO_INCREMENT for table `coupons`
+--
+ALTER TABLE `coupons`
+  MODIFY `PkCouponId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -520,13 +574,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `product`

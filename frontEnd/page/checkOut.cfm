@@ -758,7 +758,7 @@
                         successToast("Your order is successfully completed!");
                         setTimeout(() => {
                             location.href = 'index.cfm?pg=dashboard';
-                        }, 150);
+                        }, 500);
                     }
                 }
             });

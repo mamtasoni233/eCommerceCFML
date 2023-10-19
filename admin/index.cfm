@@ -24,8 +24,9 @@
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
             <!--- toast css --->
             <link rel="stylesheet" href="../assets/extensions/toastify-js/src/toastify.css" />
-            <!--- sweetalert css --->
+            <!--- sweetalert2 css --->
             <link rel="stylesheet" href="./assets/extensions/sweetalert2/sweetalert2.min.css"/>
+            <!--- <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.min.css" rel="stylesheet"/> --->
             <!-- Datatables -->
             <link rel="stylesheet" href="./assets/compiled/css/table-datatable-jquery.css"/>
             <link rel="stylesheet" href="./assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css"/>
@@ -35,6 +36,9 @@
             <!--- image preview css --->
             <link rel="stylesheet" href="./assets/extensions/filepond/filepond.css" />
             <link rel="stylesheet" href="./assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css"/>
+
+            <!---  flat picker css --->
+            <link rel="stylesheet" href="./assets/extensions/flatpickr/flatpickr.min.css"/>
             <!--- jquery --->
             <script src="./assets/extensions/jquery/jquery.min.js"></script>
             <!--- js --->
@@ -99,7 +103,11 @@
                             <cfcase value="order">
                                 <cfinclude template="./page/order.cfm">
                             </cfcase>
+                            <cfcase value="coupon">
+                                <cfinclude template="./page/coupon.cfm">
+                            </cfcase>
                         </cfswitch>
+                        
                     </div>
                     <!--- start footer --->
                     <cfinclude template="./common/footer.cfm">
@@ -115,8 +123,6 @@
             <!--- jquery validation js --->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <!--- select2 js --->
-            <!--- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> --->
             <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
             <!-- fancy box  Scripts -->
             <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
@@ -137,6 +143,8 @@
             <script src="./assets/extensions/toastify-js/src/toastify.js"></script>
             <!--- sweet alert js --->
             <script src="./assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+            <!--- flat picker --->
+            <script src="./assets/extensions/flatpickr/flatpickr.min.js"></script>
         </body>
     </html>
 </cfoutput>

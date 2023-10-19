@@ -159,9 +159,9 @@
                 { data: 'isBlcoked',
                     render: function (data,type,row) {
                         if(row.isBlcoked == 1){
-                            return '<span id="block" data-id="'+row.PkCustomerId+'" data-status="Block" data-name="'+row.firstName+'" class=" badge bg-danger text-white changeBlockStatus"  data-toggle="tooltip" data-html="true" title="Click to Block Customer" data-placement="bottom">Block</span>';
+                            return '<span id="block" data-id="'+row.PkCustomerId+'" data-status="Block" data-name="'+row.firstName+'" class=" badge bg-danger text-white changeBlockStatus"  data-toggle="tooltip" data-html="true" title="Click to Un Block Customer" data-placement="bottom">Block</span>';
                         }else{
-                            return '<span id="unBlock" data-id="'+row.PkCustomerId+'" data-status="unBlock" data-name="'+row.firstName+'" class="badge bg-success text-white changeBlockStatus" data-toggle="tooltip" data-html="true" title="Click to Un Block Customer" data-placement="bottom">Un Block</span>';
+                            return '<span id="unBlock" data-id="'+row.PkCustomerId+'" data-status="unBlock" data-name="'+row.firstName+'" class="badge bg-success text-white changeBlockStatus" data-toggle="tooltip" data-html="true" title="Click to Block Customer" data-placement="bottom">Un Block</span>';
                         }
                     }
                 },
@@ -260,7 +260,7 @@
                             url: '../ajaxAddCustomer.cfm?blockId='+id,  
                             type: 'POST',  
                             success: function(data) {
-                                dangerToast("Unblocked!","Customer Unblocked Successfully");
+                                successToast("Unblocked!","Customer Unblocked Successfully");
                                 $('#customerDataTable').DataTable().ajax.reload();                       
                             }  
                         });
@@ -280,7 +280,7 @@
                             url: '../ajaxAddCustomer.cfm?blockId='+id,  
                             type: 'POST',  
                             success: function(data) {
-                                successToast("Blocked!","Customer Blocked Successfully");
+                                dangerToast("Blocked!","Customer Blocked Successfully");
                                 $('#customerDataTable').DataTable().ajax.reload();                       
                             }  
                         });

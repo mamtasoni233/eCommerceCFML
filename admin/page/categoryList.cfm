@@ -511,7 +511,7 @@
                         url: '../ajaxAddCategory.cfm?restorePkCategoryId='+id, 
                         type: 'GET',  
                         success: function(data) {
-                            dangerToast("Restore!","Category Restore Successfully");
+                            successToast("Restore!","Category Restore Successfully");
                             $('#categoryDataTable').DataTable().ajax.reload();               
                         }  
                     });

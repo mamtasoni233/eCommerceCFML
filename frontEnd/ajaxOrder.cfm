@@ -109,7 +109,7 @@
                     , zipCode
                     , billingFirstName
                     , billingLastName
-                    , billingMobile
+                    , billingMobile 
                     , billingAddress
                     , billingState
                     , billingZipCode
@@ -170,6 +170,20 @@
                             , <cfqueryparam value = "#item.TotalCost#" cfsqltype = "cf_sql_float">
                             , <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
                         )
+                    </cfquery>
+                </cfloop>
+                <cfloop array="#session.cart.product#" item="item">
+                    <cfquery name="getProductQty">
+                        SELECT productQty, PkProductId 
+                        FROM product 
+                        WHERE PkProductId = <cfqueryparam value = "#item.FkProductId#" cfsqltype = "cf_sql_integer">
+                    </cfquery>
+                    <!--- <cfdump  var="#getProductQty#"> --->
+                    <cfset prodQty = getProductQty.productQty - item.Quantity>
+                    <!--- <cfdump  var="#prodQty#"> --->
+                    <cfquery result="qryUpdateProductQty">
+                        UPDATE product SET productQty = <cfqueryparam value = "#prodQty#" cfsqltype = "cf_sql_integer">
+                        WHERE PkProductId = <cfqueryparam value = "#getProductQty.PkProductId#" cfsqltype = "cf_sql_integer">
                     </cfquery>
                 </cfloop>
                 <cfset session.cart['PRODUCT'] = []>
