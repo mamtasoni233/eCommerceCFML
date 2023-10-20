@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 19, 2023 at 03:27 PM
+-- Generation Time: Oct 20, 2023 at 03:23 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -166,7 +166,9 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`PkCouponId`, `couponName`, `couponCode`, `discountValue`, `discountType`, `couponStartDate`, `couponExpDate`, `repeatRestriction`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 'test', 'ry20', 200, 2, '2023-10-26', '2023-11-02', 2, b'1', b'0', '2023-10-19 18:32:58', 1, '2023-10-19 18:57:04', 1);
+(1, 'test', 'ry20', 200, 2, '2023-10-26', '2023-11-02', 2, b'1', b'0', '2023-10-19 18:32:58', 1, '2023-10-20 10:15:43', 1),
+(2, 'werw', 'wer651', 560, 2, '2023-10-31', '2023-11-11', 1, b'1', b'0', '2023-10-20 10:21:02', 1, NULL, NULL),
+(3, 'wrwer', '151wrwe', 80, 1, '2023-10-30', '2023-12-11', 0, b'1', b'0', '2023-10-20 10:21:47', 1, '2023-10-20 10:36:06', NULL);
 
 -- --------------------------------------------------------
 
@@ -239,6 +241,7 @@ CREATE TABLE `orders` (
   `creditCardNumber` varchar(50) DEFAULT NULL,
   `cardExpieryDate` date DEFAULT NULL,
   `cvv` int(3) DEFAULT NULL,
+  `status` int(1) UNSIGNED NOT NULL DEFAULT 0,
   `isActive` bit(1) NOT NULL DEFAULT b'1',
   `isDeleted` bit(1) NOT NULL DEFAULT b'0',
   `createdBy` int(10) UNSIGNED NOT NULL,
@@ -251,16 +254,8 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Ratanada', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Ratanada', 'RJ', 342001, 'courier', 'creditCard', '', 'Mamta Soni', '777777777777', '2028-04-30', 321, b'1', b'0', 1, '2023-10-18 06:54:00', NULL, NULL),
-(2, 1, 'Ravina', 'Soni', 'ravina@gmail.com', '564695165', 'test', 'HR', 342008, 'werfwe', 'werwe', '564695165', 'test', 'HR', 342008, 'nextDay', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 1, '2023-10-18 07:23:29', NULL, '2023-10-18 10:53:22'),
-(3, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 349001, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 349001, 'free', 'upi', '8122891132', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-18 09:11:46', NULL, NULL),
-(4, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 349001, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 349001, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-18 09:13:18', NULL, NULL),
-(5, 11, 'Veshali', 'Bhati', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'AR', 342001, 'Veshali', 'Bhati', '8122891132', 'Chennai', 'AR', 342001, 'nextDay', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:37:39', NULL, NULL),
-(6, 11, 'test', 'test', 'yogesh.m@gmail.com', '1234560799', 'test', 'AS', 342008, 'test', 'test', '1234560799', 'test', 'AS', 342008, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:39:03', NULL, NULL),
-(7, 11, 'test', 'test', 'yogesh.m@gmail.com', '1234560799', 'test', 'AS', 342008, 'test', 'test', '1234560799', 'test', 'AS', 342008, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:39:13', NULL, NULL),
-(8, 11, 'test', 'test', 'yogesh.m@gmail.com', '1234560799', 'test', 'AS', 342008, 'test', 'test', '1234560799', 'test', 'AS', 342008, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:40:18', NULL, NULL),
-(9, 11, 'abc', 'rtyr', 'tes13t@gm.com', '78964521230', 'yry', 'BR', 349001, 'abc', 'rtyr', '78964521230', 'yry', 'BR', 349001, 'free', 'cod', '', '', NULL, NULL, NULL, b'1', b'0', 11, '2023-10-19 08:41:28', NULL, NULL);
+INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `status`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
+(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'Mamta', 'Soni', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'courier', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-10-20 11:01:47', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -275,7 +270,6 @@ CREATE TABLE `order_item` (
   `FkProductId` int(11) UNSIGNED NOT NULL,
   `totalQuantity` int(50) NOT NULL,
   `totalCost` double NOT NULL,
-  `statusId` int(1) UNSIGNED NOT NULL DEFAULT 0,
   `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
   `createdBy` int(11) NOT NULL,
   `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
@@ -286,22 +280,9 @@ CREATE TABLE `order_item` (
 -- Dumping data for table `order_item`
 --
 
-INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`, `totalQuantity`, `totalCost`, `statusId`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 1, 1, 1, 1, 56, 0, '2023-10-18 12:24:00', 1, NULL, NULL),
-(2, 1, 1, 10, 3, 30, 0, '2023-10-18 12:24:00', 1, NULL, NULL),
-(3, 1, 1, 6, 6, 1000, 0, '2023-10-18 12:24:00', 1, NULL, NULL),
-(4, 1, 2, 6, 1, 1000, 0, '2023-10-18 12:53:29', 1, NULL, NULL),
-(5, 11, 3, 9, 3, 100, 1, '2023-10-18 14:41:46', 11, '2023-10-18 17:54:16', NULL),
-(6, 11, 3, 20, 1, 1000, 1, '2023-10-18 14:41:46', 11, '2023-10-18 17:54:19', NULL),
-(7, 11, 4, 2, 2, 800, 0, '2023-10-18 14:43:18', 11, NULL, NULL),
-(8, 11, 5, 16, 2, 60, 0, '2023-10-19 14:07:39', 11, NULL, NULL),
-(9, 11, 5, 12, 4, 30, 0, '2023-10-19 14:07:39', 11, NULL, NULL),
-(10, 11, 5, 1, 1, 56, 0, '2023-10-19 14:07:39', 11, NULL, NULL),
-(11, 11, 6, 1, 1, 56, 0, '2023-10-19 14:09:03', 11, NULL, NULL),
-(12, 11, 7, 1, 1, 56, 0, '2023-10-19 14:09:13', 11, NULL, NULL),
-(13, 11, 8, 1, 1, 56, 0, '2023-10-19 14:10:18', 11, NULL, NULL),
-(14, 11, 9, 10, 2, 30, 0, '2023-10-19 14:11:28', 11, NULL, NULL),
-(15, 11, 9, 1, 2, 56, 0, '2023-10-19 14:11:28', 11, NULL, NULL);
+INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`, `totalQuantity`, `totalCost`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(1, 1, 1, 6, 5, 15000, '2023-10-20 16:31:47', 1, NULL, NULL),
+(2, 1, 1, 1, 4, 224, '2023-10-20 16:31:47', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -330,12 +311,12 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_tags`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 12, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-19 14:11:28', 1),
+(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 8, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-20 16:31:47', 1),
 (2, 19, 'Anand Namkeen Thika Meetha mix', '4', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-10-03 10:40:06', 1),
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-10-09 14:56:23', 1),
 (4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-10-11 12:37:30', 1),
 (5, 7, 'Samsung Z-fold ', '1,5', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
-(6, 18, 'Cookie', '9', 1000, 20, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-10-05 14:18:40', 1),
+(6, 18, 'Cookie', '9', 1000, 12, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-10-20 16:31:47', 1),
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
 (9, 20, 'Taj Mahal Tea', '8', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-03 14:12:05', 1),
@@ -344,7 +325,7 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (12, 18, 'Oreo', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
 (13, 18, 'test', '1,9', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 18:25:36', 1),
 (14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-05 14:15:39', 1),
-(15, 18, 'Britannia Good Day', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 16:45:26', 1),
+(15, 18, 'Britannia Good Day', '1', 30, 24, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-20 13:44:44', 1),
 (16, 18, 'Oreo Pink Cream', '1,9', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:10:44', 1),
 (17, 18, 'Sunfest', '1', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
 (18, 18, 'Choco Lava Cake', '9', 850, 20, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-10-09 15:03:16', 1),
@@ -550,7 +531,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=255;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=266;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -562,7 +543,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `PkCouponId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `PkCouponId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -574,13 +555,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `product`

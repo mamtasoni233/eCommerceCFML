@@ -89,6 +89,7 @@
             </div>
             <!-- / Navbar-->
             <!-- Main Section-->
+            <cfdump  var="#session#">
             <section class="mt-0 ">
                 <!-- Page Content Goes Here -->
                 <cfswitch expression="#pg#">
@@ -842,7 +843,7 @@
                 });
             </script>    --->
             <script>
-                // var #toScript('#productIdURL#','ProductId')#;
+                var #toScript('#productIdURL#','ProductId')#;
                 function loadAjax() {
                     $.ajax({  
                         url: './ajaxAddToCart.cfm?getCartCountValue=cartCounter', 

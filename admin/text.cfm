@@ -104,3 +104,39 @@
 <cfset categoryList = getCategoryResult()> --->
 
 <cfdump var="#categoryList#">
+
+
+SELECT
+    (
+    SELECT
+        CASE WHEN o.shipping = 'free' THEN SUM(oisub.totalCost)
+            WHEN o.shipping = 'nextDay' THEN SUM(oisub.totalCost) + 50.00
+            WHEN o.shipping = 'courier' THEN SUM(oisub.totalCost) + 100.00
+        END
+    FROM order_item oisub
+    WHERE oisub.FkOrderId = O.PkOrderId
+) AS 'totalAmt',
+O.PkOrderId,
+O.firstName,
+O.lastName,
+O.FkCustomerId,
+O.shipping,
+O.status,
+O.createdBy,
+O.updatedBy,
+O.createdDate,
+O.updatedDate,
+C.PkCustomerId,
+CONCAT_WS(" ", O.firstName, O.lastName) AS customerName,
+userUpdate.PkUserId,
+CONCAT_WS(
+    " ",
+    userUpdate.firstName,
+    userUpdate.lastName
+) AS userNameUpdate
+FROM
+    orders O
+LEFT JOIN customer C ON
+    O.createdBy = C.PkCustomerId
+LEFT JOIN users userUpdate ON
+    O.updatedBy = userUpdate.PkUserId;

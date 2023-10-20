@@ -62,14 +62,33 @@
 <cftry>
     <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
         <cfquery name="getOrderDataRows">
-            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.statusId, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", OD.firstName, OD.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
+            /* SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.statusId, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", OD.firstName, OD.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
             FROM order_item O
             LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
             LEFT JOIN orders OD ON O.FkOrderId = OD.PkOrderId
-            LEFT JOIN users userUpdate ON O.updatedBy = userUpdate.PkUserId
+            LEFT JOIN users userUpdate ON O.updatedBy = userUpdate.PkUserId */
+            SELECT
+                (
+                SELECT
+                    CASE WHEN o.shipping = 'free' THEN SUM(oisub.totalCost)
+                        WHEN o.shipping = 'nextDay' THEN SUM(oisub.totalCost) + 50.00
+                        WHEN o.shipping = 'courier' THEN SUM(oisub.totalCost) + 100.00
+                    END
+                FROM order_item oisub
+                WHERE oisub.FkOrderId = O.PkOrderId
+            ) AS 'totalAmt',
+            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate,
+            C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName,
+                userUpdate.lastName ) AS userNameUpdate
+            FROM
+                orders O
+            LEFT JOIN customer C ON
+                O.createdBy = C.PkCustomerId
+            LEFT JOIN users userUpdate ON
+                O.updatedBy = userUpdate.PkUserId
             WHERE  1 = 1
-            <cfif structKeyExists(form, "statusId") AND form.statusId NEQ 4>
-                AND O.statusId = <cfqueryparam value="#form.statusId#" cfsqltype = "cf_sql_integer">
+            <cfif structKeyExists(form, "status") AND form.status NEQ 4>
+                AND O.status = <cfqueryparam value="#form.status#" cfsqltype = "cf_sql_integer">
             </cfif>
             <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
                 AND ( C.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -77,20 +96,33 @@
                         OR CONCAT_WS(" ", OD.firstName, OD.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                     )
             </cfif>
-            Group By O.FkOrderId
             <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
                 ORDER BY #form.order#
             </cfif>
         </cfquery>
         <cfquery name="getOrderData">
-            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.statusId, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", OD.firstName, OD.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
-            FROM order_item O
-            LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
-            LEFT JOIN orders OD ON O.FkOrderId = OD.PkOrderId
-            LEFT JOIN users userUpdate ON O.updatedBy = userUpdate.PkUserId
+            SELECT
+                (
+                SELECT
+                    CASE WHEN o.shipping = 'free' THEN SUM(oisub.totalCost)
+                        WHEN o.shipping = 'nextDay' THEN SUM(oisub.totalCost) + 50.00
+                        WHEN o.shipping = 'courier' THEN SUM(oisub.totalCost) + 100.00
+                    END
+                FROM order_item oisub
+                WHERE oisub.FkOrderId = O.PkOrderId
+            ) AS 'totalAmt',
+            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate,
+            C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName,
+                userUpdate.lastName ) AS userNameUpdate
+            FROM
+                orders O
+            LEFT JOIN customer C ON
+                O.createdBy = C.PkCustomerId
+            LEFT JOIN users userUpdate ON
+                O.updatedBy = userUpdate.PkUserId
             WHERE  1 = 1
-            <cfif structKeyExists(form, "statusId") AND form.statusId NEQ 4>
-                AND O.statusId = <cfqueryparam value="#form.statusId#" cfsqltype = "cf_sql_integer">
+            <cfif structKeyExists(form, "status") AND form.status NEQ 4>
+                AND O.status = <cfqueryparam value="#form.status#" cfsqltype = "cf_sql_integer">
             </cfif>
             <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
                 AND ( C.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -98,7 +130,6 @@
                         OR CONCAT_WS(" ", OD.firstName, OD.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
                     )
             </cfif>
-            Group By O.FkOrderId
             <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
                 ORDER BY #form.order#
             </cfif>
@@ -111,12 +142,12 @@
         <cfloop query="getOrderData">
             <cfset dataRecord = {}>
 
-            <cfset dataRecord['PkItemId'] = getOrderData.PkItemId>
-            <cfset dataRecord['FkOrderId'] = getOrderData.FkOrderId>
-            <cfset dataRecord['statusId'] = getOrderData.statusId>
+            <cfset dataRecord['PkOrderId'] = getOrderData.PkOrderId>
+            <cfset dataRecord['totalAmt'] = getOrderData.totalAmt>
+            <cfset dataRecord['status'] = getOrderData.status>
             <cfset dataRecord['createdBy'] = getOrderData.createdBy>
-            <cfset dataRecord['dateCreated'] = dateTimeFormat(getOrderData.dateCreated, 'dd-mm-yyyy hh:nn:ss tt')>
-            <cfset dataRecord['dateUpdated'] = dateTimeFormat(getOrderData.dateUpdated, 'dd-mm-yyyy hh:nn:ss tt')>
+            <cfset dataRecord['createdDate'] = dateTimeFormat(getOrderData.createdDate, 'dd-mm-yyyy hh:nn:ss tt')>
+            <cfset dataRecord['updatedDate'] = dateTimeFormat(getOrderData.updatedDate, 'dd-mm-yyyy hh:nn:ss tt')>
             <cfset dataRecord['updatedBy'] = getOrderData.updatedBy>
             <cfset dataRecord['PkUserId'] = getOrderData.PkUserId>
             <cfset dataRecord['PkCustomerId'] = getOrderData.PkCustomerId>
@@ -126,16 +157,16 @@
         </cfloop>
     </cfif>
 
-    <cfif structKeyExists(url, "FkOrderId") AND url.FkOrderId GT 0>
+    <!--- <cfif structKeyExists(url, "PkOrderId") AND url.PkOrderId GT 0>
         <cfquery name="editOrderItemData">
-            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.statusId, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, PI.image, P.productName, Ord.address, Ord.billingAddress
+            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, PI.image, P.productName, Ord.address, Ord.billingAddress
             FROM order_item O
             LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
             LEFT JOIN product P ON O.FkProductId = P.PkProductId 
             LEFT JOIN product_image PI ON O.FkProductId = PI.FkProductId AND PI.isDefault = 1
             LEFT JOIN orders Ord ON O.FkOrderId = Ord.PkOrderId
             LEFT JOIN users userUpdate ON O.updatedBy = userUpdate.PkUserId
-            WHERE  O.FkOrderId = <cfqueryparam value="#url.FkOrderId#" cfsqltype = "cf_sql_integer">
+            WHERE  O.FkOrderId = <cfqueryparam value="#url.PkOrderId#" cfsqltype = "cf_sql_integer">
         </cfquery>
 
         <cfset data['json'] = {}>
@@ -144,11 +175,11 @@
         <cfset data['json']['FkOrderId'] = editOrderItemData.FkOrderId>
         <cfset data['json']['address'] = editOrderItemData.address>
         <cfset data['json']['billingAddress'] = editOrderItemData.billingAddress>
-    </cfif>
+    </cfif> --->
 
     <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getOrderItemRecord" >
         <cfquery name="getOrderItemDataRows">
-            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.statusId, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, PI.image, P.productName
+            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, PI.image, P.productName, P.productPrice
             FROM order_item O
             LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
             LEFT JOIN product P ON O.FkProductId = P.PkProductId 
@@ -157,7 +188,7 @@
             WHERE  O.FkOrderId = <cfqueryparam value="#form.FkOrderId#" cfsqltype = "cf_sql_integer">
         </cfquery>
         <cfquery name="getOrderItemData">
-            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.statusId, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, PI.image, P.productName
+            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, PI.image, P.productName, P.productPrice
             FROM order_item O
             LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
             LEFT JOIN product P ON O.FkProductId = P.PkProductId 
@@ -178,10 +209,10 @@
             <cfset dataRecord['PkItemId'] = getOrderItemData.PkItemId>
             <cfset dataRecord['FkOrderId'] = getOrderItemData.FkOrderId>
             <cfset dataRecord['FkCustomerId'] = getOrderItemData.FkCustomerId>
-            <cfset dataRecord['statusId'] = getOrderItemData.statusId>
             <cfset dataRecord['totalQuantity'] = getOrderItemData.totalQuantity>
             <cfset dataRecord['totalCost'] = getOrderItemData.totalCost>
             <cfset dataRecord['productName'] = getOrderItemData.productName>
+            <cfset dataRecord['productPrice'] = getOrderItemData.productPrice>
             <cfset dataRecord['image'] = getOrderItemData.image>
             <cfset dataRecord['createdBy'] = getOrderItemData.createdBy>
             <cfset dataRecord['dateCreated'] = dateTimeFormat(getOrderItemData.dateCreated, 'dd-mm-yyyy hh:nn:ss tt')>

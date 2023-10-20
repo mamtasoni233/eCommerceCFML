@@ -76,7 +76,7 @@
         
         <cfif getCartProductQry.FkProductId EQ url.ProductId>
             <cfset totalProductQty = getCartProductQry.quantity + form.productQty>
-            <cfset totalPrice = getCartProductQry.price + form.productPrice>
+            <cfset totalPrice = getCartProductQry.price * totalProductQty>
             <cfquery result="updateCartProductData">
                 UPDATE cart SET
                 quantity =  <cfqueryparam value = "#totalProductQty#" cfsqltype = "cf_sql_integer">
@@ -106,7 +106,7 @@
                 )
             </cfquery>
             <cfset totalProductQty = form.productQty>
-            <cfset totalPrice = form.productPrice>
+            <cfset totalPrice = form.productPrice * form.productQty>
         </cfif>
         <cfset checkProdArray = arrayFilter(session.cart.product, function(idx) {
             return idx['FkProductId'] EQ url.ProductId
@@ -174,7 +174,8 @@
                                 <!-- Cart Product-->
                                 <cfset productSubTotal = 0>
                                 <cfloop query="getCartProductQry">
-                                    <cfset priceTotal = getCartProductQry.quantity * getCartProductQry.price>
+                                    <!---   <cfset priceTotal = getCartProductQry.quantity * getCartProductQry.price> --->
+                                    <cfset priceTotal = getCartProductQry.price>
                                     <cfset productSubTotal +=  priceTotal >
                                     <cfquery name="getProductImage">
                                         SELECT image, isDefault

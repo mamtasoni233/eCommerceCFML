@@ -186,7 +186,7 @@
     $(document).ready( function () {    
         
         flatpickr('.flatpickr-no-config', {
-            dateFormat: "Y-m-d", 
+            dateFormat: "d-m-Y", 
         });
         /* $('#discountType').select2({
             theme: "bootstrap-5",
@@ -256,9 +256,9 @@
                     {
                         var returnStr = '';
                         if(row.isDeleted == 1){
-                            returnStr += '<a data-id="'+ row.PkCouponId + '" data-name="'+row.couponName+'" id="restoreProduct" class="border-none btn btn-sm btn-warning text-white mt-1 restoreProduct"><i class="fas fa-undo"></i></a>'	
+                            returnStr += '<a data-id="'+ row.PkCouponId + '" data-name="'+row.couponName+'" id="restoreCoupon" class="border-none btn btn-sm btn-warning text-white mt-1 restoreCoupon"><i class="fas fa-undo"></i></a>'	
                         } else{
-                            returnStr += '<a data-id="'+row.PkCouponId+'"  id="editCoupon" class="border-none btn btn-sm btn-success text-white mt-1 editCoupon" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkCouponId+'" data-name="'+row.couponName+'" id="deleteProduct" class="border-none btn btn-sm btn-danger text-white mt-1 deleteProduct" > <i class="bi bi-trash"></i></a>'				
+                            returnStr += '<a data-id="'+row.PkCouponId+'"  id="editCoupon" class="border-none btn btn-sm btn-success text-white mt-1 editCoupon" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkCouponId+'" data-name="'+row.couponName+'" id="deleteCoupon" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCoupon" > <i class="bi bi-trash"></i></a>'				
                         }
                         return returnStr;
                     }
@@ -266,13 +266,16 @@
             ],
             rowCallback : function(nRow, aData, iDisplayIndex){
                 $("td:first", nRow).html(iDisplayIndex + 1);
+                if ( aData.isDeleted === 1 ) {
+                    $(nRow).addClass('table-danger');
+                }
                 return nRow;
             },
-            rowCallback: function( row, data ) {
+            /* rowCallback: function( row, data ) {
                 if ( data.isDeleted === 1 ) {
                     $(row).addClass('table-danger');
                 }
-            }
+            } */
         });
         
         $('div.toolbar').after('<select id="isDeleted" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="2">Select All</option><option value="0" selected>Not Deleted</option><option value="1">Deleted</option></select>');
@@ -410,6 +413,97 @@
                 }   
             });
         });
+        $("#couponDataTable").on("click", ".deleteCoupon", function () { 
+            var id = $(this).attr("data-id");
+            var name = $(this).data("name");
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You want to delete coupon record for ' + '"' +  name + '"',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({  
+                        url: '../ajaxAddCoupon.cfm?delPkCouponId='+id,
+                        type: 'GET',  
+                        success: function(data) {
+                            dangerToast("Deleted!","Coupon Deleted Successfully");
+                            $('#couponDataTable').DataTable().ajax.reload();               
+                        }  
+                    });
+                }
+            });
+        });
+        $("#couponDataTable").on("click", ".changeStatus", function () {
+            var id = $(this).attr("data-id");
+            var name = $(this).attr("data-name");
+            var status = $(this).attr('data-status');
+            if (status == "Active") {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to deactive ' + '"' +  name + '"',
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, Deactivate it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({  
+                            url: '../ajaxAddCoupon.cfm?statusId='+id,  
+                            type: 'POST',  
+                            success: function(data) {
+                                dangerToast("Deactivated!","Coupon Deactivated Successfully");
+                                $('#couponDataTable').DataTable().ajax.reload();                       
+                            }  
+                        });
+                    }
+                });
+            }
+            else{
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to Active ' + '"' +  name + '"',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Active it!'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({  
+                            url: '../ajaxAddCoupon.cfm?statusId='+id,  
+                            type: 'POST',  
+                            success: function(data) {
+                                successToast("Activated!","Coupon Activated Successfully");
+                                $('#couponDataTable').DataTable().ajax.reload();                       
+                            }  
+                        });
+                    }
+                });
+            }
+        });
+        $("#couponDataTable").on("click", ".restoreCoupon", function () { 
+            var id = $(this).attr("data-id");
+            var name = $(this).data("name");
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You want to restore Coupon record for ' + '"' +  name + '"',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Restore it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({  
+                        url: '../ajaxAddCoupon.cfm?restorePkCouponId='+id, 
+                        type: 'GET',  
+                        success: function(data) {
+                            successToast("Restore!","Coupon Restore Successfully");
+                            $('#couponDataTable').DataTable().ajax.reload();               
+                        }  
+                    });
+                }
+            });
+        });  
     });
 
     function submitCouponData() {
