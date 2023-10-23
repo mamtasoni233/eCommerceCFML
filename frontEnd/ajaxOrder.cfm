@@ -152,6 +152,17 @@
                 FROM order_item 
                 WHERE FkOrderId  = <cfqueryparam value = "#PkOrderId#" cfsqltype = "cf_sql_integer">
             </cfquery>
+            <cfquery result="addStatus">
+                INSERT INTO status_history (
+                    FkOrderId 
+                    , status
+                    , createdBy
+                ) VALUES (
+                    <cfqueryparam value = "#PkOrderId#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "0" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                )
+            </cfquery>
             <cfif getOrderItemQry.recordCount EQ 0>
                 <cfloop array="#session.cart.product#" item="item">
                     <cfquery result="addOrderItem">

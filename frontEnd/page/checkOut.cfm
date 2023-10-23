@@ -464,7 +464,7 @@
                                 <input type="checkbox" class="form-check-input" name="acceptTerms" id="accept-terms" checked>
                                 <label class="form-check-label fw-bolder" for="accept-terms">I agree to Alpine's <a href="##">terms & conditions</a></label>
                             </div>
-                            <button type="submit" class="<!--- btn btn-dark w-100 --->btn btn-dark w-100 fw-bolder d-block text-center transition-all opacity-50-hover" >Complete Order</button>      
+                            <button type="submit" class="btn btn-dark w-100 fw-bolder d-block text-center transition-all opacity-50-hover" >Complete Order</button>      
                         </div>                
                     </div>
                     <!-- /Checkout Panel Summary -->
@@ -678,9 +678,9 @@
                     error.addClass('invalid-feedback');
                 },
                 highlight: function (element, errorClass, validClass) {
-                    if ($(element).hasClass('select2-hidden-accessible')) {
+                    /*  if ($(element).hasClass('select2-hidden-accessible')) {
                         $(element).siblings('.select2').children('span').children('span.select2-selection').addClass("invalidCs")
-                    }
+                    } */
                     if ($(element).hasClass('form-check-input')){
                         if ($(element).attr('name') == 'acceptTerms') {
                             $('##accept-terms').addClass('is-invalid');
@@ -691,9 +691,9 @@
                     //$(element).addClass('is-invalid');
                 },
                 unhighlight: function (element, errorClass, validClass) {
-                    if ($(element).hasClass('select2-hidden-accessible')) {
+                    /* if ($(element).hasClass('select2-hidden-accessible')) {
                         $(element).siblings('.select2').children('span').children('span.select2-selection').removeClass("invalidCs");
-                    }
+                    } */
                     //$(element).removeClass('is-invalid');
                     if ($(element).hasClass('form-check-input')){
                         if ($(element).attr('name') == 'acceptTerms') {

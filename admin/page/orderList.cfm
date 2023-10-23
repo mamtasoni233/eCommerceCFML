@@ -157,7 +157,11 @@
                         }
                     }
                 },
-                { data: 'totalAmt' },
+                { data: 'totalAmt',
+                    render: function(data, display, row) {
+                        return '<span><i class="bi bi-currency-rupee fs-5"></i></span> <span>'+data+'</span>';
+                    }
+                },
                 { data: 'createdDate' },
                 { data: 'updatedDate' },
                 { data: 'PkOrderId',

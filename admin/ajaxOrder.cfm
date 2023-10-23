@@ -62,11 +62,6 @@
 <cftry>
     <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
         <cfquery name="getOrderDataRows">
-            /* SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.statusId, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", OD.firstName, OD.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
-            FROM order_item O
-            LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
-            LEFT JOIN orders OD ON O.FkOrderId = OD.PkOrderId
-            LEFT JOIN users userUpdate ON O.updatedBy = userUpdate.PkUserId */
             SELECT
                 (
                 SELECT
@@ -77,16 +72,15 @@
                 FROM order_item oisub
                 WHERE oisub.FkOrderId = O.PkOrderId
             ) AS 'totalAmt',
-            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate,
-            C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName,
-                userUpdate.lastName ) AS userNameUpdate
+            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName, userUpdate.lastName ) AS userNameUpdate
             FROM
                 orders O
             LEFT JOIN customer C ON
                 O.createdBy = C.PkCustomerId
             LEFT JOIN users userUpdate ON
                 O.updatedBy = userUpdate.PkUserId
-            WHERE  1 = 1
+            WHERE 1 = 1
+            AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
             <cfif structKeyExists(form, "status") AND form.status NEQ 4>
                 AND O.status = <cfqueryparam value="#form.status#" cfsqltype = "cf_sql_integer">
             </cfif>
@@ -120,7 +114,8 @@
                 O.createdBy = C.PkCustomerId
             LEFT JOIN users userUpdate ON
                 O.updatedBy = userUpdate.PkUserId
-            WHERE  1 = 1
+            WHERE 1 = 1
+            AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
             <cfif structKeyExists(form, "status") AND form.status NEQ 4>
                 AND O.status = <cfqueryparam value="#form.status#" cfsqltype = "cf_sql_integer">
             </cfif>
@@ -157,36 +152,7 @@
         </cfloop>
     </cfif>
 
-    <!--- <cfif structKeyExists(url, "PkOrderId") AND url.PkOrderId GT 0>
-        <cfquery name="editOrderItemData">
-            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, PI.image, P.productName, Ord.address, Ord.billingAddress
-            FROM order_item O
-            LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
-            LEFT JOIN product P ON O.FkProductId = P.PkProductId 
-            LEFT JOIN product_image PI ON O.FkProductId = PI.FkProductId AND PI.isDefault = 1
-            LEFT JOIN orders Ord ON O.FkOrderId = Ord.PkOrderId
-            LEFT JOIN users userUpdate ON O.updatedBy = userUpdate.PkUserId
-            WHERE  O.FkOrderId = <cfqueryparam value="#url.PkOrderId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
-
-        <cfset data['json'] = {}>
-
-        <cfset data['json']['PkItemId'] = editOrderItemData.PkItemId>
-        <cfset data['json']['FkOrderId'] = editOrderItemData.FkOrderId>
-        <cfset data['json']['address'] = editOrderItemData.address>
-        <cfset data['json']['billingAddress'] = editOrderItemData.billingAddress>
-    </cfif> --->
-
     <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getOrderItemRecord" >
-        <cfquery name="getOrderItemDataRows">
-            SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, PI.image, P.productName, P.productPrice
-            FROM order_item O
-            LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
-            LEFT JOIN product P ON O.FkProductId = P.PkProductId 
-            LEFT JOIN product_image PI ON O.FkProductId = PI.FkProductId AND PI.isDefault = 1
-            LEFT JOIN users userUpdate ON O.updatedBy = userUpdate.PkUserId
-            WHERE  O.FkOrderId = <cfqueryparam value="#form.FkOrderId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
         <cfquery name="getOrderItemData">
             SELECT O.PkItemId, O.FkCustomerId, O.FkOrderId, O.FkProductId, O.totalQuantity, O.totalCost, O.createdBy, O.updatedBy, O.dateCreated, O.dateUpdated, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate, PI.image, P.productName, P.productPrice
             FROM order_item O
@@ -198,12 +164,8 @@
             <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
                 ORDER BY #form.order#
             </cfif>
-            LIMIT #form.start#, #form.length#
         </cfquery>
         <cfset data['data'] = []>
-        <cfset data['recordsFiltered'] = getOrderItemDataRows.recordCount>
-        <cfset data['draw'] = form.draw>
-        <cfset data['recordsTotal'] = getOrderItemDataRows.recordCount>
         <cfloop query="getOrderItemData">
             <cfset dataRecord = {}>
             <cfset dataRecord['PkItemId'] = getOrderItemData.PkItemId>
@@ -222,18 +184,61 @@
             <cfset dataRecord['PkCustomerId'] = getOrderItemData.PkCustomerId>
             <cfset dataRecord['customerName'] = getOrderItemData.customerName>
             <cfset dataRecord['userNameUpdate'] = getOrderItemData.userNameUpdate>
-            <cfset dataRecord['sNo'] = 1>
+            <!--- <cfset dataRecord['sNo'] = 1> --->
             <cfset arrayAppend(data['data'], dataRecord)>
         </cfloop>
     </cfif>
 
     <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
+        <cfquery result="addStatus">
+            INSERT INTO status_history (
+                FkOrderId 
+                , status
+                , comment
+                , createdBy
+            ) VALUES (
+                <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
+                , <cfqueryparam value = "#form.orderStatus#" cfsqltype = "cf_sql_integer">
+                , <cfqueryparam value = "#form.comment#" cfsqltype = "cf_sql_text">
+                , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            )
+        </cfquery>
         <cfquery name="changeStatus">
-            UPDATE order_item SET
-            statusId = <cfqueryparam value = "#form.value#" cfsqltype = "cf_sql_integer">
-            WHERE PkItemId = <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
-    </cfquery>
+            UPDATE orders SET
+            status = <cfqueryparam value = "#form.orderStatus#" cfsqltype = "cf_sql_integer">
+            WHERE PkOrderId = <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
     </cfif>
+
+    <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getShippingStatusRecord" >
+        <cfquery name="getShippingStatusData">
+            SELECT SH.PkHistoryId, SH.FkOrderId, SH.status, SH.comment, SH.createdBy, SH.dateCreated, O.PkOrderId, O.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName
+            FROM status_history SH
+            LEFT JOIN orders O ON SH.FkOrderId = O.PkOrderId 
+            LEFT JOIN users U ON SH.createdBy = U.PkUserId
+            LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
+            WHERE SH.FkOrderId = <cfqueryparam value="#form.FkOrderId#" cfsqltype = "cf_sql_integer">
+            AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+            <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
+                ORDER BY #form.order#
+            </cfif>
+        </cfquery>
+        <cfset data['data'] = []>
+        <cfloop query="getShippingStatusData">
+            <cfset dataRecord = {}>
+            <cfset dataRecord['PkHistoryId'] = getShippingStatusData.PkHistoryId>
+            <cfset dataRecord['FkOrderId'] = getShippingStatusData.FkOrderId>
+            <cfset dataRecord['status'] = getShippingStatusData.status>
+            <cfset dataRecord['comment'] = getShippingStatusData.comment>
+            <cfset dataRecord['createdBy'] = getShippingStatusData.createdBy>
+            <cfset dataRecord['dateCreated'] = dateTimeFormat(getShippingStatusData.dateCreated, 'dd-mm-yyyy hh:nn:ss tt')>
+            <cfset dataRecord['PkUserId'] = getShippingStatusData.PkUserId>
+            <cfset dataRecord['userName'] = getShippingStatusData.userName>
+            <cfset dataRecord['customerName'] = getShippingStatusData.customerName>
+            <cfset arrayAppend(data['data'], dataRecord)>
+        </cfloop>
+    </cfif>
+    
     <cfcatch>
         <cfset data['success'] = false>
         <cfset data['error'] = cfcatch>

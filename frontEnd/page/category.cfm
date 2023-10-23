@@ -474,7 +474,7 @@
                                 </cfloop>
                             </cfif>
                             <cfif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice") AND url.minPrice GT 0 AND url.maxPrice GT 0>
-                                <li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer ms-1'>Price: <i class='fa fa-rupee'></i> #url.minPrice# - <i class='fa fa-rupee'></i> #url.maxPrice#<i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag'></i></li>
+                                <li id='priceLi' class='bg-light py-1 fw-bolder px-2 cursor-pointer ms-1 d-inline-block'>Price: <i class='fa fa-rupee'></i> #url.minPrice# - <i class='fa fa-rupee'></i> #url.maxPrice#<i class='ri-close-circle-line ps-1 align-bottom mt-1 deleteProductTag'></i></li>
                             </cfif>
                         </ul>
                         <span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1 d-inline-block" id="deleteAllProductTag">Clear All</span>
@@ -659,14 +659,12 @@
                 }
         
                 if ($('##deleteAllProductTag').length === 0) {
-                    /* $('##productTagContainer').addClass('d-none'); */
                     $('##productTypeUl').after('<span class="fw-bolder text-muted-hover text-decoration-underline ms-2 cursor-pointer small ps-1" id="deleteAllProductTag">Clear All</span>');
                 }
         
                 if (value.length === 0) {
-                    maxPrice = parseFloat($('##filterPriceMax').val());
-                    minPrice = parseFloat($('##filterPriceMin').val());
                     $('##tagNameLi-' + value).remove();
+                    $('##productTagContainer').addClass('d-none');
                     setTimeout(function(){
                         showLoader();
                     }, 500);

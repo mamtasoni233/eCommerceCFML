@@ -137,12 +137,10 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block">Close</span>
+                                            <span class="d-block">Close</span>
                                         </button>
                                         <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
-                                            <i class="bx bx-check d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block">Submit</span>
+                                            <span class="d-block">Submit</span>
                                         </button>
                                     </div>
                                 </form>
@@ -188,14 +186,6 @@
         flatpickr('.flatpickr-no-config', {
             dateFormat: "d-m-Y", 
         });
-        /* $('#discountType').select2({
-            theme: "bootstrap-5",
-            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-            placeholder: $( this ).data( 'placeholder' ),
-            dropdownParent: $('#addCouponModal'),
-            allowClear: true,
-        }); */
-
         $('#couponDataTable').DataTable({
             processing: true,
             destroy: true,
@@ -271,11 +261,6 @@
                 }
                 return nRow;
             },
-            /* rowCallback: function( row, data ) {
-                if ( data.isDeleted === 1 ) {
-                    $(row).addClass('table-danger');
-                }
-            } */
         });
         
         $('div.toolbar').after('<select id="isDeleted" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="2">Select All</option><option value="0" selected>Not Deleted</option><option value="1">Deleted</option></select>');

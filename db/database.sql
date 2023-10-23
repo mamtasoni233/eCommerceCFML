@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 20, 2023 at 03:23 PM
+-- Generation Time: Oct 23, 2023 at 03:27 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -39,6 +39,13 @@ CREATE TABLE `cart` (
   `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `updatedBy` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(271, 11, 1, '1', 56, b'0', '2023-10-23 17:45:55', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -255,7 +262,9 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `status`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'Mamta', 'Soni', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'courier', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-10-20 11:01:47', NULL, NULL);
+(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'Mamta', 'Soni', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'courier', 'cod', '', '', NULL, NULL, NULL, 3, b'1', b'0', 1, '2023-10-20 11:01:47', NULL, '2023-10-23 11:57:37'),
+(2, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 342008, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 342008, 'courier', 'upi', '8122891132@paytm', '', NULL, NULL, NULL, 2, b'1', b'0', 11, '2023-10-23 11:32:04', NULL, '2023-10-23 11:57:10'),
+(3, 11, 'test', 'test', 'vishal.k@lucidsolutions.in', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'test', 'test', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'nextDay', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-23 11:46:06', NULL, '2023-10-23 11:56:24');
 
 -- --------------------------------------------------------
 
@@ -282,7 +291,12 @@ CREATE TABLE `order_item` (
 
 INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`, `totalQuantity`, `totalCost`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
 (1, 1, 1, 6, 5, 15000, '2023-10-20 16:31:47', 1, NULL, NULL),
-(2, 1, 1, 1, 4, 224, '2023-10-20 16:31:47', 1, NULL, NULL);
+(2, 1, 1, 1, 4, 224, '2023-10-20 16:31:47', 1, NULL, NULL),
+(3, 11, 2, 15, 2, 60, '2023-10-23 17:02:04', 11, NULL, NULL),
+(4, 11, 2, 1, 1, 56, '2023-10-23 17:02:04', 11, NULL, NULL),
+(5, 11, 2, 10, 1, 30, '2023-10-23 17:02:04', 11, NULL, NULL),
+(6, 11, 3, 16, 2, 60, '2023-10-23 17:16:06', 11, NULL, NULL),
+(7, 11, 3, 1, 1, 56, '2023-10-23 17:16:06', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -311,7 +325,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_tags`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 8, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-20 16:31:47', 1),
+(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 6, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-10-23 17:16:06', 1),
 (2, 19, 'Anand Namkeen Thika Meetha mix', '4', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-10-03 10:40:06', 1),
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-10-09 14:56:23', 1),
 (4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-10-11 12:37:30', 1),
@@ -320,13 +334,13 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
 (9, 20, 'Taj Mahal Tea', '8', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-03 14:12:05', 1),
-(10, 18, 'crack jack', '1', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-19 14:11:28', NULL),
+(10, 18, 'crack jack', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, 'Oreo', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
 (13, 18, 'test', '1,9', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 18:25:36', 1),
 (14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-05 14:15:39', 1),
-(15, 18, 'Britannia Good Day', '1', 30, 24, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-20 13:44:44', 1),
-(16, 18, 'Oreo Pink Cream', '1,9', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 17:10:44', 1),
+(15, 18, 'Britannia Good Day', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', 1),
+(16, 18, 'Oreo Pink Cream', '1,9', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:16:06', 1),
 (17, 18, 'Sunfest', '1', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
 (18, 18, 'Choco Lava Cake', '9', 850, 20, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-10-09 15:03:16', 1),
 (19, 19, 'Bhujia Sev', '4,11', 150, 10, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-10-02 18:21:02', 7),
@@ -418,6 +432,35 @@ INSERT INTO `product_tags` (`PkTagId`, `FkCategoryId`, `tagName`, `isActive`, `i
 (9, 18, 'butter buiscuit', b'1', b'0', '2023-09-14 18:11:51', 1, NULL, NULL),
 (10, 21, 'Noodles', b'1', b'0', '2023-09-15 15:14:51', 1, NULL, NULL),
 (11, 19, 'Sev', b'1', b'0', '2023-10-02 00:09:42', 7, '2023-10-11 12:43:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `status_history`
+--
+
+CREATE TABLE `status_history` (
+  `PkHistoryId` int(11) UNSIGNED NOT NULL,
+  `FkOrderId` int(11) UNSIGNED NOT NULL,
+  `status` int(1) NOT NULL,
+  `comment` text DEFAULT NULL,
+  `createdBy` int(11) NOT NULL,
+  `dateCreated` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `status_history`
+--
+
+INSERT INTO `status_history` (`PkHistoryId`, `FkOrderId`, `status`, `comment`, `createdBy`, `dateCreated`) VALUES
+(1, 1, 1, 'Your order is in progress', 1, '2023-10-23 14:31:11'),
+(2, 1, 2, '', 1, '2023-10-23 15:26:54'),
+(3, 2, 1, 'Test', 1, '2023-10-23 17:05:38'),
+(4, 3, 0, NULL, 11, '2023-10-23 17:16:06'),
+(5, 3, 1, '', 1, '2023-10-23 17:26:07'),
+(6, 3, 0, '', 1, '2023-10-23 17:26:24'),
+(7, 2, 2, '', 1, '2023-10-23 17:27:10'),
+(8, 1, 3, '', 1, '2023-10-23 17:27:37');
 
 -- --------------------------------------------------------
 
@@ -518,6 +561,13 @@ ALTER TABLE `product_tags`
   ADD KEY `FkCategoryId` (`FkCategoryId`);
 
 --
+-- Indexes for table `status_history`
+--
+ALTER TABLE `status_history`
+  ADD PRIMARY KEY (`PkHistoryId`),
+  ADD KEY `FkOrderId` (`FkOrderId`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -531,7 +581,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=266;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -555,13 +605,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -580,6 +630,12 @@ ALTER TABLE `product_image`
 --
 ALTER TABLE `product_tags`
   MODIFY `PkTagId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `status_history`
+--
+ALTER TABLE `status_history`
+  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -629,6 +685,12 @@ ALTER TABLE `product_image`
 --
 ALTER TABLE `product_tags`
   ADD CONSTRAINT `product_tags_ibfk_1` FOREIGN KEY (`FkCategoryId`) REFERENCES `category` (`PkCategoryId`);
+
+--
+-- Constraints for table `status_history`
+--
+ALTER TABLE `status_history`
+  ADD CONSTRAINT `status_history_ibfk_1` FOREIGN KEY (`FkOrderId`) REFERENCES `orders` (`PkOrderId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
