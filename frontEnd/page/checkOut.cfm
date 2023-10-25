@@ -4,12 +4,12 @@
 <cfparam name="productQty" default="" />
 <cfparam name="isDeleted" default="0" />
 <cfset customerId = session.customer.isLoggedIn>
-<cfquery name="getAllCartProductQry">
+<!--- <cfquery name="getAllCartProductQry">
     SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.quantity, C.price, P.PkProductId, P.productName, P.productPrice, P.productQty, P.productDescription
     FROM cart C
     LEFT JOIN product P ON C.FkProductId = P.PkProductId
     WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
-</cfquery>
+</cfquery> --->
 <cfoutput>
     <style>
         .form-control{
@@ -17,6 +17,7 @@
         }
     </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
+    <!--- <cfdump  var="#session#"> --->
     <!-- CheckOut Container-->
     <cfif isEmpty(session.cart.product)>
         <h1 class="mb-3 display-5 fw-bold text-center">No Product Add In Cart</h1>
@@ -322,14 +323,13 @@
                                                     <span class="mb-0 fw-bolder d-block">UPI</span>
                                                 </span>
                                                 <i class="fa-brands fa-google-pay fa-xl pt-2"></i>
-                                                <!--- <i class="ri-bank-card-line"></i> --->
                                             </span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
                             <!-- COD Info-->
-                            <div class="cod-details bg-light p-4mt-3 fw-bolder">
+                            <div class="cod-details bg-light p-4 mt-3 fw-bolder">
                                 Please click on complete order. You will then be transferred to COD to enter your payment details.
                             </div>
                             <!-- /COD Info-->
@@ -388,7 +388,7 @@
                     <!-- / Checkout Panel Left -->
                     <!-- Checkout Panel Summary -->
                     <div class="col-12 col-lg-6 col-xl-5">
-                        <div class="bg-light p-4 sticky-md-top top-5">
+                        <div class="bg-light p-4 sticky-md-top top-5 z-index-1">
                             <div class="border-bottom pb-3">
                                 <!-- Cart Item-->
                                 <!--- <cfset productSubTotal = 0> --->
@@ -453,12 +453,62 @@
                                     <p class="m-0 fs-5 fw-bold"><i class="fa fa-rupee"></i> <span id="grandTotal">#productSubTotal#</span></p>
                                 </div>
                             </div>
-                            <div class="py-3 border-bottom">
-                                <div class="input-group mb-0">
-                                    <input type="text" class="form-control" placeholder="Enter your coupon code">
-                                    <button class="btn btn-dark btn-sm px-4">Apply</button>
+                            <!-- Coupon Code-->
+                            <button class="btn btn-link p-0 my-3 fw-bolder text-decoration-none" type="button"
+                                data-bs-toggle="collapse" data-bs-target="##couponContainer" aria-expanded="false"
+                                aria-controls="couponContainer">
+                                <span class="d-flex">
+                                    <img class="w23 f-left" src="https://media6.ppl-media.com/mediafiles/ecomm/promo/1669713839_icon_coupon.svg">
+                                    <span class="text-orange  px-3 fw-bold">Apply Promo Code</span>
+                                </span> 
+                            </button>
+                            <div class="collapse" id="couponContainer">
+                                <div class="card card-body border p-1">
+                                    <div class="input-group mb-0 mt-3">
+                                        <input type="text" class="form-control" placeholder="Enter your coupon code">
+                                        <button class="btn btn-dark btn-sm px-4 text-center ">Apply</button>
+                                    </div>
+                                    <div class="text-center pt-4"><h5>OR</h5></div>
+                                    <div class="couponList pt-4">
+                                        <!-- Coupon Options -->
+                                        <cfset checkProdArray = arrayMap(session.cart.product, function(item) {
+                                            return item.FkProductId
+                                        })>
+                                        <cfquery name="getCoupon">
+                                            SELECT PkCouponId, FkProductId, couponName, couponCode, description
+                                            FROM coupons
+                                            WHERE FkproductId IN (0,<cfqueryparam value="#checkProdArray#" list="true">)
+                                        </cfquery>
+                                        <!--- <cfloop query="getCoupon">
+                                            <div class="mb-3">
+                                                <div class="d-flex justify-content-between align-items-start w-100">
+                                                    <!--- <span> --->
+                                                        <span class="fw-bolder">#getCoupon.couponName#</span>
+                                                        <span class="fw-bold text-uppercase mx-3">#getCoupon.couponCode#</span>
+                                                    <!---  </span> --->
+                                                    <input class="btn btn-sm btn-orange text-center text-white couponInput" type="button" name="coupon" id="coupon-#getCoupon.PkCouponId#" value="Apply">
+                                                </div>
+                                                <p class="small">(#getCoupon.description#)</p>
+                                            </div> 
+                                        </cfloop> --->
+                                        <cfloop query="getCoupon">
+                                            <div class="my-3 mx-2">
+                                                <div class="d-flex justify-content-between w-100">
+                                                    <div>
+                                                        <span class="fw-bolder">#getCoupon.couponName#</span>
+                                                        <span class="fw-bold text-uppercase"> - #getCoupon.couponCode#</span>
+                                                        <div class="small mt-1">(#getCoupon.description#)</div>
+                                                    </div>
+                                                    <div>
+                                                        <input class="btn btn-sm btn-orange text-center text-white couponInput" type="button" name="coupon" id="coupon-#getCoupon.PkCouponId#" value="Apply">
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        </cfloop>
+                                    </div>
                                 </div>
-                            </div> 
+                            </div>
+                            <!-- / Coupon Code-->
                             <!-- Accept Terms Checkbox-->
                             <div class="form-group form-check my-4">
                                 <input type="checkbox" class="form-check-input" name="acceptTerms" id="accept-terms" checked>

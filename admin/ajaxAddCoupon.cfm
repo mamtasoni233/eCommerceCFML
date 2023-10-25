@@ -62,10 +62,20 @@
 <cfset data['success'] = true>
 <cfset productImagePath = ExpandPath('./assets/productImage/')>
 
+<cfif structKeyExists(url, "formAction") AND url.formAction EQ "getProduct">
+    <cfquery name="getProduct">
+        SELECT productName, PkProductId 
+        FROM product 
+        WHERE isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_integer">
+    </cfquery>
+    <cfset data['productList'] = convertToObject(getProduct)>
+</cfif>
+
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getCouponDataRows">
-        SELECT C.PkCouponId, C.couponName, C.couponCode, C.discountValue, C.discountType, C.couponStartDate, C.couponExpDate, C.repeatRestriction,  C.isActive, C.createdBy, C.updatedBy, C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
+        SELECT C.PkCouponId, C.couponName, C.FkProductId, C.couponCode, C.description, C.discountValue, C.discountType, C.couponStartDate, C.couponExpDate, C.repeatRestriction,  C.isActive, C.createdBy, C.updatedBy, C.dateCreated, C.dateUpdated, C.isDeleted, P.productName, P.PkProductId, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM coupons C
+        LEFT JOIN product P ON C.FkProductId = P.PkProductId
         LEFT JOIN users U ON C.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
         WHERE 1 = 1
@@ -87,8 +97,9 @@
         </cfif>
     </cfquery>
     <cfquery name="getCouponData">
-        SELECT C.PkCouponId, C.couponName, C.couponCode, C.discountValue, C.discountType, C.couponStartDate, C.couponExpDate, C.repeatRestriction,  C.isActive, C.createdBy, C.updatedBy, C.dateCreated, C.dateUpdated, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
+        SELECT C.PkCouponId, C.couponName, C.FkProductId, C.couponCode, C.description, C.discountValue, C.discountType, C.couponStartDate, C.couponExpDate, C.repeatRestriction,  C.isActive, C.createdBy, C.updatedBy, C.dateCreated, C.dateUpdated, C.isDeleted, P.productName, P.PkProductId, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM coupons C
+        LEFT JOIN product P ON C.FkProductId = P.PkProductId
         LEFT JOIN users U ON C.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
         WHERE 1 = 1
@@ -118,9 +129,12 @@
     <cfloop query="getCouponData">
         <cfset dataRecord = {}>
         <cfset dataRecord['PkCouponId'] = getCouponData.PkCouponId>
+        <cfset dataRecord['FkProductId'] = getCouponData.FkProductId>
+        <cfset dataRecord['productName'] = getCouponData.productName>
         <cfset dataRecord['couponName'] = getCouponData.couponName>
         <cfset dataRecord['couponCode'] = getCouponData.couponCode>
         <cfset dataRecord['discountValue'] = getCouponData.discountValue>
+        <cfset dataRecord['description'] = getCouponData.description>
         <cfset dataRecord['discountType'] = getCouponData.discountType>
         <cfset dataRecord['repeatRestriction'] = getCouponData.repeatRestriction>
         <cfset dataRecord['couponStartDate'] = dateTimeFormat(getCouponData.couponStartDate, 'dd-mm-yyyy')>
@@ -141,13 +155,15 @@
 
 <cfif structKeyExists(url, "PkCouponId") AND url.PkCouponId GT 0>
     <cfquery name="editCouponData">
-        SELECT C.PkCouponId, C.couponName, C.couponCode, C.discountValue, C.discountType, C.couponStartDate, C.couponExpDate, C.repeatRestriction, C.isActive
+        SELECT C.PkCouponId, C.couponName, C.FkProductId, C.description, C.couponCode, C.discountValue, C.discountType, C.couponStartDate, C.couponExpDate, C.repeatRestriction, C.isActive
         FROM coupons C
         WHERE PkCouponId = <cfqueryparam value="#PkCouponId#" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfset data['json'] = {}>
     <cfset data['json']['PkCouponId'] = editCouponData.PkCouponId>
+    <cfset data['json']['FkProductId'] = editCouponData.FkProductId>
     <cfset data['json']['couponName'] = editCouponData.couponName>
+    <cfset data['json']['description'] = editCouponData.description>
     <cfset data['json']['couponCode'] = editCouponData.couponCode>
     <cfset data['json']['discountValue'] = editCouponData.discountValue>
     <cfset data['json']['discountType'] = editCouponData.discountType>
@@ -169,13 +185,15 @@
         <cfset productId = url.PkCouponId>
         <cfquery name="updateCouponData">
             UPDATE coupons SET
-            couponName = <cfqueryparam value = "#form.couponName#" cfsqltype = "cf_sql_varchar">
+            FkProductId = <cfqueryparam value = "#form.product#" cfsqltype = "cf_sql_integer">
+            , couponName = <cfqueryparam value = "#form.couponName#" cfsqltype = "cf_sql_varchar">
             , couponCode = <cfqueryparam value = "#form.couponCode#" cfsqltype = "cf_sql_varchar">
             , discountValue =  <cfqueryparam value = "#form.discountValue#" cfsqltype = "cf_sql_float">
             , discountType =  <cfqueryparam value = "#form.discountType#" cfsqltype = "cf_sql_integer">
             , couponStartDate =  <cfqueryparam value = "#form.couponStartDate#" cfsqltype = "cf_sql_date">
             , couponExpDate =  <cfqueryparam value = "#form.couponExpDate#" cfsqltype = "cf_sql_date">
             , repeatRestriction =  <cfqueryparam value = "#form.repeatRestriction#" cfsqltype = "cf_sql_integer">
+            , description =  <cfqueryparam value = "#form.description#" cfsqltype = "cf_sql_text">
             , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
             , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
             , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
@@ -184,24 +202,28 @@
     <cfelse>
         <cfquery result="addProductData">
             INSERT INTO coupons (
-                couponName
+                FkProductId
+                , couponName
                 , couponCode
                 , discountValue
                 , discountType
                 , couponStartDate
                 , couponExpDate
                 , repeatRestriction
+                , description
                 , isActive
                 , createdBy
                 , dateCreated
             ) VALUES (
-                <cfqueryparam value = "#form.couponName#" cfsqltype = "cf_sql_varchar">
+                <cfqueryparam value = "#form.product#" cfsqltype = "cf_sql_integer">
+                , <cfqueryparam value = "#form.couponName#" cfsqltype = "cf_sql_varchar">
                 ,  <cfqueryparam value = "#form.couponCode#" cfsqltype = "cf_sql_varchar">
                 , <cfqueryparam value = "#form.discountValue#" cfsqltype = "cf_sql_float">
                 , <cfqueryparam value = "#form.discountType#" cfsqltype = "cf_sql_integer">
                 , <cfqueryparam value = "#form.couponStartDate#" cfsqltype = "cf_sql_date">
                 , <cfqueryparam value = "#form.couponExpDate#" cfsqltype = "cf_sql_date">
                 , <cfqueryparam value = "#form.repeatRestriction#" cfsqltype = "cf_sql_integer">
+                , <cfqueryparam value = "#form.description#" cfsqltype = "cf_sql_text">
                 , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
                 , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">

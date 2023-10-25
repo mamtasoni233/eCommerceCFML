@@ -181,11 +181,11 @@
                             <i class="ri-user-line ri-lg align-middle"></i>
                         </a>
                     </li> --->
-                    <li class="nav-item dropdown me-lg-4">
-                            <a class="nav-link fw-bolder btn btn-link px-2 text-decoration-none dropdown-toggle py-lg-4 me-5" href="##" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <li class="nav-item dropdown">
+                            <a class="nav-link fw-bolder btn btn-link px-2 text-decoration-none dropdown-toggle py-lg-4" href="##" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="ri-user-line ri-lg align-middle"></i> 
                             </a>
-                            <ul class="dropdown-menu" style="left:-20px">
+                            <ul class="dropdown-menu position-absolute" style="left: -96px">
                                 <li class="mb-2">
                                     <h4 class="dropdown-header fw-bolder m-0 p-0">
                                         Hello, #session.customer.firstName# #session.customer.lastName#!!

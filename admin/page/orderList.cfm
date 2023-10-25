@@ -146,11 +146,15 @@
                     render: function (data,type,row) {
                         if(row.status  == 0){
                             return '<span class="badge bg-primary">Pending</span>';
-                        }else if(row.status  == 1){
+                        } else if(row.status  == 1){
                             return '<span class="badge bg-warning">In Process</span>';
-                        }else if(row.status  == 2){
+                        } else if(row.status  == 2){
                             return '<span class="badge bg-info">Dispatched</span>';
-                        }else if(row.status  == 3){
+                        } else if(row.status  == 3){
+                            return '<span class="badge bg-primary">Shipped</span>';
+                        } else if(row.status  == 4){
+                            return '<span class="badge bg-danger">Cancelled</span>';
+                        } else if(row.status  == 5){
                             return '<span class="badge bg-success">Delivered</span>';
                         } else{
                             return '<span class="badge bg-primary">Pending</span>'
@@ -177,13 +181,17 @@
                 } else if (data.status === 2) {
                     $(row).addClass('table-info');
                 } else if (data.status === 3) {
+                    $(row).addClass('table-primary');
+                } else if (data.status === 4) {
+                    $(row).addClass('table-danger');
+                } else if (data.status === 5) {
                     $(row).addClass('table-success');
                 } else {
                     $(row).addClass('table-transparent');
                 }
             }
         });
-        $('div.toolbar').after('<select id="status" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="4">Select All</option><option value="0" selected>Pending</option><option value="1">In-Progress</option><option value="2">Dispatched</option><option value="3">Delivered</option></select>');
+        $('div.toolbar').after('<select id="status" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="6">Select All</option><option value="0" selected>Pending</option><option value="1">In-Progress</option><option value="2">Dispatched</option><option value="3">Shipped</option><option value="4">Cancelled</option><option value="4">Delivered</option></select>');
         
         $('#status').change(function () {
             $('#orderDataTable').DataTable().ajax.reload();

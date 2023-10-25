@@ -35,18 +35,18 @@
                     FROM cart C 
                     WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 </cfquery>
+                <!--- <cfdump  var="#getCartProductQry#"> --->
                 <cfif getCartProductQry.recordCount GT 0>
                     <cfloop query="getCartProductQry">
                         <cfset dataRecord = {}>
                         <cfset dataRecord['FkProductId'] = getCartProductQry.FkProductId>
-                        <cfset dataRecord['Name'] = getCartProductQry.productName>
                         <cfset dataRecord['TotalCost'] = getCartProductQry.price>
                         <cfset dataRecord['Quantity'] = getCartProductQry.quantity>
                         <cfquery name="qryGetImage">
                             SELECT PI.image, P.productName, P.PkProductId
                             FROM product_image PI 
                             LEFT JOIN product P ON PI.FkProductId = P.PkProductId AND P.isDeleted = 0
-                            WHERE PI.FkProductId = <cfqueryparam value="#url.ProductId#" cfsqltype="cf_sql_integer">
+                            WHERE PI.FkProductId = <cfqueryparam value="#getCartProductQry.FkProductId#" cfsqltype="cf_sql_integer">
                             AND PI.isDefault = 1
                         </cfquery>
                         <cfset dataRecord['Name'] = qryGetImage.productName>
@@ -54,6 +54,7 @@
                         <cfset arrayAppend(session.cart['PRODUCT'], dataRecord)>
                     </cfloop>
                 </cfif>
+                <!--- <cfdump  var="#session.cart['PRODUCT']#"> --->
                 <cflocation url="index.cfm?pg=dashboard" addtoken="false">
             <cfelse>
                 <cflocation url="login.cfm?error=1" addtoken="false">

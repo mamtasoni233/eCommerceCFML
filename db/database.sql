@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2023 at 03:27 PM
+-- Generation Time: Oct 25, 2023 at 03:23 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -45,7 +45,8 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(271, 11, 1, '1', 56, b'0', '2023-10-23 17:45:55', 11, NULL, NULL);
+(272, 11, 15, '1', 30, b'0', '2023-10-25 10:11:16', 11, NULL, NULL),
+(273, 11, 18, '1', 850, b'0', '2023-10-25 10:13:05', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -153,6 +154,7 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 
 CREATE TABLE `coupons` (
   `PkCouponId` int(11) UNSIGNED NOT NULL,
+  `FkProductId` int(11) UNSIGNED NOT NULL,
   `couponName` varchar(100) DEFAULT NULL,
   `couponCode` varchar(50) NOT NULL,
   `discountValue` float NOT NULL,
@@ -160,6 +162,7 @@ CREATE TABLE `coupons` (
   `couponStartDate` date NOT NULL,
   `couponExpDate` date NOT NULL,
   `repeatRestriction` int(1) UNSIGNED NOT NULL DEFAULT 0,
+  `description` text DEFAULT NULL,
   `isActive` bit(1) NOT NULL DEFAULT b'1',
   `isDeleted` bit(1) NOT NULL DEFAULT b'0',
   `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
@@ -172,10 +175,10 @@ CREATE TABLE `coupons` (
 -- Dumping data for table `coupons`
 --
 
-INSERT INTO `coupons` (`PkCouponId`, `couponName`, `couponCode`, `discountValue`, `discountType`, `couponStartDate`, `couponExpDate`, `repeatRestriction`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 'test', 'ry20', 200, 2, '2023-10-26', '2023-11-02', 2, b'1', b'0', '2023-10-19 18:32:58', 1, '2023-10-20 10:15:43', 1),
-(2, 'werw', 'wer651', 560, 2, '2023-10-31', '2023-11-11', 1, b'1', b'0', '2023-10-20 10:21:02', 1, NULL, NULL),
-(3, 'wrwer', '151wrwe', 80, 1, '2023-10-30', '2023-12-11', 0, b'1', b'0', '2023-10-20 10:21:47', 1, '2023-10-20 10:36:06', NULL);
+INSERT INTO `coupons` (`PkCouponId`, `FkProductId`, `couponName`, `couponCode`, `discountValue`, `discountType`, `couponStartDate`, `couponExpDate`, `repeatRestriction`, `description`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(2, 0, '15 OFF DEP', '15OFFDEP', 15, 1, '2023-10-26', '2023-11-13', 1, 'Diwali festival: 15% off of all products', b'1', b'0', '2023-10-25 12:19:53', 1, '2023-10-25 15:19:12', 1),
+(3, 9, '20 Off Tea', '20OFFTEA', 20, 1, '2023-10-25', '2023-11-25', 1, '', b'1', b'0', '2023-10-25 12:37:54', 1, '2023-10-25 15:19:22', 1),
+(4, 0, 'test', 'APPFIRST', 200, 2, '2023-10-25', '2023-11-05', 1, 'For only test purpose\r\n', b'1', b'0', '2023-10-25 13:08:50', 1, '2023-10-25 17:04:26', 1);
 
 -- --------------------------------------------------------
 
@@ -515,7 +518,8 @@ ALTER TABLE `category`
 -- Indexes for table `coupons`
 --
 ALTER TABLE `coupons`
-  ADD PRIMARY KEY (`PkCouponId`);
+  ADD PRIMARY KEY (`PkCouponId`),
+  ADD KEY `FkProductId` (`FkProductId`);
 
 --
 -- Indexes for table `customer`
@@ -581,7 +585,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -593,7 +597,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `PkCouponId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `PkCouponId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `customer`

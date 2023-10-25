@@ -63,6 +63,13 @@
                                 <form class="form p-3" id="addCouponForm" method="POST" action="" enctype="multipart/form-data">
                                     <input type="hidden" id="PkCouponId" value="" name="PkCouponId">
                                     <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <lable class="fw-bold form-label" for="product">Products</lable>
+                                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                                <select name="product" id="product" class="form-control" data-placeholder="Select Product..">
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <lable class="fw-bold form-label" for="couponName">Coupon Name</lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
@@ -127,6 +134,16 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-12">
+                                            <lable class="fw-bold form-label" for="description">Coupon Description</lable>
+                                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                                <!--- <input type="date" class="form-control mb-3 flatpickr-no-config" id="description" value="" name="description"  placeholder="Enter Coupon Description"/>
+                                                <div class="form-control-icon">
+                                                    <i class="bi bi-calendar"></i>
+                                                </div> --->
+                                                <textarea id="description" name="description" class="form-control" row="4"></textarea>
+                                            </div>
+                                        </div>
                                         <div class="col-md-12 mb-2">
                                             <label class="form-label text-dark font-weight-bold" for="isActive">Is Active :
                                             </label>
@@ -154,6 +171,7 @@
                             <thead>
                                 <tr>
                                     <th>SI No.</th>
+                                    <th>Product</th>
                                     <th>Coupon Name</th>
                                     <th>Coupon Code</th>
                                     <th>Discount Type</th>  
@@ -161,6 +179,7 @@
                                     <th>Coupon Start Date</th>  
                                     <th>Coupon Expiry Date</th>  
                                     <th>Coupon Repeat Restriction</th>  
+                                    <th>Coupon Description</th>  
                                     <th>Create By</th>
                                     <th>Create Date</th>
                                     <th>Update By</th>
@@ -186,17 +205,24 @@
         flatpickr('.flatpickr-no-config', {
             dateFormat: "d-m-Y", 
         });
+        $('#product').select2({
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            dropdownParent: $('#addCouponModal'),
+            allowClear: true,
+        });
         $('#couponDataTable').DataTable({
             processing: true,
             destroy: true,
             pageLength: 10,
             pagination: 'datatablePagination',
-            order: [[1, 'desc']],
+            order: [[10, 'desc']],
             serverSide:true,
             responsive: true,
             autoWidth: false,
             columnDefs: [
-                { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8,9,10,11,12] }
+                { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14] }
             ],
             pagingType: "full_numbers",
             dom: 'l<"toolbar">frtip',
@@ -221,6 +247,15 @@
             },
             columns: [
                 { data: 'sNo'},
+                { data: 'productName',
+                    render: function (data, type, row) {
+                        if (data === '') {
+                            return '<span>For All Products</span>'
+                        } else {
+                            return '<span>'+data+'</span>'
+                        }
+                    }
+                },
                 { data: 'couponName'},
                 { data: 'couponCode' },
                 { data: 'discountType' },
@@ -228,6 +263,7 @@
                 { data: 'couponStartDate' },
                 { data: 'couponExpDate' },
                 { data: 'repeatRestriction' },
+                { data: 'description' },
                 { data: 'userName' },
                 { data: 'dateCreated' },
                 { data: 'userNameUpdate' },
@@ -272,10 +308,14 @@
         $("#addCoupon").on("click", function () {
             $("#addCouponModal").modal('show');
             $('#PkCouponId').val(0);
+            getProduct();
         });
 
         var validator = $("#addCouponForm").validate({
             rules: {
+                product: {
+                    required: true
+                },
                 couponName: {
                     required: true
                 },
@@ -303,6 +343,9 @@
                 error.insertAfter($(element).parent('div')); 
             },
             messages: {
+                product: {
+                    required: "Please select product",                    
+                },
                 couponName: {
                     required: "Please enter coupon name",                    
                 },
@@ -359,7 +402,8 @@
         $('#addCouponModal').on('hidden.bs.modal', function () {
             $("#addCouponForm").trigger('reset');
             validator.resetForm(); 
-            $("#discountType").val('').trigger("change"); 
+            $("#discountType").val('').trigger("change");
+            $("#product").val('').trigger("change");
         });
         $("select").on("select2:close", function (e) {  
             $(this).valid(); 
@@ -382,7 +426,10 @@
                         $('#repeatRestriction').val(result.json.repeatRestriction);
                         $('#couponStartDate').val(result.json.couponStartDate);
                         $('#couponExpDate').val(result.json.couponExpDate);
+                        $('#description').val(result.json.description);
                         $('#discountType').val(result.json.discountType).trigger('change');
+                        getProduct(result.json.FkProductId);
+                        $('#product').val(result.json.FkProductId).trigger('change');
                         if(result.json.isActive == 1){ 
                             $('#isActive').prop('checked', true);
                         } else{
@@ -393,6 +440,7 @@
                             validator.resetForm();
                             $(".modal-title").html("Add Coupon");
                             $("#discountType").val('').trigger("change");
+                            $("#product").val('').trigger("change");
                         });
                     }
                 }   
@@ -490,7 +538,30 @@
             });
         });  
     });
-
+    function getProduct(productId='') {
+        $.ajax({    
+            type: "GET",
+            url: "../ajaxAddCoupon.cfm?formAction=getProduct", 
+            dataType: "html",  
+            success: function(data){
+                let dataRecord = JSON.parse(data);
+                if (dataRecord.success) {
+                    //var html = "";
+                    $('#product').html('');
+                    var html = "<option value=''></option><option value='0'>For All Products</option>";
+                    $.each(dataRecord.productList, function( data, value, i ) {
+                        html += "<option value ="+value.pkproductid+">" + value.productname +"</option>";
+                    });
+                    $('#product').append(html);
+                    if (productId >= 0) {
+                        $('#product').val(productId);
+                    } else {
+                        $('#product').val();
+                    }
+                }
+            }
+        }); 
+    }
     function submitCouponData() {
         var formData = new FormData($('#addCouponForm')[0]);
         

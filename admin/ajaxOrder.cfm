@@ -81,7 +81,7 @@
                 O.updatedBy = userUpdate.PkUserId
             WHERE 1 = 1
             AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
-            <cfif structKeyExists(form, "status") AND form.status NEQ 4>
+            <cfif structKeyExists(form, "status") AND form.status NEQ 6>
                 AND O.status = <cfqueryparam value="#form.status#" cfsqltype = "cf_sql_integer">
             </cfif>
             <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
@@ -116,7 +116,7 @@
                 O.updatedBy = userUpdate.PkUserId
             WHERE 1 = 1
             AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
-            <cfif structKeyExists(form, "status") AND form.status NEQ 4>
+            <cfif structKeyExists(form, "status") AND form.status NEQ 6>
                 AND O.status = <cfqueryparam value="#form.status#" cfsqltype = "cf_sql_integer">
             </cfif>
             <cfif structKeyExists(form, "search") AND len(form.search) GT 0>

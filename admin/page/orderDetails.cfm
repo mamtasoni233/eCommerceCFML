@@ -104,13 +104,13 @@
                                     <h6>Sub Total:</h6>
                                 </div>
                                 <div class="col-6">
-                                    <h6>#getOrderPriceData.shippingAmount#</h6>
+                                    <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.shippingAmount#</h6>
                                 </div>
                                 <div class="col-6">
                                     <h6>Total:</h6>
                                 </div>
                                 <div class="col-6">
-                                    <h6>#getOrderPriceData.totalAmt#</h6>
+                                    <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.totalAmt#</h6>
                                 </div>
                             </div>
                         </div>
@@ -202,7 +202,9 @@
                                             <option value="0">Pending</option>
                                             <option value="1">In-Progress</option>
                                             <option value="2">Dispatched</option>
-                                            <option value="3">Delivered</option>
+                                            <option value="3">Shipped</option>
+                                            <option value="4">Cancelled</option>
+                                            <option value="5">Delivered</option>
                                         </select>
                                     </div>
                                 </div>
