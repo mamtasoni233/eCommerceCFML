@@ -258,7 +258,15 @@
                 },
                 { data: 'couponName'},
                 { data: 'couponCode' },
-                { data: 'discountType' },
+                { data: 'discountType',
+                    render: function (data,type,row) {
+                        if(data === 1){
+                            return '<span>Percent</span>'
+                        } else {
+                            return '<span>Flat</span>'
+                        }
+                    }
+                },
                 { data: 'discountValue' },
                 { data: 'couponStartDate' },
                 { data: 'couponExpDate' },

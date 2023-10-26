@@ -42,6 +42,9 @@
                         <cfset dataRecord['FkProductId'] = getCartProductQry.FkProductId>
                         <cfset dataRecord['TotalCost'] = getCartProductQry.price>
                         <cfset dataRecord['Quantity'] = getCartProductQry.quantity>
+                        <cfset dataRecord['Shipping'] = 0>
+                        <cfset dataRecord['CoupanId'] = 0>
+                        <cfset dataRecord['DiscountValue'] = 0>
                         <cfquery name="qryGetImage">
                             SELECT PI.image, P.productName, P.PkProductId
                             FROM product_image PI 

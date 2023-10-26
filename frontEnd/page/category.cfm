@@ -531,14 +531,6 @@
                                                     <img class="vh-25 img-fluid" title="" src="#imagePath##getProductImage.image#" alt="">
                                                 </picture>
                                             </cfloop> 
-                                            <!---  <div class="card-actions">
-                                                <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                                <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                                    <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                                    <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                                    <button class="btn btn-outline-dark btn-sm mx-2">L</button>
-                                                </div>
-                                            </div> --->
                                         </div>
                                         <div class="card-body px-0 text-center">
                                             <div class="d-flex justify-content-center align-items-center mx-auto mb-1">

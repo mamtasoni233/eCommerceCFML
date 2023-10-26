@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2023 at 03:23 PM
+-- Generation Time: Oct 26, 2023 at 02:12 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -45,7 +45,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(272, 11, 15, '1', 30, b'0', '2023-10-25 10:11:16', 11, NULL, NULL),
+(272, 11, 15, '4', 120, b'0', '2023-10-25 10:11:16', 11, '2023-10-26 15:08:58', 11),
 (273, 11, 18, '1', 850, b'0', '2023-10-25 10:13:05', 11, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -245,6 +245,8 @@ CREATE TABLE `orders` (
   `billingState` varchar(100) DEFAULT NULL,
   `billingZipCode` int(6) DEFAULT NULL,
   `shipping` varchar(10) DEFAULT NULL,
+  `finalAmount` float NOT NULL,
+  `discountValue` float NOT NULL DEFAULT 0,
   `paymentMethod` varchar(50) DEFAULT NULL,
   `UPIID` varchar(50) DEFAULT NULL,
   `creditCardName` varchar(100) DEFAULT NULL,
@@ -264,10 +266,10 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `status`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'Mamta', 'Soni', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'courier', 'cod', '', '', NULL, NULL, NULL, 3, b'1', b'0', 1, '2023-10-20 11:01:47', NULL, '2023-10-23 11:57:37'),
-(2, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 342008, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 342008, 'courier', 'upi', '8122891132@paytm', '', NULL, NULL, NULL, 2, b'1', b'0', 11, '2023-10-23 11:32:04', NULL, '2023-10-23 11:57:10'),
-(3, 11, 'test', 'test', 'vishal.k@lucidsolutions.in', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'test', 'test', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'nextDay', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-23 11:46:06', NULL, '2023-10-23 11:56:24');
+INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `finalAmount`, `discountValue`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `status`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
+(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'Mamta', 'Soni', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'courier', 0, 0, 'cod', '', '', NULL, NULL, NULL, 3, b'1', b'0', 1, '2023-10-20 11:01:47', NULL, '2023-10-23 11:57:37'),
+(2, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 342008, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 342008, 'courier', 0, 0, 'upi', '8122891132@paytm', '', NULL, NULL, NULL, 2, b'1', b'0', 11, '2023-10-23 11:32:04', NULL, '2023-10-23 11:57:10'),
+(3, 11, 'test', 'test', 'vishal.k@lucidsolutions.in', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'test', 'test', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'nextDay', 0, 0, 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-23 11:46:06', NULL, '2023-10-23 11:56:24');
 
 -- --------------------------------------------------------
 
