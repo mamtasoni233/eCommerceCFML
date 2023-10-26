@@ -30,6 +30,9 @@
                 <cfset session.customer.saved = 1>
                 <cfset session.cart = {}>
                 <cfset session.cart.product = []>
+                <cfset session.cart.shipping = 0>
+                <cfset session.cart.totalDiscount = 0>
+                <cfset session.cart.finalAmount = 0>
                 <cfquery name="getCartProductQry">
                     SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.quantity, C.price
                     FROM cart C 
@@ -42,7 +45,6 @@
                         <cfset dataRecord['FkProductId'] = getCartProductQry.FkProductId>
                         <cfset dataRecord['TotalCost'] = getCartProductQry.price>
                         <cfset dataRecord['Quantity'] = getCartProductQry.quantity>
-                        <cfset dataRecord['Shipping'] = 0>
                         <cfset dataRecord['CoupanId'] = 0>
                         <cfset dataRecord['DiscountValue'] = 0>
                         <cfquery name="qryGetImage">

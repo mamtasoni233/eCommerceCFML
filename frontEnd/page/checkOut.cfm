@@ -385,10 +385,10 @@
                             <div class="border-bottom pb-3">
                                 <!-- Cart Item-->
                                 <cfset productSubTotal = 0>
-                                <cfset discountValue = 0>
+                                <cfset discountValue = session.cart.totalDiscount>
                                 <cfloop array="#session.cart.product#" item="item">
                                     <cfset productSubTotal +=  item.TotalCost >
-                                    <cfset discountValue =  item.discountValue >
+                                    <cfset discountValue +=  item.discountValue >
                                     <div class="d-none d-md-flex justify-content-between align-items-start py-2">
                                         <div class="d-flex flex-grow-1 justify-content-start align-items-start">
                                             <div class="position-relative f-w-20 border p-2 me-4">
@@ -413,7 +413,7 @@
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <p class="m-0 fw-bolder fs-6">Shipping</p>
-                                    <p class="m-0 fs-6 fw-bolder"><!--- <i class="fa fa-rupee"></i>  ---><span id="shippingTotal">Free</span></p>
+                                    <p class="m-0 fs-6 fw-bolder"><!--- <i class="fa fa-rupee"></i>  ---><span id="shippingTotal">#session.cart.shipping#</span></p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center ">
                                     <p class="m-0 fw-bolder fs-6">Discount</p>
@@ -438,8 +438,8 @@
                                 </span> 
                             </button>
                             <div class="collapse" id="couponContainer">
-                                <div class="card card-body border p-1">
-                                    <div class="input-group mt-3">
+                                <div class="card card-body border p-2">
+                                    <div class="input-group mt-3 couponApplied">
                                         <input type="text" name="couponAppliedInput" id="couponAppliedInput" class="form-control" placeholder="Enter your coupon code" <!--- required --->>
                                         <button type="button" class="btn btn-dark btn-sm px-4 text-center" id="couponAppliedBtn">Apply</button>
                                     </div>
@@ -518,21 +518,23 @@
             }); */
             $('input[name=shipping]').on("change", function () {
                 var value = $(this).attr('data-value');
-                $.ajax({
+                console.log(value);
+                ajaxAddCouponShipping(value);
+                /* $.ajax({
                     type: "POST",
                     url: "../ajaxOrder.cfm?formAction=applyCoupon", 
                     data: {'value':value},
                     async: false,
                     success: function(result) {
                         if (result.success) {
-                            console.log(result);
-                            $('##totalDiscount').html(result.discountAmt);
-                            totalPrice = parseFloat(grandTotal) - parseFloat(result.discountAmt);
-                            $('##grandTotal').html(totalPrice);
+                            // console.log(result);
+                            // $('##totalDiscount').html(result.discountAmt);
+                            // totalPrice = parseFloat(grandTotal) - parseFloat(result.discountAmt);
+                            // $('##grandTotal').html(totalPrice);
                         }
                     }
-                });
-            })
+                }); */
+            });
             
             var validator = $("##addOrderForm").validate({
                 rules: {
@@ -768,19 +770,20 @@
             });
             $('##couponAppliedBtn').on('click', function() {
                 var code = $('##couponAppliedInput').val();
-                $.ajax({
+                ajaxAddCouponShipping(code);
+                $('.couponApplied').after('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                /* $.ajax({
                     type: "POST",
                     url: "../ajaxOrder.cfm?formAction=applyCoupon", 
                     data: {"code":code},
                     async: false,
                     success: function(result) {
                         if (result.success) {
-                            $(this).append('<div class="alert alert-light-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>')
+                            $('##couponAppliedBtn').after('<div><div class="alert alert-light-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>');
                             // console.log(result);
                             // $('##totalDiscount').html(result.discountAmt);
                             // totalPrice = parseFloat(grandTotal) - parseFloat(result.discountAmt);
                             // $('##grandTotal').html(totalPrice);
-                            /*  $('##couponListContainer').html(result.html); */
                             // $(this).after(create(alert()))
                             // successToast("Your order is successfully completed!");
                             // setTimeout(() => {
@@ -788,7 +791,7 @@
                             // }, 500);
                         }
                     }
-                });
+                }); */
             });
 
         });
@@ -820,6 +823,28 @@
                         setTimeout(() => {
                             location.href = 'index.cfm?pg=dashboard';
                         }, 500);
+                    }
+                }
+            });
+        }
+        function ajaxAddCouponShipping(code = '', value = 0) {
+            $.ajax({
+                type: "POST",
+                url: "../ajaxOrder.cfm?formAction=applyCoupon", 
+                data: {"code":code, "value":value},
+                async: false,
+                success: function(result) {
+                    if (result.success) {
+                        // $('##couponAppliedBtn').append('<div class="alert alert-light-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                        // console.log(result);
+                        // $('##totalDiscount').html(result.discountAmt);
+                        // totalPrice = parseFloat(grandTotal) - parseFloat(result.discountAmt);
+                        // $('##grandTotal').html(totalPrice);
+                        // $(this).after(create(alert()))
+                        // successToast("Your order is successfully completed!");
+                        // setTimeout(() => {
+                        //     location.href = 'index.cfm?pg=dashboard';
+                        // }, 500);
                     }
                 }
             });

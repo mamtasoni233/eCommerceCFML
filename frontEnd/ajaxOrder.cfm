@@ -175,6 +175,7 @@
         </cfif>
     </cfif>
     <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'applyCoupon'>
+        <cfset session.cart.shipping = form.value>
         <cfquery name="checkcoupon">
             SELECT couponCode, couponName, PkCouponId, discountValue, discountType, couponStartDate, couponExpDate, repeatRestriction
             FROM coupons 
@@ -191,20 +192,7 @@
             <cfelse>
                 <cfset discountAmount = checkcoupon.discountValue>
             </cfif>
-
-        </cfif>
-        <!--- <cfset checkProdArray = arrayMap(session.cart.product, function(item) {
-            return item.DiscountValue
-        })>
-        <cfset checkProdArray = discountAmount> --->
-        <cfset checkProdArray = arrayFilter(session.cart.product, function(item) {
-            return item.DiscountValue
-        })>
-        <!---  <cfset checkProdArray = arrayInsertAt(session.cart.product, 2, 4) --->
-        
-        <!---  <cfdump  var="#checkProdArray#"> --->
-        <cfif arrayLen(checkProdArray)>
-            <cfset checkProdArray['DiscountValue'] = discountAmount>
+            <cfset session.cart.totalDiscount = discountAmount>
         </cfif>
         <!--- <cfset data['discountAmt'] = discountAmount> --->
     </cfif>
