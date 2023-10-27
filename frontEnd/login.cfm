@@ -30,11 +30,12 @@
                 <cfset session.customer.saved = 1>
                 <cfset session.cart = {}>
                 <cfset session.cart.product = []>
-                <cfset session.cart.shipping = 0>
-                <cfset session.cart.totalDiscount = 0>
+                <cfset session.cart.Discount = 0>
                 <cfset session.cart.finalAmount = 0>
+                <cfset session.cart.shipping = 'Free'>
+                <cfset session.cart.couponId = 0>
                 <cfquery name="getCartProductQry">
-                    SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.quantity, C.price
+                    SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.discountValue, C.quantity, C.price
                     FROM cart C 
                     WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 </cfquery>
@@ -46,7 +47,7 @@
                         <cfset dataRecord['TotalCost'] = getCartProductQry.price>
                         <cfset dataRecord['Quantity'] = getCartProductQry.quantity>
                         <cfset dataRecord['CoupanId'] = 0>
-                        <cfset dataRecord['DiscountValue'] = 0>
+                        <cfset dataRecord['DiscountValue'] = getCartProductQry.discountValue>
                         <cfquery name="qryGetImage">
                             SELECT PI.image, P.productName, P.PkProductId
                             FROM product_image PI 
@@ -57,6 +58,8 @@
                         <cfset dataRecord['Name'] = qryGetImage.productName>
                         <cfset dataRecord['Image'] = qryGetImage.image>
                         <cfset arrayAppend(session.cart['PRODUCT'], dataRecord)>
+                        <cfset session.cart.finalAmount += getCartProductQry.price>
+                        <cfset session.cart.Discount += getCartProductQry.discountValue>
                     </cfloop>
                 </cfif>
                 <!--- <cfdump  var="#session.cart['PRODUCT']#"> --->

@@ -198,10 +198,10 @@
                                     <a class="dropdown-item" href="">My Profile</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">Cart</a>
+                                    <a class="dropdown-item" href="index.cfm?pg=cart">Cart</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">Checkout</a>
+                                    <a class="dropdown-item" href="index.cfm?pg=checkOut">Checkout</a>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider"/>

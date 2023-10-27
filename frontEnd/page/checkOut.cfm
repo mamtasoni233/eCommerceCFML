@@ -227,7 +227,7 @@
                             <h5 class="title-checkout">Shipping Method</h5>
                             <!-- Free Shipping Option-->
                             <div class="form-check form-group form-check-custom form-radio-custom mb-3">
-                                <input class="form-check-input" type="radio" name="shipping" id="freeShipping" data-value="Free" value="free" checked>
+                                <input class="form-check-input" type="radio" name="shipping" id="freeShipping" data-value="Free" value="free" <cfif structKeyExists(session.cart, 'shipping') AND session.cart.shipping EQ 'Free'>checked</cfif>>
                                 <label class="form-check-label" for="freeShipping">
                                     <span class="d-flex justify-content-between align-items-start w-100">
                                         <span>
@@ -241,7 +241,7 @@
                         
                             <!-- Nest Day Shipping Option-->
                             <div class="form-check form-group form-check-custom form-radio-custom mb-3">
-                                <input class="form-check-input" type="radio" name="shipping" id="nextDay" data-value="50.00" value="nextDay">
+                                <input class="form-check-input" type="radio" name="shipping" id="nextDay" data-value="50.00" value="nextDay" <cfif structKeyExists(session.cart, 'shipping') AND session.cart.shipping EQ 50.00>checked</cfif>>
                                 <label class="form-check-label" for="nextDay">
                                     <span class="d-flex justify-content-between align-items-start">
                                         <span>
@@ -258,7 +258,7 @@
                         
                             <!-- courier Shipping Option-->
                             <div class="form-check form-group form-check-custom form-radio-custom mb-3">
-                                <input class="form-check-input" type="radio" name="shipping" id="courier" data-value="100.00" value="courier">
+                                <input class="form-check-input" type="radio" name="shipping" id="courier" data-value="100.00" value="courier" <cfif structKeyExists(session.cart, 'shipping') AND session.cart.shipping EQ 100.00>checked</cfif>>
                                 <label class="form-check-label" for="courier">
                                     <span class="d-flex justify-content-between align-items-start">
                                         <span>
@@ -384,11 +384,12 @@
                         <div class="bg-light p-4 sticky-md-top top-5 z-index-1">
                             <div class="border-bottom pb-3">
                                 <!-- Cart Item-->
-                                <cfset productSubTotal = 0>
-                                <cfset discountValue = session.cart.totalDiscount>
+                                <!--- <cfset productSubTotal = 0> --->
+                                <cfset totalPrice = 0>
+                                <cfset discountValue = session.cart.Discount>
                                 <cfloop array="#session.cart.product#" item="item">
-                                    <cfset productSubTotal +=  item.TotalCost >
-                                    <cfset discountValue +=  item.discountValue >
+                                    <!--- <cfset productSubTotal +=  item.TotalCost > --->
+                                    <cfset totalPrice = session.cart.finalAmount - discountValue >
                                     <div class="d-none d-md-flex justify-content-between align-items-start py-2">
                                         <div class="d-flex flex-grow-1 justify-content-start align-items-start">
                                             <div class="position-relative f-w-20 border p-2 me-4">
@@ -409,7 +410,7 @@
                             <div class="py-3 border-bottom">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <p class="m-0 fw-bolder fs-6">Subtotal</p>
-                                    <p class="m-0 fs-6 fw-bolder"><i class="fa fa-rupee"></i> <span>#productSubTotal#</span></p>
+                                    <p class="m-0 fs-6 fw-bolder"><i class="fa fa-rupee"></i> <span>#session.cart.finalAmount#</span></p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <p class="m-0 fw-bolder fs-6">Shipping</p>
@@ -422,10 +423,16 @@
                             </div>
                             <div class="py-3 border-bottom">
                                 <div class="d-flex justify-content-between align-items-center">
+                                    <cfif session.cart.shipping EQ 'Free'>
+                                        <cfset shippingVal = 0>
+                                    <cfelse>
+                                        <cfset shippingVal = session.cart.shipping>
+                                    </cfif>
+                                    <cfset finalAmount = totalPrice + shippingVal >
                                     <div>
                                         <p class="m-0 fw-bold fs-5">Grand Total</p>
                                     </div>
-                                    <p class="m-0 fs-5 fw-bold"><i class="fa fa-rupee"></i> <span id="grandTotal">#productSubTotal#</span></p>
+                                    <p class="m-0 fs-5 fw-bold"><i class="fa fa-rupee"></i> <span id="grandTotal">#finalAmount#</span></p>
                                 </div>
                             </div>
                             <!-- Coupon Code-->
@@ -438,33 +445,44 @@
                                 </span> 
                             </button>
                             <div class="collapse" id="couponContainer">
+                                <cfset checkFkProductId = arrayMap(session.cart.product, function(item) {
+                                    return item.FkProductId
+                                })>
+                                <cfquery name="getCoupon">
+                                    SELECT PkCouponId, FkProductId, couponName, couponCode, description
+                                    FROM coupons
+                                    WHERE FkproductId IN (0,<cfqueryparam value="#checkFkProductId#" list="true">)
+                                    
+                                </cfquery>
+                                <!--- <cfset checkCouponId = arrayMap(session.cart.product, function(item) {
+                                    return item
+                                })> --->
+                                <!--- <cfdump var="#checkCouponId#"> --->
+                                <cfquery name="qryGetCouponName" dbtype="query">
+                                    SELECT *
+                                    FROM getCoupon
+                                    WHERE PkCouponId = <cfqueryparam value="#session.cart.couponId#" cfsqltype="cf_sql_integer">
+                                </cfquery>
+                                
                                 <div class="card card-body border p-2">
                                     <div class="input-group mt-3 couponApplied">
-                                        <input type="text" name="couponAppliedInput" id="couponAppliedInput" class="form-control" placeholder="Enter your coupon code" <!--- required --->>
+                                        <input type="text" name="couponAppliedInput" id="couponAppliedInput" class="form-control" placeholder="Enter your coupon code" value="#qryGetCouponName.couponCode#">
                                         <button type="button" class="btn btn-dark btn-sm px-4 text-center" id="couponAppliedBtn">Apply</button>
                                     </div>
                                     <div class="text-center mt-3"><h5>OR</h5></div>
                                     <div id="couponListContainer">
                                         <div class="">
                                             <!-- Coupon Options -->
-                                            <cfset checkProdArray = arrayMap(session.cart.product, function(item) {
-                                                return item.FkProductId
-                                            })>
-                                            <cfquery name="getCoupon">
-                                                SELECT PkCouponId, FkProductId, couponName, couponCode, description
-                                                FROM coupons
-                                                WHERE FkproductId IN (0,<cfqueryparam value="#checkProdArray#" list="true">)
-                                            </cfquery>
                                             <cfloop query="getCoupon">
                                                 <div class="mt-0" id="couponList">
                                                     <div class="d-flex justify-content-between w-100">
-                                                        <div id="couponDetails">
+                                                        <div id="couponDetails" class="<cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId EQ getCoupon.PkCouponId>text-decoration-line-through</cfif>">
                                                             <span class="fw-bolder">#getCoupon.couponName# -</span>
                                                             <span class="fw-bold text-uppercase couponcode">#getCoupon.couponCode#</span>
                                                             <div class="small mt-1">(#getCoupon.description#)</div>
                                                         </div>
                                                         <div>
-                                                            <input class="btn btn-sm btn-orange text-center text-white addCoupon" type="button" name="addCoupon" data-coupon="#getCoupon.couponCode#" id="addCoupon-#getCoupon.PkCouponId#" value="Apply">
+                                                            <input class="btn btn-sm btn-orange text-center text-white addCoupon <cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId EQ getCoupon.PkCouponId>disabled</cfif>" type="button" name="addCoupon" data-coupon="#getCoupon.couponCode#" id="addCoupon-#getCoupon.PkCouponId#" value="Apply">
                                                         </div>
                                                     </div>
                                                 </div> 
@@ -491,6 +509,11 @@
 
     <script>
         var #toScript('#customerId#', 'customerId')#
+        var #toScript('#finalAmount#', 'finalAmount')#
+        var shippingValue = 0;
+        var couponCode = '';
+        let totalPrice = 0;
+        var grandTotal = $('##grandTotal').html();
         $(document).ready( function () { 
             $('##state').select2({
                 theme: "bootstrap-5",
@@ -504,8 +527,6 @@
                 placeholder: $( this ).data( 'placeholder' ),
                 allowClear: true,
             });
-            let totalPrice = 0;
-            var grandTotal = $('##grandTotal').html();
             /* $('input[name=shipping]').on("click", function () {
                 var value = $(this).attr('data-value');
                 if (value == 'Free') {
@@ -517,9 +538,19 @@
                 $('##grandTotal').html(totalPrice);
             }); */
             $('input[name=shipping]').on("change", function () {
-                var value = $(this).attr('data-value');
-                console.log(value);
-                ajaxAddCouponShipping(value);
+                shippingValue = $(this).attr('data-value');
+                /* console.log(shippingValue); */
+                // var grandTotal = $('##grandTotal').html();
+                ajaxAddCouponShipping(couponCode, shippingValue);
+                if (shippingValue == 'Free') {
+                    totalPrice = 0 + parseFloat(grandTotal);
+                } else {
+                    totalPrice = parseFloat(shippingValue) + parseFloat(grandTotal);
+                }
+                $('##grandTotal').html(totalPrice);
+                /* grandTotal = totalPrice; */
+                parseFloat($('##shippingTotal').html(shippingValue));
+                /* grandTotal = parseFloat(shippingValue) + parseFloat(grandTotal); */
                 /* $.ajax({
                     type: "POST",
                     url: "../ajaxOrder.cfm?formAction=applyCoupon", 
@@ -765,13 +796,17 @@
             });
 
             $('.addCoupon').on('click', function () {
-                var couponCode = $(this).data('coupon');
-                $('##couponAppliedInput').val(couponCode);
+                var coupon = $(this).data('coupon');
+                $('##couponAppliedInput').val(coupon);
             });
             $('##couponAppliedBtn').on('click', function() {
-                var code = $('##couponAppliedInput').val();
-                ajaxAddCouponShipping(code);
-                $('.couponApplied').after('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                couponCode = $('##couponAppliedInput').val();
+                if(couponCode != ''){
+                    ajaxAddCouponShipping(couponCode, shippingValue); 
+                    $('.couponApplied').after('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                } else{
+                    $('.couponApplied').after('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>Please add coupon..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                }
                 /* $.ajax({
                     type: "POST",
                     url: "../ajaxOrder.cfm?formAction=applyCoupon", 
@@ -827,25 +862,31 @@
                 }
             });
         }
-        function ajaxAddCouponShipping(code = '', value = 0) {
+        function ajaxAddCouponShipping(couponCode, shippingValue) {
+            // var grandTotal = $('##grandTotal').html();
             $.ajax({
                 type: "POST",
                 url: "../ajaxOrder.cfm?formAction=applyCoupon", 
-                data: {"code":code, "value":value},
+                data: {"couponCode":couponCode, "shippingValue":shippingValue},
                 async: false,
                 success: function(result) {
+                    console.log("result", result);
                     if (result.success) {
-                        // $('##couponAppliedBtn').append('<div class="alert alert-light-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-                        // console.log(result);
-                        // $('##totalDiscount').html(result.discountAmt);
-                        // totalPrice = parseFloat(grandTotal) - parseFloat(result.discountAmt);
-                        // $('##grandTotal').html(totalPrice);
-                        // $(this).after(create(alert()))
-                        // successToast("Your order is successfully completed!");
-                        // setTimeout(() => {
-                        //     location.href = 'index.cfm?pg=dashboard';
-                        // }, 500);
-                    }
+                        var discount = $('##totalDiscount').text(result.discountAmt);
+                        /* if (result.shippingAmt == 'Free') {
+                            totalPrice = 0 + parseFloat(grandTotal);
+                        } else {
+                            totalPrice = parseFloat(result.shippingAmt) + parseFloat(grandTotal);
+                        }
+                        grandTotal = totalPrice; */
+                        /* if (result.discountAmt) {
+                            //$('##grandTotal').html();
+                            totalPrice = parseFloat(grandTotal) - parseFloat(discount);
+                        } else{
+                            totalPrice = parseFloat(grandTotal);
+                        } */
+                       /*  grandTotal = totalPrice; */
+                    } 
                 }
             });
         }

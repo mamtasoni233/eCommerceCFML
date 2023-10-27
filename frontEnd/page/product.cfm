@@ -808,6 +808,7 @@
             $('.addToCartBtn').on('click', function (e) {
                 e.preventDefault();
                 var quantity = $('##productQuantity').val();
+                //productPrice = productPrice * quantity;
                 $.ajax({  
                     url: '../ajaxAddToCart.cfm?ProductId='+ productId, 
                     data: {'productQty':quantity, 'productPrice':productPrice, 'customerId' : customerId},

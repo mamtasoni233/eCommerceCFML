@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2023 at 02:12 PM
+-- Generation Time: Oct 27, 2023 at 03:03 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -33,6 +33,7 @@ CREATE TABLE `cart` (
   `FkProductId` int(11) UNSIGNED NOT NULL,
   `quantity` varchar(255) DEFAULT NULL,
   `price` float NOT NULL,
+  `discountValue` float NOT NULL DEFAULT 0,
   `isDeleted` bit(1) NOT NULL DEFAULT b'0',
   `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
   `createdBy` int(11) NOT NULL,
@@ -44,9 +45,9 @@ CREATE TABLE `cart` (
 -- Dumping data for table `cart`
 --
 
-INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(272, 11, 15, '4', 120, b'0', '2023-10-25 10:11:16', 11, '2023-10-26 15:08:58', 11),
-(273, 11, 18, '1', 850, b'0', '2023-10-25 10:13:05', 11, NULL, NULL);
+INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(313, 11, 6, '2', 2000, 150, b'0', '2023-10-27 18:18:42', 11, '2023-10-27 18:18:56', NULL),
+(314, 11, 13, '2', 1000, 150, b'0', '2023-10-27 18:18:51', 11, '2023-10-27 18:18:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -587,7 +588,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=315;
 
 --
 -- AUTO_INCREMENT for table `category`
