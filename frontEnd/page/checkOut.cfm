@@ -515,6 +515,7 @@
         let totalPrice = 0;
         var grandTotal = $('##grandTotal').html();
         $(document).ready( function () { 
+            console.log(finalAmount);
             $('##state').select2({
                 theme: "bootstrap-5",
                 width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
@@ -879,13 +880,13 @@
                             totalPrice = parseFloat(result.shippingAmt) + parseFloat(grandTotal);
                         }
                         grandTotal = totalPrice; */
-                        /* if (result.discountAmt) {
+                        if (result.discountAmt) {
                             //$('##grandTotal').html();
-                            totalPrice = parseFloat(grandTotal) - parseFloat(discount);
+                            totalPrice = finalAmount - parseFloat(discount);
                         } else{
-                            totalPrice = parseFloat(grandTotal);
-                        } */
-                       /*  grandTotal = totalPrice; */
+                            totalPrice = finalAmount;
+                        }
+                        $('##grandTotal').html(totalPrice);
                     } 
                 }
             });
