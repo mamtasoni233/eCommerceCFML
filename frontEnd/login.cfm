@@ -32,10 +32,10 @@
                 <cfset session.cart.product = []>
                 <cfset session.cart.Discount = 0>
                 <cfset session.cart.finalAmount = 0>
-                <cfset session.cart.shipping = 'Free'>
+                <cfset session.cart.shipping = 0>
                 <cfset session.cart.couponId = 0>
                 <cfquery name="getCartProductQry">
-                    SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.discountValue, C.quantity, C.price
+                    SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.discountValue, C.quantity, C.price, C.FkCouponId
                     FROM cart C 
                     WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 </cfquery>
@@ -46,7 +46,7 @@
                         <cfset dataRecord['FkProductId'] = getCartProductQry.FkProductId>
                         <cfset dataRecord['TotalCost'] = getCartProductQry.price>
                         <cfset dataRecord['Quantity'] = getCartProductQry.quantity>
-                        <cfset dataRecord['CoupanId'] = 0>
+                        <cfset dataRecord['CoupanId'] = getCartProductQry.FkCouponId>
                         <cfset dataRecord['DiscountValue'] = getCartProductQry.discountValue>
                         <cfquery name="qryGetImage">
                             SELECT PI.image, P.productName, P.PkProductId
@@ -60,6 +60,7 @@
                         <cfset arrayAppend(session.cart['PRODUCT'], dataRecord)>
                         <cfset session.cart.finalAmount += getCartProductQry.price>
                         <cfset session.cart.Discount += getCartProductQry.discountValue>
+                        <cfset session.cart.couponId = getCartProductQry.FkCouponId>
                     </cfloop>
                 </cfif>
                 <!--- <cfdump  var="#session.cart['PRODUCT']#"> --->

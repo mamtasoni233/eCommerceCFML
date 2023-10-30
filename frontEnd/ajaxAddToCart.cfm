@@ -254,7 +254,7 @@
         <cfset session.cart['PRODUCT'] = []>
         <cfset session.cart.Discount = 0>
         <cfset session.cart.finalAmount = 0>
-        <cfset session.cart.shipping = 'Free'>
+        <cfset session.cart.shipping = 0>
         <cfset session.cart.couponId = 0>
         <cfquery name="deleteCartProduct">
             DELETE FROM cart 

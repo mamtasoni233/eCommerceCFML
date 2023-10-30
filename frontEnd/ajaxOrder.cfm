@@ -142,6 +142,7 @@
                         FkCustomerId
                         , FkOrderId
                         , FkProductId
+                        , FkCouponId
                         , totalQuantity
                         , totalCost
                         , createdBy
@@ -149,6 +150,7 @@
                         <cfqueryparam value = "#url.customerId#" cfsqltype = "cf_sql_integer">
                         , <cfqueryparam value = "#PkOrderId#" cfsqltype = "cf_sql_integer">
                         , <cfqueryparam value = "#item.FkProductId#" cfsqltype = "cf_sql_integer">
+                        , <cfqueryparam value = "#item.CoupanId#" cfsqltype = "cf_sql_varchar">
                         , <cfqueryparam value = "#item.Quantity#" cfsqltype = "cf_sql_integer">
                         , <cfqueryparam value = "#item.TotalCost#" cfsqltype = "cf_sql_float">
                         , <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
@@ -170,7 +172,7 @@
             <cfset session.cart['PRODUCT'] = []>
             <cfset session.cart.Discount = 0>
             <cfset session.cart.finalAmount = 0>
-            <cfset session.cart.shipping = 'Free'>
+            <cfset session.cart.shipping = 0>
             <cfset session.cart.couponId = 0>
             <cfquery name="deleteCartProduct">
                 DELETE FROM cart 
@@ -179,7 +181,7 @@
         </cfif>
     </cfif>
     <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'applyCoupon'>
-        <cfif structKeyExists(form, 'shippingValue') AND form.shippingValue GT 0>
+        <cfif structKeyExists(form, 'shippingValue')>
             <cfset session.cart.shipping = form.shippingValue>
         </cfif>
         <cfquery name="checkcoupon">
@@ -207,40 +209,17 @@
                 <cfset item.CoupanId = checkcoupon.PkCouponId>
                 <cfquery result="updateDiscountValueCart">
                     UPDATE cart SET 
-                    discountValue = <cfqueryparam value = "#item.DiscountValue#" cfsqltype = "cf_sql_float">
+                    FkCouponId = <cfqueryparam value = "#item.CoupanId#" cfsqltype = "cf_sql_varchar">
+                    , discountValue = <cfqueryparam value = "#item.DiscountValue#" cfsqltype = "cf_sql_float">
                     WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 </cfquery>
                 <cfset totalDiscount += item.DiscountValue>
             </cfloop>
             <cfset session.cart.Discount = totalDiscount>
-            <!---  <cfquery name="getCartProductQry">
-                SELECT C.PkCartId, C.FkCustomerId, C.FkProductId, C.discountValue, C.quantity, C.price
-                FROM cart C 
-                WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
-            </cfquery> --->
-            <!---  <cfset session.cart.Discount = getCartProductQry.discountValue> --->
-            <!--- <cfset checkProdDiscountArray = arrayMap(session.cart.product, function(item) {
-                return item
-            })>
-            <cfif arrayLen(checkProdDiscountArray) GT 0> --->
-                <!--- <cfloop array="#session.cart.product#" item="item">
-                    <!--- <cfset dataRecord = {}>
-                    <cfset dataRecord['DiscountValue'] = discountAmount>
-                    <cfset dataRecord['CoupanId'] = checkcoupon.PkCouponId> --->
-                    <!--- <arrayAppend(session.cart.product, dataRecord) --->
-                    <cfset item.DiscountValue = discountAmount>
-                    <cfset item.CoupanId = checkcoupon.PkCouponId>
-                    <cfquery>
-                        UPDATE cart SET 
-                        discountValue = <cfqueryparam value = "#item.DiscountValue#" cfsqltype = "cf_sql_float">
-                        WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
-                    </cfquery>
-                </cfloop> --->
-                <!--- <cfset session.cart.Discount += discountAmount> --->
-            <!---  </cfif> --->
         </cfif>
         <cfset data['discountAmt'] = session.cart.Discount>
         <cfset data['shippingAmt'] = session.cart.shipping>
+        <cfset data['priceTotal'] = (session.cart.finalAmount + session.cart.shipping )- session.cart.Discount>
     </cfif>
     <cfcatch>
         <cfset data['success'] = false>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2023 at 03:03 PM
+-- Generation Time: Oct 30, 2023 at 02:06 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -31,6 +31,7 @@ CREATE TABLE `cart` (
   `PkCartId` int(11) UNSIGNED NOT NULL,
   `FkCustomerId` int(11) UNSIGNED NOT NULL,
   `FkProductId` int(11) UNSIGNED NOT NULL,
+  `FkCouponId` varchar(50) NOT NULL DEFAULT '0',
   `quantity` varchar(255) DEFAULT NULL,
   `price` float NOT NULL,
   `discountValue` float NOT NULL DEFAULT 0,
@@ -45,9 +46,9 @@ CREATE TABLE `cart` (
 -- Dumping data for table `cart`
 --
 
-INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(313, 11, 6, '2', 2000, 150, b'0', '2023-10-27 18:18:42', 11, '2023-10-27 18:18:56', NULL),
-(314, 11, 13, '2', 1000, 150, b'0', '2023-10-27 18:18:51', 11, '2023-10-27 18:18:56', NULL);
+INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(321, 11, 6, '2', '2', 2000, 127.5, b'0', '2023-10-30 12:20:33', 11, '2023-10-30 14:09:37', NULL),
+(322, 11, 18, '2', '1', 850, 127.5, b'0', '2023-10-30 12:20:43', 11, '2023-10-30 14:09:37', NULL);
 
 -- --------------------------------------------------------
 
@@ -248,6 +249,7 @@ CREATE TABLE `orders` (
   `shipping` varchar(10) DEFAULT NULL,
   `finalAmount` float NOT NULL,
   `discountValue` float NOT NULL DEFAULT 0,
+  `FkCouponId` varchar(50) NOT NULL DEFAULT '0',
   `paymentMethod` varchar(50) DEFAULT NULL,
   `UPIID` varchar(50) DEFAULT NULL,
   `creditCardName` varchar(100) DEFAULT NULL,
@@ -267,10 +269,10 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `finalAmount`, `discountValue`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `status`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'Mamta', 'Soni', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'courier', 0, 0, 'cod', '', '', NULL, NULL, NULL, 3, b'1', b'0', 1, '2023-10-20 11:01:47', NULL, '2023-10-23 11:57:37'),
-(2, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 342008, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 342008, 'courier', 0, 0, 'upi', '8122891132@paytm', '', NULL, NULL, NULL, 2, b'1', b'0', 11, '2023-10-23 11:32:04', NULL, '2023-10-23 11:57:10'),
-(3, 11, 'test', 'test', 'vishal.k@lucidsolutions.in', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'test', 'test', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'nextDay', 0, 0, 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-23 11:46:06', NULL, '2023-10-23 11:56:24');
+INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `finalAmount`, `discountValue`, `FkCouponId`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `status`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
+(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'Mamta', 'Soni', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'courier', 0, 0, '0', 'cod', '', '', NULL, NULL, NULL, 3, b'1', b'0', 1, '2023-10-20 11:01:47', NULL, '2023-10-23 11:57:37'),
+(2, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 342008, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 342008, 'courier', 0, 0, '0', 'upi', '8122891132@paytm', '', NULL, NULL, NULL, 2, b'1', b'0', 11, '2023-10-23 11:32:04', NULL, '2023-10-23 11:57:10'),
+(3, 11, 'test', 'test', 'vishal.k@lucidsolutions.in', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'test', 'test', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'nextDay', 0, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-23 11:46:06', NULL, '2023-10-23 11:56:24');
 
 -- --------------------------------------------------------
 
@@ -283,6 +285,7 @@ CREATE TABLE `order_item` (
   `FkCustomerId` int(11) UNSIGNED NOT NULL,
   `FkOrderId` int(11) UNSIGNED NOT NULL,
   `FkProductId` int(11) UNSIGNED NOT NULL,
+  `FkCouponId` varchar(50) NOT NULL DEFAULT '0',
   `totalQuantity` int(50) NOT NULL,
   `totalCost` double NOT NULL,
   `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
@@ -295,14 +298,14 @@ CREATE TABLE `order_item` (
 -- Dumping data for table `order_item`
 --
 
-INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`, `totalQuantity`, `totalCost`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 1, 1, 6, 5, 15000, '2023-10-20 16:31:47', 1, NULL, NULL),
-(2, 1, 1, 1, 4, 224, '2023-10-20 16:31:47', 1, NULL, NULL),
-(3, 11, 2, 15, 2, 60, '2023-10-23 17:02:04', 11, NULL, NULL),
-(4, 11, 2, 1, 1, 56, '2023-10-23 17:02:04', 11, NULL, NULL),
-(5, 11, 2, 10, 1, 30, '2023-10-23 17:02:04', 11, NULL, NULL),
-(6, 11, 3, 16, 2, 60, '2023-10-23 17:16:06', 11, NULL, NULL),
-(7, 11, 3, 1, 1, 56, '2023-10-23 17:16:06', 11, NULL, NULL);
+INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`, `FkCouponId`, `totalQuantity`, `totalCost`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
+(1, 1, 1, 6, '0', 5, 15000, '2023-10-20 16:31:47', 1, NULL, NULL),
+(2, 1, 1, 1, '0', 4, 224, '2023-10-20 16:31:47', 1, NULL, NULL),
+(3, 11, 2, 15, '0', 2, 60, '2023-10-23 17:02:04', 11, NULL, NULL),
+(4, 11, 2, 1, '0', 1, 56, '2023-10-23 17:02:04', 11, NULL, NULL),
+(5, 11, 2, 10, '0', 1, 30, '2023-10-23 17:02:04', 11, NULL, NULL),
+(6, 11, 3, 16, '0', 2, 60, '2023-10-23 17:16:06', 11, NULL, NULL),
+(7, 11, 3, 1, '0', 1, 56, '2023-10-23 17:16:06', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -588,7 +591,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=315;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=323;
 
 --
 -- AUTO_INCREMENT for table `category`

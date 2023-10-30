@@ -4,10 +4,23 @@
 <cfparam name="productQty" default="" />
 <cfparam name="isDeleted" default="0" />
 <cfset customerId = session.customer.isLoggedIn>
+<cfquery name="qryGetOrderDetail">
+    SELECT FkCustomerId, firstName, lastName, email, mobile, address, state, zipCode, billingFirstName, billingLastName, billingMobile, billingAddress, billingState, billingZipCode, shipping, finalAmount, discountValue, paymentMethod, UPIID, creditCardName, creditCardNumber, cardExpieryDate, cvv
+    FROM orders 
+    WHERE FkCustomerId = <cfqueryparam value = "#customerId#" cfsqltype = "cf_sql_integer">
+</cfquery>
 <cfoutput>
     <style>
         .form-control{
             border-radius: 0 !important;
+        }
+        .bootstrap-tagsinput  {
+            padding: 14px 6px;
+        }
+        .bootstrap-tagsinput .tag {
+            background: red;
+            padding: 4px;
+            font-size: 14px;
         }
     </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
@@ -30,7 +43,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com">
+                                        <input type="email" name="email" class="form-control" id="email" value="#qryGetOrderDetail.email#" placeholder="you@example.com">
                                     </div>
                                     <!-- Mailing List Signup-->
                                     <!---  <div class="form-group form-check m-0">
@@ -49,28 +62,28 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="firstName" class="form-label">First name</label>
-                                        <input type="text" name="firstName" class="form-control" id="firstName" placeholder="" value="" >
+                                        <input type="text" name="firstName" class="form-control" id="firstName" placeholder="Enter First Name" value="#qryGetOrderDetail.firstName#">
                                     </div>
                                 </div>
                                 <!-- Last Name-->
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="lastName" class="form-label">Last name</label>
-                                        <input type="text" name="lastName"  class="form-control" id="lastName" placeholder="" value="" >
+                                        <input type="text" name="lastName"  class="form-control" id="lastName" placeholder="Enter Last Name" value="#qryGetOrderDetail.lastName#" >
                                     </div>
                                 </div>
                                 <!-- Mobile Number-->
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="mobile" class="form-label">Mobile Number</label>
-                                        <input type="number" name="mobile" class="form-control" id="mobile" placeholder="" value="" >
+                                        <input type="number" name="mobile" class="form-control" id="mobile" placeholder="Enter Mobile Number" value="#qryGetOrderDetail.mobile#" >
                                     </div>
                                 </div>
                                 <!-- Post Code-->
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="zipCode" class="form-label">Zip/Post Code</label>
-                                        <input type="text" name="zipCode" class="form-control" id="zipCode" placeholder="" >
+                                        <input type="text" name="zipCode" class="form-control" id="zipCode" placeholder="Enter Zip Code" >
                                     </div>
                                 </div>
                                 <!-- State-->
@@ -79,42 +92,42 @@
                                         <label for="state" class="form-label">State</label>
                                         <select class="form-select" id="state" name="state" data-placeholder="Please Select State">
                                             <option value=""></option>
-                                            <option value="AP">Andhra Pradesh</option>
-                                            <option value="AR">Arunachal Pradesh</option>
-                                            <option value="AS">Assam</option>
-                                            <option value="BR">Bihar</option>
-                                            <option value="CT">Chhattisgarh</option>
-                                            <option value="GA">Gujarat</option>
-                                            <option value="HR">Haryana</option>
-                                            <option value="HP">Himachal Pradesh</option>
-                                            <option value="JK">Jammu and Kashmir</option>
-                                            <option value="GA">Goa</option>
-                                            <option value="JH">Jharkhand</option>
-                                            <option value="KA">Karnataka</option>
-                                            <option value="KL">Kerala</option>
-                                            <option value="MP">Madhya Pradesh</option>
-                                            <option value="MH">Maharashtra</option>
-                                            <option value="MN">Manipur</option>
-                                            <option value="ML">Meghalaya</option>
-                                            <option value="MZ">Mizoram</option>
-                                            <option value="NL">Nagaland</option>
-                                            <option value="OR">Odisha</option>
-                                            <option value="PB">Punjab</option>
-                                            <option value="RJ">Rajasthan</option>
-                                            <option value="SK">Sikkim</option>
-                                            <option value="TN">Tamil Nadu</option>
-                                            <option value="TG">Telangana</option>
-                                            <option value="TR">Tripura</option>
-                                            <option value="UT">Uttarakhand</option>
-                                            <option value="UP">Uttar Pradesh</option>
-                                            <option value="WB">West Bengal</option>
-                                            <option value="AN">Andaman and Nicobar Islands</option>
-                                            <option value="CH">Chandigarh</option>
-                                            <option value="DN">Dadra and Nagar Haveli</option>
-                                            <option value="DD">Daman and Diu</option>
-                                            <option value="DL">Delhi</option>
-                                            <option value="LD">Lakshadweep</option>
-                                            <option value="PY">Puducherry</option>
+                                            <option value="AP" <cfif qryGetOrderDetail.state EQ 'AP'>selected</cfif>>Andhra Pradesh</option>
+                                            <option value="AR" <cfif qryGetOrderDetail.state EQ 'AR'>selected</cfif>>Arunachal Pradesh</option>
+                                            <option value="AS" <cfif qryGetOrderDetail.state EQ 'AS'>selected</cfif>>Assam</option>
+                                            <option value="BR" <cfif qryGetOrderDetail.state EQ 'BR'>selected</cfif>>Bihar</option>
+                                            <option value="CT" <cfif qryGetOrderDetail.state EQ 'CT'>selected</cfif>>Chhattisgarh</option>
+                                            <option value="GA" <cfif qryGetOrderDetail.state EQ 'GA'>selected</cfif>>Gujarat</option>
+                                            <option value="HR" <cfif qryGetOrderDetail.state EQ 'HR'>selected</cfif>>Haryana</option>
+                                            <option value="HP" <cfif qryGetOrderDetail.state EQ 'HP'>selected</cfif>>Himachal Pradesh</option>
+                                            <option value="JK" <cfif qryGetOrderDetail.state EQ 'JK'>selected</cfif>>Jammu and Kashmir</option>
+                                            <option value="GA" <cfif qryGetOrderDetail.state EQ 'GA'>selected</cfif>>Goa</option>
+                                            <option value="JH" <cfif qryGetOrderDetail.state EQ 'JH'>selected</cfif>>Jharkhand</option>
+                                            <option value="KA" <cfif qryGetOrderDetail.state EQ 'KA'>selected</cfif>>Karnataka</option>
+                                            <option value="KL" <cfif qryGetOrderDetail.state EQ 'KL'>selected</cfif>>Kerala</option>
+                                            <option value="MP" <cfif qryGetOrderDetail.state EQ 'MP'>selected</cfif>>Madhya Pradesh</option>
+                                            <option value="MH" <cfif qryGetOrderDetail.state EQ 'MH'>selected</cfif>>Maharashtra</option>
+                                            <option value="MN" <cfif qryGetOrderDetail.state EQ 'MN'>selected</cfif>>Manipur</option>
+                                            <option value="ML" <cfif qryGetOrderDetail.state EQ 'ML'>selected</cfif>>Meghalaya</option>
+                                            <option value="MZ" <cfif qryGetOrderDetail.state EQ 'MZ'>selected</cfif>>Mizoram</option>
+                                            <option value="NL" <cfif qryGetOrderDetail.state EQ 'NL'>selected</cfif>>Nagaland</option>
+                                            <option value="OR" <cfif qryGetOrderDetail.state EQ 'OR'>selected</cfif>>Odisha</option>
+                                            <option value="PB" <cfif qryGetOrderDetail.state EQ 'PB'>selected</cfif>>Punjab</option>
+                                            <option value="RJ" <cfif qryGetOrderDetail.state EQ 'RJ'>selected</cfif>>Rajasthan</option>
+                                            <option value="SK" <cfif qryGetOrderDetail.state EQ 'SK'>selected</cfif>>Sikkim</option>
+                                            <option value="TN" <cfif qryGetOrderDetail.state EQ 'TN'>selected</cfif>>Tamil Nadu</option>
+                                            <option value="TG" <cfif qryGetOrderDetail.state EQ 'TG'>selected</cfif>>Telangana</option>
+                                            <option value="TR" <cfif qryGetOrderDetail.state EQ 'TR'>selected</cfif>>Tripura</option>
+                                            <option value="UT" <cfif qryGetOrderDetail.state EQ 'UT'>selected</cfif>>Uttarakhand</option>
+                                            <option value="UP" <cfif qryGetOrderDetail.state EQ 'UP'>selected</cfif>>Uttar Pradesh</option>
+                                            <option value="WB" <cfif qryGetOrderDetail.state EQ 'WB'>selected</cfif>>West Bengal</option>
+                                            <option value="AN" <cfif qryGetOrderDetail.state EQ 'AN'>selected</cfif>>Andaman and Nicobar Islands</option>
+                                            <option value="CH" <cfif qryGetOrderDetail.state EQ 'AP'>selected</cfif>>Chandigarh</option>
+                                            <option value="DN" <cfif qryGetOrderDetail.state EQ 'AP'>selected</cfif>>Dadra and Nagar Haveli</option>
+                                            <option value="DD" <cfif qryGetOrderDetail.state EQ 'AP'>selected</cfif>>Daman and Diu</option>
+                                            <option value="DL" <cfif qryGetOrderDetail.state EQ 'AP'>selected</cfif>>Delhi</option>
+                                            <option value="LD" <cfif qryGetOrderDetail.state EQ 'AP'>selected</cfif>>Lakshadweep</option>
+                                            <option value="PY" <cfif qryGetOrderDetail.state EQ 'AP'>selected</cfif>>Puducherry</option>
                                         </select>
                                     </div>
                                 </div>
@@ -122,7 +135,8 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="address" class="form-label">Address</label>
-                                        <input type="text" name="address" class="form-control" id="address" placeholder="123 Some Street Somewhere" >
+                                        <textarea name="address" class="form-control" id="address" row="1" placeholder="123 Some Street Somewhere" >#qryGetOrderDetail.address#</textarea>
+                                        <!---  <input type="text" name="address" class="form-control" id="address" placeholder="123 Some Street Somewhere" > --->
                                     </div>
                                 </div>
                             </div>
@@ -216,7 +230,8 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="billingAddress" class="form-label">Address</label>
-                                        <input type="text" name="billingAddress" class="form-control" id="billingAddress" placeholder="123 Some Street Somewhere" >
+                                        <!--- <input type="text" name="billingAddress" class="form-control" id="billingAddress" placeholder="123 Some Street Somewhere" > --->
+                                        <textarea name="billingAddress" class="form-control" id="billingAddress" row="1" placeholder="123 Some Street Somewhere" ></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -227,7 +242,7 @@
                             <h5 class="title-checkout">Shipping Method</h5>
                             <!-- Free Shipping Option-->
                             <div class="form-check form-group form-check-custom form-radio-custom mb-3">
-                                <input class="form-check-input" type="radio" name="shipping" id="freeShipping" data-value="Free" value="free" <cfif structKeyExists(session.cart, 'shipping') AND session.cart.shipping EQ 'Free'>checked</cfif>>
+                                <input class="form-check-input" type="radio" name="shipping" id="freeShipping" data-value="0" value="free" <cfif structKeyExists(session.cart, 'shipping') AND session.cart.shipping EQ 0>checked</cfif>>
                                 <label class="form-check-label" for="freeShipping">
                                     <span class="d-flex justify-content-between align-items-start w-100">
                                         <span>
@@ -339,13 +354,13 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="creditCardNumber" class="form-label">Credit card number</label>
-                                            <input type="text" class="form-control" name="creditCardNumber" id="creditCardNumber" placeholder="" >
+                                            <input type="text" class="form-control" name="creditCardNumber" id="creditCardNumber" placeholder=""  >
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="cardExpieryDate" class="form-label">Expiration</label>
-                                            <input type="date" class="form-control" name="cardExpieryDate" id="cardExpieryDate" placeholder="" >
+                                            <input type="date" class="form-control" name="cardExpieryDate" id="cardExpieryDate" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -357,7 +372,7 @@
                                                     What's this?
                                                 </button>
                                             </div>
-                                            <input type="text" class="form-control" name="cvv" id="cvv" placeholder="" >
+                                            <input type="text" class="form-control" name="cvv" id="cvv" placeholder="" v>
                                         </div>
                                     </div>
                                 </div>
@@ -369,7 +384,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="UPIID" class="form-label">UPI Number/UPI ID</label>
-                                            <input type="text" class="form-control" name="UPIID" id="UPIID" placeholder="" >
+                                            <input type="text" class="form-control" name="UPIID" id="UPIID" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -389,7 +404,7 @@
                                 <cfset discountValue = session.cart.Discount>
                                 <cfloop array="#session.cart.product#" item="item">
                                     <!--- <cfset productSubTotal +=  item.TotalCost > --->
-                                    <cfset totalPrice = session.cart.finalAmount - discountValue >
+                                    <!--- <cfset totalPrice = session.cart.finalAmount - discountValue > --->
                                     <div class="d-none d-md-flex justify-content-between align-items-start py-2">
                                         <div class="d-flex flex-grow-1 justify-content-start align-items-start">
                                             <div class="position-relative f-w-20 border p-2 me-4">
@@ -423,12 +438,8 @@
                             </div>
                             <div class="py-3 border-bottom">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <cfif session.cart.shipping EQ 'Free'>
-                                        <cfset shippingVal = 0>
-                                    <cfelse>
-                                        <cfset shippingVal = session.cart.shipping>
-                                    </cfif>
-                                    <cfset finalAmount = totalPrice + shippingVal >
+                                
+                                    <cfset finalAmount =  (session.cart.finalAmount + session.cart.shipping) - session.cart.Discount >
                                     <div>
                                         <p class="m-0 fw-bold fs-5">Grand Total</p>
                                     </div>
@@ -454,10 +465,6 @@
                                     WHERE FkproductId IN (0,<cfqueryparam value="#checkFkProductId#" list="true">)
                                     
                                 </cfquery>
-                                <!--- <cfset checkCouponId = arrayMap(session.cart.product, function(item) {
-                                    return item
-                                })> --->
-                                <!--- <cfdump var="#checkCouponId#"> --->
                                 <cfquery name="qryGetCouponName" dbtype="query">
                                     SELECT *
                                     FROM getCoupon
@@ -466,7 +473,7 @@
                                 
                                 <div class="card card-body border p-2">
                                     <div class="input-group mt-3 couponApplied">
-                                        <input type="text" name="couponAppliedInput" id="couponAppliedInput" class="form-control" placeholder="Enter your coupon code" value="#qryGetCouponName.couponCode#">
+                                        <input type="text" name="couponAppliedInput" id="couponAppliedInput" class="form-control couponAppliedInput" placeholder="Enter your coupon code" value="#qryGetCouponName.couponCode#" data-role="tagsinput">
                                         <button type="button" class="btn btn-dark btn-sm px-4 text-center" id="couponAppliedBtn">Apply</button>
                                     </div>
                                     <div class="text-center mt-3"><h5>OR</h5></div>
@@ -509,13 +516,12 @@
 
     <script>
         var #toScript('#customerId#', 'customerId')#
-        var #toScript('#finalAmount#', 'finalAmount')#
         var shippingValue = 0;
         var couponCode = '';
-        let totalPrice = 0;
-        var grandTotal = $('##grandTotal').html();
+        /* let totalPrice = 0;
+        var grandTotal = $('##grandTotal').html(); */
         $(document).ready( function () { 
-            console.log(finalAmount);
+            // const regexUPI = ^[a-zA-Z0-9.-]{2, 256}@[a-zA-Z][a-zA-Z]{2, 64}$;
             $('##state').select2({
                 theme: "bootstrap-5",
                 width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
@@ -540,34 +546,27 @@
             }); */
             $('input[name=shipping]').on("change", function () {
                 shippingValue = $(this).attr('data-value');
+                //alert(shippingValue)
                 /* console.log(shippingValue); */
                 // var grandTotal = $('##grandTotal').html();
                 ajaxAddCouponShipping(couponCode, shippingValue);
-                if (shippingValue == 'Free') {
+                /* if (shippingValue == 'Free') {
                     totalPrice = 0 + parseFloat(grandTotal);
-                } else {
-                    totalPrice = parseFloat(shippingValue) + parseFloat(grandTotal);
-                }
-                $('##grandTotal').html(totalPrice);
+                } else { */
+                    // totalPrice = parseFloat(shippingValue) + parseFloat(grandTotal);
+               /*  } */
+              /*   $('##grandTotal').html(totalPrice); */
                 /* grandTotal = totalPrice; */
                 parseFloat($('##shippingTotal').html(shippingValue));
                 /* grandTotal = parseFloat(shippingValue) + parseFloat(grandTotal); */
-                /* $.ajax({
-                    type: "POST",
-                    url: "../ajaxOrder.cfm?formAction=applyCoupon", 
-                    data: {'value':value},
-                    async: false,
-                    success: function(result) {
-                        if (result.success) {
-                            // console.log(result);
-                            // $('##totalDiscount').html(result.discountAmt);
-                            // totalPrice = parseFloat(grandTotal) - parseFloat(result.discountAmt);
-                            // $('##grandTotal').html(totalPrice);
-                        }
-                    }
-                }); */
             });
-            
+            $.validator.addMethod(
+                "regex",
+                function(value, element, regexp) {
+                    return this.optional(element) || regexp.test(value);
+                },
+                "Please enter correct upi addess...."
+            );
             var validator = $("##addOrderForm").validate({
                 rules: {
                     email: {
@@ -649,10 +648,11 @@
                         required: function(){
                             if( $('##upi' ).prop('checked') == true){
                                 return true;
-                            }else{
+                            } else {
                                 return false;
                             }
-                        }
+                        },
+                        regex: /^[0-9A-Za-z.-]{2,256}@[A-Za-z]{2,64}$/
                     },
                     acceptTerms: {
                         required: function(){
@@ -717,7 +717,8 @@
                         required: "Please enter credit card cvv number",                    
                     },
                     UPIID: {
-                        required: "Please enter upi id/upi number",                    
+                        required: "Please enter upi id/upi number",  
+                        regex: 'Please enter correct upi addess'
                     },
                     acceptTerms: {
                         required: "Please checked the aggree terms and conditions",                    
@@ -796,38 +797,23 @@
                 }, 
             });
 
+            // $('##couponAppliedInput').tagsinput();
+
             $('.addCoupon').on('click', function () {
                 var coupon = $(this).data('coupon');
+                // $('##couponAppliedInput').val(coupon);
                 $('##couponAppliedInput').val(coupon);
             });
             $('##couponAppliedBtn').on('click', function() {
-                couponCode = $('##couponAppliedInput').val();
+                // couponCode = $('##couponAppliedInput').val();
+                couponCode = $('##couponAppliedInput').val().tagsinput();
                 if(couponCode != ''){
                     ajaxAddCouponShipping(couponCode, shippingValue); 
                     $('.couponApplied').after('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $("##couponDetails").addClass('text-decoration-line-through');
                 } else{
                     $('.couponApplied').after('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>Please add coupon..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
-                /* $.ajax({
-                    type: "POST",
-                    url: "../ajaxOrder.cfm?formAction=applyCoupon", 
-                    data: {"code":code},
-                    async: false,
-                    success: function(result) {
-                        if (result.success) {
-                            $('##couponAppliedBtn').after('<div><div class="alert alert-light-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>');
-                            // console.log(result);
-                            // $('##totalDiscount').html(result.discountAmt);
-                            // totalPrice = parseFloat(grandTotal) - parseFloat(result.discountAmt);
-                            // $('##grandTotal').html(totalPrice);
-                            // $(this).after(create(alert()))
-                            // successToast("Your order is successfully completed!");
-                            // setTimeout(() => {
-                            //     location.href = 'index.cfm?pg=dashboard';
-                            // }, 500);
-                        }
-                    }
-                }); */
             });
 
         });
@@ -874,19 +860,20 @@
                     console.log("result", result);
                     if (result.success) {
                         var discount = $('##totalDiscount').text(result.discountAmt);
-                        /* if (result.shippingAmt == 'Free') {
+                        var priceTotal = $('##grandTotal').html(result.priceTotal);
+                        /*  if (result.shippingAmt == 'Free') {
                             totalPrice = 0 + parseFloat(grandTotal);
                         } else {
                             totalPrice = parseFloat(result.shippingAmt) + parseFloat(grandTotal);
                         }
-                        grandTotal = totalPrice; */
+                        grandTotal = totalPrice;
                         if (result.discountAmt) {
                             //$('##grandTotal').html();
                             totalPrice = finalAmount - parseFloat(discount);
                         } else{
                             totalPrice = finalAmount;
                         }
-                        $('##grandTotal').html(totalPrice);
+                        $('##grandTotal').html(totalPrice); */
                     } 
                 }
             });
