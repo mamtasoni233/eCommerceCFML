@@ -161,7 +161,7 @@
                         }
                     }
                 },
-                { data: 'totalAmt',
+                { data: 'finalAmount',
                     render: function(data, display, row) {
                         return '<span><i class="bi bi-currency-rupee fs-5"></i></span> <span>'+data+'</span>';
                     }

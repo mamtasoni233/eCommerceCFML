@@ -12,7 +12,7 @@
         FROM orders O 
         WHERE PkOrderId = <cfqueryparam value = "#url.id#" cfsqltype = "cf_sql_integer">
     </cfquery>
-   <!---  <cfquery name="getOrderPriceData">
+    <!---  <cfquery name="getOrderPriceData">
         SELECT (
                 CASE WHEN OD.shipping = 'free' THEN SUM(O.totalCost)
                     WHEN OD.shipping = 'nextDay' THEN SUM(O.totalCost) + 50.00
@@ -26,7 +26,7 @@
         LEFT JOIN product_image PI ON O.FkProductId = PI.FkProductId AND PI.isDefault = 1
         WHERE  O.FkOrderId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
     </cfquery> --->
-    <cfquery name="getOrderPriceData">
+    <!--- <cfquery name="getOrderPriceData">
         SELECT
             (
                 SELECT
@@ -42,7 +42,26 @@
                 WHEN o.shipping = 'nextDay' THEN 50.00
                 WHEN o.shipping = 'courier' THEN 100.00
             END AS 'shippingAmount',
-            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName
+            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName
+            FROM
+                orders O
+            LEFT JOIN customer C ON
+                O.createdBy = C.PkCustomerId
+            WHERE O.PkOrderId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+            AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+    </cfquery> CASE
+                WHEN O.shipping = 'free' THEN SUM(O.finalAmount)
+                WHEN O.shipping = 'nextDay' THEN SUM(O.finalAmount) + 50.00
+                WHEN O.shipping = 'courier' THEN SUM(O.finalAmount) + 100.00
+            END AS 'totalAmt',--->
+    <cfquery name="getOrderPriceData">
+        SELECT
+            CASE
+                WHEN O.shipping = 'free' THEN 00.00
+                WHEN O.shipping = 'nextDay' THEN 50.00
+                WHEN O.shipping = 'courier' THEN 100.00
+            END AS 'shippingAmount',
+            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName
             FROM
                 orders O
             LEFT JOIN customer C ON
@@ -50,6 +69,7 @@
             WHERE O.PkOrderId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
             AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
     </cfquery>
+    <cfset totalPrice = (getOrderPriceData.finalAmount + getOrderPriceData.shippingAmount) - getOrderPriceData.discountValue>
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -97,21 +117,22 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-end align-items-center mt-3">
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <h6>Sub Total:</h6>
-                                </div>
-                                <div class="col-6">
-                                    <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.shippingAmount#</h6>
-                                </div>
-                                <div class="col-6">
-                                    <h6>Total:</h6>
-                                </div>
-                                <div class="col-6">
-                                    <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.totalAmt#</h6>
-                                </div>
+                        <div class=" mt-3">
+                            <div class="d-flex justify-content-end">
+                                <h6>Shiiping Charge :</h6>
+                                <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.shippingAmount#</h6>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <h6>Sub Total :</h6>
+                                <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.finalAmount#</h6>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <h6>Discount :</h6>
+                                <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.discountValue#</h6>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <h6>Total :</h6>
+                                <h6><i class="bi bi-currency-rupee fs-5"></i> #totalPrice#</h6>
                             </div>
                         </div>
 

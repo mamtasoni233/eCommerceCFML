@@ -83,7 +83,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="zipCode" class="form-label">Zip/Post Code</label>
-                                        <input type="text" name="zipCode" class="form-control" id="zipCode" placeholder="Enter Zip Code" >
+                                        <input type="text" name="zipCode" class="form-control" id="zipCode" placeholder="Enter Zip Code" value="#qryGetOrderDetail.zipCode#">
                                     </div>
                                 </div>
                                 <!-- State-->
@@ -372,7 +372,7 @@
                                                     What's this?
                                                 </button>
                                             </div>
-                                            <input type="text" class="form-control" name="cvv" id="cvv" placeholder="" v>
+                                            <input type="text" class="form-control" name="cvv" id="cvv" placeholder="" >
                                         </div>
                                     </div>
                                 </div>
@@ -438,7 +438,6 @@
                             </div>
                             <div class="py-3 border-bottom">
                                 <div class="d-flex justify-content-between align-items-center">
-                                
                                     <cfset finalAmount =  (session.cart.finalAmount + session.cart.shipping) - session.cart.Discount >
                                     <div>
                                         <p class="m-0 fw-bold fs-5">Grand Total</p>
@@ -470,10 +469,15 @@
                                     FROM getCoupon
                                     WHERE PkCouponId = <cfqueryparam value="#session.cart.couponId#" cfsqltype="cf_sql_integer">
                                 </cfquery>
+                                <!--- <cfquery name="qryGetCouponName" dbtype="query">
+                                    SELECT *
+                                    FROM getCoupon
+                                    WHERE PkCouponId IN (<cfqueryparam value="#session.cart.couponId#" list="true">)
+                                </cfquery> --->
                                 
                                 <div class="card card-body border p-2">
                                     <div class="input-group mt-3 couponApplied">
-                                        <input type="text" name="couponAppliedInput" id="couponAppliedInput" class="form-control couponAppliedInput" placeholder="Enter your coupon code" value="#qryGetCouponName.couponCode#" data-role="tagsinput">
+                                        <input type="text" name="couponAppliedInput" id="couponAppliedInput" class="form-control couponAppliedInput" placeholder="Enter coupon" value="#qryGetCouponName.couponCode#" <!--- data-role="tagsinput" --->>
                                         <button type="button" class="btn btn-dark btn-sm px-4 text-center" id="couponAppliedBtn">Apply</button>
                                     </div>
                                     <div class="text-center mt-3"><h5>OR</h5></div>
@@ -516,6 +520,7 @@
 
     <script>
         var #toScript('#customerId#', 'customerId')#
+        var #toScript('#finalAmount#', 'finalAmount')#
         var shippingValue = 0;
         var couponCode = '';
         /* let totalPrice = 0;
@@ -801,16 +806,18 @@
 
             $('.addCoupon').on('click', function () {
                 var coupon = $(this).data('coupon');
-                // $('##couponAppliedInput').val(coupon);
                 $('##couponAppliedInput').val(coupon);
+                // $('##couponAppliedInput').tagsinput('add', coupon);
+                //$('##couponAppliedInput').val(coupon).tagsinput();
             });
             $('##couponAppliedBtn').on('click', function() {
-                // couponCode = $('##couponAppliedInput').val();
-                couponCode = $('##couponAppliedInput').val().tagsinput();
+                couponCode = $('##couponAppliedInput').val();
+                //couponCode = $("##couponAppliedInput").tagsinput('items');
+                // console.log('couponCode', couponCode);
                 if(couponCode != ''){
                     ajaxAddCouponShipping(couponCode, shippingValue); 
                     $('.couponApplied').after('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-                    $("##couponDetails").addClass('text-decoration-line-through');
+                    // $("##couponDetails").addClass('text-decoration-line-through');
                 } else{
                     $('.couponApplied').after('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>Please add coupon..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
@@ -861,6 +868,7 @@
                     if (result.success) {
                         var discount = $('##totalDiscount').text(result.discountAmt);
                         var priceTotal = $('##grandTotal').html(result.priceTotal);
+                        finalAmount = parseFloat(result.priceTotal);
                         /*  if (result.shippingAmt == 'Free') {
                             totalPrice = 0 + parseFloat(grandTotal);
                         } else {

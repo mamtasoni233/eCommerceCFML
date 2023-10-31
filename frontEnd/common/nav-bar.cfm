@@ -198,6 +198,9 @@
                                     <a class="dropdown-item" href="">My Profile</a>
                                 </li>
                                 <li>
+                                    <a class="dropdown-item" href="index.cfm?pg=orders">My Orders</a>
+                                </li>
+                                <li>
                                     <a class="dropdown-item" href="index.cfm?pg=cart">Cart</a>
                                 </li>
                                 <li>

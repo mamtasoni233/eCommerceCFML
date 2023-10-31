@@ -94,7 +94,7 @@
             </div>
             <!-- / Navbar-->
             <!-- Main Section-->
-            <cfdump  var="#session#">
+            <!--- <cfdump  var="#session#"> --->
             <section class="mt-0 ">
                 <!-- Page Content Goes Here -->
                 <cfswitch expression="#pg#">
@@ -112,6 +112,12 @@
                     </cfcase>
                     <cfcase value="checkOut">
                         <cfinclude template="./page/checkOut.cfm">
+                    </cfcase>
+                    <cfcase value="orders">
+                        <cfinclude template="./page/orders.cfm">
+                    </cfcase>
+                    <cfcase value="orderInfo">
+                        <cfinclude template="./page/orderInfo.cfm">
                     </cfcase>
                 </cfswitch>
                 <!-- /Page Content -->

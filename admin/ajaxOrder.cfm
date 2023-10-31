@@ -72,7 +72,7 @@
                 FROM order_item oisub
                 WHERE oisub.FkOrderId = O.PkOrderId
             ) AS 'totalAmt',
-            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName, userUpdate.lastName ) AS userNameUpdate
+            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName, userUpdate.lastName ) AS userNameUpdate
             FROM
                 orders O
             LEFT JOIN customer C ON
@@ -105,9 +105,7 @@
                 FROM order_item oisub
                 WHERE oisub.FkOrderId = O.PkOrderId
             ) AS 'totalAmt',
-            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate,
-            C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName,
-                userUpdate.lastName ) AS userNameUpdate
+            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName, userUpdate.lastName ) AS userNameUpdate
             FROM
                 orders O
             LEFT JOIN customer C ON
@@ -139,6 +137,8 @@
 
             <cfset dataRecord['PkOrderId'] = getOrderData.PkOrderId>
             <cfset dataRecord['totalAmt'] = getOrderData.totalAmt>
+            <cfset dataRecord['finalAmount'] = getOrderData.finalAmount>
+            <cfset dataRecord['discountValue'] = getOrderData.discountValue>
             <cfset dataRecord['status'] = getOrderData.status>
             <cfset dataRecord['createdBy'] = getOrderData.createdBy>
             <cfset dataRecord['createdDate'] = dateTimeFormat(getOrderData.createdDate, 'dd-mm-yyyy hh:nn:ss tt')>

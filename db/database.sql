@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 30, 2023 at 02:06 PM
+-- Generation Time: Oct 31, 2023 at 01:28 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -47,8 +47,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(321, 11, 6, '2', '2', 2000, 127.5, b'0', '2023-10-30 12:20:33', 11, '2023-10-30 14:09:37', NULL),
-(322, 11, 18, '2', '1', 850, 127.5, b'0', '2023-10-30 12:20:43', 11, '2023-10-30 14:09:37', NULL);
+(325, 11, 6, '0', '2', 2000, 0, b'0', '2023-10-31 14:52:20', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -270,9 +269,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `finalAmount`, `discountValue`, `FkCouponId`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `status`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'Mamta', 'Soni', '8122891132', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 342008, 'courier', 0, 0, '0', 'cod', '', '', NULL, NULL, NULL, 3, b'1', b'0', 1, '2023-10-20 11:01:47', NULL, '2023-10-23 11:57:37'),
-(2, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 342008, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 342008, 'courier', 0, 0, '0', 'upi', '8122891132@paytm', '', NULL, NULL, NULL, 2, b'1', b'0', 11, '2023-10-23 11:32:04', NULL, '2023-10-23 11:57:10'),
-(3, 11, 'test', 'test', 'vishal.k@lucidsolutions.in', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'test', 'test', '637577450', 'Sahi Baag Road, Ahmadabad, Gujrat, Bharat', 'GA', 349001, 'nextDay', 0, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-23 11:46:06', NULL, '2023-10-23 11:56:24');
+(4, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'courier', 2850, 427.5, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-31 07:45:25', NULL, NULL),
+(5, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 342008, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 342008, 'free', 2060, 200, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-31 09:01:19', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -299,13 +297,10 @@ CREATE TABLE `order_item` (
 --
 
 INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`, `FkCouponId`, `totalQuantity`, `totalCost`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 1, 1, 6, '0', 5, 15000, '2023-10-20 16:31:47', 1, NULL, NULL),
-(2, 1, 1, 1, '0', 4, 224, '2023-10-20 16:31:47', 1, NULL, NULL),
-(3, 11, 2, 15, '0', 2, 60, '2023-10-23 17:02:04', 11, NULL, NULL),
-(4, 11, 2, 1, '0', 1, 56, '2023-10-23 17:02:04', 11, NULL, NULL),
-(5, 11, 2, 10, '0', 1, 30, '2023-10-23 17:02:04', 11, NULL, NULL),
-(6, 11, 3, 16, '0', 2, 60, '2023-10-23 17:16:06', 11, NULL, NULL),
-(7, 11, 3, 1, '0', 1, 56, '2023-10-23 17:16:06', 11, NULL, NULL);
+(8, 11, 4, 6, '2', 2, 2000, '2023-10-31 13:15:25', 11, NULL, NULL),
+(9, 11, 4, 18, '2', 1, 850, '2023-10-31 13:15:25', 11, NULL, NULL),
+(10, 11, 5, 12, '4', 2, 60, '2023-10-31 14:31:19', 11, NULL, NULL),
+(11, 11, 5, 6, '4', 2, 2000, '2023-10-31 14:31:19', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -339,19 +334,19 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-10-09 14:56:23', 1),
 (4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-10-11 12:37:30', 1),
 (5, 7, 'Samsung Z-fold ', '1,5', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
-(6, 18, 'Cookie', '9', 1000, 12, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-10-20 16:31:47', 1),
+(6, 18, 'Cookie', '9', 1000, 8, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-10-31 14:31:19', 1),
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
 (9, 20, 'Taj Mahal Tea', '8', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-03 14:12:05', 1),
 (10, 18, 'crack jack', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
-(12, 18, 'Oreo', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-21 18:25:06', 1),
+(12, 18, 'Oreo', '1', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-31 14:31:19', 1),
 (13, 18, 'test', '1,9', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 18:25:36', 1),
 (14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-05 14:15:39', 1),
 (15, 18, 'Britannia Good Day', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', 1),
 (16, 18, 'Oreo Pink Cream', '1,9', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:16:06', 1),
 (17, 18, 'Sunfest', '1', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
-(18, 18, 'Choco Lava Cake', '9', 850, 20, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-10-09 15:03:16', 1),
+(18, 18, 'Choco Lava Cake', '9', 850, 19, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-10-31 13:15:26', 1),
 (19, 19, 'Bhujia Sev', '4,11', 150, 10, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-10-02 18:21:02', 7),
 (20, 20, 'Wagh bakri Chai', '8', 1000, 25, 'Waagbakri Chai', b'1', b'0', '2023-10-03 10:45:41', 1, '2023-10-03 14:13:56', 1),
 (21, 19, '5555555555', NULL, 55000, 20, 'ewe', b'1', b'0', '2023-10-03 12:43:57', 1, '2023-10-03 14:14:04', 1);
@@ -462,14 +457,8 @@ CREATE TABLE `status_history` (
 --
 
 INSERT INTO `status_history` (`PkHistoryId`, `FkOrderId`, `status`, `comment`, `createdBy`, `dateCreated`) VALUES
-(1, 1, 1, 'Your order is in progress', 1, '2023-10-23 14:31:11'),
-(2, 1, 2, '', 1, '2023-10-23 15:26:54'),
-(3, 2, 1, 'Test', 1, '2023-10-23 17:05:38'),
-(4, 3, 0, NULL, 11, '2023-10-23 17:16:06'),
-(5, 3, 1, '', 1, '2023-10-23 17:26:07'),
-(6, 3, 0, '', 1, '2023-10-23 17:26:24'),
-(7, 2, 2, '', 1, '2023-10-23 17:27:10'),
-(8, 1, 3, '', 1, '2023-10-23 17:27:37');
+(9, 4, 0, NULL, 11, '2023-10-31 13:15:25'),
+(10, 5, 0, NULL, 11, '2023-10-31 14:31:19');
 
 -- --------------------------------------------------------
 
@@ -546,8 +535,8 @@ ALTER TABLE `orders`
 ALTER TABLE `order_item`
   ADD PRIMARY KEY (`PkItemId`),
   ADD KEY `FkCustomerId` (`FkCustomerId`),
-  ADD KEY `FkOrderId` (`FkOrderId`),
-  ADD KEY `FkProductId` (`FkProductId`);
+  ADD KEY `FkProductId` (`FkProductId`),
+  ADD KEY `FkOrderId` (`FkOrderId`);
 
 --
 -- Indexes for table `product`
@@ -591,7 +580,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=323;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=326;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -615,13 +604,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -645,7 +634,7 @@ ALTER TABLE `product_tags`
 -- AUTO_INCREMENT for table `status_history`
 --
 ALTER TABLE `status_history`
-  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -675,8 +664,8 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `order_item`
   ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`),
-  ADD CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`FkOrderId`) REFERENCES `orders` (`PkOrderId`),
-  ADD CONSTRAINT `order_item_ibfk_3` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`);
+  ADD CONSTRAINT `order_item_ibfk_3` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`),
+  ADD CONSTRAINT `order_item_ibfk_4` FOREIGN KEY (`FkOrderId`) REFERENCES `orders` (`PkOrderId`);
 
 --
 -- Constraints for table `product`

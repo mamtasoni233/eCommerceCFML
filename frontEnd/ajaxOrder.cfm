@@ -107,8 +107,8 @@
                 , <cfqueryparam value = "#form.billingState#" cfsqltype = "cf_sql_varchar">
                 , <cfqueryparam value = "#form.billingZipCode#" cfsqltype = "cf_sql_integer" null="#NOT len(form.billingZipCode)#">
                 , <cfqueryparam value = "#form.shipping#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.finalAmount#" cfsqltype = "cf_sql_float">
-                , <cfqueryparam value = "#form.discountValue#" cfsqltype = "cf_sql_float">
+                , <cfqueryparam value = "#session.cart.finalAmount#" cfsqltype = "cf_sql_float">
+                , <cfqueryparam value = "#session.cart.Discount#" cfsqltype = "cf_sql_float">
                 , <cfqueryparam value = "#form.paymentMethod#" cfsqltype = "cf_sql_varchar">
                 , <cfqueryparam value = "#form.UPIID#" cfsqltype = "cf_sql_varchar">
                 , <cfqueryparam value = "#form.creditCardName#" cfsqltype = "cf_sql_varchar">
@@ -189,11 +189,18 @@
             FROM coupons 
             WHERE couponCode = <cfqueryparam value = "#form.couponCode#" cfsqltype = "cf_sql_varchar">
         </cfquery>
+        <!--- <cfquery name="checkcoupon">
+            SELECT couponCode, couponName, PkCouponId, discountValue, discountType, couponStartDate, couponExpDate, repeatRestriction
+            FROM coupons 
+            WHERE couponCode IN (<cfqueryparam value="#form.couponCode#" list="true">)
+        </cfquery> --->
+        <!---  <cfdump  var="#checkcoupon#"><cfabort> --->
         <cfif checkcoupon.recordCount GT 0>
             <cfset priceTotal = 0>
             <cfset discountAmount = 0>
             <cfset totalDiscount = 0>
             <cfset session.cart.couponId = checkcoupon.PkCouponId>
+            <!--- <cfset listAppend(session.cart.couponId, checkcoupon.PkCouponId)> --->
             <!--- <cfloop array="#session.cart.product#" item="item">
                 <cfset priceTotal = item.TotalCost>
             </cfloop> --->
@@ -207,12 +214,21 @@
                 </cfif>
                 <cfset item.DiscountValue = discountAmount>
                 <cfset item.CoupanId = checkcoupon.PkCouponId>
+                <!--- <cfset myCouponIds = listAppend( item.CoupanId, checkcoupon.PkCouponId)> --->
+                <!--- <cfdump  var="#myCouponIds#"> --->
                 <cfquery result="updateDiscountValueCart">
                     UPDATE cart SET 
                     FkCouponId = <cfqueryparam value = "#item.CoupanId#" cfsqltype = "cf_sql_varchar">
                     , discountValue = <cfqueryparam value = "#item.DiscountValue#" cfsqltype = "cf_sql_float">
                     WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 </cfquery>
+                <!--- <cfquery result="updateDiscountValueCart">
+                    UPDATE cart SET 
+                    FkCouponId =<cfqueryparam value = "#myCouponIds#" list = "true" cfsqltype="cf_sql_varchar">
+                    , discountValue = <cfqueryparam value = "#item.DiscountValue#" cfsqltype = "cf_sql_float">
+                    WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                </cfquery> --->
+                <!--- <cfdump  var="#updateDiscountValueCart#"><cfabort> --->
                 <cfset totalDiscount += item.DiscountValue>
             </cfloop>
             <cfset session.cart.Discount = totalDiscount>
@@ -221,6 +237,80 @@
         <cfset data['shippingAmt'] = session.cart.shipping>
         <cfset data['priceTotal'] = (session.cart.finalAmount + session.cart.shipping )- session.cart.Discount>
     </cfif>
+    
+    <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
+        <cfquery name="getOrderDataRows">
+            SELECT
+                (
+                    SELECT
+                        SUM(oisub.totalQuantity)
+                    FROM order_item oisub
+                    WHERE oisub.FkOrderId = O.PkOrderId
+                ) AS 'totalQuantity',
+            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, 
+            FROM
+                orders O
+            LEFT JOIN customer C ON
+                O.createdBy = C.PkCustomerId
+            WHERE O.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+            <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
+                AND ( C.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
+                        OR C.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
+                        OR CONCAT_WS(" ", OD.firstName, OD.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
+                    )
+            </cfif>
+            <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
+                ORDER BY #form.order#
+            </cfif>
+        </cfquery>
+        <cfquery name="getOrderData">
+            SELECT
+                (
+                    SELECT
+                        SUM(oisub.totalQuantity)
+                    FROM order_item oisub
+                    WHERE oisub.FkOrderId = O.PkOrderId
+                ) AS 'totalQuantity',
+            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName,
+            FROM
+                orders O
+            LEFT JOIN customer C ON
+                O.createdBy = C.PkCustomerId
+            WHERE  O.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+            <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
+                AND ( C.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
+                        OR C.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
+                        OR CONCAT_WS(" ", OD.firstName, OD.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
+                    )
+            </cfif>
+            <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
+                ORDER BY #form.order#
+            </cfif>
+            LIMIT #form.start#, #form.length#
+        </cfquery>
+        <cfset data['data'] = []>
+        <cfset data['recordsFiltered'] = getOrderDataRows.recordCount>
+        <cfset data['draw'] = form.draw>
+        <cfset data['recordsTotal'] = getOrderDataRows.recordCount>
+        <cfloop query="getOrderData">
+            <cfset dataRecord = {}>
+
+            <cfset dataRecord['PkOrderId'] = getOrderData.PkOrderId>
+            <cfset dataRecord['totalQuantity'] = getOrderData.totalQuantity>
+            <cfset dataRecord['finalAmount'] = getOrderData.finalAmount>
+            <cfset dataRecord['discountValue'] = getOrderData.discountValue>
+            <cfset dataRecord['status'] = getOrderData.status>
+            <cfset dataRecord['createdBy'] = getOrderData.createdBy>
+            <cfset dataRecord['createdDate'] = dateTimeFormat(getOrderData.createdDate, 'dd-mm-yyyy hh:nn:ss tt')>
+            <cfset dataRecord['PkCustomerId'] = getOrderData.PkCustomerId>
+            <cfset dataRecord['customerName'] = getOrderData.customerName>
+            <cfset arrayAppend(data['data'], dataRecord)>
+        </cfloop>
+    </cfif>
+
+
     <cfcatch>
         <cfset data['success'] = false>
         <cfset data['error'] = cfcatch>
