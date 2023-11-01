@@ -60,6 +60,7 @@
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email</th>
+                                    <th>Mobile</th>
                                     <th>Gender</th>
                                     <th>Dob</th>
                                     <th>Create By</th>
@@ -117,6 +118,7 @@
                 { data: 'firstName', },
                 { data: 'lastName',  },
                 { data: 'email',  width:480 },
+                { data: 'mobile',  width:480 },
                 { data: 'gender', 
                     render: function(data, display, row) {
                         if (data > 0) {

@@ -112,7 +112,7 @@
                                         <cfset statusName = Pending>">
                                     </cfif>
                                     <tr>
-                                        <td>#getOrderData.PkOrderId#</td>
+                                        <td>###getOrderData.PkOrderId#</td>
                                         <td>#getOrderData.totalQuantity#</td>
                                         <td>#statusName#</td>
                                         <td>#getOrderData.finalAmount#</td>

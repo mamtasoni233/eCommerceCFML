@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 31, 2023 at 01:28 PM
+-- Generation Time: Nov 01, 2023 at 02:34 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -193,6 +193,7 @@ CREATE TABLE `customer` (
   `token` varchar(255) DEFAULT NULL,
   `lastName` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `mobile` varchar(12) DEFAULT NULL,
   `password` varchar(100) NOT NULL,
   `dob` date NOT NULL,
   `gender` bit(1) NOT NULL,
@@ -210,18 +211,19 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`PkCustomerId`, `firstName`, `token`, `lastName`, `email`, `password`, `dob`, `gender`, `profile`, `isBlcoked`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 'Mamta', '7F9C4237-1606-47C0-A96CAEEAC7311144', 'Soni', 'mamta.s@lucidsolutions.in', '$2a$10$EIMyk7EYrrx8WxTBnbROn.0pJ89u/lEZWSqSisWSgV7GjzY.Tzw4u', '2001-07-16', b'0', NULL, b'0', b'1', b'0', 0, '2023-08-11 08:05:50', 1, '2023-10-19 07:06:04'),
-(2, 'test', NULL, 'test', 'mamta@yahoo.in', '$2a$10$qvrxiNNJUOrAY7s2pPLKcemxkZo85eZ0V2eC0ARMXLU0oAZtIho9K', '1996-03-04', b'1', '', b'0', b'1', b'1', 1, '2023-08-14 06:13:06', NULL, '2023-08-16 04:47:11'),
-(3, 'test', NULL, 'test', 'ravi@gmail.com', '$2a$10$A7SBFgAOmO8DAQVc8lFoAuFSRq5zctd5GzcNRo.XE8ZHIbF3NMzfC', '1996-03-04', b'1', NULL, b'1', b'1', b'0', 1, '2023-08-14 06:16:56', NULL, '2023-08-16 04:47:26'),
-(4, 'arfwseert', NULL, 'wqew', 'werwerwe@gmail.com', '$2a$10$pLmaV/d27yvvSvgiIMixoOGBMF3Nrns/CrxK9BwBTALx/01/wpt.q', '1997-04-05', b'0', NULL, b'1', b'1', b'0', 1, '2023-08-14 06:17:58', NULL, '2023-08-14 12:31:07'),
-(5, 'sftstfg', NULL, 'ftggdrtfe', 'ravina@gmail.com', '$2a$10$2EwyauSjj5zYC9mDbCBA1OJhJd33TtaBd9B8HkX6Vd.mbHBCHRm4e', '2000-07-07', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:46:11', NULL, NULL),
-(6, 'adsf', NULL, 'fwef', 'mamta123@lucidsolutions.in', '$2a$10$i.QZccW7zvDCZFFz5HQYMujS0DnEbYJ9N10RXQZNUjGZP8HyUCwTy', '1998-07-07', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:47:31', NULL, '2023-08-16 04:47:33'),
-(7, '646485', NULL, 'wewe', 'ravina@gmail.com', '$2a$10$P5c5FgQXAyUrz0QNR3HigejG/jwkqT5LEJAc4oVoLaQaULlQvX2je', '2008-06-13', b'1', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:49:09', 1, '2023-08-14 10:57:55'),
-(8, 'thyrtf', NULL, 'erty', 'yogesh.m@gmail.com', '$2a$10$Odo3.yQIaGKiixWQNMN0Ie/sEKJ81hAf6TYVXcMNe1qREuanDhzZC', '2001-03-08', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:53:33', NULL, NULL),
-(9, 'thyrtf', NULL, 'erty', 'yogesh.m@gmail.com', '$2a$10$Nvroj5URmsNzMxLmUGz3Ru0jwI1o6RR9v0pAsEpdpd9TWd6bXGQ9C', '2001-03-08', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:54:49', NULL, NULL),
-(10, 'tyrty', NULL, 'tyrty', 'yogesh.m@gmail.com', '$2a$10$dHnyMAEyGhgYEJRCdiDpsut8iAzWco/17W0QTzDPfFjVTXx2VbVue', '2010-05-15', b'1', '', b'0', b'1', b'1', 1, '2023-08-14 06:59:29', 1, '2023-08-14 12:19:47'),
-(11, 'Vishal', NULL, 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '$2a$10$EfdmrcOB8W5uHX/oGIIl8uJZxzpEQSFRNOGXkkqfHdDEW4qfJpQ5a', '1995-08-20', b'1', NULL, b'0', b'1', b'0', 0, '2023-09-22 05:57:59', NULL, NULL);
+INSERT INTO `customer` (`PkCustomerId`, `firstName`, `token`, `lastName`, `email`, `mobile`, `password`, `dob`, `gender`, `profile`, `isBlcoked`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
+(1, 'Mamta', '7F9C4237-1606-47C0-A96CAEEAC7311144', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', '$2a$10$EIMyk7EYrrx8WxTBnbROn.0pJ89u/lEZWSqSisWSgV7GjzY.Tzw4u', '2001-07-16', b'0', NULL, b'0', b'1', b'0', 0, '2023-08-11 08:05:50', 1, '2023-11-01 11:12:50'),
+(2, 'test', NULL, 'test', 'mamta@yahoo.in', NULL, '$2a$10$qvrxiNNJUOrAY7s2pPLKcemxkZo85eZ0V2eC0ARMXLU0oAZtIho9K', '1996-03-04', b'1', '', b'0', b'1', b'1', 1, '2023-08-14 06:13:06', NULL, '2023-08-16 04:47:11'),
+(3, 'test', NULL, 'test', 'ravi@gmail.com', NULL, '$2a$10$A7SBFgAOmO8DAQVc8lFoAuFSRq5zctd5GzcNRo.XE8ZHIbF3NMzfC', '1996-03-04', b'1', '', b'1', b'1', b'1', 1, '2023-08-14 06:16:56', NULL, '2023-11-01 12:19:14'),
+(4, 'arfwseert', NULL, 'wqew', 'werwerwe@gmail.com', NULL, '$2a$10$pLmaV/d27yvvSvgiIMixoOGBMF3Nrns/CrxK9BwBTALx/01/wpt.q', '1997-04-05', b'0', NULL, b'1', b'1', b'0', 1, '2023-08-14 06:17:58', NULL, '2023-08-14 12:31:07'),
+(5, 'sftstfg', NULL, 'ftggdrtfe', 'ravina@gmail.com', NULL, '$2a$10$2EwyauSjj5zYC9mDbCBA1OJhJd33TtaBd9B8HkX6Vd.mbHBCHRm4e', '2000-07-07', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:46:11', NULL, NULL),
+(6, 'adsf', NULL, 'fwef', 'mamta123@lucidsolutions.in', NULL, '$2a$10$i.QZccW7zvDCZFFz5HQYMujS0DnEbYJ9N10RXQZNUjGZP8HyUCwTy', '1998-07-07', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:47:31', NULL, '2023-08-16 04:47:33'),
+(7, '646485', NULL, 'wewe', 'ravina@gmail.com', NULL, '$2a$10$P5c5FgQXAyUrz0QNR3HigejG/jwkqT5LEJAc4oVoLaQaULlQvX2je', '2008-06-13', b'1', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:49:09', 1, '2023-08-14 10:57:55'),
+(8, 'thyrtf', NULL, 'erty', 'yogesh.m@gmail.com', NULL, '$2a$10$Odo3.yQIaGKiixWQNMN0Ie/sEKJ81hAf6TYVXcMNe1qREuanDhzZC', '2001-03-08', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:53:33', NULL, NULL),
+(9, 'thyrtf', NULL, 'erty', 'yogesh.m@gmail.com', NULL, '$2a$10$Nvroj5URmsNzMxLmUGz3Ru0jwI1o6RR9v0pAsEpdpd9TWd6bXGQ9C', '2001-03-08', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:54:49', NULL, NULL),
+(10, 'tyrty', NULL, 'tyrty', 'yogesh.m@gmail.com', NULL, '$2a$10$dHnyMAEyGhgYEJRCdiDpsut8iAzWco/17W0QTzDPfFjVTXx2VbVue', '2010-05-15', b'1', '', b'0', b'1', b'1', 1, '2023-08-14 06:59:29', 1, '2023-08-14 12:19:47'),
+(11, 'Vishal', NULL, 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8385079333', '$2a$10$EfdmrcOB8W5uHX/oGIIl8uJZxzpEQSFRNOGXkkqfHdDEW4qfJpQ5a', '1995-08-20', b'1', NULL, b'0', b'1', b'0', 0, '2023-09-22 05:57:59', 11, '2023-11-01 11:52:27'),
+(12, 'te', NULL, 'Soni', 'test@lucidsolutions.in', '895656321', '$2a$10$LZ3Px7UOUmo0eBYFZvTAguE733T7zGh66fN2tv2PGMhV5kYrLSgVu', '2003-06-13', b'1', NULL, b'0', b'1', b'0', 1, '2023-11-01 12:20:35', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -598,7 +600,7 @@ ALTER TABLE `coupons`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `PkCustomerId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `PkCustomerId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `orders`

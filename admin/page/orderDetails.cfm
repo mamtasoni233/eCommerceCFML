@@ -103,7 +103,7 @@
                     </div>
                     <div class="card-body mt-4">
                         <div class="table-responsive border-bottom">
-                            <table class="table nowrap" id="orderItemeDataTable">
+                            <table class="table table-hover nowrap" id="orderItemeDataTable">
                                 <thead>
                                     <tr>
                                         <th>Image</th>
@@ -118,22 +118,24 @@
                             </table>
                         </div>
                         <div class=" mt-3">
-                            <div class="d-flex justify-content-end">
-                                <h6>Shiiping Charge :</h6>
-                                <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.shippingAmount#</h6>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <h6>Sub Total :</h6>
-                                <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.finalAmount#</h6>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <h6>Discount :</h6>
-                                <h6><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.discountValue#</h6>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <h6>Total :</h6>
-                                <h6><i class="bi bi-currency-rupee fs-5"></i> #totalPrice#</h6>
-                            </div>
+                            <table class="table d-flex justify-content-end">
+                                <tr>
+                                    <td class="m-0 p-0">Shipping Charge :</td>
+                                    <td class="m-0 p-0"><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.shippingAmount#</td>
+                                </tr>
+                                <tr>
+                                    <td class="m-0 p-0">Sub Total :</td>
+                                    <td class="m-0 p-0"><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.finalAmount#</td>
+                                </tr>
+                                <tr>
+                                    <td class="m-0 p-0">Discount :</td>
+                                    <td class="m-0 p-0"><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.discountValue#</td>
+                                </tr>
+                                <tr>
+                                    <td class="m-0 p-0">Total :</td>
+                                    <td class="m-0 p-0"><i class="bi bi-currency-rupee fs-5"></i> #totalPrice#</td>
+                                </tr>
+                            </table>
                         </div>
 
                     </div>
@@ -144,7 +146,7 @@
                     </div>
                     <div class="card-body mt-4">
                         <div class="table-responsive">
-                            <table class="table nowrap" id="shippingActivityDataTable">
+                            <table class="table table-hover nowrap" id="shippingActivityDataTable">
                                 <thead>
                                     <tr>
                                         <th>Date Added</th>

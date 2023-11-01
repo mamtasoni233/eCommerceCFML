@@ -8,6 +8,7 @@
 <cfparam name="email" default="" />
 <cfparam name="gender" default="" />
 <cfparam name="dob" default="" />
+<cfparam name="mobile" default="" />
 <cfset bcrypt = application.bcrypt>
 <cfset gensalt = bcrypt.gensalt()>
 <cfparam name="password" default="" />
@@ -65,7 +66,7 @@
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
     <cfquery name="getCustomerDataRows">
-        SELECT C.PkCustomerId, C.firstName, C.lastName, C.email, C.gender, C.dob, C.isActive, C.isBlcoked, C.createdBy, C.updatedBy, C.createdDate, C.updatedDate, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
+        SELECT C.PkCustomerId, C.firstName, C.lastName, C.email, C.gender, C.dob, C.mobile, C.isActive, C.isBlcoked, C.createdBy, C.updatedBy, C.createdDate, C.updatedDate, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM customer C
         LEFT JOIN users U ON C.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
@@ -78,8 +79,7 @@
                     OR C.email LIKE <cfqueryparam value="%#trim(search)#%">
                     OR C.gender LIKE <cfqueryparam value="%#trim(search)#%">
                     OR C.dob LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR CONCAT_WS(' ', U.firstName, U.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR CONCAT_WS(' ', userUpdate.firstName, userUpdate.lastName) LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR C.mobile LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
         <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
@@ -87,7 +87,7 @@
         </cfif>
     </cfquery>
     <cfquery name="getCustomerData">
-        SELECT C.PkCustomerId, C.firstName, C.lastName, C.email, C.gender, C.dob, C.isActive, C.isBlcoked, C.createdBy, C.updatedBy, C.createdDate, C.updatedDate, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
+        SELECT C.PkCustomerId, C.firstName, C.lastName, C.email, C.gender, C.dob, C.mobile, C.isActive, C.isBlcoked, C.createdBy, C.updatedBy, C.createdDate, C.updatedDate, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
         FROM customer C
         LEFT JOIN users U ON C.createdBy = U.PkUserId
         LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
@@ -100,6 +100,7 @@
                     OR C.email LIKE <cfqueryparam value="%#trim(search)#%">
                     OR C.gender LIKE <cfqueryparam value="%#trim(search)#%">
                     OR C.dob LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR C.mobile LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
         
@@ -120,6 +121,7 @@
         <cfset dataRecord['lastName'] = getCustomerData.lastName>
         <cfset dataRecord['email'] = getCustomerData.email>
         <cfset dataRecord['gender'] = getCustomerData.gender>
+        <cfset dataRecord['mobile'] = getCustomerData.mobile>
         <cfset dataRecord['dob'] = dateFormat(getCustomerData.dob, 'dd-mm-yyyy')>
         <cfset dataRecord['isActive'] = getCustomerData.isActive>
         <cfset dataRecord['isBlcoked'] = getCustomerData.isBlcoked>
@@ -163,6 +165,7 @@
                 firstName = <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
                 , lastName = <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
                 , email = <cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
+                , mobile = <cfqueryparam value = "#form.mobile#" cfsqltype = "cf_sql_varchar">
                 , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
                 , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 , updatedDate =  <cfqueryparam value = "#CreateODBCDateTime(now())#" cfsqltype = "cf_sql_datetime">
@@ -180,6 +183,7 @@
                     firstName
                     , lastName
                     , email
+                    , mobile
                     , dob
                     , gender
                     <cfif structKeyExists(form, "password") AND len( trim(form.password ) ) GT 0>
@@ -192,6 +196,7 @@
                     <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
                     , <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
                     , <cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.mobile#" cfsqltype = "cf_sql_varchar">
                     , <cfqueryparam value = "#dob#" cfsqltype = "cf_sql_date">
                     , <cfqueryparam value = "#form.gender#" cfsqltype = "cf_sql_bit">
                     <cfif structKeyExists(form, "password") AND len( trim(form.password ) ) GT 0>

@@ -9,11 +9,12 @@
     <cfparam name="dobDate" default="" />
     <cfparam name="dobMonth" default="" />
     <cfparam name="gender" default="" />
+    <cfparam name="mobile" default="" />
     <cfparam name="profile" default="" />
     <cfparam name="isActive" default="" /> 
     <cfif structKeyExists(url, "PkCustomerId") AND url.PkCustomerId GT 0>
         <cfquery name="editCustomerData">
-            SELECT PkCustomerId, firstName, profile, isActive, lastName, email, gender, dob
+            SELECT PkCustomerId, firstName, profile, isActive, lastName, email, gender, dob, mobile
             FROM customer 
             WHERE PkCustomerId = <cfqueryparam value="#PkCustomerId#" cfsqltype="cf_sql_integer">
         </cfquery>
@@ -92,6 +93,15 @@
                                 <input type="email" name="email" id="email" class="form-control form-control-xl" placeholder="Enter Email" value="#email#"/>
                                 <div class="form-control-icon">
                                     <i class="bi bi-person-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <lable class="fw-bold form-label" for="mobile">Mobile</lable>
+                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                <input type="mobile" name="mobile" id="mobile" class="form-control form-control-xl" placeholder="Enter mobile" value="#mobile#"/>
+                                <div class="form-control-icon">
+                                    <i class="bi bi-phone"></i>
                                 </div>
                             </div>
                         </div>

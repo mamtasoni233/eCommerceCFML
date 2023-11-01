@@ -119,6 +119,9 @@
                     <cfcase value="orderInfo">
                         <cfinclude template="./page/orderInfo.cfm">
                     </cfcase>
+                    <cfcase value="account">
+                        <cfinclude template="./page/account.cfm">
+                    </cfcase>
                 </cfswitch>
                 <!-- /Page Content -->
             </section>
