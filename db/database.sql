@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 01, 2023 at 02:34 PM
+-- Generation Time: Nov 02, 2023 at 01:48 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -212,9 +212,9 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`PkCustomerId`, `firstName`, `token`, `lastName`, `email`, `mobile`, `password`, `dob`, `gender`, `profile`, `isBlcoked`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 'Mamta', '7F9C4237-1606-47C0-A96CAEEAC7311144', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', '$2a$10$EIMyk7EYrrx8WxTBnbROn.0pJ89u/lEZWSqSisWSgV7GjzY.Tzw4u', '2001-07-16', b'0', NULL, b'0', b'1', b'0', 0, '2023-08-11 08:05:50', 1, '2023-11-01 11:12:50'),
+(1, 'Mamta', NULL, 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', '$2a$10$EIMyk7EYrrx8WxTBnbROn.0pJ89u/lEZWSqSisWSgV7GjzY.Tzw4u', '2001-07-16', b'0', NULL, b'0', b'1', b'0', 0, '2023-08-11 08:05:50', 1, '2023-11-02 11:04:31'),
 (2, 'test', NULL, 'test', 'mamta@yahoo.in', NULL, '$2a$10$qvrxiNNJUOrAY7s2pPLKcemxkZo85eZ0V2eC0ARMXLU0oAZtIho9K', '1996-03-04', b'1', '', b'0', b'1', b'1', 1, '2023-08-14 06:13:06', NULL, '2023-08-16 04:47:11'),
-(3, 'test', NULL, 'test', 'ravi@gmail.com', NULL, '$2a$10$A7SBFgAOmO8DAQVc8lFoAuFSRq5zctd5GzcNRo.XE8ZHIbF3NMzfC', '1996-03-04', b'1', '', b'1', b'1', b'1', 1, '2023-08-14 06:16:56', NULL, '2023-11-01 12:19:14'),
+(3, 'test', NULL, 'test', 'ravi@gmail.com', NULL, '$2a$10$A7SBFgAOmO8DAQVc8lFoAuFSRq5zctd5GzcNRo.XE8ZHIbF3NMzfC', '1996-03-04', b'1', '', b'1', b'1', b'0', 1, '2023-08-14 06:16:56', NULL, '2023-11-02 12:17:23'),
 (4, 'arfwseert', NULL, 'wqew', 'werwerwe@gmail.com', NULL, '$2a$10$pLmaV/d27yvvSvgiIMixoOGBMF3Nrns/CrxK9BwBTALx/01/wpt.q', '1997-04-05', b'0', NULL, b'1', b'1', b'0', 1, '2023-08-14 06:17:58', NULL, '2023-08-14 12:31:07'),
 (5, 'sftstfg', NULL, 'ftggdrtfe', 'ravina@gmail.com', NULL, '$2a$10$2EwyauSjj5zYC9mDbCBA1OJhJd33TtaBd9B8HkX6Vd.mbHBCHRm4e', '2000-07-07', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:46:11', NULL, NULL),
 (6, 'adsf', NULL, 'fwef', 'mamta123@lucidsolutions.in', NULL, '$2a$10$i.QZccW7zvDCZFFz5HQYMujS0DnEbYJ9N10RXQZNUjGZP8HyUCwTy', '1998-07-07', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:47:31', NULL, '2023-08-16 04:47:33'),
@@ -222,7 +222,7 @@ INSERT INTO `customer` (`PkCustomerId`, `firstName`, `token`, `lastName`, `email
 (8, 'thyrtf', NULL, 'erty', 'yogesh.m@gmail.com', NULL, '$2a$10$Odo3.yQIaGKiixWQNMN0Ie/sEKJ81hAf6TYVXcMNe1qREuanDhzZC', '2001-03-08', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:53:33', NULL, NULL),
 (9, 'thyrtf', NULL, 'erty', 'yogesh.m@gmail.com', NULL, '$2a$10$Nvroj5URmsNzMxLmUGz3Ru0jwI1o6RR9v0pAsEpdpd9TWd6bXGQ9C', '2001-03-08', b'0', NULL, b'0', b'1', b'0', 1, '2023-08-14 06:54:49', NULL, NULL),
 (10, 'tyrty', NULL, 'tyrty', 'yogesh.m@gmail.com', NULL, '$2a$10$dHnyMAEyGhgYEJRCdiDpsut8iAzWco/17W0QTzDPfFjVTXx2VbVue', '2010-05-15', b'1', '', b'0', b'1', b'1', 1, '2023-08-14 06:59:29', 1, '2023-08-14 12:19:47'),
-(11, 'Vishal', NULL, 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8385079333', '$2a$10$EfdmrcOB8W5uHX/oGIIl8uJZxzpEQSFRNOGXkkqfHdDEW4qfJpQ5a', '1995-08-20', b'1', NULL, b'0', b'1', b'0', 0, '2023-09-22 05:57:59', 11, '2023-11-01 11:52:27'),
+(11, 'Vishal', NULL, 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8385079333', '$2a$10$EwOyXFxUEHfyoIp1.I5Ht./yX1tcpCyq094MI5ctIgTfYL9lIi0U6', '1995-08-20', b'1', NULL, b'0', b'1', b'0', 0, '2023-09-22 05:57:59', 11, '2023-11-02 06:12:39'),
 (12, 'te', NULL, 'Soni', 'test@lucidsolutions.in', '895656321', '$2a$10$LZ3Px7UOUmo0eBYFZvTAguE733T7zGh66fN2tv2PGMhV5kYrLSgVu', '2003-06-13', b'1', NULL, b'0', b'1', b'0', 1, '2023-11-01 12:20:35', NULL, NULL);
 
 -- --------------------------------------------------------
@@ -470,28 +470,35 @@ INSERT INTO `status_history` (`PkHistoryId`, `FkOrderId`, `status`, `comment`, `
 
 CREATE TABLE `users` (
   `PkUserId` int(11) UNSIGNED NOT NULL,
-  `token` varchar(255) DEFAULT NULL,
   `firstName` varchar(100) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
   `lastName` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `mobile` varchar(12) DEFAULT NULL,
   `dob` date NOT NULL,
   `gender` bit(1) NOT NULL DEFAULT b'1',
   `password` varchar(100) NOT NULL,
-  `image` varchar(255) DEFAULT NULL
+  `image` varchar(255) DEFAULT NULL,
+  `isActive` bit(1) NOT NULL DEFAULT b'1',
+  `isDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `createdBy` int(10) UNSIGNED NOT NULL,
+  `createdDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedBy` int(10) DEFAULT NULL,
+  `updatedDate` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`PkUserId`, `token`, `firstName`, `lastName`, `email`, `dob`, `gender`, `password`, `image`) VALUES
-(1, '18DDB337-AF2F-42EC-A056207956B2B437', 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '1.jpg'),
-(2, NULL, 'Nanu', 'Soni', 'nanu@gmail.com', '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL),
-(3, NULL, 'gvedrfg', 'dftgd', 'admin@gmail.com', '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', NULL),
-(4, NULL, 'test', 'test', 'mamta@gmail.com', '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL),
-(5, NULL, 'Mamta', 'soni', '', '2006-04-11', b'0', '$2a$10$v3izpn/ocmrASfYmYtHp1uVb4fHokoD944y26vToQM9hbq/dDzBMa', NULL),
-(6, NULL, 'fgujhg', 'gjg', 'ravina@gmail.com', '2007-08-15', b'0', '$2a$10$TUDPhJfaJHKxx3hNiHOy6.wWbD6ROhZFXd7mSBaN0qD4mOU.nXyQi', NULL),
-(7, NULL, 'Vishal Kumar', 'Khatri', 'vishal.k@lucidsolutions.in', '1995-08-20', b'1', '$2a$10$vOKOnWE1xfkbLT0YuXRVtuCXH09oSE7WWnDJ50gUSrXtGNCefhVte', NULL);
+INSERT INTO `users` (`PkUserId`, `firstName`, `token`, `lastName`, `email`, `mobile`, `dob`, `gender`, `password`, `image`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
+(1, 'Mamta', NULL, 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '1.jpg', b'1', b'0', 0, '2023-11-02 11:08:46', 1, '2023-11-02 12:05:18'),
+(2, 'Nanu', NULL, 'Soni', 'nanu@gmail.com', NULL, '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, '2023-11-02 12:05:38'),
+(3, 'gvedrfg', NULL, 'dftgd', 'admin@gmail.com', NULL, '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', '', b'1', b'1', 0, '2023-11-02 11:08:46', NULL, '2023-11-02 12:22:55'),
+(4, 'test', NULL, 'test', 'mamta@gmail.com', NULL, '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, NULL),
+(5, 'Mamta', NULL, 'soni', '', NULL, '2006-04-11', b'0', '$2a$10$v3izpn/ocmrASfYmYtHp1uVb4fHokoD944y26vToQM9hbq/dDzBMa', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, NULL),
+(6, 'fgujhg', NULL, 'gjg', 'ravina@gmail.com', NULL, '2007-08-15', b'0', '$2a$10$TUDPhJfaJHKxx3hNiHOy6.wWbD6ROhZFXd7mSBaN0qD4mOU.nXyQi', '', b'1', b'1', 0, '2023-11-02 11:08:46', NULL, '2023-11-02 12:23:06'),
+(7, 'Vishal Kumar', NULL, 'Khatri', 'vishal.k@lucidsolutions.in', NULL, '1995-08-20', b'1', '$2a$10$vOKOnWE1xfkbLT0YuXRVtuCXH09oSE7WWnDJ50gUSrXtGNCefhVte', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, NULL);
 
 --
 -- Indexes for dumped tables

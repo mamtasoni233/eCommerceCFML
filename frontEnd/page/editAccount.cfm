@@ -17,6 +17,11 @@
     WHERE PkCustomerId = <cfqueryparam value="#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
 </cfquery>
 <cfoutput>
+        <style>
+            .form-control{
+                border-radius: 0 !important;
+            }
+        </style>
     <section class="container mb-5">
         <!-- Breadcrumbs-->
         <nav aria-label="breadcrumb">

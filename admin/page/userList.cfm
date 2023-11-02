@@ -1,18 +1,19 @@
 <cfoutput>
-    <cfparam name="PkCustomerId" default="" />
+    <cfparam name="PkUserId" default="" />
     <cfparam name="firstName" default="" />
     <cfparam name="lastName" default="" />
     <cfparam name="email" default="" />
     <cfparam name="password" default="" />
+    <cfparam name="mobile" default="" />
     <cfparam name="dob" default="" />
     <cfparam name="gender" default="" />
-    <cfparam name="profile" default="" />
+    <cfparam name="image" default="" />
     <cfparam name="isActive" default="" /> 
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h1>Customer</h1>
+                    <h1>User</h1>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -21,24 +22,24 @@
                                 <a href="index.cfm?pg=dashboard">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Customers
+                                Users
                             </li>
                         </ol>
                     </nav>
                 </div>
-                <cfif structKeyExists(session, 'customer')>
-                    <cfif structKeyExists(session.customer, 'customerSave') AND session.customer.customerSave EQ 1>
+                <cfif structKeyExists(session, 'user')>
+                    <cfif structKeyExists(session.user, 'userSave') AND session.user.userSave EQ 1>
                         <div class="alert alert-light-success alert-dismissible show fade">
-                            <i class="bi bi-check-circle"></i> Customer Data successfully inserted..!!!
+                            <i class="bi bi-check-circle"></i> User Data successfully inserted..!!!
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <cfset StructDelete(session.customer,'customerSave')>
-                    <cfelseif structKeyExists(session.customer, 'customerUpdate') AND session.customer.customerUpdate EQ 1>
+                        <cfset StructDelete(session.user,'userSave')>
+                    <cfelseif structKeyExists(session.user, 'userUpdate') AND session.user.userUpdate EQ 1>
                         <div class="alert alert-light-success alert-dismissible show fade">
-                            <i class="bi bi-check-circle"></i> Customer Data successfully updated..!!!
+                            <i class="bi bi-check-circle"></i> User Data successfully updated..!!!
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <cfset StructDelete(session.customer,'customerUpdate')>
+                        <cfset StructDelete(session.user,'userUpdate')>
                     </cfif>
                 </cfif>
             </div>
@@ -47,16 +48,16 @@
         <section class="section">
             <div class="card">
                 <div class="card-header d-flex justify-content-end">
-                    <a href="../index.cfm?pg=customer&s=addCustomer" class="btn btn-primary editCustomer"  name="addCustomer" id="addCustomer" data-id="0">
-                        <i class="bi bi-plus-lg "></i><span class="ms-2 pt-1">Add Customer</span>
+                    <a href="../index.cfm?pg=user&s=addUser" class="btn btn-primary editUser"  name="addUser" id="addUser" data-id="0">
+                        <i class="bi bi-plus-lg "></i><span class="ms-2 pt-1">Add User</span>
                     </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table nowrap" id="customerDataTable" >
+                        <table class="table nowrap" id="userDataTable" >
                             <thead>
                                 <tr>
-                                    <th>Customer Id</th>
+                                    <th>User Id</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email</th>
@@ -68,7 +69,6 @@
                                     <th>Update By</th>
                                     <th>Update Date</th>
                                     <th>Is Active</th>
-                                    <th>Is Block</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -84,7 +84,7 @@
 </cfoutput>
 <script>
     $(document).ready( function () {
-        var table = $('#customerDataTable').DataTable({
+        var table = $('#userDataTable').DataTable({
             processing: true,
             pageLength: 10,
             pagination: 'datatablePagination',
@@ -97,10 +97,10 @@
             scrollCollapse: true,
             autoWidth: true,
             columnDefs: [
-                { "width": "30%", "targets": [0,1,2,3,4,5,6,7,8,9,10,11] }
+                { "width": "30%", "targets": [0,1,2,3,4,5,6,7,8,9,10] }
             ],
             ajax: {
-                url: "../ajaxAddCustomer.cfm?formAction=getRecord",
+                url: "../ajaxAddUser.cfm?formAction=getRecord",
                 type :'post',
                 data: function(d){
                     var sIdx = d.order[0].column;
@@ -119,7 +119,7 @@
                 }
             },
             columns: [
-                { data: 'PkCustomerId', },
+                { data: 'PkUserId', },
                 { data: 'firstName', },
                 { data: 'lastName',  },
                 { data: 'email',  width:480 },
@@ -144,10 +144,10 @@
                     }   
                 },
                 { data: 'createdDate', width:280 },
-                { data: 'userNameUpdate',
+                { data: 'userName',
                     render: function(data, display, row) {
                         if (row.createdBy > 0) {
-                            return '<span>'+row.userNameUpdate+'</span>' 
+                            return '<span>'+row.userName+'</span>' 
                         } else {
                             return '<span>'+row.firstName+'</span>' 
                         }
@@ -157,33 +157,24 @@
                 { data: 'isActive',
                     render: function (data,type,row) {
                         if(row.isActive == 1){
-                            return '<span id="deactive" data-id="'+row.PkCustomerId+'" data-status="Active" data-name="'+row.firstName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Customer" data-placement="bottom">Active</span>';
+                            return '<span id="deactive" data-id="'+row.PkUserId+'" data-status="Active" data-name="'+row.firstName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive User" data-placement="bottom">Active</span>';
                         }else{
-                            return '<span id="active" data-id="'+row.PkCustomerId+'" data-status="Deactive" data-name="'+row.firstName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active Customer" data-placement="bottom">Inactive</span>';
+                            return '<span id="active" data-id="'+row.PkUserId+'" data-status="Deactive" data-name="'+row.firstName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active User" data-placement="bottom">Inactive</span>';
                         }
                     }
                 },
-                { data: 'isBlcoked',
-                    render: function (data,type,row) {
-                        if(row.isBlcoked == 1){
-                            return '<span id="block" data-id="'+row.PkCustomerId+'" data-status="Block" data-name="'+row.firstName+'" class=" badge bg-danger text-white changeBlockStatus"  data-toggle="tooltip" data-html="true" title="Click to Un Block Customer" data-placement="bottom">Block</span>';
-                        }else{
-                            return '<span id="unBlock" data-id="'+row.PkCustomerId+'" data-status="unBlock" data-name="'+row.firstName+'" class="badge bg-success text-white changeBlockStatus" data-toggle="tooltip" data-html="true" title="Click to Block Customer" data-placement="bottom">Un Block</span>';
-                        }
-                    }
-                },
-                { data: 'PkCustomerId',
+                { data: 'PkUserId',
                     /* render: function(data, type, row, meta)
                     {
-                        return '<a href="../index.cfm?pg=customer&s=addCustomer&PkCustomerId='+row.PkCustomerId+'" data-id="'+row.PkCustomerId+'"  id="editCustomer" class="border-none btn btn-sm btn-success text-white mt-1 editCustomer" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkCustomerId+'" data-name="'+row.firstName+'" id="deleteCustomer" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCustomer" > <i class="bi bi-trash"></i></a>'				
+                        return '<a href="../index.cfm?pg=user&s=addUser&PkUserId='+row.PkUserId+'" data-id="'+row.PkUserId+'"  id="editUser" class="border-none btn btn-sm btn-success text-white mt-1 editUser" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkUserId+'" data-name="'+row.firstName+'" id="deleteUser" class="border-none btn btn-sm btn-danger text-white mt-1 deleteUser" > <i class="bi bi-trash"></i></a>'				
                     } */
                     render: function(data, type, row, meta)
                     {
                         var returnStr = '';
                         if(row.isDeleted == 1){
-                            returnStr += '<a data-id="'+ row.PkCustomerId + '" data-name="'+row.firstName+'" id="restoreCustomer" class="border-none btn btn-sm btn-warning text-white mt-1 restoreCustomer"><i class="fas fa-undo"></i></a>'	
+                            returnStr += '<a data-id="'+ row.PkUserId + '" data-name="'+row.firstName+'" id="restoreUser" class="border-none btn btn-sm btn-warning text-white mt-1 restoreUser"><i class="fas fa-undo"></i></a>'	
                         } else{
-                            returnStr += '<a href="../index.cfm?pg=customer&s=addCustomer&PkCustomerId='+row.PkCustomerId+'" data-id="'+row.PkCustomerId+'"  id="editCustomer" class="border-none btn btn-sm btn-success text-white mt-1 editCustomer" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkCustomerId+'" data-name="'+row.firstName+'" id="deleteCustomer" class="border-none btn btn-sm btn-danger text-white mt-1 deleteCustomer" > <i class="bi bi-trash"></i></a>'				
+                            returnStr += '<a href="../index.cfm?pg=user&s=addUser&PkUserId='+row.PkUserId+'" data-id="'+row.PkUserId+'"  id="editUser" class="border-none btn btn-sm btn-success text-white mt-1 editUser" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkUserId+'" data-name="'+row.firstName+'" id="deleteUser" class="border-none btn btn-sm btn-danger text-white mt-1 deleteUser" > <i class="bi bi-trash"></i></a>'				
                         }
                         return returnStr;
                     }
@@ -198,14 +189,14 @@
         $('div.toolbar').after('<select id="isDeleted" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="2">Select All</option><option value="0" selected>Not Deleted</option><option value="1">Deleted</option></select>');
         
         $('#isDeleted').change(function () {
-            $('#customerDataTable').DataTable().ajax.reload();
+            $('#userDataTable').DataTable().ajax.reload();
         });
-        $("#customerDataTable").on("click", ".deleteCustomer", function () { 
+        $("#userDataTable").on("click", ".deleteUser", function () { 
             var id = $(this).attr("data-id");
             var name = $(this).data("name");
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'You want to delete customer record for ' + '"' +  name + '"',
+                text: 'You want to delete user record for ' + '"' +  name + '"',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#dc3545',
@@ -213,17 +204,17 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({  
-                        url: '../ajaxAddCustomer.cfm?delPkCustomerId='+id, 
+                        url: '../ajaxAddUser.cfm?delPkUserId='+id, 
                         type: 'GET',  
                         success: function(data) {
-                            dangerToast("Deleted!","Customer Deleted Successfully");
-                            $('#customerDataTable').DataTable().ajax.reload();               
+                            dangerToast("Deleted!","User Deleted Successfully");
+                            $('#userDataTable').DataTable().ajax.reload();               
                         }  
                     });
                 }
             });
         }); 
-        $("#customerDataTable").on("click", ".changeStatus", function () {
+        $("#userDataTable").on("click", ".changeStatus", function () {
             var id = $(this).attr("data-id");
             var name = $(this).attr("data-name");
             var status = $(this).attr('data-status');
@@ -238,11 +229,11 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({  
-                            url: '../ajaxAddCustomer.cfm?statusId='+id,  
+                            url: '../ajaxAddUser.cfm?statusId='+id,  
                             type: 'POST',  
                             success: function(data) {
-                                dangerToast("Deactivated!","Customer Deactivated Successfully");
-                                $('#customerDataTable').DataTable().ajax.reload();                       
+                                dangerToast("Deactivated!","User Deactivated Successfully");
+                                $('#userDataTable').DataTable().ajax.reload();                       
                             }  
                         });
                     }
@@ -258,80 +249,34 @@
                     }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({  
-                            url: '../ajaxAddCustomer.cfm?statusId='+id,  
+                            url: '../ajaxAddUser.cfm?statusId='+id,  
                             type: 'POST',  
                             success: function(data) {
-                                successToast("Activated!","Customer Activated Successfully");
-                                $('#customerDataTable').DataTable().ajax.reload();                       
+                                successToast("Activated!","User Activated Successfully");
+                                $('#userDataTable').DataTable().ajax.reload();                       
                             }  
                         });
                     }
                 });
             }
         });
-        $("#customerDataTable").on("click", ".changeBlockStatus", function () {
-            var id = $(this).attr("data-id");
-            var name = $(this).attr("data-name");
-            var status = $(this).attr('data-status');
-            if (status == "Block") {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'You want to unblock ' + '"' +  name + '"',
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545',
-                    confirmButtonText: 'Yes, Unblocked it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({  
-                            url: '../ajaxAddCustomer.cfm?blockId='+id,  
-                            type: 'POST',  
-                            success: function(data) {
-                                successToast("Unblocked!","Customer Unblocked Successfully");
-                                $('#customerDataTable').DataTable().ajax.reload();                       
-                            }  
-                        });
-                    }
-                });
-            }
-            else{
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'You want to Block ' + '"' +  name + '"',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Block it!'
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({  
-                            url: '../ajaxAddCustomer.cfm?blockId='+id,  
-                            type: 'POST',  
-                            success: function(data) {
-                                dangerToast("Blocked!","Customer Blocked Successfully");
-                                $('#customerDataTable').DataTable().ajax.reload();                       
-                            }  
-                        });
-                    }
-                });
-            }
-        });
-        $("#customerDataTable").on("click", ".restoreCustomer", function () { 
+        $("#userDataTable").on("click", ".restoreUser", function () { 
             var id = $(this).attr("data-id");
             var name = $(this).data("name");
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'You want to restore customer record for ' + '"' +  name + '"',
+                text: 'You want to restore user record for ' + '"' +  name + '"',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, Restore it!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({  
-                        url: '../ajaxAddCustomer.cfm?restorePkCustomerId='+id, 
+                        url: '../ajaxAddUser.cfm?restorePkUserId='+id, 
                         type: 'GET',  
                         success: function(data) {
-                            successToast("Restore!","Customer Restore Successfully");
-                            $('#customerDataTable').DataTable().ajax.reload();               
+                            successToast("Restore!","User Restore Successfully");
+                            $('#userDataTable').DataTable().ajax.reload();               
                         }  
                     });
                 }

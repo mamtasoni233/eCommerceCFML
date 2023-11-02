@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfparam name="PkCustomerId" default="0" />
+    <cfparam name="PkUserId" default="0" />
     <cfparam name="firstName" default="" />
     <cfparam name="lastName" default="" />
     <cfparam name="email" default="" />
@@ -10,30 +10,30 @@
     <cfparam name="dobMonth" default="" />
     <cfparam name="gender" default="" />
     <cfparam name="mobile" default="" />
-    <cfparam name="profile" default="" />
+    <cfparam name="image" default="" />
     <cfparam name="isActive" default="" /> 
-    <cfif structKeyExists(url, "PkCustomerId") AND url.PkCustomerId GT 0>
-        <cfquery name="editCustomerData">
-            SELECT PkCustomerId, firstName, profile, isActive, lastName, email, gender, dob, mobile
-            FROM customer 
-            WHERE PkCustomerId = <cfqueryparam value="#PkCustomerId#" cfsqltype="cf_sql_integer">
+    <cfif structKeyExists(url, "PkUserId") AND url.PkUserId GT 0>
+        <cfquery name="editUserData">
+            SELECT PkUserId, firstName, image, isActive, lastName, email, gender, dob, mobile
+            FROM users 
+            WHERE PkUserId = <cfqueryparam value="#PkUserId#" cfsqltype="cf_sql_integer">
         </cfquery>
-        <cfset PkCustomerId= editCustomerData.PkCustomerId>
-        <cfset firstName = editCustomerData.firstName>
-        <cfset lastName = editCustomerData.lastName>
-        <cfset email = editCustomerData.email>
-        <cfset gender = editCustomerData.gender>
-        <cfset dobDate = dateFormat(editCustomerData.dob, 'dd')>
-        <cfset dobMonth = dateFormat(editCustomerData.dob, 'mm')>
-        <cfset dobYear = dateFormat(editCustomerData.dob, 'yyyy')>
-        <cfset profile = editCustomerData.profile>
-        <cfset isActive = editCustomerData.isActive>
+        <cfset PkUserId= editUserData.PkUserId>
+        <cfset firstName = editUserData.firstName>
+        <cfset lastName = editUserData.lastName>
+        <cfset email = editUserData.email>
+        <cfset gender = editUserData.gender>
+        <cfset dobDate = dateFormat(editUserData.dob, 'dd')>
+        <cfset dobMonth = dateFormat(editUserData.dob, 'mm')>
+        <cfset dobYear = dateFormat(editUserData.dob, 'yyyy')>
+        <cfset image = editUserData.image>
+        <cfset isActive = editUserData.isActive>
     </cfif>
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h1>Customer</h1>
+                    <h1>User</h1>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -42,10 +42,10 @@
                                 <a href="index.cfm?pg=dashboard">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item" aria-current="page">
-                                <a href="index.cfm?pg=customer&s=customerList">Customers</a>
+                                <a href="index.cfm?pg=user&s=userList">Users</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Add Customer
+                                Add User
                             </li>
                         </ol>
                     </nav>
@@ -62,12 +62,12 @@
         <section class="section">
             <div class="card">
                 <div class="card-header d-flex justify-content-end">
-                    <a href="index.cfm?pg=customer&s=customerList" class="btn btn-primary"  name="backCustomerList" id="backCustomerList" data-id="0">
+                    <a href="index.cfm?pg=user&s=userList" class="btn btn-primary"  name="backUserList" id="backUserList" data-id="0">
                         <i class="bi bi-left-arrow"></i><span class="ms-2 pt-1">Back</span>
                     </a>
                 </div>
-                <form action="ajaxAddCustomer.cfm?formAction=saveCustomer" class="form p-3" id="addCustomerForm" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="PkCustomerId" value="#PkCustomerId#" name="PkCustomerId">
+                <form action="ajaxAddUser.cfm?formAction=saveUser" class="form p-3" id="addUserForm" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="PkUserId" value="#PkUserId#" name="PkUserId">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <lable class="fw-bold form-label" for="firstName">First Name</lable>
@@ -108,7 +108,7 @@
                         <div class="col-md-6">
                             <lable class="fw-bold form-label" for="password">Password</lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Password" <cfif PkCustomerId EQ 0>required</cfif> value="" />
+                                <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Password" <cfif PkUserId EQ 0>required</cfif> value="" />
                                 <div class="form-control-icon">
                                     <i class="bi bi-shield-lock"></i>
                                 </div>
@@ -173,9 +173,9 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <lable class="fw-bold form-label" for="customerProfile">Profile</lable>
+                            <lable class="fw-bold form-label" for="userProfile">Profile</lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                            <input type="file" class="form-control form-control-xl image-preview-filepond" name="customerProfile" id="customerProfile"  aria-describedby="inputGroupPrepend">
+                            <input type="file" class="form-control form-control-xl image-preview-filepond" name="userProfile" id="userProfile"  aria-describedby="inputGroupPrepend">
                                 <div class="form-control-icon">
                                     <i class="bi bi-cloud-plus-fill me-2"></i>
                                 </div>
@@ -216,7 +216,7 @@
                     $("##pswmeter-message").addClass('d-none');
                 }
             });
-            $('##customerProfile').change(function(){
+            $('##userProfile').change(function(){
                 const file = this.files[0];
                 if (file){
                     let reader = new FileReader();
@@ -226,7 +226,7 @@
                         reader.readAsDataURL(file);
                     }
             });
-            $("##addCustomerForm").validate({
+            $("##addUserForm").validate({
                 rules: {
                     firstName: {
                         required: true
@@ -253,7 +253,7 @@
                     password: {
                         //required: true,
                         required: function(element){
-                            if( $("##PkCustomerId").val() > 0){
+                            if( $("##PkUserId").val() > 0){
                                 return false;
                             } else{
                                 return true;

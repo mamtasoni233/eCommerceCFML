@@ -195,7 +195,7 @@
                                     <a class="dropdown-item" href="index.cfm?pg=dashboard">Homepage</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">My Profile</a>
+                                    <a class="dropdown-item" href="index.cfm?pg=account&s=editAccount">My Profile</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="index.cfm?pg=orders">My Orders</a>

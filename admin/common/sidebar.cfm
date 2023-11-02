@@ -75,6 +75,12 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
+                    <li class="sidebar-item <cfif pg EQ 'user'>active</cfif>">
+                        <a href="index.cfm?pg=user&s=userList" class="sidebar-link">
+                            <i class="fa fa-user"></i>
+                            <span>User</span>
+                        </a>
+                    </li>
                     <li class="sidebar-item <cfif pg EQ 'category'>active</cfif>">
                         <a href="index.cfm?pg=category&s=categoryList" class="sidebar-link">
                             <i class="bi bi-grid-fill"></i>

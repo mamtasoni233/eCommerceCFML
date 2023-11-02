@@ -106,6 +106,9 @@
                             <cfcase value="coupon">
                                 <cfinclude template="./page/coupon.cfm">
                             </cfcase>
+                            <cfcase value="user">
+                                <cfinclude template="./page/user.cfm">
+                            </cfcase>
                         </cfswitch>
                         
                     </div>

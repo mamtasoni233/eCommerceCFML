@@ -32,6 +32,7 @@
                 , dob
                 , gender
                 , password
+                , createdBy
             ) VALUES (
                 <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
                 , <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
@@ -39,6 +40,7 @@
                 , <cfqueryparam value = "#dob#" cfsqltype = "cf_sql_date">
                 , <cfqueryparam value = "#form.gender#" cfsqltype = "cf_sql_bit">
                 , <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
+                , <cfqueryparam value = "0" cfsqltype = "cf_sql_integer">
             )
         </cfquery>
         <cflocation url="auth-register.cfm?saved=2" addtoken="false">

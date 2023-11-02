@@ -2,7 +2,7 @@
 <cfheader statuscode="200" statustext="OK" />
 <cfcontent reset="true" type="application/json" />
 
-<cfparam name="PkCustomerId" default="" />
+<cfparam name="PkUserId" default="" />
 <cfparam name="firstName" default="" />
 <cfparam name="lastName" default="" />
 <cfparam name="email" default="" />
@@ -62,51 +62,49 @@
 </cffunction>
 <cfset data = {}>
 <cfset data['success'] = true>
-<cfset customerProfilePath = ExpandPath('./assets/customerProfile/')>
+<cfset userProfilePath = ExpandPath('./assets/userProfile/')>
 
 <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
-    <cfquery name="getCustomerDataRows">
-        SELECT C.PkCustomerId, C.firstName, C.lastName, C.email, C.gender, C.dob, C.mobile, C.isActive, C.isBlcoked, C.createdBy, C.updatedBy, C.createdDate, C.updatedDate, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
-        FROM customer C
-        LEFT JOIN users U ON C.createdBy = U.PkUserId
-        LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
+    <cfquery name="getUserDataRows">
+        SELECT 
+            U.PkUserId, U.firstName, U.lastName, U.email, U.gender, U.dob, U.mobile, U.isActive, U.createdBy, U.updatedBy, U.createdDate, U.updatedDate, U.isDeleted, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
+        FROM users U
         WHERE  1 = 1
         <cfif structKeyExists(form, "isDeleted") AND form.isDeleted NEQ 2>
-            AND C.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
+            AND U.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
         </cfif>
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
-                    OR C.firstName LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.lastName LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.email LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.gender LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.dob LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.mobile LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.firstName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.email LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.gender LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.dob LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.mobile LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
         <cfif structKeyExists(form, "order") AND len(form.order) GT 0>
             ORDER BY #form.order#
         </cfif>
     </cfquery>
-    <cfquery name="getCustomerData">
-        SELECT C.PkCustomerId, C.firstName, C.lastName, C.email, C.gender, C.dob, C.mobile, C.isActive, C.isBlcoked, C.createdBy, C.updatedBy, C.createdDate, C.updatedDate, C.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, CONCAT_WS(" ", userUpdate.firstName, userUpdate.lastName) AS userNameUpdate
-        FROM customer C
-        LEFT JOIN users U ON C.createdBy = U.PkUserId
-        LEFT JOIN users userUpdate ON C.updatedBy = userUpdate.PkUserId
+    <cfquery name="getUserData">
+        SELECT 
+            U.PkUserId, U.firstName, U.lastName, U.email, U.gender, U.dob, U.mobile, U.isActive, U.createdBy, U.updatedBy, U.createdDate, U.updatedDate, U.isDeleted, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
+        FROM users U
         WHERE  1 = 1
         <cfif structKeyExists(form, "isDeleted") AND form.isDeleted NEQ 2>
-            AND C.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
+            AND U.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
         </cfif>
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
                     OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%"> 
-                    OR C.firstName LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.lastName LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.email LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.gender LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.dob LIKE <cfqueryparam value="%#trim(search)#%">
-                    OR C.mobile LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.firstName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.lastName LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.email LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.gender LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.dob LIKE <cfqueryparam value="%#trim(search)#%">
+                    OR U.mobile LIKE <cfqueryparam value="%#trim(search)#%">
                 )
         </cfif>
         
@@ -116,45 +114,42 @@
         LIMIT #form.start#, #form.length#
     </cfquery>
     <cfset data['data'] = []>
-    <cfset data['recordsFiltered'] = getCustomerDataRows.recordCount>
+    <cfset data['recordsFiltered'] = getUserDataRows.recordCount>
     <cfset data['draw'] = form.draw>
-    <cfset data['recordsTotal'] = getCustomerDataRows.recordCount>
-    <cfloop query="getCustomerData">
+    <cfset data['recordsTotal'] = getUserDataRows.recordCount>
+    <cfloop query="getUserData">
         <cfset dataRecord = {}>
 
-        <cfset dataRecord['PkCustomerId'] = getCustomerData.PkCustomerId>
-        <cfset dataRecord['firstName'] = getCustomerData.firstName>
-        <cfset dataRecord['lastName'] = getCustomerData.lastName>
-        <cfset dataRecord['email'] = getCustomerData.email>
-        <cfset dataRecord['gender'] = getCustomerData.gender>
-        <cfset dataRecord['mobile'] = getCustomerData.mobile>
-        <cfset dataRecord['dob'] = dateFormat(getCustomerData.dob, 'dd-mm-yyyy')>
-        <cfset dataRecord['isActive'] = getCustomerData.isActive>
-        <cfset dataRecord['isDeleted'] = getCustomerData.isDeleted>
-        <cfset dataRecord['isBlcoked'] = getCustomerData.isBlcoked>
-        <cfset dataRecord['isDeleted'] = getCustomerData.isDeleted>
-        <cfset dataRecord['createdBy'] = getCustomerData.createdBy>
-        <cfset dataRecord['createdDate'] = dateTimeFormat(getCustomerData.createdDate, 'dd-mm-yyyy hh:nn:ss tt')>
-        <cfset dataRecord['updatedDate'] = dateTimeFormat(getCustomerData.updatedDate, 'dd-mm-yyyy hh:nn:ss tt')>
-        <cfset dataRecord['updatedBy'] = getCustomerData.updatedBy>
-        <cfset dataRecord['PkUserId'] = getCustomerData.PkUserId>
-        <cfset dataRecord['userName'] = getCustomerData.userName>
-        <cfset dataRecord['userNameUpdate'] = getCustomerData.userNameUpdate>
+        <cfset dataRecord['PkUserId'] = getUserData.PkUserId>
+        <cfset dataRecord['firstName'] = getUserData.firstName>
+        <cfset dataRecord['lastName'] = getUserData.lastName>
+        <cfset dataRecord['email'] = getUserData.email>
+        <cfset dataRecord['gender'] = getUserData.gender>
+        <cfset dataRecord['mobile'] = getUserData.mobile>
+        <cfset dataRecord['dob'] = dateFormat(getUserData.dob, 'dd-mm-yyyy')>
+        <cfset dataRecord['isActive'] = getUserData.isActive>
+        <cfset dataRecord['isDeleted'] = getUserData.isDeleted>
+        <cfset dataRecord['createdBy'] = getUserData.createdBy>
+        <cfset dataRecord['createdDate'] = dateTimeFormat(getUserData.createdDate, 'dd-mm-yyyy hh:nn:ss tt')>
+        <cfset dataRecord['updatedDate'] = dateTimeFormat(getUserData.updatedDate, 'dd-mm-yyyy hh:nn:ss tt')>
+        <cfset dataRecord['updatedBy'] = getUserData.updatedBy>
+        <cfset dataRecord['PkUserId'] = getUserData.PkUserId>
+        <cfset dataRecord['userName'] = getUserData.userName>
         <cfset arrayAppend(data['data'], dataRecord)>
     </cfloop>
 </cfif>
 
-<cfif structKeyExists(url, 'formAction') AND url.formAction EQ 'saveCustomer'>
+<cfif structKeyExists(url, 'formAction') AND url.formAction EQ 'saveUser'>
     
     <cfif structKeyExists(form, "firstName") AND len(form.firstName) GT 0>
-        <cfif structKeyExists(form, 'PkCustomerId') AND form.PkCustomerId EQ 0>
+        <cfif structKeyExists(form, 'PkUserId') AND form.PkUserId EQ 0>
             <cfquery name="checkEmail">
-                SELECT PkCustomerId, email FROM customer 
+                SELECT PkUserId, email FROM users 
                 WHERE email = <cfqueryparam value="#trim(email)#" cfsqltype="cf_sql_varchar"> AND 
-                PkCustomerId != <cfqueryparam value = "#form.PkCustomerId#" cfsqltype = "cf_sql_integer">
+                PkUserId != <cfqueryparam value = "#form.PkUserId#" cfsqltype = "cf_sql_integer">
             </cfquery>
             <cfif checkEmail.recordCount GT 0>
-                <cflocation url="index.cfm?pg=customer&s=addCustomer&checkEmail=1" addtoken="false">
+                <cflocation url="index.cfm?pg=user&s=addUser&checkEmail=1" addtoken="false">
             </cfif>     
         </cfif>
         <cfif NOT structKeyExists(form, "isActive")>
@@ -162,13 +157,13 @@
         <cfelse>
             <cfset isActive = form.isActive>
         </cfif>
-        <cfset customerId = 0>
+        <cfset userId = 0>
         <cfset dob = dateFormat(CreateDate(form.year, form.month, form.day), 'yyyy-mm-dd')>
         <cfset hashPassword = bcrypt.hashpw(form.password,gensalt)>
-        <cfif structKeyExists(form, "PkCustomerId") AND form.PkCustomerId GT 0>
-            <cfset customerId = form.PkCustomerId>
-            <cfquery name="updatecustomerData">
-                UPDATE customer SET
+        <cfif structKeyExists(form, "PkUserId") AND form.PkUserId GT 0>
+            <cfset userId = form.PkUserId>
+            <cfquery name="updateUserData">
+                UPDATE users SET
                 firstName = <cfqueryparam value = "#form.firstName#" cfsqltype = "cf_sql_varchar">
                 , lastName = <cfqueryparam value = "#form.lastName#" cfsqltype = "cf_sql_varchar">
                 , email = <cfqueryparam value = "#form.email#" cfsqltype = "cf_sql_varchar">
@@ -179,14 +174,14 @@
                 <cfif structKeyExists(form, "password") AND len( trim(form.password ) ) GT 0>
                     , password = <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
                 </cfif>
-                WHERE PkCustomerId = <cfqueryparam value = "#customerId#" cfsqltype = "cf_sql_integer">
+                WHERE PkUserId = <cfqueryparam value = "#userId#" cfsqltype = "cf_sql_integer">
             </cfquery>
-            <!--- <cfset session.customer = {}> --->
-            <cfset session.customer.customerUpdate = 1>
-            <cflocation url="index.cfm?pg=customer&s=customerList" addtoken="false">
+            <!--- <cfset session.user = {}> --->
+            <cfset session.user.userUpdate = 1>
+            <cflocation url="index.cfm?pg=user&s=userList" addtoken="false">
         <cfelse>
-            <cfquery result="addCustomerData">
-                INSERT INTO customer (
+            <cfquery result="addUserData">
+                INSERT INTO users (
                     firstName
                     , lastName
                     , email
@@ -214,77 +209,70 @@
                     , <cfqueryparam value = "#CreateODBCDateTime(now())#" cfsqltype = "cf_sql_timestamp">
                 )
             </cfquery>
-            <cfset customerId = addCustomerData.generatedKey>
-            <!--- <cfset session.customer = {}> --->
-            <cfset session.customer.customerSave = 1>
-            <cflocation url="index.cfm?pg=customer&s=customerList" addtoken="false">
+            <cfset userId = addUserData.generatedKey>
+            <!--- <cfset session.user = {}> --->
+            <cfset session.user.customerSave = 1>
+            <cflocation url="index.cfm?pg=user&s=userList" addtoken="false">
         </cfif>
         <cfif structKeyExists(form, "password") AND len( trim(form.password ) ) GT 0>
             <cfquery name="qryPassword" result="qryResultPassword">
-                UPDATE customer SET
+                UPDATE users SET
                 password = <cfqueryparam value = "#hashPassword#" cfsqltype = "cf_sql_varchar">
-                WHERE PkCustomerId = <cfqueryparam value="#customerId#" cfsqltype="cf_sql_integer">
+                WHERE PkUserId = <cfqueryparam value="#userId#" cfsqltype="cf_sql_integer">
             </cfquery>
         </cfif>
-        <cfif structKeyExists(form, "customerProfile") AND len(form.customerProfile) GT 0>
-            <cfset txtcustomerProfile = "">
-            <cffile action="upload" destination="#customerProfilePath#" fileField="customerProfile"  nameconflict="makeunique" result="dataImage">
-            <cfset txtcustomerProfile = dataImage.serverfile>
+        <cfif structKeyExists(form, "userProfile") AND len(form.userProfile) GT 0>
+            <cfset txtuserProfile = "">
+            <cffile action="upload" destination="#userProfilePath#" fileField="userProfile"  nameconflict="makeunique" result="dataImage">
+            <cfset txtuserProfile = dataImage.serverfile>
             <cfquery name="qryGetImageName">
-                SELECT profile
-                FROM customer
-                WHERE PkCustomerId = <cfqueryparam value="#customerId#" cfsqltype="cf_sql_integer">
+                SELECT image
+                FROM users
+                WHERE PkUserId = <cfqueryparam value="#userId#" cfsqltype="cf_sql_integer">
             </cfquery>
-            <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.customerProfile) GT 0>
-                <cfif fileExists("#customerProfilePath##qryGetImageName.customerProfile#")>
-                    <cffile action="delete" file="#customerProfilePath##qryGetImageName.customerProfile#">
+            <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.userProfile) GT 0>
+                <cfif fileExists("#userProfilePath##qryGetImageName.userProfile#")>
+                    <cffile action="delete" file="#userProfilePath##qryGetImageName.userProfile#">
                 </cfif>
             </cfif>
-            <cfif len(txtcustomerProfile) GT 0>
-                <cfquery name="qryCustomerUpdateImg" result="qryResultCustomerUpdateImg">
-                    UPDATE customer SET
-                    profile = <cfqueryparam value="#txtcustomerProfile#" cfsqltype = "cf_sql_varchar">
-                    WHERE PkCustomerId = <cfqueryparam value="#customerId#" cfsqltype="cf_sql_integer">
+            <cfif len(txtuserProfile) GT 0>
+                <cfquery name="qryUserUpdateImg" result="qryResultUSerUpdateImg">
+                    UPDATE users SET
+                    image = <cfqueryparam value="#txtuserProfile#" cfsqltype = "cf_sql_varchar">
+                    WHERE PkUserId = <cfqueryparam value="#userId#" cfsqltype="cf_sql_integer">
                 </cfquery>
             </cfif>
         </cfif>
     </cfif>
 </cfif>
 
-<cfif structKeyExists(url, 'delPkCustomerId') AND url.delPkCustomerId GT 0>
+<cfif structKeyExists(url, 'delPkUserId') AND url.delPkUserId GT 0>
         <cfquery name="removeImage">
-            SELECT PkCustomerId, profile FROM customer 
-            WHERE PkCustomerId = <cfqueryparam value="#url.delPkCustomerId#" cfsqltype = "cf_sql_integer">
+            SELECT PkUserId, image FROM users 
+            WHERE PkUserId = <cfqueryparam value="#url.delPkUserId#" cfsqltype = "cf_sql_integer">
         </cfquery>
-        <cfif fileExists("#customerProfilePath##removeImage.profile#")>
-            <cffile action="delete" file="#customerProfilePath##removeImage.profile#">
+        <cfif fileExists("#userProfilePath##removeImage.image#")>
+            <cffile action="delete" file="#userProfilePath##removeImage.image#">
         </cfif>
-        <cfquery result="deleteCustomerImageData">
-            UPDATE customer SET
-            profile = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
+        <cfquery result="deleteUserImageData">
+            UPDATE users SET
+            image = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
             , isDeleted = <cfqueryparam value="1" cfsqltype = "cf_sql_integer">
-            WHERE PkCustomerId = <cfqueryparam value="#url.delPkCustomerId#" cfsqltype = "cf_sql_integer">
+            WHERE PkUserId = <cfqueryparam value="#url.delPkUserId#" cfsqltype = "cf_sql_integer">
         </cfquery>
 </cfif>
 <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
     <cfquery name="changeStatus">
-        UPDATE customer SET
+        UPDATE users SET
         isActive = !isActive
-        WHERE PkCustomerId = <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
+        WHERE PkUserId = <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
     </cfquery>
 </cfif>
-<cfif structKeyExists(url, "blockId") AND url.blockId GT 0>
-    <cfquery name="changeBlockStatus">
-        UPDATE customer SET
-        isBlcoked = !isBlcoked
-        WHERE PkCustomerId = <cfqueryparam value = "#url.blockId#" cfsqltype = "cf_sql_integer">
-    </cfquery>
-</cfif>
-<cfif structKeyExists(url, 'restorePkCustomerId') AND url.restorePkCustomerId GT 0>
+<cfif structKeyExists(url, 'restorePkUserId') AND url.restorePkUserId GT 0>
     <cfquery result="restoreCustomerData">
-        UPDATE customer SET
+        UPDATE users SET
         isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
-        WHERE PkCustomerId IN(<cfqueryparam value="#url.restorePkCustomerId#" list="true">)
+        WHERE PkUserId IN(<cfqueryparam value="#url.restorePkUserId#" list="true">)
     </cfquery>
 </cfif>
 

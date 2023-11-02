@@ -147,6 +147,9 @@
                         </ul> 
                     </cfif>
                 </div>
+                <div class="col-md-3">
+                    <cfinclude template="../common/sidebar.cfm">
+                </div>
             </div>
         <!-- Data Tables end -->
     </section>

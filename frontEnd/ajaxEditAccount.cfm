@@ -79,7 +79,31 @@
             <cflocation url="index.cfm?pg=account&s=editAccount" addtoken="false">
         </cfquery>
     </cfif>
+	<cfif structKeyExists(url, "formAction") AND url.formAction EQ "changePassword">
+		<cfquery name="getCustomerPassword">
+			SELECT PkCustomerId, password FROM customer 
+			WHERE PkCustomerId = <cfqueryparam value="#customerId#" cfsqltype="cf_sql_integer">
+		</cfquery>
+		<cfif getCustomerPassword.recordCount GT 0>
+			<cfif structKeyExists(form, 'oldpassword') AND len(form.oldpassword) GT 0> 
+				<cfset checkPassword = bcrypt.checkpw(form.oldpassword, getCustomerPassword.password)>
+				<cfif checkPassword EQ true>
+					<cfset hashPassword = bcrypt.hashpw(form.newPassword,gensalt)>
+					<cfquery result="updatePassword">
+						UPDATE customer SET  
+						password = <cfqueryparam value="#hashPassword#" cfsqltype="cf_sql_varchar">
+						WHERE PkCustomerId= <cfqueryparam value="#customerId#" cfsqltype="cf_sql_integer"> 
+					</cfquery>
+					<cfset session.customer.save = 6>
+					<cflocation url="index.cfm?pg=account&s=changePassword" addtoken="false">
+				<cfelse>
+					<cfset session.customer.error = 2>
+					<cflocation url="index.cfm?pg=account&s=changePassword" addtoken="false">
+				</cfif>
+			</cfif>
 
+		</cfif>
+	</cfif>
     <cfcatch>
         <cfset data['success'] = false>
         <cfset data['error'] = cfcatch>
