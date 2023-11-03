@@ -11,6 +11,7 @@
 <cfparam name="startRow" default="">
 <cfparam name="pageNum" default="1">
 <cfparam name="maxRows" default="9">
+<cfparam name="formAction" default="">
 
 <cfset startRow = ( pageNum-1 ) * maxRows>
 
@@ -279,6 +280,56 @@
             <!--- <cfset session.cart.product = [{'FkProductId':getCartProductQry.FkProductId,'Quantity':getCartCount.totalCartValue, 'totalCost':''}]> --->
             <!--- <cfset arrayAppend(session.cart.product['Quantity'], totalQuantity)> --->
         <!---  </cflock> --->
+    </cfif>
+    <cfif structKeyExists(url, "formAction") AND url.formAction EQ "addWishList">
+        <!---  <cfdump  var="#form#">
+            <cfdump  var="#url#"><cfabort> --->
+        <cfquery name="getProductWishList">
+            SELECT 
+                PkWishListId, FkProductId, FkCustomerId, isLike
+            FROM product_wishlist
+            WHERE FkProductId = <cfqueryparam value="#form.productId#" cfsqltype = "cf_sql_integer">
+            AND FkCustomerId = <cfqueryparam value="#form.customerId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+        <!--- <cfdump  var="#getProductWishList.recordcount#"> --->
+        <cfif getProductWishList.FkProductId EQ form.productId>
+            <cfquery result="updateWishListData">
+                UPDATE product_wishlist SET
+                FkProductId =  <cfqueryparam value = "#form.productId#" cfsqltype = "cf_sql_integer">
+                , FkCustomerId =  <cfqueryparam value = "#form.customerId#" cfsqltype = "cf_sql_integer">
+                , isLike =  <cfqueryparam value = "#form.isLike#" cfsqltype = "cf_sql_bit">
+                , updatedBy =  <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                WHERE FkCustomerId = <cfqueryparam value = "#form.customerId#" cfsqltype = "cf_sql_integer">
+                AND FkProductId =  <cfqueryparam value = "#form.productId#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+            <!--- <cfdump  var="#insertLikeData#"><cfabort> --->
+            <cfelse>
+                <cfquery result="insertLikeData">
+                    INSERT INTO product_wishlist (
+                        FkProductId
+                        , FkCustomerId
+                        , isLike
+                        , createdBy
+                    ) VALUES (
+                        <cfqueryparam value = "#form.productId#" cfsqltype = "cf_sql_integer">
+                        , <cfqueryparam value = "#form.customerId#" cfsqltype = "cf_sql_integer">
+                        , <cfqueryparam value = "#form.isLike#" cfsqltype = "cf_sql_bit">
+                        , <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                    )
+                </cfquery>
+        </cfif>
+    </cfif>
+    <cfif structKeyExists(url, "formAction") AND url.formAction EQ "removeWishList">
+        <cfquery result="updateWishListData">
+            UPDATE product_wishlist SET
+            FkProductId =  <cfqueryparam value = "#form.productId#" cfsqltype = "cf_sql_integer">
+            , FkCustomerId =  <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            , isLike =  <cfqueryparam value = "0" cfsqltype = "cf_sql_bit">
+            , updatedBy =  <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            AND FkProductId =  <cfqueryparam value = "#form.productId#" cfsqltype = "cf_sql_integer">
+        </cfquery>
     </cfif>
     <cfcatch>
         <cfset data['success'] = false>

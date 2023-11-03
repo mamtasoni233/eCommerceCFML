@@ -642,7 +642,6 @@
                         required: function(){
                             return checkRequireCreditCard();
                         },
-                        digits:true,
                     },
                     cvv: {
                         required: function(){

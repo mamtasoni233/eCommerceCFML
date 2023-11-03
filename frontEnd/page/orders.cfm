@@ -77,15 +77,15 @@
         <div class="row">
                 <h1>MY Orders</h1>
                 <div class="col-9">
-                    <table class="table-responsive table table-bordered table-hover text-center mt-3" id="orderDataTable">
-                        <thead >
+                    <table class="table-responsive table table-bordered table-hover align-middle mt-3 shadow-lg" id="orderDataTable">
+                        <thead class="ps-5">
                             <tr class="text-capitalize fw-bold">
-                                <th>Order Id</th>
-                                <th>Quantity</th>
-                                <th>Status</th>
-                                <th>Total</th>
-                                <th>Order On</th>
-                                <th>View</th>
+                                <th class="ps-5">Order Id</th>
+                                <th class="ps-5">Quantity</th>
+                                <th class="ps-5">Status</th>
+                                <th class="ps-5">Total</th>
+                                <th class="ps-5">Order On</th>
+                                <th class="ps-5">View</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -112,12 +112,12 @@
                                         <cfset statusName = Pending>">
                                     </cfif>
                                     <tr>
-                                        <td>###getOrderData.PkOrderId#</td>
-                                        <td>#getOrderData.totalQuantity#</td>
-                                        <td>#statusName#</td>
-                                        <td>#getOrderData.finalAmount#</td>
-                                        <td>#dateTimeFormat(getOrderData.createdDate, 'dd/mm/yyyy hh:nn:ss tt')#</td>
-                                        <td>
+                                        <td class="ps-5">###getOrderData.PkOrderId#</td>
+                                        <td class="ps-5">#getOrderData.totalQuantity#</td>
+                                        <td class="ps-5">#statusName#</td>
+                                        <td class="ps-5">#getOrderData.finalAmount#</td>
+                                        <td class="ps-5">#dateTimeFormat(getOrderData.createdDate, 'dd/mm/yyyy hh:nn:ss tt')#</td>
+                                        <td class="ps-5">
                                             <a class="btn btn-sm btn-orange rounded-3" data-bs-toggle="tooltip" title="View Details" href="index.cfm?pg=orderInfo&order_id=#getOrderData.PkOrderId#">
                                                 <i class="fa-solid fa-eye"></i>
                                             </a>

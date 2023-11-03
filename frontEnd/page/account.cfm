@@ -6,5 +6,8 @@
         <cfcase value="changePassword">
             <cfinclude template="./changePassword.cfm"> 
         </cfcase>
+        <cfcase value="wishList">
+            <cfinclude template="./wishList.cfm"> 
+        </cfcase>
     </cfswitch>
 </cfoutput>

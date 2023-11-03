@@ -193,9 +193,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                        <a href="index.cfm?pg=customer&s=customerList" class="btn btn-light-secondary">
                             <span class="d-block">Cancel</span>
-                        </button>
+                        </a>
                         <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
                             <span class="d-block">Submit</span>
                         </button>

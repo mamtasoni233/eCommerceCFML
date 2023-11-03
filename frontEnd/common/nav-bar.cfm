@@ -169,7 +169,7 @@
 
                     <!-- Navbar Wishlist-->
                     <li class="ms-1 d-none d-lg-inline-block">
-                        <a class="nav-link fw-bolder btn btn-link px-2 py-0 text-decoration-none d-flex align-items-center" href="##">
+                        <a class="nav-link fw-bolder btn btn-link px-2 py-0 text-decoration-none d-flex align-items-center" href="index.cfm?pg=account&s=wishList">
                             <i class="ri-heart-line ri-lg align-middle"></i>
                         </a>
                     </li>

@@ -530,6 +530,27 @@
                                                 <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
                                                     <img class="vh-25 img-fluid" title="" src="#imagePath##getProductImage.image#" alt="">
                                                 </picture>
+                                                <div class="card-actions">
+                                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
+                                                    <!--- <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
+                                                        <button class="btn btn-outline-dark btn-sm mx-2">S</button>
+                                                        <button class="btn btn-outline-dark btn-sm mx-2">M</button>
+                                                        <button class="btn btn-outline-dark btn-sm mx-2">L</button>
+                                                    </div> --->
+                                                    <!---  <button class="m-add-to-cart m-spinner-button m:w-full m-button m-button--white" name="add" aria-label="Add to cart">
+                                                        <span class="m-spinner-icon">
+                                                        <svg class="animate-spin m-svg-icon--medium" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                            <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                        </svg>
+                                                        </span>
+                                                        <span class="m-add-to-cart--text" data-atc-text="">
+                                                        
+                                                            Quick Add
+                                                        
+                                                        </span>
+                                                    </button> --->
+                                                </div>
                                             </cfloop> 
                                         </div>
                                         <div class="card-body px-0 text-center">

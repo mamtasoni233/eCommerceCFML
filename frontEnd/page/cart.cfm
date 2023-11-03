@@ -25,70 +25,71 @@
             <div class="row g-4 g-md-8" id="cartAllProductContainer">
                 <!-- Cart Items -->
                 <div class="col-12 col-lg-6 col-xl-7">
-                    <div class="table-responsive">
-                        <table class="table" id="productTable">
-                            <thead>
-                                <tr>
-                                    <th class="d-none d-sm-table-cell"></th>
-                                    <th class="ps-sm-3">Details</th>
-                                    <th>Quantities</th>
-                                    <th class="ps-sm-3">
-                                        <button class="btn-outline-none bg-light border-0 removeCartProduct" id="removeAllCartValue">
-                                            Remove All
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </th>
+                    <table class="table-responsive table table-bordered table-hover align-middle shadow-lg" id="productTable">
+                        <thead>
+                            <tr>
+                                <th class="d-none d-sm-table-cell"></th>
+                                <th class="ps-3">Details</th>
+                                <th class="ps-3">Quantities</th>
+                                <th class="ps-3">Price</th>
+                                <th class="ps-3">
+                                    <a class="btn btn-sm removeCartProduct " id="removeAllCartValue" data-bs-toggle="tooltip" title="Remove All">
+                                        <i class="fa fa-trash mt-0 pt-0"></i>
+                                    </a>
+                                    <!--- <button class="btn-outline-none bg-light border-0 removeCartProduct text-uppercase" id="removeAllCartValue">
+                                        <!--- Remove All --->
+                                        <i class="fa fa-trash"></i>
+                                    </button> --->
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <cfset productSubTotal = 0>
+                            <cfloop query="getAllCartProductQry">
+                                <cfset priceTotal = getAllCartProductQry.quantity * getAllCartProductQry.price>
+                                <cfset productSubTotal +=  priceTotal >
+                                <cfquery name="getProductImage">
+                                    SELECT image, isDefault
+                                    FROM product_image 
+                                    WHERE FkProductId = <cfqueryparam value="#getAllCartProductQry.FkProductId#" cfsqltype = "cf_sql_integer">
+                                </cfquery>
+                                <tr id="rowProduct-#getAllCartProductQry.FkProductId#" class="rowProductclass">
+                                    <!-- image -->
+                                        <td class="d-none d-sm-table-cell ps-3">
+                                            <picture class="d-block bg-light f-w-20">
+                                                <img class="img-fluid" src="#imagePath##getProductImage.image#" alt="">
+                                            </picture>
+                                        </td>
+                                    <!-- image -->
+                                    <!-- Details -->
+                                        <td class="ps-3">
+                                            <a style="cursor:pointer;" class="text-decoration-none" href="index.cfm?pg=product&id=#getAllCartProductQry.FkProductId#" data-bs-toggle="tooltip" title="View">
+                                                #getAllCartProductQry.productName#
+                                            </a>
+                                        </td>
+                                    <!-- Details -->
+                                    <!-- Qty -->
+                                        <td class="ps-3">
+                                            #getAllCartProductQry.quantity# 
+                                        </td>
+                                    <!-- /Qty -->
+                                    <!-- Price -->
+                                        <td class="ps-3">
+                                            <i class="fa fa-rupee"></i> 
+                                            <span class="perProductPrice">#priceTotal#</span>
+                                        </td>
+                                    <!-- /Price -->
+                                    <!-- Actions -->
+                                        <td class="ps-3">
+                                            <a class="btn btn-sm btn-danger btn-outline-none removeCartProduct" id="removeCartProduct-#getAllCartProductQry.FkProductId#" data-productId ="#getAllCartProductQry.FkProductId#" data-name="#getAllCartProductQry.productName#" data-bs-toggle="tooltip" title="Remove">
+                                                <i class="fa fa-remove"></i>
+                                            </a>
+                                        </td>
+                                    <!-- /Actions -->
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <cfset productSubTotal = 0>
-                                <cfloop query="getAllCartProductQry">
-                                    <cfset priceTotal = getAllCartProductQry.quantity * getAllCartProductQry.price>
-                                    <cfset productSubTotal +=  priceTotal >
-                                    <cfquery name="getProductImage">
-                                        SELECT image, isDefault
-                                        FROM product_image 
-                                        WHERE FkProductId = <cfqueryparam value="#getAllCartProductQry.FkProductId#" cfsqltype = "cf_sql_integer">
-                                    </cfquery>
-                                    <tr id="rowProduct-#getAllCartProductQry.FkProductId#" class="rowProductclass">
-                                        <!-- image -->
-                                            <td class="d-none d-sm-table-cell">
-                                                <picture class="d-block bg-light f-w-20">
-                                                    <img class="img-fluid" src="#imagePath##getProductImage.image#" alt="">
-                                                </picture>
-                                            </td>
-                                        <!-- image -->
-                                        <!-- Details -->
-                                            <td>
-                                                <div class="ps-sm-3">
-                                                    <h6 class="mb-2 fw-bolder">
-                                                        #getAllCartProductQry.productName#
-                                                    </h6>
-                                                </div>
-                                            </td>
-                                        <!-- Details -->
-                                        <!-- Qty -->
-                                            <td>
-                                                <div class="ps-2">
-                                                    <p class="fw-bolder mt-3 m-sm-0">#getAllCartProductQry.quantity#  </p>
-                                                </div>
-                                            </td>
-                                        <!-- /Qty -->
-                                        <!-- Actions -->
-                                            <td>
-                                                <div class="d-flex align-items-center h-100 ps-4">
-                                                    <p class="fw-bolder m-sm-0"><i class="fa fa-rupee"></i> <span class="perProductPrice">#priceTotal#</span></p>
-                                                    <button class="btn btn-sm btn-outline-none bg-light border-0 removeCartProduct" id="removeCartProduct-#getAllCartProductQry.FkProductId#" data-productId ="#getAllCartProductQry.FkProductId#" data-name="#getAllCartProductQry.productName#">
-                                                        <i class="fw-bold ri-close-line"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        <!-- /Actions -->
-                                    </tr>
-                                </cfloop>
-                            </tbody>
-                        </table>
-                    </div>
+                            </cfloop>
+                        </tbody>
+                    </table>
                 </div>
                 <!-- /Cart Items -->
                 <!-- Cart Summary -->
@@ -115,7 +116,7 @@
                             </div>
                         </div>
                         <!-- Coupon Code-->
-                        <button class="btn btn-link p-0 mt-2 text-white fw-bolder text-decoration-none" type="button"
+                        <!--- <button class="btn btn-link p-0 mt-2 text-white fw-bolder text-decoration-none" type="button"
                             data-bs-toggle="collapse" data-bs-target="##collapseExample" aria-expanded="false"
                             aria-controls="collapseExample">
                             Have a coupon code?
@@ -128,7 +129,7 @@
                                         <i class="ri-checkbox-circle-line ri-lg"></i></button>
                                 </div>
                             </div>
-                        </div>
+                        </div> --->
                         <!-- / Coupon Code-->
                     
                         <!-- Checkout Button-->
@@ -164,7 +165,10 @@
                     text: 'You want to delete this product ' + '"' +  name + '"',
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '##dc3545',
+                    confirmButtonColor: 'rgb(239 88 32)',
+                    // customClass: {
+                    //     confirmButton: 'btn btn-orange m-2',
+                    // },
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {

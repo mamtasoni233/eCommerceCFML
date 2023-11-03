@@ -21,7 +21,7 @@
                 <a href="" class="text-white text-decoration-none">My Addresses</a>
             </li> --->
             <li class="list-group-item bg-dark rounded-0">
-                <a href="" class="text-white text-decoration-none">Wish List</a>
+                <a href="index.cfm?pg=account&s=wishList" class="text-white text-decoration-none">Wish List</a>
             </li>
             <li class="list-group-item bg-dark rounded-0">
                 <a href="index.cfm?pg=orders" class="text-white text-decoration-none">My Orders</a>

@@ -6,7 +6,8 @@
 <cfparam name="isDeleted" default="0" />
 <cfset customerId = session.customer.isLoggedIn>
 <cfquery name="getProduct">
-    SELECT P.PkProductId, P.FkCategoryId, P.productQty, P.productName, P.productPrice, P.productDescription
+    SELECT 
+        P.PkProductId, P.FkCategoryId, P.productQty, P.productName, P.productPrice, P.productDescription
     FROM product P
     WHERE  P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
     AND P.PkProductId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
@@ -66,6 +67,14 @@
     WHERE P.isDeleted = <cfqueryparam value="#isDeleted#" cfsqltype = "cf_sql_bit">
     AND P.FkCategoryId = <cfqueryparam value="#getProduct.FkCategoryId#" cfsqltype = "cf_sql_integer">
     AND P.PkProductId != <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+</cfquery>
+<!--- get wishlist --->
+<cfquery name="getProductWishList">
+    SELECT 
+        PkWishListId, FkProductId, FkCustomerId, isLike
+    FROM product_wishlist
+    WHERE FkProductId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+    AND FkCustomerId = <cfqueryparam value="#customerId#" cfsqltype = "cf_sql_integer">
 </cfquery>
 <!--- / Related Product query --->
 <cfoutput>
@@ -167,7 +176,18 @@
                             <small class="text-muted d-inline-block ms-2 fs-bolder">(1288)</small>
                         </div>
                     </div>
-                    <h1 class="mb-2 fs-2 fw-bold">#getProduct.productName#</h1>
+                    <div class="d-flex justify-content-between" id="wishlistblock">
+                        <h1 class="mb-2 fs-2 fw-bold">#getProduct.productName#</h1>
+                        <cfif customerId GT 0>
+                            <a class="likeButton" data-id="#url.id#" data-like= "<cfif getProductWishList.isLike EQ 1>0<cfelse>1</cfif>">
+                                <i class="fs-5 likeIcon <cfif getProductWishList.isLike EQ 1>fa fa-heart text-danger <cfelse>fa-regular fa-heart</cfif>"></i>
+                            </a>
+                        <!--- <cfelse>
+                            <a href="">
+                                <i class="fa-regular fa-heart"></i>
+                            </a> --->
+                        </cfif>
+                    </div>
                     <div class="d-flex justify-content-start align-items-center">
                         <p class="lead fw-bolder m-0 fs-3 lh-1 me-2"><i class="fa fa-rupee"></i> #getProduct.productPrice#</p>
                         <!--- <s class="lh-1 me-2"><span class="fw-bolder m-0">#getProduct.productPrice#</span></s>
@@ -767,6 +787,34 @@
         var #toScript('#id#', 'productId')#
         var #toScript('#customerId#', 'customerId')#
         $(document).ready( function () { 
+            $( '.likeButton' ).on( "click", function() {
+                var dataId = $(this).data("id");
+                var like = $(this).data("like"); 
+                $.ajax({
+                    type: "POST",
+                    url: '../ajaxAddToCart.cfm?formAction=addWishList', 
+                    data :{ 'productId':dataId, 'isLike':like, 'customerId':customerId},
+                    success: function(result) {
+                            if(result.success){
+                                if (like == 0) {
+                                    dangerToast("Product removed in wishlist");
+                                    $('.likeIcon').removeClass('fa fa-heart text-danger');
+                                    $('.likeIcon').addClass('fa-regular fa-heart');
+                                    $('.likeButton').data("like", 1);
+                                } else {
+                                    successToast("Product added in wishlist");
+                                    $('.likeIcon').removeClass('fa-regular fa-heart');
+                                    $('.likeIcon').addClass('fa fa-heart text-danger');
+                                    $('.likeButton').data("like", 0);
+
+                                }
+                            }/* else{
+                                location.href = result.data;
+                            } */
+                    }
+                });
+            });
+
             $('##productQuantity').on('keyup', function() {
                 if ( $(this).val() > productQty ) {
                     warnToast("Not allowed to add this product");
