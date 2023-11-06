@@ -176,7 +176,8 @@
                             <small class="text-muted d-inline-block ms-2 fs-bolder">(1288)</small>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-between" id="wishlistblock">
+                    <h1 class="mb-2 fs-2 fw-bold">#getProduct.productName#</h1>
+                    <!--- <div class="d-flex justify-content-between" id="wishlistblock">
                         <h1 class="mb-2 fs-2 fw-bold">#getProduct.productName#</h1>
                         <cfif customerId GT 0>
                             <a class="likeButton" data-id="#url.id#" data-like= "<cfif getProductWishList.isLike EQ 1>0<cfelse>1</cfif>">
@@ -187,7 +188,7 @@
                                 <i class="fa-regular fa-heart"></i>
                             </a> --->
                         </cfif>
-                    </div>
+                    </div> --->
                     <div class="d-flex justify-content-start align-items-center">
                         <p class="lead fw-bolder m-0 fs-3 lh-1 me-2"><i class="fa fa-rupee"></i> #getProduct.productPrice#</p>
                         <!--- <s class="lh-1 me-2"><span class="fw-bolder m-0">#getProduct.productPrice#</span></s>
@@ -212,7 +213,16 @@
                     <!-- Add To Cart-->
                     <div class="d-flex justify-content-between mt-4">
                         <button class="btn btn-dark btn-dark-chunky flex-grow-1 me-2 text-white addToCartBtn">Add To Cart</button>
-                        <button class="btn btn-orange btn-orange-chunky"><i class="ri-heart-line"></i></button>
+                        <!---  <button class="btn btn-orange btn-orange-chunky"><i class="ri-heart-line"></i></button> --->
+                        <cfif customerId GT 0>
+                            <a class="likeButton btn btn-orange btn-orange-chunky" data-id="#url.id#" data-like= "<cfif getProductWishList.isLike EQ 1>0<cfelse>1</cfif>">
+                                <i class="fs-5 likeIcon <cfif getProductWishList.isLike EQ 1>fa fa-heart text-white <cfelse>fa-regular fa-heart</cfif>"></i>
+                            </a>
+                        <!--- <cfelse>
+                            <a href="">
+                                <i class="fa-regular fa-heart"></i>
+                            </a> --->
+                        </cfif>
                     </div>
                     <!-- /Add To Cart-->
                 
@@ -798,13 +808,13 @@
                             if(result.success){
                                 if (like == 0) {
                                     dangerToast("Product removed in wishlist");
-                                    $('.likeIcon').removeClass('fa fa-heart text-danger');
+                                    $('.likeIcon').removeClass('fa fa-heart text-white');
                                     $('.likeIcon').addClass('fa-regular fa-heart');
                                     $('.likeButton').data("like", 1);
                                 } else {
                                     successToast("Product added in wishlist");
                                     $('.likeIcon').removeClass('fa-regular fa-heart');
-                                    $('.likeIcon').addClass('fa fa-heart text-danger');
+                                    $('.likeIcon').addClass('fa fa-heart text-white');
                                     $('.likeButton').data("like", 0);
 
                                 }

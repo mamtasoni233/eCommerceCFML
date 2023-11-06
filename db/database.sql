@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 03, 2023 at 02:44 PM
+-- Generation Time: Nov 06, 2023 at 02:21 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -47,9 +47,10 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(325, 11, 6, '0', '2', 2000, 0, b'0', '2023-10-31 14:52:20', 11, NULL, NULL),
-(329, 1, 15, '0', '3', 90, 0, b'0', '2023-11-03 11:28:42', 1, '2023-11-03 17:30:12', 1),
-(330, 1, 6, '0', '1', 1000, 0, b'0', '2023-11-03 18:21:46', 1, NULL, NULL);
+(366, 11, 15, '0', '1', 30, 0, b'0', '2023-11-06 16:25:28', 11, NULL, NULL),
+(367, 1, 6, '0', '1', 1000, 0, b'0', '2023-11-06 18:15:50', 1, NULL, NULL),
+(368, 1, 12, '0', '1', 30, 0, b'0', '2023-11-06 18:15:59', 1, NULL, NULL),
+(369, 1, 1, '0', '2', 112, 0, b'0', '2023-11-06 18:18:09', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -468,8 +469,8 @@ CREATE TABLE `product_wishlist` (
 
 INSERT INTO `product_wishlist` (`PkWishListId`, `FkProductId`, `FkCustomerId`, `isLike`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
 (1, 15, 1, b'1', '2023-11-03 14:53:47', 1, '2023-11-03 15:34:13', 1),
-(2, 1, 1, b'1', '2023-11-03 15:34:23', 1, '2023-11-03 15:37:28', 1),
-(3, 6, 1, b'0', '2023-11-03 15:55:59', 1, '2023-11-03 16:33:07', 1);
+(2, 1, 1, b'0', '2023-11-03 15:34:23', 1, '2023-11-06 16:37:34', 1),
+(3, 6, 1, b'0', '2023-11-03 15:55:59', 1, '2023-11-06 13:54:02', 1);
 
 -- --------------------------------------------------------
 
@@ -529,7 +530,7 @@ INSERT INTO `users` (`PkUserId`, `firstName`, `token`, `lastName`, `email`, `mob
 (2, 'Nanu', NULL, 'Soni', 'nanu@gmail.com', NULL, '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, '2023-11-02 12:05:38'),
 (3, 'gvedrfg', NULL, 'dftgd', 'admin@gmail.com', NULL, '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', '', b'1', b'1', 0, '2023-11-02 11:08:46', NULL, '2023-11-02 12:22:55'),
 (4, 'test', NULL, 'test', 'mamta@gmail.com', NULL, '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, NULL),
-(5, 'Mamta', NULL, 'soni', '', NULL, '2006-04-11', b'0', '$2a$10$v3izpn/ocmrASfYmYtHp1uVb4fHokoD944y26vToQM9hbq/dDzBMa', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, NULL),
+(5, 'Mamta', NULL, 'soni', '', NULL, '2006-04-11', b'0', '$2a$10$v3izpn/ocmrASfYmYtHp1uVb4fHokoD944y26vToQM9hbq/dDzBMa', '', b'1', b'1', 0, '2023-11-02 11:08:46', NULL, '2023-11-06 09:24:44'),
 (6, 'fgujhg', NULL, 'gjg', 'ravina@gmail.com', NULL, '2007-08-15', b'0', '$2a$10$TUDPhJfaJHKxx3hNiHOy6.wWbD6ROhZFXd7mSBaN0qD4mOU.nXyQi', '', b'1', b'1', 0, '2023-11-02 11:08:46', NULL, '2023-11-02 12:23:06'),
 (7, 'Vishal Kumar', NULL, 'Khatri', 'vishal.k@lucidsolutions.in', NULL, '1995-08-20', b'1', '$2a$10$vOKOnWE1xfkbLT0YuXRVtuCXH09oSE7WWnDJ50gUSrXtGNCefhVte', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, NULL);
 
@@ -630,7 +631,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=331;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=370;
 
 --
 -- AUTO_INCREMENT for table `category`

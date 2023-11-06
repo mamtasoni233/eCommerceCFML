@@ -8,6 +8,7 @@
 <cfparam name="pageNum" default="1">
 <cfparam name="maxRows" default="9">
 <cfparam name="sorting" default="P.productName ASC">
+<cfset customerId = session.customer.isLoggedIn>
 <cfset startRow = ( pageNum-1 ) * maxRows>
 
 <cfparam name="minPrice" default="">
@@ -61,6 +62,8 @@
     </cfif>
     LIMIT #startRow#, #maxRows#
 </cfquery>
+<cfset productPrice = getProductPaging.productPrice>
+
 <cffunction name="getCategoryResult" access="public" returntype="array">
     <cfargument name="parentId" default="0" required="false" type="numeric"/>
     <cfargument name="categoryId" default="0" required="false" type="numeric"/>
@@ -146,6 +149,10 @@
             100% { 
                 transform: rotate(360deg); 
             }
+        }
+        span.quickAddBtn:hover{
+            background: ##d75515 !important;
+            color: ##fff;
         }
     </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
@@ -530,8 +537,9 @@
                                                 <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
                                                     <img class="vh-25 img-fluid" title="" src="#imagePath##getProductImage.image#" alt="">
                                                 </picture>
-                                                <div class="card-actions">
-                                                    <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
+                                                <div class="card-actions d-flex justify-content-center align-items-center">
+                                                    <input type="hidden" name="quantity" value="1" id="productQuantity">
+                                                    <span class="btn btn-sm btn-outline-orange text-center small text-uppercase tracking-wide fw-bolder d-block quickAddBtn" data-id="#getProductPaging.PkProductId#">Quick Add</span>
                                                     <!--- <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
                                                         <button class="btn btn-outline-dark btn-sm mx-2">S</button>
                                                         <button class="btn btn-outline-dark btn-sm mx-2">M</button>
@@ -658,6 +666,8 @@
         var #toScript('#minPrice#','minPrice')#;
         var #toScript('#maxPrice#','maxPrice')#;
         var #toScript('#sorting#','sortingVar')#;
+        var #toScript('#productPrice#', 'productPrice')#
+        var #toScript('#customerId#', 'customerId')#
         var value = "";
         var url = "";
         var sorting = sortingVar;
@@ -676,8 +686,12 @@
                 }
         
                 if (value.length === 0) {
-                    $('##tagNameLi-' + value).remove();
-                    $('##productTagContainer').addClass('d-none');
+                    maxPrice = parseFloat($('##filterPriceMax').val());
+                    minPrice = parseFloat($('##filterPriceMin').val());
+                    if ($(this).prop("checked") && $('##tagNameLi-' + $(this).val()).length === 0){
+                        $('##tagNameLi-' + value).remove();
+                    }
+                    /* $('##productTagContainer').addClass('d-none'); */
                     setTimeout(function(){
                         showLoader();
                     }, 500);
@@ -698,6 +712,35 @@
             } else{
                 $('##priceLi').remove();
             }
+
+            $('.quickAddBtn').on('click', function (e) {
+                e.preventDefault();
+                var quantity = $('##productQuantity').val();
+                var productId = $(this).data('id');
+                $.ajax({  
+                    url: '../ajaxAddToCart.cfm?ProductId='+ productId, 
+                    data: {'productQty':quantity, 'productPrice':productPrice, 'customerId' : customerId},
+                    type: 'POST',
+                    success: function(result) {
+                        if (result.success) {
+                            successToast("Great!! You were " + quantity + " product added in to cart");
+                            $.ajax({  
+                                url: '../ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
+                                type: 'GET',
+                                success: function(result) {
+                                    if (result.success) {
+                                        $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
+                                        $('##offcanvasCartBtn > span.cartCounter').text(result.cartCountValue);
+                                    } else {
+                                        $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
+                                        $('##offcanvasCartBtn span.cartCounter').text('');
+                                    }
+                                },
+                            });  
+                        }
+                    },
+                });  
+            });
         });
         $(document).on("click", '##applyPriceFilter', function () {
             maxPrice = parseFloat($('##filterPriceMax').val());
@@ -788,5 +831,6 @@
         function hideLoader() {
             $("##overlay").addClass("d-none");
         }
+        
     </script>
 </cfoutput>
