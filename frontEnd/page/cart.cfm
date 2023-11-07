@@ -169,12 +169,14 @@
     <!-- / Cart Container-->
 
     <section class="container mt-5">
+        <cfdump  var="#session#">
         <cfif getAllCartProductQry.recordCount EQ 0>
             <h1 class="mb-6 mt-3 display-5 fw-bold text-center">Your Cart Is Empty</h1>
         <cfelse>
-            <div class="d-flex justify-content-between mt-5">
+            <!--- <div class="d-flex justify-content-between mt-5">
                 <h1 class="mb-6 mt-5 display-5 fw-bold cartHeading">Your Cart</h1>
-            </div>
+            </div> --->
+            <h1 class="mb-6 mt-3 display-5 fw-bold text-center cartHeading">Your Cart</h1>
             <div class="row" id="cartAllProductContainer">
                 <!-- Cart Items -->
                 <div class="col-12">
@@ -218,11 +220,13 @@
                                             <td class="ps-3">
                                                 <!--- #getAllCartProductQry.quantity#  --->
                                                 <div class="quantity">
-                                                    <button class="btn btn-sm btn-dark minus-btn disabled" type="button" name="button" id="minusBtn-#getAllCartProductQry.FkProductId#">
+                                                    <button class="btn btn-sm btn-dark minus-btn" type="button" name="button"  data-pId="#getAllCartProductQry.FkProductId#" data-prodPrice="#getAllCartProductQry.productPrice#" data-prodQty="#getAllCartProductQry.productQty#" id="minusBtn-#getAllCartProductQry.FkProductId#">
                                                         <i class="fa fa-minus"></i>
                                                     </button>
-                                                    <input type="text" name="quantity" class="productQuantity" data-id="#getAllCartProductQry.FkProductId#" value="#getAllCartProductQry.quantity#" data-price="#getAllCartProductQry.price#" id="productQuantity-#getAllCartProductQry.FkProductId#">
-                                                    <button class="btn btn-sm btn-dark plus-btn" type="button" name="button" id="plusBtn-#getAllCartProductQry.FkProductId#">
+
+                                                    <input type="text" name="quantity" class="productQuantity" data-id="#getAllCartProductQry.FkProductId#" value="#getAllCartProductQry.quantity#" data-price="#getAllCartProductQry.productPrice#" id="productQuantity-#getAllCartProductQry.FkProductId#">
+
+                                                    <button class="btn btn-sm btn-dark plus-btn" type="button" name="button" id="plusBtn-#getAllCartProductQry.FkProductId#" data-pId="#getAllCartProductQry.FkProductId#" data-prodPrice="#getAllCartProductQry.productPrice#" data-prodQty="#getAllCartProductQry.productQty#">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
                                                 </div>
@@ -396,11 +400,15 @@
             });
             // increment - decrement
             $('.plus-btn').on('click', function(e) {
-                e.preventDefault();
+                // e.preventDefault();
                 let $input = $(this).closest('div').find('input');
                 let value = parseInt($input.val());
+                var productId = $(this).attr('data-pId');
+                var price = $(this).attr('data-prodPrice');
+                var productQty = $(this).attr('data-prodQty');
+                console.log(productQty);
                 console.log(value);
-                /* $('##minsBtn-'+productId).removeClass('disabled');
+                $('##minusBtn-'+productId).removeClass('disabled'); 
                 if (value <= productQty) {
                     value = value + 1;
                     $(this).removeClass('disabled');
@@ -409,8 +417,24 @@
                     value = productQty;
                     $(this).addClass('disabled');
                 }
+                addToCart(productId,value,price);
                 $input.val(value);
-                addToCart(productId); */
+            });
+            $('.minus-btn').on('click', function(e) {
+                // e.preventDefault();
+                let $input = $(this).closest('div').find('input');
+                let value = parseInt($input.val());
+                var productId = $(this).attr('data-pId');
+                var price = $(this).attr('data-prodPrice');
+                var productQty = $(this).attr('data-prodQty');
+                $('##plusBtn-'+productId).removeClass('disabled');
+                if ( value > 1) {
+                    value = value - 1;
+                    $(this).removeClass('disabled');
+                    (value === 1) &&  $(this).addClass('disabled'); 
+                }
+                addToCart(productId,value,price);
+                $input.val(value);
             });
             /* var productQty = $('##productQuantity').val();
             $('.productQuantity').on('keyup', function() {
@@ -419,11 +443,11 @@
                     warnToast("Not allowed to add this product");
                     $(this).val(productQty);
                     $('##plusBtn-'+productId).addClass('disabled');
-                    $('##minsBtn-'+productId).removeClass('disabled');
+                    $('##minusBtn-'+productId).removeClass('disabled');
                 }
             });
             var productId = $('.productQuantity').data('id');
-            $('##minsBtn-'+productId).on('click', function(e) {
+            $('##minusBtn-'+productId).on('click', function(e) {
                 e.preventDefault();
                 var $input = $(this).closest('div').find('input');
                 var value = parseInt($input.val());
@@ -437,11 +461,11 @@
                 addToCart(productId);
             }); */
             
-            $('##plusBtn-'+productId).on('click', function(e) {
+            /*  $('##plusBtn-'+productId).on('click', function(e) {
                 e.preventDefault();
                 var $input = $(this).closest('div').find('input');
                 var value = parseInt($input.val());
-                $('##minsBtn-'+productId).removeClass('disabled');
+                $('##minusBtn-'+productId).removeClass('disabled');
                 if (value <= productQty) {
                     value = value + 1;
                     $(this).removeClass('disabled');
@@ -452,21 +476,25 @@
                 }
                 $input.val(value);
                 addToCart(productId);
-            });
+            }); */
         });
         function showLoader(pId=0) {
             $("##priceRow-"+pId).html('<div class="spinner-border text-secondary" role="status"><span class="visually-hidden">Loading...</span></div>');
         }
-        function addToCart(productId=0){
-            var quantity = $('.productQuantity').val();
+        function addToCart(productId=0, quantity=0, price=0){
+            //var quantity = $('##productQuantity-'+productId).val();
+            /* var quantity = $('.productQuantity').val();
             var productId = $('.productQuantity').data('id');
-            var productPrice = $('.productQuantity').data('price');
+            var productPrice = $('.productQuantity').data('price'); */
             $.ajax({  
                 url: '../ajaxAddToCart.cfm?ProductId='+ productId, 
-                data: {'productQty':quantity, 'productPrice':productPrice, 'customerId' : customerId},
+                data: {'productQty':quantity, 'productPrice':price, 'customerId' : customerId},
                 type: 'POST',
                 success: function(result) {
                     if (result.success) {
+                        console.log('addTocartRes', result);
+                        /*  $('.productQuantity').val(result.totalQty);
+                        $('.perProductPrice').html(result.totalPrice); */
                         successToast("Great!! You were " + quantity + " product added in to cart");
                         $.ajax({  
                             url: '../ajaxAddToCart.cfm?getCartCountValue=cartCounter', 

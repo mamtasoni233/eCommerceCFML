@@ -195,36 +195,40 @@
                         <p class="lead fw-bolder m-0 fs-6 lh-1 text-success">#getProduct.productPrice#</p> --->
                     </div>
                     <!-- /Product Name, Review, Brand, Price-->
-                    <div class="d-flex justify-content-between align-items-center mt-5">
-                        <div class="quantity">
-                            <button class="btn btn-sm btn-dark minus-btn disabled" type="button" name="button">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                            <input type="text" name="quantity" value="1" id="productQuantity">
-                            <button class="btn btn-sm btn-dark plus-btn" type="button" name="button">
-                                <i class="fa fa-plus"></i>
-                            </button>
+                    <cfif getProduct.productQty GT 0>
+                        <div class="d-flex justify-content-between align-items-center mt-5">
+                            <div class="quantity">
+                                <button class="btn btn-sm btn-dark minus-btn disabled" type="button" name="button">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <input type="text" name="quantity" value="1" id="productQuantity">
+                                <button class="btn btn-sm btn-dark plus-btn" type="button" name="button">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="stock">
+                                <label for="stockAvalaible" class="h5">Stock Available: </label>
+                                <span id="stockAvalaible" class=" fw-bold ms-2">#getProduct.productQty#</span>
+                            </div>
                         </div>
-                        <div class="stock">
-                            <label for="stockAvalaible" class="h5">Stock Available: </label>
-                            <span id="stockAvalaible" class=" fw-bold ms-2">#getProduct.productQty#</span>
+                        <!-- Add To Cart-->
+                        <div class="d-flex justify-content-between mt-4">
+                            <button class="btn btn-dark btn-dark-chunky flex-grow-1 me-2 text-white addToCartBtn">Add To Cart</button>
+                            <!---  <button class="btn btn-orange btn-orange-chunky"><i class="ri-heart-line"></i></button> --->
+                            <cfif customerId GT 0>
+                                <a class="likeButton btn btn-orange btn-orange-chunky" data-id="#url.id#" data-like= "<cfif getProductWishList.isLike EQ 1>0<cfelse>1</cfif>">
+                                    <i class="fs-5 likeIcon <cfif getProductWishList.isLike EQ 1>fa fa-heart text-white <cfelse>fa-regular fa-heart</cfif>"></i>
+                                </a>
+                            <!--- <cfelse>
+                                <a href="">
+                                    <i class="fa-regular fa-heart"></i>
+                                </a> --->
+                            </cfif>
                         </div>
-                    </div>
-                    <!-- Add To Cart-->
-                    <div class="d-flex justify-content-between mt-4">
-                        <button class="btn btn-dark btn-dark-chunky flex-grow-1 me-2 text-white addToCartBtn">Add To Cart</button>
-                        <!---  <button class="btn btn-orange btn-orange-chunky"><i class="ri-heart-line"></i></button> --->
-                        <cfif customerId GT 0>
-                            <a class="likeButton btn btn-orange btn-orange-chunky" data-id="#url.id#" data-like= "<cfif getProductWishList.isLike EQ 1>0<cfelse>1</cfif>">
-                                <i class="fs-5 likeIcon <cfif getProductWishList.isLike EQ 1>fa fa-heart text-white <cfelse>fa-regular fa-heart</cfif>"></i>
-                            </a>
-                        <!--- <cfelse>
-                            <a href="">
-                                <i class="fa-regular fa-heart"></i>
-                            </a> --->
-                        </cfif>
-                    </div>
-                    <!-- /Add To Cart-->
+                        <!-- /Add To Cart-->
+                    <cfelse>
+                        <p class="text-center h4 mt-4">Sorry stock is not available</p>
+                    </cfif>
                 
                     <!-- Socials-->
                     <div class="my-4">

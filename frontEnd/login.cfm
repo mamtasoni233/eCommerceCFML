@@ -46,7 +46,11 @@
                         <cfset dataRecord['FkProductId'] = getCartProductQry.FkProductId>
                         <cfset dataRecord['TotalCost'] = getCartProductQry.price>
                         <cfset dataRecord['Quantity'] = getCartProductQry.quantity>
-                        <cfset dataRecord['CoupanId'] = getCartProductQry.FkCouponId>
+                        <cfif getCartProductQry.FkCouponId GT 0>
+                            <cfset dataRecord['CoupanId'] = getCartProductQry.FkCouponId>
+                        <cfelse>
+                            <cfset dataRecord['CoupanId'] = 0>
+                        </cfif>
                         <cfset dataRecord['DiscountValue'] = getCartProductQry.discountValue>
                         <cfquery name="qryGetImage">
                             SELECT PI.image, P.productName, P.PkProductId
