@@ -77,143 +77,150 @@
         <div class="row">
             <h1>Order Details</h1>
             <div class="col-md-9">
-                <table class="table-responsive table table-bordered table-hover align-middle mt-3">
-                    <thead>
-                        <tr>
-                            <th class="text-capitalize fw-bold fs-5 ps-4" colspan="2">Order Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="ps-4 text-capitalize fs-5">
-                                <div>
-                                    <strong>Order ID: </strong> ###url.order_id#
-                                </div>
-                                <div>
-                                    <strong>Order Placed On: </strong> #dateTimeFormat(getOrderDetails.createdDate, 'dd/mm/yyyy hh:nn:ss tt')#
-                                </div>
-                            </td>
-                            <td class="ps-4 text-capitalize fs-5">
-                                <strong>Payment Method: </strong> #getOrderDetails.paymentMethod#
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            
+                <div class="table-responsive shadow-lg rounded-3">
+                    <table class="table table-borderless table-hover align-middle mt-3" id="orderInfoDataTable">
+                        <thead>
+                            <tr>
+                                <th class="text-capitalize fw-bold fs-5 ps-4" colspan="2">Order Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-4 text-capitalize fs-5">
+                                    <div>
+                                        <strong>Order ID: </strong> ###url.order_id#
+                                    </div>
+                                    <div>
+                                        <strong>Order Placed On: </strong> #dateTimeFormat(getOrderDetails.createdDate, 'dd/mm/yyyy hh:nn:ss tt')#
+                                    </div>
+                                </td>
+                                <td class="ps-4 text-capitalize fs-5">
+                                    <strong>Payment Method: </strong> #getOrderDetails.paymentMethod#
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="row mt-3">
                     <div class="col-lg-6">
-                        <div class="border border-bottom-0 ps-4 p-2 fs-5">
-                            <strong class="fw-bold">Payment Address</strong>
-                        </div>
-                        <div class="border ps-4 p-2 wordWrapClass fs-5">
-                            <div>#getOrderDetails.firstName# #getOrderDetails.lastName#</div>
-                            <div>#getOrderDetails.mobile#</div>
-                            <div>#getOrderDetails.email#</div>
-                            <div>#getOrderDetails.address#</div>
-                            <div>#getOrderDetails.zipCode#</div>
-                            <div>#getOrderDetails.state#</div>
+                        <div class="card border shadow-lg rounded-3">
+                            <div class=" ps-4 p-2 fs-5 ">
+                                <strong class="fw-bold">Payment Address</strong>
+                            </div>
+                            <div class=" ps-4 p-2 wordWrapClass fs-5">
+                                <div>#getOrderDetails.firstName# #getOrderDetails.lastName#</div>
+                                <div>#getOrderDetails.mobile#</div>
+                                <div>#getOrderDetails.email#</div>
+                                <div>#getOrderDetails.address#</div>
+                                <div>#getOrderDetails.zipCode#</div>
+                                <div>#getOrderDetails.state#</div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="border border-bottom-0 ps-4 p-2 fs-5 ">
-                            <strong class="fw-bold">Shipping Address</strong>
-                        </div>
-                        <div class="border ps-4 p-2 wordWrapClass fs-5">
-                            <div>#getOrderDetails.billingFirstName# #getOrderDetails.billingLastName#</div>
-                            <div>#getOrderDetails.billingMobile#</div>
-                            <div>#getOrderDetails.email#</div>
-                            <div>#getOrderDetails.billingAddress#</div>
-                            <div>#getOrderDetails.billingZipCode#</div>
-                            <div>#getOrderDetails.billingState#</div>
+                        <div class="card border shadow-lg rounded-3">
+                            <div class=" ps-4 p-2 fs-5">
+                                <strong class="fw-bold">Shipping Address</strong>
+                            </div>
+                            <div class=" ps-4 p-2 wordWrapClass fs-5">
+                                <div>#getOrderDetails.billingFirstName# #getOrderDetails.billingLastName#</div>
+                                <div>#getOrderDetails.billingMobile#</div>
+                                <div>#getOrderDetails.email#</div>
+                                <div>#getOrderDetails.billingAddress#</div>
+                                <div>#getOrderDetails.billingZipCode#</div>
+                                <div>#getOrderDetails.billingState#</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <table class="table-responsive table table-bordered align-middle mt-3 table-hover shadow-lg">
-                    <thead class="fs-5 fw-bolder">
-                        <tr>
-                            <th class="w-25 ps-4">Product Name</th>
-                            <th class="w-25 ps-4">Image</th>
-                            <th class="ps-4">Quantity</th>
-                            <th class="ps-4">Price</th>
-                            <th class="ps-4">Total</th>
-                        </tr>
-                        </thead>
-                    <tbody >
-                        <cfloop query="#getOrderItemData#">
+                <div class="table-responsive card border shadow-lg rounded-3 mt-3">
+                    <table class="table table-borderless table-hover align-middle mt-3">
+                        <thead class="fs-5 fw-bolder">
                             <tr>
-                                <td class="ps-4">
-                                    #getOrderItemData.productName#
-                                </td>
-                                <td class="ps-4">
-                                    <img data-fancybox="group" class="image" src="#imagePath##getOrderItemData.image#" width="50" height="50">
-                                </td>
-                                <td class="ps-4">#getOrderItemData.totalQuantity#</td>
-                                <td class="ps-4"><i class="bi bi-currency-rupee fs-5"></i> #getOrderItemData.productPrice#</td>
-                                <td class="ps-4"><i class="bi bi-currency-rupee fs-5"></i> #getOrderItemData.totalCost#</td>
+                                <th class="w-25 ps-4">Product Name</th>
+                                <th class="w-25 ps-4">Image</th>
+                                <th class="ps-4">Quantity</th>
+                                <th class="ps-4">Price</th>
+                                <th class="ps-4">Total</th>
                             </tr>
-                        </cfloop>
-                    </tbody>
-
-                    <tfoot class="text-end">
-                        <tr>
-                            <td colspan="3"></td>
-                            <td class="m-0 p-0 fs-5 fw-bolder pe-2">Shipping Charge :</td>
-                            <td class="m-0 p-0 text-center"><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.shippingAmount#</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td class="m-0 p-0 fs-5 fw-bolder pe-2">Sub Total :</td>
-                            <td class="m-0 p-0 text-center"><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.finalAmount#</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td class="m-0 p-0 fs-5 fw-bolder pe-2">Discount :</td>
-                            <td class="m-0 p-0 text-center"><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.discountValue#</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td class="m-0 p-0 fs-5 fw-bolder pe-2">Total :</td>
-                            <td class="m-0 p-0 text-center"><i class="bi bi-currency-rupee fs-5"></i> #totalPrice#</td>
-                        </tr>
-                    </tfoot>
-                </table>
-
-                <h1>Order History</h1>
-                <table class="table-responsive table table-bordered align-middle mt-3 table-hover shadow-lg">
-                    <thead>
-                        <tr>
-                            <th class="w-25 ps-4">Date Added</th>
-                            <th class="w-25 ps-4">Status</th>
-                            <th class="w-50 ps-4">Comment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <cfloop query="getShippingStatusData">
-                            <cfset statusId = getShippingStatusData.status>
-                            <cfif statusId EQ 0>
-                                <cfset statusName = "Pending">
-                            <cfelseif statusId EQ 1>
-                                <cfset statusName = "In Process">
-                            <cfelseif statusId EQ 2>
-                                <cfset statusName = "Dispatched>">
-                            <cfelseif statusId EQ 3>
-                                <cfset statusName = "Shipped">
-                            <cfelseif statusId EQ 4>
-                                <cfset statusName = "Cancelled">
-                            <cfelseif statusId EQ 5>
-                                <cfset statusName = "Delivered">
-                            <cfelse>
-                                <cfset statusName = Pending>">
-                            </cfif>
-                        <tr>
-                            <td class="ps-4">#DateFormat(getShippingStatusData.createdDate, "dd/mm/yyyy")#</td>
-                            <td class="ps-4">#statusName#</td>
-                            <td class="ps-4">#getShippingStatusData.comment#</td>
-                        </tr>
-                        </cfloop>
-                    <tbody>
-                </table>
+                            </thead>
+                        <tbody >
+                            <cfloop query="#getOrderItemData#">
+                                <tr>
+                                    <td class="ps-4">
+                                        #getOrderItemData.productName#
+                                    </td>
+                                    <td class="ps-4">
+                                        <img data-fancybox="group" class="image" src="#imagePath##getOrderItemData.image#" width="50" height="50">
+                                    </td>
+                                    <td class="ps-4">#getOrderItemData.totalQuantity#</td>
+                                    <td class="ps-4"><i class="bi bi-currency-rupee fs-5"></i> #getOrderItemData.productPrice#</td>
+                                    <td class="ps-4"><i class="bi bi-currency-rupee fs-5"></i> #getOrderItemData.totalCost#</td>
+                                </tr>
+                            </cfloop>
+                        </tbody>
+                    
+                        <tfoot class="text-end">
+                            <tr>
+                                <td colspan="3"></td>
+                                <td class="m-0 p-0 fs-5 fw-bolder pe-2">Shipping Charge :</td>
+                                <td class="m-0 p-0 text-center"><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.shippingAmount#</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td class="m-0 p-0 fs-5 fw-bolder pe-2">Sub Total :</td>
+                                <td class="m-0 p-0 text-center"><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.finalAmount#</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td class="m-0 p-0 fs-5 fw-bolder pe-2">Discount :</td>
+                                <td class="m-0 p-0 text-center"><i class="bi bi-currency-rupee fs-5"></i> #getOrderPriceData.discountValue#</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td class="m-0 p-0 fs-5 fw-bolder pe-2">Total :</td>
+                                <td class="m-0 p-0 text-center"><i class="bi bi-currency-rupee fs-5"></i> #totalPrice#</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <h1 class="mt-3">Order History</h1>
+                <div class="table-responsive shadow-lg rounded-3">
+                    <table class="table table-borderless table-hover align-middle mt-3">
+                        <thead>
+                            <tr>
+                                <th class="w-25 ps-4">Date Added</th>
+                                <th class="w-25 ps-4">Status</th>
+                                <th class="w-50 ps-4">Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <cfloop query="getShippingStatusData">
+                                <cfset statusId = getShippingStatusData.status>
+                                <cfif statusId EQ 0>
+                                    <cfset statusName = "Pending">
+                                <cfelseif statusId EQ 1>
+                                    <cfset statusName = "In Process">
+                                <cfelseif statusId EQ 2>
+                                    <cfset statusName = "Dispatched>">
+                                <cfelseif statusId EQ 3>
+                                    <cfset statusName = "Shipped">
+                                <cfelseif statusId EQ 4>
+                                    <cfset statusName = "Cancelled">
+                                <cfelseif statusId EQ 5>
+                                    <cfset statusName = "Delivered">
+                                <cfelse>
+                                    <cfset statusName = Pending>">
+                                </cfif>
+                            <tr>
+                                <td class="ps-4">#DateFormat(getShippingStatusData.createdDate, "dd/mm/yyyy")#</td>
+                                <td class="ps-4">#statusName#</td>
+                                <td class="ps-4">#getShippingStatusData.comment#</td>
+                            </tr>
+                            </cfloop>
+                        <tbody>
+                    </table>
+                </div>
                 <div class="row mt-4 mb-3">
                     <div class="col-lg-7">
                         <a href="index.cfm?pg=orders" data-bs-toggle="tooltip" title="Back" class="text-decoration-none text-white rounded-3 btn btn-sm btn-dark">

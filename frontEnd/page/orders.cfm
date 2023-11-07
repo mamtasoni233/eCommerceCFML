@@ -74,10 +74,14 @@
         </nav>           
         <!-- /Breadcrumbs-->
         <!-- Data Tables start -->
+        <div class="d-flex justify-content-between mt-5">
+            <h1 class="mb-6 mt-4 display-5 fw-bold cartHeading">My Orders</h1>
+        </div>
         <div class="row">
-                <h1>MY Orders</h1>
-                <div class="col-9">
-                    <table class="table-responsive table table-bordered table-hover align-middle mt-3 shadow-lg" id="orderDataTable">
+            <!--- <h1>MY Orders</h1> --->
+            <div class="col-9">
+                <div class="table-responsive shadow-lg rounded-3">
+                    <table class="table table-borderless table-hover align-middle mt-3" id="orderDataTable">
                         <thead class="ps-5">
                             <tr class="text-capitalize fw-bold">
                                 <th class="ps-5">Order Id</th>
@@ -128,29 +132,30 @@
                             </cfif>
                         </tbody>
                     </table>
-                    <cfif getOrderData.recordCount GT 5>
-                        <ul class="pagination pagination-sm justify-content-end">
-                            <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
-                                <a  href="index.cfm?pg=orders&pageNum=#pageNum-1#" data-id="#pageNum#" class="page-link prev" >Previous</a>
-                            </li>
-                            <!--- <cfloop from="1" to="#totalPages#" index="i"> --->
-                            <cfloop from="#max(1, pageNum - 2)#" to="#min(totalPages, pageNum + 2)#" index="i">
-                                <li class="page-item <cfif pageNum EQ i>active</cfif>">
-                                    <a class="page-link mr-2" href="index.cfm?pg=orders&pageNum=#i#">
-                                        #i#
-                                    </a>
-                                </li>
-                            </cfloop>
-                            <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
-                                <a href="index.cfm?pg=orders&pageNum=#pageNum+1#" data-id="#pageNum#" class="page-link next">Next</a>
-                            </li>
-                        </ul> 
-                    </cfif>
                 </div>
-                <div class="col-md-3">
-                    <cfinclude template="../common/sidebar.cfm">
-                </div>
+                <cfif getOrderData.recordCount GT 5>
+                    <ul class="pagination pagination-sm justify-content-end">
+                        <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
+                            <a  href="index.cfm?pg=orders&pageNum=#pageNum-1#" data-id="#pageNum#" class="page-link prev" >Previous</a>
+                        </li>
+                        <!--- <cfloop from="1" to="#totalPages#" index="i"> --->
+                        <cfloop from="#max(1, pageNum - 2)#" to="#min(totalPages, pageNum + 2)#" index="i">
+                            <li class="page-item <cfif pageNum EQ i>active</cfif>">
+                                <a class="page-link mr-2" href="index.cfm?pg=orders&pageNum=#i#">
+                                    #i#
+                                </a>
+                            </li>
+                        </cfloop>
+                        <li class="page-item <cfif pageNum EQ totalPages>disabled</cfif>">
+                            <a href="index.cfm?pg=orders&pageNum=#pageNum+1#" data-id="#pageNum#" class="page-link next">Next</a>
+                        </li>
+                    </ul> 
+                </cfif>
             </div>
+            <div class="col-md-3">
+                <cfinclude template="../common/sidebar.cfm">
+            </div>
+        </div>
         <!-- Data Tables end -->
     </section>
 </cfoutput>

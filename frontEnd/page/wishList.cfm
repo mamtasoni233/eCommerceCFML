@@ -49,41 +49,43 @@
         <div class="row">
                 <h1>MY Wishlist</h1>
                 <div class="col-md-9">
-                    <table class="table-responsive table table-bordered bordered-3 table-hover align-middle mt-3 shadow-lg" id="orderDataTable">
-                        <thead >
-                            <tr class="text-capitalize fw-bold">
-                                <th class="ps-5">Product Name</th>
-                                <th class="text-center">Image</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <cfif getWishListData.recordCount EQ 0>
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted">No record found</td></tr>
+                    <div class="table-responsive shadow-lg rounded-3">
+                        <table class="table table-borderless table-hover align-middle mt-3" id="wishListDataTable">
+                            <thead >
+                                <tr class="text-capitalize fw-bold">
+                                    <th class="ps-5">Product Name</th>
+                                    <th class="text-center">Image</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
-                            <cfelse>
-                                <cfloop query="getWishListData">
+                            </thead>
+                            <tbody>
+                                <cfif getWishListData.recordCount EQ 0>
                                     <tr>
-                                        <td class="ps-5">
-                                            <a style="cursor:pointer;" class="text-decoration-none" href="index.cfm?pg=product&id=#getWishListData.FkProductId#" data-bs-toggle="tooltip" title="View">
-                                                #getWishListData.productName#
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <img data-fancybox="group" class="image" src="#imagePath##getWishListData.image#" width="50" height="50">
-                                        </td>
-                                        <td class="text-center">
-                                            <a class="btn btn-sm btn-danger removeBtn" data-id=#getWishListData.FkProductId# data-name="#getWishListData.productName#" data-bs-toggle="tooltip" title="Remove">
-                                                <i class="fa fa-remove"></i>
-                                            </a>
-                                        </td>
+                                        <td colspan="3" class="text-center text-muted">No record found</td></tr>
                                     </tr>
+                                <cfelse>
+                                    <cfloop query="getWishListData">
+                                        <tr>
+                                            <td class="ps-5">
+                                                <a style="cursor:pointer;" class="text-decoration-none" href="index.cfm?pg=product&id=#getWishListData.FkProductId#" data-bs-toggle="tooltip" title="View">
+                                                    #getWishListData.productName#
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <img data-fancybox="group" class="image" src="#imagePath##getWishListData.image#" width="50" height="50">
+                                            </td>
+                                            <td class="text-center">
+                                                <a class="btn btn-sm btn-danger removeBtn" data-id=#getWishListData.FkProductId# data-name="#getWishListData.productName#" data-bs-toggle="tooltip" title="Remove">
+                                                    <i class="fa fa-remove"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
 
-                                </cfloop>
-                            </cfif>
-                        </tbody>
-                    </table>
+                                    </cfloop>
+                                </cfif>
+                            </tbody>
+                        </table>
+                    </div>
                     <cfif getWishListData.recordCount GT 5>
                         <ul class="pagination pagination-sm justify-content-end">
                             <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
