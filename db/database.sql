@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2023 at 02:21 PM
+-- Generation Time: Nov 07, 2023 at 09:48 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -48,9 +48,10 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
 (366, 11, 15, '0', '1', 30, 0, b'0', '2023-11-06 16:25:28', 11, NULL, NULL),
-(367, 1, 6, '0', '1', 1000, 0, b'0', '2023-11-06 18:15:50', 1, NULL, NULL),
-(368, 1, 12, '0', '1', 30, 0, b'0', '2023-11-06 18:15:59', 1, NULL, NULL),
-(369, 1, 1, '0', '2', 112, 0, b'0', '2023-11-06 18:18:09', 1, NULL, NULL);
+(381, 1, 19, '0', '26', 4243200, 0, b'0', '2023-11-07 13:53:51', 1, '2023-11-07 14:15:27', 1),
+(382, 1, 15, '0', '35', 330750, 0, b'0', '2023-11-07 13:54:06', 1, '2023-11-07 14:15:29', 1),
+(383, 1, 6, '0', '21', 6174000, 0, b'0', '2023-11-07 13:54:11', 1, '2023-11-07 14:15:32', 1),
+(384, 1, 10, '0', '34', 1395360, 0, b'0', '2023-11-07 13:57:15', 1, '2023-11-07 14:14:16', 1);
 
 -- --------------------------------------------------------
 
@@ -276,7 +277,23 @@ CREATE TABLE `orders` (
 INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `finalAmount`, `discountValue`, `FkCouponId`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `status`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
 (4, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'courier', 2850, 427.5, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-31 07:45:25', NULL, NULL),
 (5, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 342008, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 342008, 'free', 2060, 200, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-31 09:01:19', NULL, NULL),
-(6, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'courier', 1340, 201, '0', 'upi', '8385079333@paytm', '', NULL, '2023-11-24', NULL, 0, b'1', b'0', 1, '2023-11-03 05:24:09', NULL, NULL);
+(6, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'courier', 1340, 201, '0', 'upi', '8385079333@paytm', '', NULL, '2023-11-24', NULL, 0, b'1', b'0', 1, '2023-11-03 05:24:09', NULL, NULL),
+(7, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1142, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:28:33', NULL, NULL),
+(8, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 55000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:29:54', NULL, NULL),
+(9, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 55000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:29:59', NULL, NULL),
+(10, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 55000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:30:05', NULL, NULL),
+(11, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 55000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:30:11', NULL, NULL),
+(12, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 55000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:30:12', NULL, NULL),
+(13, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 55000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:30:23', NULL, NULL),
+(14, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 55000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:30:24', NULL, NULL),
+(15, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 56500, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:30:36', NULL, NULL),
+(16, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 56500, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:30:37', NULL, NULL),
+(17, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 56500, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:30:37', NULL, NULL),
+(18, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 56500, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:31:07', NULL, NULL),
+(19, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 264872000000000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 08:20:54', NULL, NULL),
+(20, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 264872000000000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 08:21:03', NULL, NULL),
+(21, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 150, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 08:21:31', NULL, NULL),
+(22, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 150, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 08:23:42', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -309,7 +326,11 @@ INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`
 (11, 11, 5, 6, '4', 2, 2000, '2023-10-31 14:31:19', 11, NULL, NULL),
 (12, 1, 6, 15, '2', 2, 60, '2023-11-03 10:54:09', 1, NULL, NULL),
 (13, 1, 6, 1, '2', 5, 280, '2023-11-03 10:54:09', 1, NULL, NULL),
-(14, 1, 6, 13, '2', 2, 1000, '2023-11-03 10:54:09', 1, NULL, NULL);
+(14, 1, 6, 13, '2', 2, 1000, '2023-11-03 10:54:09', 1, NULL, NULL),
+(15, 1, 7, 6, '0', 1, 1000, '2023-11-07 10:58:33', 1, NULL, NULL),
+(16, 1, 7, 12, '0', 1, 30, '2023-11-07 10:58:33', 1, NULL, NULL),
+(17, 1, 7, 1, '0', 2, 112, '2023-11-07 10:58:33', 1, NULL, NULL),
+(18, 1, 22, 19, '0', 1, 150, '2023-11-07 13:53:42', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -323,7 +344,7 @@ CREATE TABLE `product` (
   `productName` varchar(100) NOT NULL,
   `product_tags` mediumtext DEFAULT NULL,
   `productPrice` float NOT NULL,
-  `productQty` int(11) NOT NULL,
+  `productQty` int(11) UNSIGNED NOT NULL,
   `productDescription` text DEFAULT NULL,
   `isActive` bit(1) NOT NULL DEFAULT b'1',
   `isDeleted` bit(1) NOT NULL DEFAULT b'0',
@@ -338,25 +359,25 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_tags`, `productPrice`, `productQty`, `productDescription`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 1, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-11-03 10:54:09', 1),
+(1, 18, 'PARLE G Original Gluco Biscuits Plain', '1', 56, 0, 'Filled with the goodness of milk and wheat, parle-g has been a source of all round nourishment for the nation since 1939.As its unique taste expanded over the globe, parle-g was declared the worlds largest selling biscuit brand by nielsen in 2003. Best paired with tea across India, dip this biscuit in your chai and relish the delicious taste like nothing in the world exists. Parle g gold is bigger, richer and tastier glucose biscuit.', b'1', b'0', '2023-09-13 15:36:01', 1, '2023-11-07 10:58:33', 1),
 (2, 19, 'Anand Namkeen Thika Meetha mix', '4', 800, 10, 'testy', b'1', b'0', '2023-09-13 16:03:30', 1, '2023-10-03 10:40:06', 1),
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-10-09 14:56:23', 1),
 (4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-10-11 12:37:30', 1),
 (5, 7, 'Samsung Z-fold ', '1,5', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
-(6, 18, 'Cookie', '9', 1000, 8, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-10-31 14:31:19', 1),
+(6, 18, 'Cookie', '9', 1000, 7, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-11-07 10:58:33', 1),
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
 (9, 20, 'Taj Mahal Tea', '8', 100, 25, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-10-03 14:12:05', 1),
 (10, 18, 'crack jack', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
-(12, 18, 'Oreo', '1', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-31 14:31:19', 1),
+(12, 18, 'Oreo', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-07 10:58:33', 1),
 (13, 18, 'test', '1,9', 500, 48, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-11-03 10:54:09', 1),
 (14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-05 14:15:39', 1),
 (15, 18, 'Britannia Good Day', '1', 30, 20, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-03 10:54:09', 1),
 (16, 18, 'Oreo Pink Cream', '1,9', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:16:06', 1),
 (17, 18, 'Sunfest', '1', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
 (18, 18, 'Choco Lava Cake', '9', 850, 19, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-10-31 13:15:26', 1),
-(19, 19, 'Bhujia Sev', '4,11', 150, 10, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-10-02 18:21:02', 7),
+(19, 19, 'Bhujia Sev', '4,11', 150, 9, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-11-07 13:53:42', 7),
 (20, 20, 'Wagh bakri Chai', '8', 1000, 25, 'Waagbakri Chai', b'1', b'0', '2023-10-03 10:45:41', 1, '2023-10-03 14:13:56', 1),
 (21, 19, '5555555555', NULL, 55000, 20, 'ewe', b'1', b'0', '2023-10-03 12:43:57', 1, '2023-10-03 14:14:04', 1);
 
@@ -494,7 +515,23 @@ CREATE TABLE `status_history` (
 INSERT INTO `status_history` (`PkHistoryId`, `FkOrderId`, `status`, `comment`, `createdBy`, `dateCreated`) VALUES
 (9, 4, 0, NULL, 11, '2023-10-31 13:15:25'),
 (10, 5, 0, NULL, 11, '2023-10-31 14:31:19'),
-(11, 6, 0, NULL, 1, '2023-11-03 10:54:09');
+(11, 6, 0, NULL, 1, '2023-11-03 10:54:09'),
+(12, 7, 0, NULL, 1, '2023-11-07 10:58:33'),
+(13, 8, 0, NULL, 1, '2023-11-07 10:59:54'),
+(14, 9, 0, NULL, 1, '2023-11-07 10:59:59'),
+(15, 10, 0, NULL, 1, '2023-11-07 11:00:05'),
+(16, 11, 0, NULL, 1, '2023-11-07 11:00:11'),
+(17, 12, 0, NULL, 1, '2023-11-07 11:00:12'),
+(18, 13, 0, NULL, 1, '2023-11-07 11:00:23'),
+(19, 14, 0, NULL, 1, '2023-11-07 11:00:24'),
+(20, 15, 0, NULL, 1, '2023-11-07 11:00:36'),
+(21, 16, 0, NULL, 1, '2023-11-07 11:00:37'),
+(22, 17, 0, NULL, 1, '2023-11-07 11:00:37'),
+(23, 18, 0, NULL, 1, '2023-11-07 11:01:07'),
+(24, 19, 0, NULL, 1, '2023-11-07 13:50:54'),
+(25, 20, 0, NULL, 1, '2023-11-07 13:51:03'),
+(26, 21, 0, NULL, 1, '2023-11-07 13:51:31'),
+(27, 22, 0, NULL, 1, '2023-11-07 13:53:42');
 
 -- --------------------------------------------------------
 
@@ -631,7 +668,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=370;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=385;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -655,13 +692,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -691,7 +728,7 @@ ALTER TABLE `product_wishlist`
 -- AUTO_INCREMENT for table `status_history`
 --
 ALTER TABLE `status_history`
-  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `users`
