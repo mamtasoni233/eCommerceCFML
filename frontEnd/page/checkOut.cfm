@@ -462,7 +462,6 @@
                                     SELECT PkCouponId, FkProductId, couponName, couponCode, description
                                     FROM coupons
                                     WHERE FkproductId IN (0,<cfqueryparam value="#checkFkProductId#" list="true">)
-                                    
                                 </cfquery>
                                 <cfquery name="qryGetCouponName" dbtype="query">
                                     SELECT *

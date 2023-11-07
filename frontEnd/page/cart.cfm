@@ -9,6 +9,7 @@
     FROM cart C
     LEFT JOIN product P ON C.FkProductId = P.PkProductId
     WHERE C.FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+    ORDER BY C.PkCartId DESC
 </cfquery>
 <cfset productId = getAllCartProductQry.FkProductId>
 <cfset productQty = getAllCartProductQry.productQty>
@@ -169,7 +170,7 @@
     <!-- / Cart Container-->
 
     <section class="container mt-5">
-        <cfdump  var="#session#">
+        <!--- <cfdump  var="#session#"> --->
         <cfif getAllCartProductQry.recordCount EQ 0>
             <h1 class="mb-6 mt-3 display-5 fw-bold text-center">Your Cart Is Empty</h1>
         <cfelse>
@@ -224,7 +225,7 @@
                                                         <i class="fa fa-minus"></i>
                                                     </button>
 
-                                                    <input type="text" name="quantity" class="productQuantity" data-id="#getAllCartProductQry.FkProductId#" value="#getAllCartProductQry.quantity#" data-price="#getAllCartProductQry.productPrice#" id="productQuantity-#getAllCartProductQry.FkProductId#">
+                                                    <input type="text" name="quantity" class="productQuantity" data-id="#getAllCartProductQry.FkProductId#" value="#getAllCartProductQry.quantity#" data-price="#getAllCartProductQry.productPrice#" id="productQuantity-#getAllCartProductQry.FkProductId#" data-prodQty="#getAllCartProductQry.productQty#">
 
                                                     <button class="btn btn-sm btn-dark plus-btn" type="button" name="button" id="plusBtn-#getAllCartProductQry.FkProductId#" data-pId="#getAllCartProductQry.FkProductId#" data-prodPrice="#getAllCartProductQry.productPrice#" data-prodQty="#getAllCartProductQry.productQty#">
                                                         <i class="fa fa-plus"></i>
@@ -242,7 +243,7 @@
                                         <!-- Total Price -->
                                             <td class="ps-3 priceRow" id="priceRow-#getAllCartProductQry.FkProductId#" data-productId="#getAllCartProductQry.FkProductId#">
                                                 <i class="fa fa-rupee"></i> 
-                                                <span class="perProductPrice">#getAllCartProductQry.price#</span>
+                                                <span class="perProductPrice" id="perProductTotalPrice-#getAllCartProductQry.FkProductId#">#getAllCartProductQry.price#</span>
                                             </td>
                                         <!-- /Total Price -->
                                         
@@ -254,46 +255,31 @@
                 </div>
                 <!-- /Cart Items -->
                 <!-- Cart Summary -->
-                <!---  <div class="col-12 col-lg-6 col-xl-5">
-                    <div class="bg-dark p-4 p-md-5 text-white">
-                        <h3 class="fs-3 fw-bold m-0 text-center">Order Summary</h3>
-                        <div class="py-3 border-bottom-white-opacity">
-                            <div class="d-flex justify-content-between align-items-center mb-2 flex-column flex-sm-row">
-                                <p class="m-0 fw-bolder fs-6">Subtotal</p>
-                                <p class="m-0 fs-6 fw-bolder"><i class="fa fa-rupee"></i> <span class="priceSubtotal">#productSubTotal#</span></p>
+                <div class="col-12 d-flex justify-content-end mt-5">
+                    <div class="w-25">
+                        <div class="border-bottom-white-opacity">
+                            <div class="m-0 p-0 d-flex justify-content-end align-items-center flex-column flex-sm-row">
+                                <p class="me-5 fs-5 fw-bold">Sub Total</p>
+                                <p class="fs-5 fw-bold me-2"><i class="fa fa-rupee"></i> <span class="priceSubtotal">#productSubTotal#</span></p>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center flex-column flex-sm-row mt-3 m-sm-0">
-                                <p class="m-0 fw-bolder fs-6">Shipping</p>
-                                <span class="text-white opacity-75 small">Will be set at checkout</span>
-                            </div>
+                            <!---  <p class="text-muted m-0 p-0 d-flex justify-content-end">Will be set at checkout</p> --->
                         </div>
-                        <div class="py-3 border-bottom-white-opacity">
-                            <div class="d-flex justify-content-between align-items-center flex-column flex-sm-row">
-                                <div>
-                                    <p class="m-0 fs-5 fw-bold">Grand Total</p>
-                                    <!--- <span class="text-white opacity-75 small">Inc $45.89 sales tax</span> --->
-                                </div>
-                                <p class="mt-3 m-sm-0 fs-5 fw-bold"><i class="fa fa-rupee"></i> <span class="priceSubtotal">#productSubTotal#</span></p>
-                            </div>
-                        </div>
-                    
                         <!-- Checkout Button-->
-                        <a href="index.cfm?pg=checkOut" class="btn btn-orange w-100 text-center mt-3"
+                        <a href="index.cfm?pg=checkOut" class="btn btn-orange w-100 text-center mt-2"
                             role="button">
                             <i class="ri-secure-payment-line align-bottom"></i> 
                             Proceed to checkout
                         </a>
                         <!-- Checkout Button-->
                     </div>
-                    
-                    <!-- Payment Icons-->
-                    <ul class="list-unstyled d-flex justify-content-center mt-3">
-                        <li class="mx-1 border d-flex align-items-center p-2"><i class="pi pi-mastercard"></i></li>
-                        <li class="mx-1 border d-flex align-items-center p-2"><i class="pi pi-american-express"></i></li>
-                        <li class="mx-1 border d-flex align-items-center p-2"><i class="pi pi-visa"></i></li>
-                    </ul>
-                    <!-- / Payment Icons-->            
-                </div> --->
+                </div>
+                <!--- <!-- Payment Icons-->
+                <ul class="list-unstyled d-flex justify-content-center mt-3">
+                    <li class="mx-1 border d-flex align-items-center p-2"><i class="pi pi-mastercard"></i></li>
+                    <li class="mx-1 border d-flex align-items-center p-2"><i class="pi pi-american-express"></i></li>
+                    <li class="mx-1 border d-flex align-items-center p-2"><i class="pi pi-visa"></i></li>
+                </ul>
+                <!-- / Payment Icons-->      --->       
                 <!-- /Cart Summary -->
             </div>
         </cfif>
@@ -305,6 +291,7 @@
         var #toScript('#productId#', 'productId')# */
         var #toScript('#customerId#', 'customerId')#
         $(document).ready( function () { 
+
             $('.removeCartProduct').on('click', function () {
                 var pId = $(this).attr('data-productId');
                 var name = $(this).attr('data-name');
@@ -320,7 +307,7 @@
                         setTimeout(function(){
                             showLoader(pId);
                         }, 1000);
-                        $.ajax({  
+                        /* $.ajax({  
                             url: './ajaxAddToCart.cfm?removeCartProduct=' + pId, 
                             type: 'GET',
                             async: false,
@@ -355,7 +342,8 @@
                                     });  
                                 }
                             },
-                        });
+                        }); */
+                        removeProduct(pId);
                     }
                 });
             });
@@ -406,8 +394,6 @@
                 var productId = $(this).attr('data-pId');
                 var price = $(this).attr('data-prodPrice');
                 var productQty = $(this).attr('data-prodQty');
-                console.log(productQty);
-                console.log(value);
                 $('##minusBtn-'+productId).removeClass('disabled'); 
                 if (value <= productQty) {
                     value = value + 1;
@@ -417,8 +403,17 @@
                     value = productQty;
                     $(this).addClass('disabled');
                 }
-                addToCart(productId,value,price);
-                $input.val(value);
+                setTimeout(function(){
+                    showLoader(productId);
+                }, 500);
+                setTimeout(function(){
+                    hideLoader(productId);
+                }, 1000);
+                setTimeout(function(){
+                    $input.val(value);
+                    addToCart(productId,value,price);
+                    // hideLoader(productId);
+                }, 500);
             });
             $('.minus-btn').on('click', function(e) {
                 // e.preventDefault();
@@ -428,13 +423,16 @@
                 var price = $(this).attr('data-prodPrice');
                 var productQty = $(this).attr('data-prodQty');
                 $('##plusBtn-'+productId).removeClass('disabled');
-                if ( value > 1) {
+                if ( value > 0) {
                     value = value - 1;
                     $(this).removeClass('disabled');
-                    (value === 1) &&  $(this).addClass('disabled'); 
-                }
-                addToCart(productId,value,price);
+                    (value === 0) &&  removeProduct(productId); 
+                } /* else{
+                    removeProduct(productId);
+                } */
                 $input.val(value);
+                addToCart(productId,value,price);
+                
             });
             /* var productQty = $('##productQuantity').val();
             $('.productQuantity').on('keyup', function() {
@@ -481,21 +479,56 @@
         function showLoader(pId=0) {
             $("##priceRow-"+pId).html('<div class="spinner-border text-secondary" role="status"><span class="visually-hidden">Loading...</span></div>');
         }
-        function addToCart(productId=0, quantity=0, price=0){
-            //var quantity = $('##productQuantity-'+productId).val();
-            /* var quantity = $('.productQuantity').val();
-            var productId = $('.productQuantity').data('id');
-            var productPrice = $('.productQuantity').data('price'); */
+        function hideLoader(pId=0) {
+            $("##priceRow-"+pId).html('<div class="spinner-border hide text-secondary" role="status"><span class="visually-hidden">Loading...</span></div>');
+        }
+        function removeProduct(pId=0) {
             $.ajax({  
-                url: '../ajaxAddToCart.cfm?ProductId='+ productId, 
+                url: './ajaxAddToCart.cfm?removeCartProduct=' + pId, 
+                type: 'GET',
+                async: false,
+                success: function(result) {
+                    if (result.success) {
+                        dangerToast("Your product is successfully deleted!");
+                        showLoader(pId);
+                        setTimeout(function(){
+                            $('##rowProduct-'+pId).remove();
+                        }, 1000);
+                        if($('.rowProductclass').length === 0){
+                            $('.cartHeading').text('Your Cart Is Empty');
+                            $('##cartAllProductContainer').addClass('d-none');
+                        } 
+                        let priceVal=0;
+                        $('.perProductPrice').each(function() {
+                            priceVal += parseFloat($(this).html());
+                        });
+                        $('.priceSubtotal').html(priceVal);
+                        $.ajax({  
+                            url: './ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
+                            type: 'GET',
+                            success: function(result) {
+                                if (result.success) {
+                                    $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
+                                    $('##offcanvasCartBtn span.cartCounter').text(result.cartCountValue);
+                                } else{
+                                    $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
+                                    $('##offcanvasCartBtn span.cartCounter').text('');
+                                }
+                            },
+                        });  
+                    }
+                },
+            });
+        }
+        function addToCart(productId=0, quantity=0, price=0){
+            $.ajax({  
+                url: '../ajaxAddToCart.cfm?updateCartProductId='+ productId, 
                 data: {'productQty':quantity, 'productPrice':price, 'customerId' : customerId},
                 type: 'POST',
                 success: function(result) {
                     if (result.success) {
-                        console.log('addTocartRes', result);
-                        /*  $('.productQuantity').val(result.totalQty);
-                        $('.perProductPrice').html(result.totalPrice); */
-                        successToast("Great!! You were " + quantity + " product added in to cart");
+                        $('##perProductTotalPrice-'+productId).html(result.totalPrice);
+                       /*  successToast("Great!! You were " + quantity + " product added in to cart"); */
                         $.ajax({  
                             url: '../ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
                             type: 'GET',

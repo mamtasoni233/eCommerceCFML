@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 07, 2023 at 09:48 AM
+-- Generation Time: Nov 07, 2023 at 01:41 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -48,10 +48,8 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
 (366, 11, 15, '0', '1', 30, 0, b'0', '2023-11-06 16:25:28', 11, NULL, NULL),
-(381, 1, 19, '0', '26', 4243200, 0, b'0', '2023-11-07 13:53:51', 1, '2023-11-07 14:15:27', 1),
-(382, 1, 15, '0', '35', 330750, 0, b'0', '2023-11-07 13:54:06', 1, '2023-11-07 14:15:29', 1),
-(383, 1, 6, '0', '21', 6174000, 0, b'0', '2023-11-07 13:54:11', 1, '2023-11-07 14:15:32', 1),
-(384, 1, 10, '0', '34', 1395360, 0, b'0', '2023-11-07 13:57:15', 1, '2023-11-07 14:14:16', 1);
+(399, 1, 10, '0', '4', 120, 0, b'0', '2023-11-07 16:59:00', 1, '2023-11-07 17:49:02', 1),
+(406, 1, 13, '0', '1', 500, 0, b'0', '2023-11-07 17:42:35', 1, '2023-11-07 17:49:48', 1);
 
 -- --------------------------------------------------------
 
@@ -668,7 +666,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=385;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=408;
 
 --
 -- AUTO_INCREMENT for table `category`
