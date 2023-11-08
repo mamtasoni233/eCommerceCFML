@@ -81,12 +81,14 @@
                                     <div class="avatar avatar-md">
                                         <cfif listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile)>
                                                 <img src="./assets/compiled/jpg/#session.user.profile#" alt="Profile">
-                                        <cfelse>
-                                            <img src="./assets/compiled/jpg/1.jpg" alt="Profile">
-                                        </cfif>
-                                        <cfif NOT listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile) AND structKeyExists(session.user, 'profile') AND len(session.user.profile) GT 0>
+                                        <!--- <cfelse>
+                                            <img src="./assets/compiled/jpg/1.jpg" alt="Profile"> --->
+                                        <!--- </cfif> --->
+                                        <cfelseif NOT listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile) AND structKeyExists(session.user, 'profile') AND len(session.user.profile) GT 0>
                                                 <img src="./assets/profileImage/#session.user.profile#" alt="Profile">
-                                        </cfif>
+                                        <cfelse>
+                                            <img src="../assets/compiled/jpg/1.jpg" class="rounded-circle profileImg" alt="Profile">
+                                        </cfif> 
                                         <!--- <img src="../../assets/categoryImage/1_1al79zoyr0rtd.png"/> --->
                                         <!--- <cfif listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile)>
                                             <img src="../assets/compiled/jpg/#session.user.profile#" alt="Profile">

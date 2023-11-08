@@ -9,6 +9,7 @@
     FROM orders 
     WHERE FkCustomerId = <cfqueryparam value = "#customerId#" cfsqltype = "cf_sql_integer">
 </cfquery>
+<cfset finalAmount = 0>
 <cfoutput>
     <style>
         .form-control{
@@ -438,6 +439,7 @@
                             </div>
                             <div class="py-3 border-bottom">
                                 <div class="d-flex justify-content-between align-items-center">
+                                    
                                     <cfset finalAmount =  (session.cart.finalAmount + session.cart.shipping) - session.cart.Discount >
                                     <div>
                                         <p class="m-0 fw-bold fs-5">Grand Total</p>

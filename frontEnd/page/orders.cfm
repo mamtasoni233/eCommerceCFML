@@ -75,7 +75,7 @@
         <!-- /Breadcrumbs-->
         <!-- Data Tables start -->
         <div class="d-flex justify-content-between mt-5">
-            <h1 class="mb-6 mt-4 display-5 fw-bold cartHeading">My Orders</h1>
+            <h1 class="mb-6 mt-4 display-5 fw-bold ">My Orders</h1>
         </div>
         <div class="row">
             <!--- <h1>MY Orders</h1> --->
@@ -127,14 +127,13 @@
                                             </a>
                                         </td>
                                     </tr>
-
                                 </cfloop>
                             </cfif>
                         </tbody>
                     </table>
                 </div>
                 <cfif getOrderData.recordCount GT 5>
-                    <ul class="pagination pagination-sm justify-content-end">
+                    <ul class="pagination pagination-sm justify-content-end mt-5">
                         <li class="page-item <cfif pageNum EQ 1>disabled</cfif>">
                             <a  href="index.cfm?pg=orders&pageNum=#pageNum-1#" data-id="#pageNum#" class="page-link prev" >Previous</a>
                         </li>

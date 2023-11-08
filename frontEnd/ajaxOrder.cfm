@@ -137,6 +137,14 @@
         </cfquery>
         <cfif getOrderItemQry.recordCount EQ 0>
             <cfloop array="#session.cart.product#" item="item">
+                <!--- <cfset checkFkProductId = arrayMap(session.cart.product, function(item) {
+                    return item.FkProductId
+                })> 
+                <cfquery name="getProductQty">
+                    SELECT productQty, PkProductId 
+                    FROM product
+                    WHERE PkProductId  = <cfqueryparam value = "#item.FkProductId#" cfsqltype = "cf_sql_integer">
+                </cfquery> --->
                 <cfquery result="addOrderItem">
                     INSERT INTO order_item (
                         FkCustomerId
@@ -189,21 +197,11 @@
             FROM coupons 
             WHERE couponCode = <cfqueryparam value = "#form.couponCode#" cfsqltype = "cf_sql_varchar">
         </cfquery>
-        <!--- <cfquery name="checkcoupon">
-            SELECT couponCode, couponName, PkCouponId, discountValue, discountType, couponStartDate, couponExpDate, repeatRestriction
-            FROM coupons 
-            WHERE couponCode IN (<cfqueryparam value="#form.couponCode#" list="true">)
-        </cfquery> --->
-        <!---  <cfdump  var="#checkcoupon#"><cfabort> --->
         <cfif checkcoupon.recordCount GT 0>
             <cfset priceTotal = 0>
             <cfset discountAmount = 0>
             <cfset totalDiscount = 0>
             <cfset session.cart.couponId = checkcoupon.PkCouponId>
-            <!--- <cfset listAppend(session.cart.couponId, checkcoupon.PkCouponId)> --->
-            <!--- <cfloop array="#session.cart.product#" item="item">
-                <cfset priceTotal = item.TotalCost>
-            </cfloop> --->
             <cfset productArrayLen="#arrayLen(session.cart.product)#">
             <cfloop array="#session.cart.product#" item="item">
                 <cfset priceTotal = item.TotalCost>
@@ -214,21 +212,12 @@
                 </cfif>
                 <cfset item.DiscountValue = discountAmount>
                 <cfset item.CoupanId = checkcoupon.PkCouponId>
-                <!--- <cfset myCouponIds = listAppend( item.CoupanId, checkcoupon.PkCouponId)> --->
-                <!--- <cfdump  var="#myCouponIds#"> --->
                 <cfquery result="updateDiscountValueCart">
                     UPDATE cart SET 
                     FkCouponId = <cfqueryparam value = "#item.CoupanId#" cfsqltype = "cf_sql_varchar">
                     , discountValue = <cfqueryparam value = "#item.DiscountValue#" cfsqltype = "cf_sql_float">
                     WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 </cfquery>
-                <!--- <cfquery result="updateDiscountValueCart">
-                    UPDATE cart SET 
-                    FkCouponId =<cfqueryparam value = "#myCouponIds#" list = "true" cfsqltype="cf_sql_varchar">
-                    , discountValue = <cfqueryparam value = "#item.DiscountValue#" cfsqltype = "cf_sql_float">
-                    WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
-                </cfquery> --->
-                <!--- <cfdump  var="#updateDiscountValueCart#"><cfabort> --->
                 <cfset totalDiscount += item.DiscountValue>
             </cfloop>
             <cfset session.cart.Discount = totalDiscount>

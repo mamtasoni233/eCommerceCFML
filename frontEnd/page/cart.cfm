@@ -174,10 +174,7 @@
         <cfif getAllCartProductQry.recordCount EQ 0>
             <h1 class="mb-6 mt-3 display-5 fw-bold text-center">Your Cart Is Empty</h1>
         <cfelse>
-            <!--- <div class="d-flex justify-content-between mt-5">
-                <h1 class="mb-6 mt-5 display-5 fw-bold cartHeading">Your Cart</h1>
-            </div> --->
-            <h1 class="mb-6 mt-3 display-5 fw-bold text-center cartHeading">Your Cart</h1>
+            <h1 class="mb-6 mt-3 display-5 fw-bold cartHeading">Your Cart</h1>
             <div class="row" id="cartAllProductContainer">
                 <!-- Cart Items -->
                 <div class="col-12">
@@ -295,7 +292,7 @@
             $('.removeCartProduct').on('click', function () {
                 var pId = $(this).attr('data-productId');
                 var name = $(this).attr('data-name');
-                Swal.fire({
+                /* Swal.fire({
                     title: 'Are you sure?',
                     text: 'You want to delete this product ' + '"' +  name + '"',
                     icon: 'warning',
@@ -303,7 +300,7 @@
                     confirmButtonColor: 'rgb(239 88 32)',
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
-                    if (result.isConfirmed) {
+                    if (result.isConfirmed) { */
                         setTimeout(function(){
                             showLoader(pId);
                         }, 1000);
@@ -344,8 +341,8 @@
                             },
                         }); */
                         removeProduct(pId);
-                    }
-                });
+                    /*  }
+                }); */
             });
             $('##removeAllCartValue').on('click', function () {
                 Swal.fire({
@@ -403,17 +400,22 @@
                     value = productQty;
                     $(this).addClass('disabled');
                 }
-                setTimeout(function(){
+                /* setTimeout(function(){
                     showLoader(productId);
-                }, 500);
+                }, 800);
                 setTimeout(function(){
                     hideLoader(productId);
-                }, 1000);
+                }, 500); */
                 setTimeout(function(){
                     $input.val(value);
                     addToCart(productId,value,price);
-                    // hideLoader(productId);
                 }, 500);
+                
+                /*  setTimeout(function(){
+                    // hideLoader(productId);
+                    // hideLoader(productId);
+                }, 500); */
+                
             });
             $('.minus-btn').on('click', function(e) {
                 // e.preventDefault();
@@ -477,11 +479,11 @@
             }); */
         });
         function showLoader(pId=0) {
-            $("##priceRow-"+pId).html('<div class="spinner-border text-secondary" role="status"><span class="visually-hidden">Loading...</span></div>');
+            $("##priceRow-"+pId).html('<div class="spinner-border text-secondary" role="status" ><span class="visually-hidden">Loading...</span></div>');
         }
-        function hideLoader(pId=0) {
-            $("##priceRow-"+pId).html('<div class="spinner-border hide text-secondary" role="status"><span class="visually-hidden">Loading...</span></div>');
-        }
+        /* function hideLoader(pId=0) {
+            $("##priceRow-"+pId).html();
+        } */
         function removeProduct(pId=0) {
             $.ajax({  
                 url: './ajaxAddToCart.cfm?removeCartProduct=' + pId, 
@@ -527,7 +529,14 @@
                 type: 'POST',
                 success: function(result) {
                     if (result.success) {
+                        /* let priceVal=0; */
                         $('##perProductTotalPrice-'+productId).html(result.totalPrice);
+                        let priceVal=0;
+                        $('.perProductPrice').each(function() {
+                            priceVal += parseFloat($(this).html());
+                        });
+                        $('.priceSubtotal').html(priceVal);
+                        $('.priceSubtotal').html(result.subTotal);
                        /*  successToast("Great!! You were " + quantity + " product added in to cart"); */
                         $.ajax({  
                             url: '../ajaxAddToCart.cfm?getCartCountValue=cartCounter', 

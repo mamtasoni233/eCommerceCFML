@@ -394,7 +394,11 @@
     document.addEventListener('DOMContentLoaded', () => {
       // var priceSliders = '';
       var e = document.querySelectorAll('.filter-price') || [];
-      priceSliders = e;
+      if (priceSliders === undefined) {
+        priceSliders = '';
+      } else {
+        priceSliders = e;
+      }
       const t = (e) => {
         const t = e.closest('.widget-filter-price');
         h.a.create(e, {

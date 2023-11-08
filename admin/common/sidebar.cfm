@@ -107,7 +107,9 @@
                     </li>
                     <li class="sidebar-item <cfif pg EQ 'order'>active</cfif>">
                         <a href="index.cfm?pg=order&s=orderList" class="sidebar-link">
-                            <i class="fas fa-cart-plus"></i>
+                            <!---  <i class="bi bi-cart-check-fill"></i> --->
+                            <!--- <i class="fas fa-cart-plus"></i> --->
+                            <i class="fas fa-cart-arrow-down"></i>
                             <span>Orders</span>
                         </a>
                     </li>

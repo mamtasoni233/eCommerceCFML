@@ -69,9 +69,9 @@
         SELECT 
             U.PkUserId, U.firstName, U.lastName, U.email, U.gender, U.dob, U.mobile, U.isActive, U.createdBy, U.updatedBy, U.createdDate, U.updatedDate, U.isDeleted, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
         FROM users U
-        WHERE  1 = 1
+        WHERE U.PkUserId != <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
         <cfif structKeyExists(form, "isDeleted") AND form.isDeleted NEQ 2>
-            AND U.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
+            AND U.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_bit">
         </cfif>
         <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
             AND ( U.firstName LIKE <cfqueryparam value="%#trim(search)#%"> 
@@ -92,7 +92,7 @@
         SELECT 
             U.PkUserId, U.firstName, U.lastName, U.email, U.gender, U.dob, U.mobile, U.isActive, U.createdBy, U.updatedBy, U.createdDate, U.updatedDate, U.isDeleted, CONCAT_WS(" ", U.firstName, U.lastName) AS userName
         FROM users U
-        WHERE  1 = 1
+        WHERE U.PkUserId != <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
         <cfif structKeyExists(form, "isDeleted") AND form.isDeleted NEQ 2>
             AND U.isDeleted = <cfqueryparam value="#form.isDeleted#" cfsqltype = "cf_sql_integer">
         </cfif>
