@@ -19,7 +19,12 @@
             FROM order_item oisub
             WHERE oisub.FkOrderId = O.PkOrderId
         ) AS 'totalQuantity',
-    O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName
+        CASE
+            WHEN O.shipping = 'free' THEN 00.00
+            WHEN O.shipping = 'nextDay' THEN 50.00
+            WHEN O.shipping = 'courier' THEN 100.00
+        END AS 'shippingAmount',
+        O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName
     FROM
         orders O
     LEFT JOIN customer C ON
@@ -45,7 +50,12 @@
             FROM order_item oisub
             WHERE oisub.FkOrderId = O.PkOrderId
         ) AS 'totalQuantity',
-    O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName
+        CASE
+            WHEN O.shipping = 'free' THEN 00.00
+            WHEN O.shipping = 'nextDay' THEN 50.00
+            WHEN O.shipping = 'courier' THEN 100.00
+        END AS 'shippingAmount',
+        O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName
     FROM
         orders O
     LEFT JOIN customer C ON
@@ -63,6 +73,7 @@
     </cfif>
     LIMIT #startRow#, #maxRows#
 </cfquery>
+<cfset totalAmount = (getOrderData.finalAmount + getOrderData.shippingAmount) - getOrderData.discountValue>
 <cfoutput>
     <section class="container">
         <!-- Breadcrumbs-->
@@ -119,7 +130,7 @@
                                         <td class="ps-5">###getOrderData.PkOrderId#</td>
                                         <td class="ps-5">#getOrderData.totalQuantity#</td>
                                         <td class="ps-5">#statusName#</td>
-                                        <td class="ps-5">#getOrderData.finalAmount#</td>
+                                        <td class="ps-5">#totalAmount#</td>
                                         <td class="ps-5">#dateTimeFormat(getOrderData.createdDate, 'dd/mm/yyyy hh:nn:ss tt')#</td>
                                         <td class="ps-5">
                                             <a class="btn btn-sm btn-orange rounded-3" data-bs-toggle="tooltip" title="View Details" href="index.cfm?pg=orderInfo&order_id=#getOrderData.PkOrderId#">

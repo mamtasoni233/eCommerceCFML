@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2023 at 02:03 PM
+-- Generation Time: Nov 09, 2023 at 01:08 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -47,8 +47,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(366, 11, 15, '0', '1', 30, 0, b'0', '2023-11-06 16:25:28', 11, NULL, NULL),
-(427, 1, 9, '0', '2', 200, 0, b'0', '2023-11-08 12:34:40', 1, '2023-11-08 14:15:32', 1);
+(431, 1, 20, '2', '5', 10000, 300, b'0', '2023-11-09 13:43:07', 1, '2023-11-09 13:45:19', 1);
 
 -- --------------------------------------------------------
 
@@ -179,7 +178,7 @@ CREATE TABLE `coupons` (
 
 INSERT INTO `coupons` (`PkCouponId`, `FkProductId`, `couponName`, `couponCode`, `discountValue`, `discountType`, `couponStartDate`, `couponExpDate`, `repeatRestriction`, `description`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
 (2, 0, '15 OFF DEP', '15OFFDEP', 15, 1, '2023-10-26', '2023-11-13', 1, 'Diwali festival: 15% off of all products', b'1', b'0', '2023-10-25 12:19:53', 1, '2023-10-25 15:19:12', 1),
-(3, 9, '20 Off Tea', '20OFFTEA', 20, 1, '2023-10-25', '2023-11-25', 1, '', b'1', b'0', '2023-10-25 12:37:54', 1, '2023-10-25 15:19:22', 1),
+(3, 9, '20 Off Tea', '20OFFTEA', 20, 1, '2023-10-25', '2023-11-25', 1, '20% off tea products', b'1', b'0', '2023-10-25 12:37:54', 1, '2023-11-09 12:29:45', 1),
 (4, 0, 'test', 'APPFIRST', 200, 2, '2023-10-25', '2023-11-05', 1, 'For only test purpose\r\n', b'1', b'0', '2023-10-25 13:08:50', 1, '2023-10-25 17:04:26', 1);
 
 -- --------------------------------------------------------
@@ -272,7 +271,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `email`, `mobile`, `address`, `state`, `zipCode`, `billingFirstName`, `billingLastName`, `billingMobile`, `billingAddress`, `billingState`, `billingZipCode`, `shipping`, `finalAmount`, `discountValue`, `FkCouponId`, `paymentMethod`, `UPIID`, `creditCardName`, `creditCardNumber`, `cardExpieryDate`, `cvv`, `status`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(4, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'courier', 2850, 427.5, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-31 07:45:25', NULL, NULL),
+(4, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'courier', 2850, 427.5, '0', 'cod', '', '', NULL, NULL, NULL, 1, b'1', b'0', 11, '2023-10-31 07:45:25', NULL, '2023-11-09 08:36:40'),
 (5, 11, 'Vishal', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 342008, 'Vishal', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 342008, 'free', 2060, 200, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-10-31 09:01:19', NULL, NULL),
 (6, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'courier', 1340, 201, '0', 'upi', '8385079333@paytm', '', NULL, '2023-11-24', NULL, 0, b'1', b'0', 1, '2023-11-03 05:24:09', NULL, NULL),
 (7, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1142, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-07 05:28:33', NULL, NULL),
@@ -296,7 +295,12 @@ INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `ema
 (25, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-08 06:22:07', NULL, NULL),
 (26, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-08 06:22:26', NULL, NULL),
 (27, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-08 06:22:43', NULL, NULL),
-(28, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1200, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-08 06:32:46', NULL, NULL);
+(28, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1200, 0, '0', 'cod', '', '', NULL, NULL, NULL, 1, b'1', b'0', 1, '2023-11-08 06:32:46', NULL, '2023-11-09 05:33:45'),
+(29, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'courier', 2200, 200, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-09 08:06:23', NULL, NULL),
+(30, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'courier', 0, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-09 08:07:39', NULL, NULL),
+(31, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 2000, 300, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-09 08:11:42', NULL, NULL),
+(33, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 1030, 154.5, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-09 08:29:50', NULL, NULL),
+(34, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'courier', 3000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-09 12:07:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -336,7 +340,14 @@ INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`
 (18, 1, 22, 19, '0', 1, 150, '2023-11-07 13:53:42', 1, NULL, NULL),
 (19, 1, 25, 20, '0', 1, 1000, '2023-11-08 11:52:07', 1, NULL, NULL),
 (20, 1, 28, 9, '0', 2, 200, '2023-11-08 12:02:46', 1, NULL, NULL),
-(21, 1, 28, 20, '0', 1, 1000, '2023-11-08 12:02:46', 1, NULL, NULL);
+(21, 1, 28, 20, '0', 1, 1000, '2023-11-08 12:02:46', 1, NULL, NULL),
+(22, 1, 29, 9, '4', 2, 200, '2023-11-09 13:36:23', 1, NULL, NULL),
+(23, 1, 29, 20, '4', 2, 2000, '2023-11-09 13:36:23', 1, NULL, NULL),
+(24, 1, 31, 20, '0', 2, 2000, '2023-11-09 13:41:42', 1, NULL, NULL),
+(25, 11, 33, 15, '0', 1, 30, '2023-11-09 13:59:50', 11, NULL, NULL),
+(26, 11, 33, 6, '2', 1, 1000, '2023-11-09 13:59:50', 11, NULL, NULL),
+(27, 11, 34, 6, '0', 2, 2000, '2023-11-09 17:37:00', 11, NULL, NULL),
+(28, 11, 34, 13, '0', 2, 1000, '2023-11-09 17:37:00', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -370,21 +381,21 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-10-09 14:56:23', 1),
 (4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-10-11 12:37:30', 1),
 (5, 7, 'Samsung Z-fold ', '1,5', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
-(6, 18, 'Cookie', '9', 1000, 7, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-11-07 10:58:33', 1),
+(6, 18, 'Cookie', '9', 1000, 4, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-11-09 17:37:00', 1),
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
-(9, 20, 'Taj Mahal Tea', '8', 100, 23, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-11-08 12:02:46', 1),
+(9, 20, 'Taj Mahal Tea', '8', 100, 21, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-11-09 13:36:23', 1),
 (10, 18, 'crack jack', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, 'Oreo', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-07 10:58:33', 1),
-(13, 18, 'test', '1,9', 500, 48, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-11-03 10:54:09', 1),
+(13, 18, 'test', '1,9', 500, 46, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-11-09 17:37:00', 1),
 (14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-05 14:15:39', 1),
-(15, 18, 'Britannia Good Day', '1', 30, 20, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-08 14:38:06', 1),
+(15, 18, 'Britannia Good Day', '1', 30, 19, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-09 13:59:50', 1),
 (16, 18, 'Oreo Pink Cream', '1,9', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:16:06', 1),
 (17, 18, 'Sunfest', '1', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
 (18, 18, 'Choco Lava Cake', '9', 850, 19, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-10-31 13:15:26', 1),
 (19, 19, 'Bhujia Sev', '4,11', 150, 9, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-11-07 13:53:42', 7),
-(20, 20, 'Wagh bakri Chai', '8', 1000, 23, 'Waagbakri Chai', b'1', b'0', '2023-10-03 10:45:41', 1, '2023-11-08 12:02:46', 1),
+(20, 20, 'Wagh bakri Chai', '8', 1000, 19, 'Waagbakri Chai', b'1', b'0', '2023-10-03 10:45:41', 1, '2023-11-09 13:41:42', 1),
 (21, 19, '5555555555', NULL, 55000, 20, 'ewe', b'1', b'0', '2023-10-03 12:43:57', 1, '2023-10-03 14:14:04', 1);
 
 -- --------------------------------------------------------
@@ -496,11 +507,13 @@ CREATE TABLE `product_wishlist` (
 --
 
 INSERT INTO `product_wishlist` (`PkWishListId`, `FkProductId`, `FkCustomerId`, `isLike`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(1, 15, 1, b'1', '2023-11-03 14:53:47', 1, '2023-11-03 15:34:13', 1),
+(1, 15, 1, b'0', '2023-11-03 14:53:47', 1, '2023-11-09 10:18:02', 1),
 (2, 1, 1, b'0', '2023-11-03 15:34:23', 1, '2023-11-06 16:37:34', 1),
 (3, 6, 1, b'0', '2023-11-03 15:55:59', 1, '2023-11-06 13:54:02', 1),
-(4, 10, 1, b'1', '2023-11-08 11:56:14', 1, NULL, NULL),
-(5, 20, 1, b'1', '2023-11-08 12:28:48', 1, NULL, NULL);
+(4, 10, 1, b'0', '2023-11-08 11:56:14', 1, '2023-11-09 13:48:26', 1),
+(5, 20, 1, b'0', '2023-11-08 12:28:48', 1, '2023-11-09 13:52:21', 1),
+(6, 15, 11, b'0', '2023-11-09 13:53:45', 11, '2023-11-09 13:53:53', 11),
+(7, 13, 11, b'1', '2023-11-09 14:50:42', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -546,7 +559,17 @@ INSERT INTO `status_history` (`PkHistoryId`, `FkOrderId`, `status`, `comment`, `
 (30, 25, 0, NULL, 1, '2023-11-08 11:52:07'),
 (31, 26, 0, NULL, 1, '2023-11-08 11:52:26'),
 (32, 27, 0, NULL, 1, '2023-11-08 11:52:43'),
-(33, 28, 0, NULL, 1, '2023-11-08 12:02:46');
+(33, 28, 0, NULL, 1, '2023-11-08 12:02:46'),
+(34, 28, 1, '', 1, '2023-11-09 10:55:28'),
+(35, 28, 2, '', 1, '2023-11-09 11:03:08'),
+(36, 28, 1, 'test', 1, '2023-11-09 11:03:45'),
+(37, 29, 0, NULL, 1, '2023-11-09 13:36:23'),
+(38, 30, 0, NULL, 1, '2023-11-09 13:37:39'),
+(39, 31, 0, NULL, 1, '2023-11-09 13:41:42'),
+(41, 33, 0, NULL, 11, '2023-11-09 13:59:50'),
+(42, 4, 1, 'testing', 1, '2023-11-09 14:06:40'),
+(43, 4, 1, 'testing', 1, '2023-11-09 14:07:14'),
+(44, 34, 0, NULL, 11, '2023-11-09 17:37:00');
 
 -- --------------------------------------------------------
 
@@ -683,7 +706,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=429;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=435;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -707,13 +730,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -737,13 +760,13 @@ ALTER TABLE `product_tags`
 -- AUTO_INCREMENT for table `product_wishlist`
 --
 ALTER TABLE `product_wishlist`
-  MODIFY `PkWishListId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `PkWishListId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `status_history`
 --
 ALTER TABLE `status_history`
-  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `users`

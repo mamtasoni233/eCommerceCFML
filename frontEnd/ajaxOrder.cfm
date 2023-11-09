@@ -216,7 +216,8 @@
                     UPDATE cart SET 
                     FkCouponId = <cfqueryparam value = "#item.CoupanId#" cfsqltype = "cf_sql_varchar">
                     , discountValue = <cfqueryparam value = "#item.DiscountValue#" cfsqltype = "cf_sql_float">
-                    WHERE FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                    WHERE FkProductId = <cfqueryparam value = "#item.FkProductId#" cfsqltype = "cf_sql_integer">
+                    AND FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
                 </cfquery>
                 <cfset totalDiscount += item.DiscountValue>
             </cfloop>
@@ -299,7 +300,23 @@
         </cfloop>
     </cfif>
 
-
+    <cfif structKeyExists(url, "formAction") AND url.formAction EQ 'removeCoupon'>
+        <cfset session.cart.couponId = 0>
+        <cfloop array="#session.cart.product#" item="item">
+            <cfset item.DiscountValue = 0>
+            <cfset item.CoupanId = 0>
+            <cfquery result="updateDiscountValueCart">
+                UPDATE cart SET 
+                FkCouponId = <cfqueryparam value = "#item.CoupanId#" cfsqltype = "cf_sql_varchar">
+                , discountValue = <cfqueryparam value = "#item.DiscountValue#" cfsqltype = "cf_sql_float">
+                WHERE FkProductId = <cfqueryparam value = "#item.FkProductId#" cfsqltype = "cf_sql_integer">
+                AND FkCustomerId = <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+        </cfloop>
+        <cfset session.cart.Discount = 0>
+        <cfset data['discountAmt'] = session.cart.Discount>
+        <cfset data['priceTotal'] = (session.cart.finalAmount + session.cart.shipping )- session.cart.Discount>
+    </cfif>
     <cfcatch>
         <cfset data['success'] = false>
         <cfset data['error'] = cfcatch>

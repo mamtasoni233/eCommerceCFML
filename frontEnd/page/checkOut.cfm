@@ -28,10 +28,10 @@
     <!--- <cfdump  var="#session#"> --->
     <!-- CheckOut Container-->
     <cfif isEmpty(session.cart.product)>
-        <h1 class="mb-3 display-5 fw-bold text-center">No Product Add In Cart</h1>
+        <h1 class="mb-3 display-5 fw-bold text-center ">No Product Add In Cart</h1>
     <cfelse>
         <section class="container mt5">
-            <h1 class="mb-3 display-5 fw-bold text-center">Checkout Securely</h1>
+            <h1 class="mb-3 display-5 fw-bold text-center chekOutHeading">Checkout Securely</h1>
             <form class="form" id="addOrderForm" method="POST" action="" enctype="multipart/form-data">
                 <div class="row g-md-8 mt-2">
                     <!-- Checkout Panel Left -->
@@ -448,14 +448,19 @@
                                 </div>
                             </div>
                             <!-- Coupon Code-->
-                            <button class="btn btn-link p-0 my-3 fw-bolder text-decoration-none" type="button"
-                                data-bs-toggle="collapse" data-bs-target="##couponContainer" aria-expanded="false"
-                                aria-controls="couponContainer">
-                                <span class="d-flex">
-                                    <img class="w23 f-left" src="https://media6.ppl-media.com/mediafiles/ecomm/promo/1669713839_icon_coupon.svg">
-                                    <span class="text-orange  px-3 fw-bold">Apply Promo Code</span>
-                                </span> 
-                            </button>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-link p-0 my-3 fw-bolder text-decoration-none" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="##couponContainer" aria-expanded="false"
+                                    aria-controls="couponContainer">
+                                    <span class="d-flex">
+                                        <img class="w23 f-left" src="https://media6.ppl-media.com/mediafiles/ecomm/promo/1669713839_icon_coupon.svg">
+                                        <span class="text-orange  px-3 fw-bold">Apply Promo Code</span>
+                                    </span> 
+                                </button>
+                                <cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId GT 0>
+                                    <button type="button" id="removeCoupon" class="btn btn-link btn-sm btn-light btn-outline-none text-danger btn-link p-0 my-3 fw-bold pe-auto">Remove Coupon</button>
+                                </cfif>
+                            </div>
                             <div class="collapse" id="couponContainer">
                                 <cfset checkFkProductId = arrayMap(session.cart.product, function(item) {
                                     return item.FkProductId
@@ -470,12 +475,6 @@
                                     FROM getCoupon
                                     WHERE PkCouponId = <cfqueryparam value="#session.cart.couponId#" cfsqltype="cf_sql_integer">
                                 </cfquery>
-                                <!--- <cfquery name="qryGetCouponName" dbtype="query">
-                                    SELECT *
-                                    FROM getCoupon
-                                    WHERE PkCouponId IN (<cfqueryparam value="#session.cart.couponId#" list="true">)
-                                </cfquery> --->
-                                
                                 <div class="card card-body border p-2">
                                     <div class="input-group mt-3 couponApplied">
                                         <input type="text" name="couponAppliedInput" id="couponAppliedInput" class="form-control couponAppliedInput" placeholder="Enter coupon" value="#qryGetCouponName.couponCode#" <!--- data-role="tagsinput" --->>
@@ -488,13 +487,13 @@
                                             <cfloop query="getCoupon">
                                                 <div class="mt-0" id="couponList">
                                                     <div class="d-flex justify-content-between w-100">
-                                                        <div id="couponDetails" class="<cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId EQ getCoupon.PkCouponId>text-decoration-line-through</cfif>">
+                                                        <div id="couponDetails-#getCoupon.PkCouponId#" data-id="#getCoupon.PkCouponId#" class="couponDetails mb-2 <cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId EQ getCoupon.PkCouponId>text-decoration-line-through</cfif>">
                                                             <span class="fw-bolder">#getCoupon.couponName# -</span>
                                                             <span class="fw-bold text-uppercase couponcode">#getCoupon.couponCode#</span>
-                                                            <div class="small mt-1">(#getCoupon.description#)</div>
+                                                            <div class="small">(#getCoupon.description#)</div>
                                                         </div>
                                                         <div>
-                                                            <input class="btn btn-sm btn-orange text-center text-white addCoupon <cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId EQ getCoupon.PkCouponId>disabled</cfif>" type="button" name="addCoupon" data-coupon="#getCoupon.couponCode#" id="addCoupon-#getCoupon.PkCouponId#" value="Apply">
+                                                            <input class="btn btn-sm btn-orange text-center text-white mb-2 addCoupon <cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId EQ getCoupon.PkCouponId>disabled</cfif>" type="button" name="addCoupon" data-coupon="#getCoupon.couponCode#" data-cId="#getCoupon.PkCouponId#" id="addCoupon-#getCoupon.PkCouponId#" value="Apply">
                                                         </div>
                                                     </div>
                                                 </div> 
@@ -810,19 +809,42 @@
                 // $('##couponAppliedInput').tagsinput('add', coupon);
                 //$('##couponAppliedInput').val(coupon).tagsinput();
             });
+            
             $('##couponAppliedBtn').on('click', function() {
                 couponCode = $('##couponAppliedInput').val();
+                //let id = $('.couponDetails').attr('data-id');
                 //couponCode = $("##couponAppliedInput").tagsinput('items');
                 // console.log('couponCode', couponCode);
                 if(couponCode != ''){
                     ajaxAddCouponShipping(couponCode, shippingValue); 
                     $('.couponApplied').after('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-                    // $("##couponDetails").addClass('text-decoration-line-through');
+                    $('##removeCoupon').addClass('d-blcok');
+                    //$(".couponDetails").addClass('text-decoration-line-through');
                 } else{
                     $('.couponApplied').after('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>Please add coupon..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
             });
-
+            $('##removeCoupon').on('click', function (){
+                // $('##couponAppliedInput').val('');
+                // $('.couponDetails').removeClass('text-decoration-line-through');
+                // $('.addCoupon').removeClass('disabled');
+                $.ajax({
+                    type: "POST",
+                    url: "../ajaxOrder.cfm?formAction=removeCoupon",
+                    success: function(result) {
+                        if (result.success) {
+                            successToast("You have successfully removed coupon!");
+                            $('##couponAppliedInput').val('');
+                            $('.couponDetails').removeClass('text-decoration-line-through');
+                            $('.addCoupon').removeClass('disabled');
+                            var discount = $('##totalDiscount').text(result.discountAmt);
+                            var priceTotal = $('##grandTotal').html(result.priceTotal);
+                            finalAmount = parseFloat(result.priceTotal);
+                            $('##removeCoupon').addClass('d-none');
+                        }
+                    }
+                });
+            });
         });
         function checkRequireBill() {
             if( $('##same-address' ).prop('checked') == false ){
@@ -849,6 +871,8 @@
                 success: function(result) {
                     if (result.success) {
                         successToast("Your order is successfully completed!");
+                        $('.chekOutHeading').text('Your Cart Is Empty');
+                        $("##addOrderForm").addClass('d-none');
                         setTimeout(() => {
                             location.href = 'index.cfm?pg=dashboard';
                         }, 500);
@@ -857,7 +881,6 @@
             });
         }
         function ajaxAddCouponShipping(couponCode, shippingValue) {
-            // var grandTotal = $('##grandTotal').html();
             $.ajax({
                 type: "POST",
                 url: "../ajaxOrder.cfm?formAction=applyCoupon", 
@@ -869,19 +892,6 @@
                         var discount = $('##totalDiscount').text(result.discountAmt);
                         var priceTotal = $('##grandTotal').html(result.priceTotal);
                         finalAmount = parseFloat(result.priceTotal);
-                        /*  if (result.shippingAmt == 'Free') {
-                            totalPrice = 0 + parseFloat(grandTotal);
-                        } else {
-                            totalPrice = parseFloat(result.shippingAmt) + parseFloat(grandTotal);
-                        }
-                        grandTotal = totalPrice;
-                        if (result.discountAmt) {
-                            //$('##grandTotal').html();
-                            totalPrice = finalAmount - parseFloat(discount);
-                        } else{
-                            totalPrice = finalAmount;
-                        }
-                        $('##grandTotal').html(totalPrice); */
                     } 
                 }
             });

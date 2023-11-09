@@ -17,7 +17,7 @@
         W.FkProductId = P.PkProductId
         LEFT JOIN product_image PI ON W.FkProductId = PI.FkProductId AND PI.isDefault = 1
     WHERE W.isLike = <cfqueryparam value = "1" cfsqltype = "cf_sql_bit">
-    AND W.FkCustomerId = <cfqueryparam value="#customerId#" cfsqltype = "cf_sql_bit">
+    AND W.FkCustomerId = <cfqueryparam value="#customerId#" cfsqltype = "cf_sql_integer">
     ORDER BY W.PkWishListId DESC
 </cfquery>
 <cfset totalPages = ceiling( getWishListDataRows.recordCount/maxRows )>
@@ -30,7 +30,7 @@
         W.FkProductId = P.PkProductId
         LEFT JOIN product_image PI ON W.FkProductId = PI.FkProductId AND PI.isDefault = 1
     WHERE W.isLike = <cfqueryparam value = "1" cfsqltype = "cf_sql_bit">
-    AND W.FkCustomerId = <cfqueryparam value="#customerId#" cfsqltype = "cf_sql_bit">
+    AND W.FkCustomerId = <cfqueryparam value="#customerId#" cfsqltype = "cf_sql_integer">
     ORDER BY W.PkWishListId DESC
     LIMIT #startRow#, #maxRows#
 </cfquery>

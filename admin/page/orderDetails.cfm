@@ -70,6 +70,16 @@
             AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
     </cfquery>
     <cfset totalPrice = (getOrderPriceData.finalAmount + getOrderPriceData.shippingAmount) - getOrderPriceData.discountValue>
+    <cfquery name="getShippingStatusData">
+            SELECT SH.PkHistoryId, SH.FkOrderId, SH.status, SH.comment, SH.createdBy, SH.dateCreated, O.PkOrderId, O.isDeleted, U.PkUserId, CONCAT_WS(" ", U.firstName, U.lastName) AS userName, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName
+            FROM status_history SH
+            LEFT JOIN orders O ON SH.FkOrderId = O.PkOrderId 
+            LEFT JOIN users U ON SH.createdBy = U.PkUserId
+            LEFT JOIN customer C ON O.createdBy = C.PkCustomerId
+            WHERE SH.FkOrderId = <cfqueryparam value="#url.id#" cfsqltype = "cf_sql_integer">
+            AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
+            ORDER BY SH.PkHistoryId DESC
+        </cfquery>
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -222,12 +232,12 @@
                                     <div class="form-group">
                                         <select name="orderStatus" id="orderStatus" class="form-control form-select">
                                             <option value="">Select Order Status..</option>
-                                            <option value="0">Pending</option>
-                                            <option value="1">In-Progress</option>
-                                            <option value="2">Dispatched</option>
-                                            <option value="3">Shipped</option>
-                                            <option value="4">Cancelled</option>
-                                            <option value="5">Delivered</option>
+                                            <option value="0" <cfif getShippingStatusData.status EQ 0>selected</cfif>>Pending</option>
+                                            <option value="1" <cfif getShippingStatusData.status EQ 1>selected</cfif>>In-Progress</option>
+                                            <option value="2" <cfif getShippingStatusData.status EQ 2>selected</cfif>>Dispatched</option>
+                                            <option value="3" <cfif getShippingStatusData.status EQ 3>selected</cfif>>Shipped</option>
+                                            <option value="4" <cfif getShippingStatusData.status EQ 4>selected</cfif>>Cancelled</option>
+                                            <option value="5" <cfif getShippingStatusData.status EQ 5>selected</cfif>>Delivered</option>
                                         </select>
                                     </div>
                                 </div>

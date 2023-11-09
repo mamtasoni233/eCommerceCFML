@@ -63,16 +63,12 @@
     <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
         <cfquery name="getOrderDataRows">
             SELECT
-                (
-                SELECT
-                    CASE WHEN o.shipping = 'free' THEN SUM(oisub.totalCost)
-                        WHEN o.shipping = 'nextDay' THEN SUM(oisub.totalCost) + 50.00
-                        WHEN o.shipping = 'courier' THEN SUM(oisub.totalCost) + 100.00
-                    END
-                FROM order_item oisub
-                WHERE oisub.FkOrderId = O.PkOrderId
-            ) AS 'totalAmt',
-            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName, userUpdate.lastName ) AS userNameUpdate
+                CASE
+                    WHEN O.shipping = 'free' THEN 00.00
+                    WHEN O.shipping = 'nextDay' THEN 50.00
+                    WHEN O.shipping = 'courier' THEN 100.00
+                END AS 'shippingAmount',
+                O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, O.isDeleted, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName,   userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName, userUpdate.lastName ) AS userNameUpdate
             FROM
                 orders O
             LEFT JOIN customer C ON
@@ -96,16 +92,12 @@
         </cfquery>
         <cfquery name="getOrderData">
             SELECT
-                (
-                SELECT
-                    CASE WHEN o.shipping = 'free' THEN SUM(oisub.totalCost)
-                        WHEN o.shipping = 'nextDay' THEN SUM(oisub.totalCost) + 50.00
-                        WHEN o.shipping = 'courier' THEN SUM(oisub.totalCost) + 100.00
-                    END
-                FROM order_item oisub
-                WHERE oisub.FkOrderId = O.PkOrderId
-            ) AS 'totalAmt',
-            O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName, userUpdate.lastName ) AS userNameUpdate
+                CASE
+                    WHEN O.shipping = 'free' THEN 00.00
+                    WHEN O.shipping = 'nextDay' THEN 50.00
+                    WHEN O.shipping = 'courier' THEN 100.00
+                END AS 'shippingAmount',
+                O.PkOrderId, O.firstName, O.lastName, O.FkCustomerId, O.shipping, O.status, O.finalAmount, O.discountValue, O.createdBy, O.updatedBy, O.createdDate, O.updatedDate, C.PkCustomerId, CONCAT_WS(" ", O.firstName, O.lastName) AS customerName, userUpdate.PkUserId, CONCAT_WS( " ",  userUpdate.firstName, userUpdate.lastName ) AS userNameUpdate
             FROM
                 orders O
             LEFT JOIN customer C ON
@@ -134,10 +126,9 @@
         <cfset data['recordsTotal'] = getOrderDataRows.recordCount>
         <cfloop query="getOrderData">
             <cfset dataRecord = {}>
-
             <cfset dataRecord['PkOrderId'] = getOrderData.PkOrderId>
-            <cfset dataRecord['totalAmt'] = getOrderData.totalAmt>
-            <cfset dataRecord['finalAmount'] = getOrderData.finalAmount>
+            <!--- <cfset dataRecord['finalAmount'] = getOrderData.finalAmount> --->
+            <cfset dataRecord['totalAmount'] = (getOrderData.finalAmount + getOrderData.shippingAmount) - getOrderData.discountValue>
             <cfset dataRecord['discountValue'] = getOrderData.discountValue>
             <cfset dataRecord['status'] = getOrderData.status>
             <cfset dataRecord['createdBy'] = getOrderData.createdBy>
