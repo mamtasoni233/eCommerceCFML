@@ -283,31 +283,31 @@
                                         <input type="hidden" name="PkUserId" id="PkUserId" value="#PkUserId#">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <lable class="fw-bold form-label" for="firstName">First Name</lable>
+                                                <lable class="fw-bold form-label" for="firstName">First Name <span class="text-danger">*</span></lable>
                                                 <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                    <input type="text" class="form-control form-control-xl" id="firstName" name="firstName" placeholder="Enter First Name" value="#firstName#"/>
+                                                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" value="#firstName#"/>
                                                     <div class="form-control-icon">
                                                         <i class="bi bi-person"></i>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <lable class="fw-bold form-label" for="lastName">Last Name</lable>
+                                                <lable class="fw-bold form-label" for="lastName">Last Name <span class="text-danger">*</span></lable>
                                                 <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                    <input type="text" class="form-control form-control-xl" id="lastName" name="lastName" placeholder="Enter Last Name" value="#lastName#"/>
+                                                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" value="#lastName#"/>
                                                     <div class="form-control-icon">
                                                         <i class="bi bi-person"></i>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                <lable class="fw-bold form-label " for="dob">DOB</lable>
+                                                <lable class="fw-bold form-label " for="dob">DOB <span class="text-danger">*</span></lable>
                                                 <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <select name="year" class="form-select" id="year">
-                                                                    <option value="" selected class="opacity-100">Year</option>
+                                                                <select name="year" id="year" class="form-control form-control-xl" data-placeholder="Select Year">
+                                                                    <option></option>
                                                                     <cfloop from="1995" to="2013" index="idx">
                                                                         <option value="#idx#" <cfif dobYear EQ idx>selected</cfif>>#idx#</option>
                                                                     </cfloop>
@@ -316,8 +316,8 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <select name="month" class="form-select" id="month">
-                                                                    <option value="" selected class="opacity-100">Month</option>
+                                                                <select name="month" id="month" class="form-control form-control-xl" data-placeholder="Select Month">
+                                                                    <option></option>
                                                                     <cfloop from="1" to="12" index="i">
                                                                         <option value="#i#" <cfif dobMonth EQ i>selected</cfif>>#i#</option>
                                                                     </cfloop>
@@ -326,8 +326,8 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <select name="day" class="form-select" id="day">
-                                                                    <option value="" class="opacity-100">Day</option>
+                                                                <select name="day" id="day" class="form-control form-control-xl" data-placeholder="Select Day">
+                                                                    <option></option>
                                                                     <cfloop from="1" to="31" index="j">
                                                                         <option value="#j#" <cfif dobDate EQ j  >selected</cfif>>#j#</option>
                                                                     </cfloop>
@@ -337,39 +337,37 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6"> 
-                                            <lable class="fw-bold form-label" for="email">Email</lable>
-                                            <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="text" class="form-control form-control-xl" id="email" name="email" placeholder="Email" value="#email#"/>
-                                                <div class="form-control-icon">
-                                                    <i class="bi bi-envelope"></i>
+                                            <div class="col-md-6"> 
+                                                <lable class="fw-bold form-label" for="email">Email <span class="text-danger">*</span></lable>
+                                                <div class="form-group position-relative has-icon-left mb-4 mt-2">
+                                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email" value="#email#"/>
+                                                    <div class="form-control-icon">
+                                                        <i class="bi bi-envelope"></i>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6"> 
-                                            <lable class="fw-bold form-label" for="gender">Gender</lable>
-                                            <div class="form-group position-relative has-icon-left mt-4">
-                                                <div class="row genderRow">
-                                                    <div class="col-md-6">
+                                            <div class="col-md-6"> 
+                                                <lable class="fw-bold form-label" for="gender">Gender <span class="text-danger">*</span></lable>
+                                                <div class="form-group position-relative has-icon-left mt-4">
+                                                    <div class="row genderRow">
+                                                        <div class="col-md-6">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input genderCheck" type="radio" name="gender" value="1" <cfif gender EQ 1>checked</cfif>>
+                                                                    <label class="form-check-label ms-3 " for="male" id="male"> <i class="fas fa-male fs-2"></i> </label>
+                                                                </div>
+                                                        </div>
+                                                        <div class="col-md-6">
                                                             <div class="form-check">
-                                                                <input class="form-check-input genderCheck" type="radio" name="gender" value="1" <cfif gender EQ 1>checked</cfif>>
-                                                                <label class="form-check-label" for="male" id="male"> Male</label>
+                                                                <input class="form-check-input genderCheck" type="radio" name="gender" value="0"  <cfif gender EQ 0>checked</cfif>>
+                                                                <label class="form-check-label ms-3" for="female" id="female"> <i class="fas fa-female fs-2"></i></label>
                                                             </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input genderCheck" type="radio" name="gender" value="0"  <cfif gender EQ 0>checked</cfif>>
-                                                            <label class="form-check-label" for="female" id="female"> Female </label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-4 mx-auto">
-                                            <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mx-auto">
-                                                Update
-                                            </button>
+                                            <div class="d-flex justify-content-end mt-4">
+                                                <button type="submit" class="btn btn-primary shadow-lg" data-toggle="tooltip" data-html="true" title="Update Info" data-placement="bottom">Update</button>
+                                            </div>
                                         </div>
                                     </form>
                                     <!-- End Profile Edit Form -->
@@ -394,7 +392,7 @@
                                             <div class="col-md-12">
                                                 <lable class="fw-bold form-label" for="password">Old Password <span class="text-danger">*</span></lable>
                                                 <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                    <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Enter Your Old Password" value=""/>
+                                                    <input type="password" name="password" id="password" class="form-control " placeholder="Enter your old password" value=""/>
                                                     <div class="form-control-icon">
                                                         <i class="bi bi-shield-lock"></i>
                                                     </div>
@@ -403,7 +401,7 @@
                                             <div class="col-md-12">
                                                 <lable class="fw-bold form-label" for="newPassword">New Password <span class="text-danger">*</span></lable>
                                                 <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                    <input type="password" name="newPassword" id="newPassword" class="form-control form-control-xl" placeholder="Enter your new password" value=""/>
+                                                    <input type="password" name="newPassword" id="newPassword" class="form-control " placeholder="Enter your new password" value=""/>
                                                     <div class="form-control-icon">
                                                         <i class="bi bi-shield-lock"></i>
                                                     </div>
@@ -414,15 +412,15 @@
                                             <div class="col-md-12">
                                                 <lable class="fw-bold form-label" for="confrimPassword">Confrim Password <span class="text-danger">*</span></lable>
                                                 <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                    <input type="password" name="confrimPassword" id="confrimPassword" class="form-control form-control-xl" placeholder="Enter your Confrim password" value=""/>
+                                                    <input type="password" name="confrimPassword" id="confrimPassword" class="form-control " placeholder="Enter your confrim password" value=""/>
                                                     <div class="form-control-icon">
                                                         <i class="bi bi-shield-lock"></i>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-12 d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Update Password" data-bs-placement="bottom">Update</button>
+                                            <div class="d-flex justify-content-end mt-4">
+                                                <button type="submit" class="btn btn-primary shadow-lg" data-toggle="tooltip" data-html="true" title="Update Password" data-placement="bottom">Update</button>
+                                            </div>
                                         </div>
                                     </form>
                                     <!-- End Change Password Form -->
@@ -440,6 +438,24 @@
 <script src="./assets/js/pswmeter.min.js"></script>
 <script>
     $( document ).ready(function() {
+        $('#year').select2({
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            allowClear: true,
+        });
+        $('#month').select2({
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            allowClear: true,
+        });
+        $('#day').select2({
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            allowClear: true,
+        });
         $('#newPassword').on('keyup',function(){
             if ($(this).val().length > 0) {
                 $("#pswmeter").removeClass('d-none');

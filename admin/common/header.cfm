@@ -103,7 +103,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem">
                             <li>
-                                <h6 class="dropdown-header">Hello, #session.user.firstName#!</h6>
+                                <h6 class="dropdown-header">Hello, #session.user.firstName#</h6>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="index.cfm?pg=profile">
@@ -111,7 +111,7 @@
                                     Profile
                                 </a>
                             </li>
-                            <li>
+                            <!--- <li>
                                 <a class="dropdown-item" href="##">
                                     <i class="icon-mid bi bi-gear me-2"></i> Settings
                                 </a>
@@ -120,7 +120,7 @@
                                 <a class="dropdown-item" href="##">
                                     <i class="icon-mid bi bi-wallet me-2"></i> Wallet
                                 </a>
-                            </li>
+                            </li> --->
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>

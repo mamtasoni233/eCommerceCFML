@@ -64,43 +64,43 @@
                                     <input type="hidden" id="PkCouponId" value="" name="PkCouponId">
                                     <div class="row g-3">
                                         <div class="col-md-12">
-                                            <lable class="fw-bold form-label" for="product">Products</lable>
+                                            <lable class="fw-bold form-label" for="product">Select Products <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                                 <select name="product" id="product" class="form-control" data-placeholder="Select Product..">
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="couponName">Coupon Name</lable>
+                                            <lable class="fw-bold form-label" for="couponName">Coupon Name <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="text" class="form-control " id="couponName" value="" name="couponName"  placeholder="Enter Coupon Name"/>
+                                                <input type="text" class="form-control " id="couponName" value="" name="couponName"  placeholder="Enter coupon name"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-tag-fill"></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="couponCode">Coupon Code</lable>
+                                            <lable class="fw-bold form-label" for="couponCode">Coupon Code <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="text" class="form-control " id="couponCode" value="" name="couponCode"  placeholder="Enter Coupon Code"/>
+                                                <input type="text" class="form-control " id="couponCode" value="" name="couponCode"  placeholder="Enter coupon code"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-percent"></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="discountValue">Discount Value</lable>
+                                            <lable class="fw-bold form-label" for="discountValue">Discount Value <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="number" class="form-control " id="discountValue" value="" name="discountValue"  placeholder="Enter Discount Value"/>
+                                                <input type="number" class="form-control " id="discountValue" value="" name="discountValue"  placeholder="Enter discount value"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-currency-rupee"></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="repeatRestriction">Repeat Restriction</lable>
+                                            <lable class="fw-bold form-label" for="repeatRestriction">Repeat Restriction <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="text" class="form-control " id="repeatRestriction" value="" name="repeatRestriction"  placeholder="Enter Repeat Restriction"/>
+                                                <input type="text" class="form-control " id="repeatRestriction" value="" name="repeatRestriction"  placeholder="Enter repeat restriction"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-tag-fill"></i>
                                                 </div>
@@ -117,18 +117,18 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="couponStartDate">Coupon Start Date</lable>
+                                            <lable class="fw-bold form-label" for="couponStartDate">Coupon Start Date <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="date" class="form-control mb-3 flatpickr-no-config" id="couponStartDate" value="" name="couponStartDate"  placeholder="Enter Coupon Start Date"/>
+                                                <input type="date" class="form-control mb-3 flatpickr-no-config" id="couponStartDate" value="" name="couponStartDate"  placeholder="Enter coupon start date"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-calendar"></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="couponExpDate">Coupon Expiry Date</lable>
+                                            <lable class="fw-bold form-label" for="couponExpDate">Coupon Expiry Date <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="date" class="form-control mb-3 flatpickr-no-config" id="couponExpDate" value="" name="couponExpDate"  placeholder="Enter Coupon Expiry Date"/>
+                                                <input type="date" class="form-control mb-3 flatpickr-no-config" id="couponExpDate" value="" name="couponExpDate"  placeholder="Enter coupon expiry date"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-calendar"></i>
                                                 </div>
@@ -153,10 +153,10 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                        <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">
                                             <span class="d-block">Close</span>
                                         </button>
-                                        <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
+                                        <button type="submit" id="defaultSubmit" class="btn btn-primary" >
                                             <span class="d-block">Submit</span>
                                         </button>
                                     </div>
@@ -177,6 +177,8 @@
                                     <th>Discount Type</th>  
                                     <th>Discount Value</th>  
                                     <th>Coupon Start Date</th>  
+                                    <th>Status</th>
+                                    <th>Action</th>
                                     <th>Coupon Expiry Date</th>  
                                     <th>Coupon Repeat Restriction</th>  
                                     <th>Coupon Description</th>  
@@ -184,8 +186,6 @@
                                     <th>Create Date</th>
                                     <th>Update By</th>
                                     <th>Update Date</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -269,19 +269,20 @@
                 },
                 { data: 'discountValue' },
                 { data: 'couponStartDate' },
-                { data: 'couponExpDate' },
-                { data: 'repeatRestriction' },
-                { data: 'description' },
-                { data: 'userName' },
-                { data: 'dateCreated' },
-                { data: 'userNameUpdate' },
-                { data: 'dateUpdated' },
                 { data: 'isActive',
                     render: function (data,type,row) {
-                        if(row.isActive == 1){
-                            return '<span id="deactive" data-id="'+row.PkCouponId+'" data-status="Active" data-name="'+row.couponName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Coupon" data-placement="bottom">Active</span>';
+                        if(row.isDeleted == 1){
+                            if(row.isActive == 1){
+                                return '<a role="button" id="deactive" data-id="'+row.PkCouponId+'" data-status="Active" data-name="'+row.couponName+'" class=" badge bg-success text-white"  data-toggle="tooltip" data-html="true" title="Click to Deactive Coupon" data-placement="bottom">Active</a>';
+                            }else{
+                                return '<a role="button" id="active" data-id="'+row.PkCouponId+'" data-status="Deactive" data-name="'+row.couponName+'" class="badge bg-danger text-white" data-toggle="tooltip" data-html="true" title="Click to Active Coupon" data-placement="bottom">Inactive</a>';
+                            }
                         }else{
-                            return '<span id="active" data-id="'+row.PkCouponId+'" data-status="Deactive" data-name="'+row.couponName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active Coupon" data-placement="bottom">Inactive</span>';
+                            if(row.isActive == 1){
+                                return '<a role="button" id="deactive" data-id="'+row.PkCouponId+'" data-status="Active" data-name="'+row.couponName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Coupon" data-placement="bottom">Active</a>';
+                            }else{
+                                return '<a role="button" id="active" data-id="'+row.PkCouponId+'" data-status="Deactive" data-name="'+row.couponName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active Coupon" data-placement="bottom">Inactive</a>';
+                            }
                         }
                     }
                 },
@@ -297,6 +298,13 @@
                         return returnStr;
                     }
                 },
+                { data: 'couponExpDate' },
+                { data: 'repeatRestriction' },
+                { data: 'description' },
+                { data: 'userName' },
+                { data: 'dateCreated' },
+                { data: 'userNameUpdate' },
+                { data: 'dateUpdated' },
             ],
             rowCallback : function(nRow, aData, iDisplayIndex){
                 $("td:first", nRow).html(iDisplayIndex + 1);

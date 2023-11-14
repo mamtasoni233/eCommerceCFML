@@ -64,17 +64,16 @@
                                 <input type="hidden" id="PkCategoryId" value="" name="PkCategoryId">
                                 <div class="row g-3">
                                     <div class="col-md-12">
-                                        <lable class="fw-bold form-label" for="parentCategory">Parent Category Name</lable>
+                                        <lable class="fw-bold form-label" for="parentCategory">Select Parent Category <span class="text-danger">*</span></lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                             <select name="parentCategory" id="parentCategory" class="form-control-xl" data-placeholder="Select Parent Catgeory">
-                                                <!--- <option disabled selected></option> --->
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <lable class="fw-bold form-label" for="categoryName">Category Name</lable>
+                                        <lable class="fw-bold form-label" for="categoryName">Category Name <span class="text-danger">*</span></lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="text" class="form-control form-control-xl" id="categoryName" value="" name="categoryName"  placeholder="Category Name"/>
+                                            <input type="text" class="form-control " id="categoryName" value="" name="categoryName"  placeholder="Category Name"/>
                                             <div class="form-control-icon">
                                                 <i class="bi bi-bag-heart-fill"></i>
                                             </div>
@@ -106,10 +105,10 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                    <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">
                                         <span class="d-block">Close</span>
                                     </button>
-                                    <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
+                                    <button type="submit" id="defaultSubmit" class="btn btn-primary" >
                                         <span class="d-block">Submit</span>
                                     </button>
                                 </div>
@@ -122,15 +121,15 @@
                         <table class="table nowrap" id="categoryDataTable">
                             <thead>
                                 <tr>
+                                    <th>Image</th>
                                     <th>Category Name</th>
                                     <th>Parent Category</th>
-                                    <th>Image</th>
+                                    <th>Status</th>
                                     <th>Create By</th>
                                     <th>Create Date</th>
                                     <th>Update By</th>
-                                    <th>Update Date</th>
-                                    <th>Status</th>
                                     <th>Action</th>
+                                    <th>Update Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -215,8 +214,6 @@
                 }
             },
             columns: [
-                { data: 'categoryName'},
-                { data: 'parentCategoryName' },
                 { data: 'categoryImage',
                     render: function(data, display, row) {
                         var returnStr = '';
@@ -226,23 +223,30 @@
                         return returnStr;
                     }
                 },
-                { data: 'userName' },
-                { data: 'dateCreated' },
-                { data: 'userNameUpdate' },
-                { data: 'dateUpdated' },
+                { data: 'categoryName'},
+                { data: 'parentCategoryName' },
                 { data: 'isActive',
                     render: function (data,type,row) {
                         var returnStr = '';
-                        /* if(row.isDeleted == 0){ */
+                        if(row.isDeleted == 1){
                             if(row.isActive == 1){
-                                returnStr += '<span id="deactive" data-id="'+row.PkCategoryId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
+                                returnStr += '<a role="button" id="deactive" data-id="'+row.PkCategoryId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white "  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</a>';
                             }else{
-                                returnStr += '<span id="active" data-id="'+row.PkCategoryId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
+                                returnStr += '<a role="button" id="active" data-id="'+row.PkCategoryId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white " data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</a>';
                             }
-                        /* } */
+                        } else{
+                            if(row.isActive == 1){
+                                returnStr += '<a role="button" id="deactive" data-id="'+row.PkCategoryId+'" data-status="Active" data-name="'+row.categoryName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</a>';
+                            }else{
+                                returnStr += '<a role="button" id="active" data-id="'+row.PkCategoryId+'" data-status="Deactive" data-name="'+row.categoryName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</a>';
+                            }
+                        }
                         return returnStr;
                     }
                 },
+                { data: 'userName' },
+                { data: 'dateCreated' },
+                { data: 'userNameUpdate' },
                 { data: 'PkCategoryId',
                     render: function(data, type, row, meta)
                     {
@@ -255,6 +259,7 @@
                         return returnStr;
                     }
                 },
+                { data: 'dateUpdated' },
             ],
             rowCallback: function( row, data ) {
                 if ( data.isDeleted === 1 ) {

@@ -70,45 +70,45 @@
                     <input type="hidden" id="PkCustomerId" value="#PkCustomerId#" name="PkCustomerId">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <lable class="fw-bold form-label" for="firstName">First Name</lable>
+                            <lable class="fw-bold form-label" for="firstName">First Name <span class="text-danger">*</span></lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                <input type="text" name="firstName" id="firstName" class="form-control form-control-xl" placeholder="Enter First Name" value="#firstName#"/>
+                                <input type="text" name="firstName" id="firstName" class="form-control " placeholder="Enter first name" value="#firstName#"/>
                                 <div class="form-control-icon">
                                     <i class="bi bi-person-fill"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <lable class="fw-bold form-label" for="lastName">Last Name</lable>
+                            <lable class="fw-bold form-label" for="lastName">Last Name <span class="text-danger">*</span></lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                <input type="text" name="lastName" id="lastName" class="form-control form-control-xl" placeholder="Enter Last Name" value="#lastName#"/>
+                                <input type="text" name="lastName" id="lastName" class="form-control " placeholder="Enter last name" value="#lastName#"/>
                                 <div class="form-control-icon">
                                     <i class="bi bi-person-fill"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <lable class="fw-bold form-label" for="email">Email</lable>
+                            <lable class="fw-bold form-label" for="email">Email <span class="text-danger">*</span></lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                <input type="email" name="email" id="email" class="form-control form-control-xl" placeholder="Enter Email" value="#email#"/>
+                                <input type="email" name="email" id="email" class="form-control " placeholder="Enter email address" value="#email#"/>
                                 <div class="form-control-icon">
-                                    <i class="bi bi-person-fill"></i>
+                                    <i class="bi bi-envelope-at-fill"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <lable class="fw-bold form-label" for="mobile">Mobile</lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                <input type="mobile" name="mobile" id="mobile" class="form-control form-control-xl" placeholder="Enter mobile" value="#mobile#"/>
+                                <input type="mobile" name="mobile" id="mobile" class="form-control " placeholder="Enter mobile number" value="#mobile#"/>
                                 <div class="form-control-icon">
                                     <i class="bi bi-phone"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <lable class="fw-bold form-label" for="password">Password</lable>
+                            <lable class="fw-bold form-label" for="password">Password <span class="text-danger">*</span></lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Password" <cfif PkCustomerId EQ 0>required</cfif> value="" />
+                                <input type="password" name="password" id="password" class="form-control " placeholder="Enter password" <cfif PkCustomerId EQ 0>required</cfif> value="" />
                                 <div class="form-control-icon">
                                     <i class="bi bi-shield-lock"></i>
                                 </div>
@@ -117,32 +117,33 @@
                             <div id="pswmeter-message" class="d-none mb-3"></div>
                         </div>
                         <div class="col-md-6"> 
-                            <lable class="fw-bold form-label" for="gender">Gender</lable>
+                            <lable class="fw-bold form-label" for="gender">Gender <span class="text-danger">*</span></lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-3">
                                 <div class="row genderRow me-5">
                                     <div class="col-md-6">
                                             <div class="form-check">
                                                 <input class="form-check-input genderCheck" type="radio" name="gender" value="1" <cfif gender EQ 1>checked</cfif>>
-                                                <label class="form-check-label" for="male" id="male"> Male</label>
+                                                <label class="form-check-label ms-3 " for="male" id="male"> <i class="fas fa-male fs-2"></i> </label>
                                             </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-check">
                                             <input class="form-check-input genderCheck" type="radio" name="gender" value="0" <cfif gender EQ 0>checked</cfif>>
-                                            <label class="form-check-label" for="female" id="female"> Female </label>
+                                            <label class="form-check-label ms-3" for="female" id="female"> <i class="fas fa-female fs-2"></i></label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <lable class="fw-bold form-label " for="dob">DOB</lable>
+                            <lable class="fw-bold form-label " for="dob">DOB <span class="text-danger">*</span></lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <select name="year" class="form-select" id="year">
-                                                <option value="" selected class="opacity-100">Year</option>
+                                            <!--- <select name="year" class="form-select " id="year"> --->
+                                            <select name="year" id="year" class="form-control form-control-xl" data-placeholder="Select Year">
+                                                <option></option>
                                                 <cfloop from="1995" to="2013" index="idx">
                                                     <option value="#idx#" <cfif dobYear EQ idx>selected</cfif>>#idx#</option>
                                                 </cfloop>
@@ -151,8 +152,9 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <select name="month" class="form-select" id="month">
-                                                <option value="" selected class="opacity-100">Month</option>
+                                            <!--- <select name="month" class="form-select " id="month"> --->
+                                            <select name="month" id="month" class="form-control-xl" data-placeholder="Select Month">
+                                                <option></option>
                                                 <cfloop from="1" to="12" index="i">
                                                     <option value="#i#" <cfif dobMonth EQ i>selected</cfif>>#i#</option>
                                                 </cfloop>
@@ -161,8 +163,9 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <select name="day" class="form-select" id="day">
-                                                <option value="" class="opacity-100">Day</option>
+                                            <!--- <select name="day" class="form-select " id="day"> --->
+                                            <select name="day" id="day" class="form-control-xl" data-placeholder="Select Day">
+                                                <option></option>
                                                 <cfloop from="1" to="31" index="j">
                                                     <option value="#j#" <cfif dobDate EQ j>selected</cfif>>#j#</option>
                                                 </cfloop>
@@ -175,7 +178,7 @@
                         <div class="col-md-6">
                             <lable class="fw-bold form-label" for="customerProfile">Profile</lable>
                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                            <input type="file" class="form-control form-control-xl image-preview-filepond" name="customerProfile" id="customerProfile"  aria-describedby="inputGroupPrepend">
+                            <input type="file" class="form-control  image-preview-filepond" name="customerProfile" id="customerProfile"  aria-describedby="inputGroupPrepend">
                                 <div class="form-control-icon">
                                     <i class="bi bi-cloud-plus-fill me-2"></i>
                                 </div>
@@ -193,10 +196,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="index.cfm?pg=customer&s=customerList" class="btn btn-light-secondary">
+                        <a href="index.cfm?pg=customer&s=customerList" class="btn btn-danger me-3">
                             <span class="d-block">Cancel</span>
                         </a>
-                        <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
+                        <button type="submit" id="defaultSubmit" class="btn btn-primary" >
                             <span class="d-block">Submit</span>
                         </button>
                     </div>
@@ -207,6 +210,24 @@
     <script src="/assets/js/pswmeter.min.js"></script>
     <script>
         $( document ).ready(function() {
+            $('##year').select2({
+                theme: "bootstrap-5",
+                width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+                placeholder: $( this ).data( 'placeholder' ),
+                allowClear: true,
+            });
+            $('##month').select2({
+                theme: "bootstrap-5",
+                width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+                placeholder: $( this ).data( 'placeholder' ),
+                allowClear: true,
+            });
+            $('##day').select2({
+                theme: "bootstrap-5",
+                width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+                placeholder: $( this ).data( 'placeholder' ),
+                allowClear: true,
+            });
             $('##password').on('keyup',function(){
                 if ($(this).val().length > 0) {
                     $("##pswmeter").removeClass('d-none');

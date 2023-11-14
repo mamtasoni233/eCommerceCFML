@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 09, 2023 at 01:08 PM
+-- Generation Time: Nov 14, 2023 at 02:20 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -47,7 +47,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(431, 1, 20, '2', '5', 10000, 300, b'0', '2023-11-09 13:43:07', 1, '2023-11-09 13:45:19', 1);
+(431, 1, 20, '2', '2', 2000, 300, b'0', '2023-11-09 13:43:07', 1, '2023-11-14 17:21:31', 1);
 
 -- --------------------------------------------------------
 
@@ -177,7 +177,7 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`PkCouponId`, `FkProductId`, `couponName`, `couponCode`, `discountValue`, `discountType`, `couponStartDate`, `couponExpDate`, `repeatRestriction`, `description`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(2, 0, '15 OFF DEP', '15OFFDEP', 15, 1, '2023-10-26', '2023-11-13', 1, 'Diwali festival: 15% off of all products', b'1', b'0', '2023-10-25 12:19:53', 1, '2023-10-25 15:19:12', 1),
+(2, 0, '15 OFF DEP', '15OFFDEP', 15, 1, '2023-10-26', '2023-11-13', 1, 'Diwali festival: 15% off of all products', b'1', b'0', '2023-10-25 12:19:53', 1, '2023-11-14 18:40:25', 1),
 (3, 9, '20 Off Tea', '20OFFTEA', 20, 1, '2023-10-25', '2023-11-25', 1, '20% off tea products', b'1', b'0', '2023-10-25 12:37:54', 1, '2023-11-09 12:29:45', 1),
 (4, 0, 'test', 'APPFIRST', 200, 2, '2023-10-25', '2023-11-05', 1, 'For only test purpose\r\n', b'1', b'0', '2023-10-25 13:08:50', 1, '2023-10-25 17:04:26', 1);
 
@@ -384,7 +384,7 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (6, 18, 'Cookie', '9', 1000, 4, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-11-09 17:37:00', 1),
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
-(9, 20, 'Taj Mahal Tea', '8', 100, 21, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-11-09 13:36:23', 1),
+(9, 20, 'Taj Mahal Tea', '8', 100, 21, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-11-14 16:12:44', 1),
 (10, 18, 'crack jack', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, 'Oreo', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-07 10:58:33', 1),
@@ -396,7 +396,8 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (18, 18, 'Choco Lava Cake', '9', 850, 19, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-10-31 13:15:26', 1),
 (19, 19, 'Bhujia Sev', '4,11', 150, 9, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-11-07 13:53:42', 7),
 (20, 20, 'Wagh bakri Chai', '8', 1000, 19, 'Waagbakri Chai', b'1', b'0', '2023-10-03 10:45:41', 1, '2023-11-09 13:41:42', 1),
-(21, 19, '5555555555', NULL, 55000, 20, 'ewe', b'1', b'0', '2023-10-03 12:43:57', 1, '2023-10-03 14:14:04', 1);
+(21, 19, '5555555555', NULL, 55000, 20, 'ewe', b'1', b'0', '2023-10-03 12:43:57', 1, '2023-10-03 14:14:04', 1),
+(22, 20, 'werwer', NULL, 25, 15, 'werfwe', b'1', b'1', '2023-11-14 16:20:18', 1, '2023-11-14 16:20:31', NULL);
 
 -- --------------------------------------------------------
 
@@ -448,7 +449,8 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (57, 1, '925036427-3444501-1.jpg', b'0', b'1', '2023-10-05 12:05:04', 1),
 (58, 14, '070417TeaShops01_ey82bknl49ky.jpg', b'0', b'1', '2023-10-05 14:15:39', 1),
 (61, 3, 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_ilkqjj831sgv.jpg', b'1', b'1', '2023-10-09 14:56:08', 1),
-(62, 15, 'anand-nmkieen.png', b'0', b'1', '2023-11-08 14:38:07', 1);
+(62, 15, 'anand-nmkieen.png', b'0', b'1', '2023-11-08 14:38:07', 1),
+(63, 22, '925036427-3444501-1_1xiyqqiuya1nb.jpg', b'0', b'1', '2023-11-14 16:20:18', 1);
 
 -- --------------------------------------------------------
 
@@ -480,7 +482,7 @@ INSERT INTO `product_tags` (`PkTagId`, `FkCategoryId`, `tagName`, `isActive`, `i
 (5, 41, 'sports', b'1', b'0', '2023-09-14 14:10:34', 1, NULL, NULL),
 (6, 17, 'camera', b'1', b'0', '2023-09-14 14:10:43', 1, '2023-09-14 16:36:31', 1),
 (7, 19, 'mixer', b'1', b'0', '2023-09-14 17:09:22', 1, NULL, NULL),
-(8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-10-19 12:33:27', 1),
+(8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-11-14 16:33:06', 1),
 (9, 18, 'butter buiscuit', b'1', b'0', '2023-09-14 18:11:51', 1, NULL, NULL),
 (10, 21, 'Noodles', b'1', b'0', '2023-09-15 15:14:51', 1, NULL, NULL),
 (11, 19, 'Sev', b'1', b'0', '2023-10-02 00:09:42', 7, '2023-10-11 12:43:00', NULL);
@@ -601,8 +603,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`PkUserId`, `firstName`, `token`, `lastName`, `email`, `mobile`, `dob`, `gender`, `password`, `image`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 'Mamta', NULL, 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '6_hwcj2rffo9wk.png', b'1', b'0', 0, '2023-11-02 11:08:46', 1, '2023-11-08 08:57:30'),
-(2, 'Nanu', NULL, 'Soni', 'nanu@gmail.com', NULL, '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, '2023-11-02 12:05:38'),
+(1, 'Mamta', NULL, 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '4.jpg', b'1', b'0', 0, '2023-11-02 11:08:46', 1, '2023-11-14 11:35:57'),
+(2, 'Nanu', NULL, 'Soni', 'nanu@gmail.com', '8385079333', '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', 1, '2023-11-14 12:48:11'),
 (3, 'gvedrfg', NULL, 'dftgd', 'admin@gmail.com', NULL, '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', '', b'1', b'1', 0, '2023-11-02 11:08:46', NULL, '2023-11-02 12:22:55'),
 (4, 'test', NULL, 'test', 'mamta@gmail.com', NULL, '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, NULL),
 (5, 'Mamta', NULL, 'soni', '', NULL, '2006-04-11', b'0', '$2a$10$v3izpn/ocmrASfYmYtHp1uVb4fHokoD944y26vToQM9hbq/dDzBMa', '', b'1', b'1', 0, '2023-11-02 11:08:46', NULL, '2023-11-06 09:24:44'),
@@ -742,13 +744,13 @@ ALTER TABLE `order_item`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `product_tags`

@@ -63,12 +63,12 @@
                                     <th>Mobile</th>
                                     <th>Gender</th>
                                     <th>Dob</th>
+                                    <th>Is Active</th>
+                                    <th>Is Block</th>
                                     <th>Create By</th>
                                     <th>Create Date</th>
                                     <th>Update By</th>
                                     <th>Update Date</th>
-                                    <th>Is Active</th>
-                                    <th>Is Block</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -134,6 +134,40 @@
                     },  width:500, 
                 },
                 { data: 'dob', width:500, },
+                { data: 'isActive',
+                    render: function (data,type,row) {
+                        if(row.isDeleted == 1){
+                            if(row.isActive == 1){
+                                return '<a id="deactive" role="button" data-id="'+row.PkCustomerId+'" data-status="Active" data-name="'+row.firstName+'" class=" badge bg-success text-white"  data-toggle="tooltip" data-html="true" title="Click to Deactive Customer" data-placement="bottom">Active</a>';
+                            }else{
+                                return '<a id="active" role="button" data-id="'+row.PkCustomerId+'" data-status="Deactive" data-name="'+row.firstName+'" class="badge bg-danger text-white" data-toggle="tooltip" data-html="true" title="Click to Active Customer" data-placement="bottom">Inactive</a>';
+                            }
+                        } else{
+                            if(row.isActive == 1){
+                                return '<a id="deactive" role="button" data-id="'+row.PkCustomerId+'" data-status="Active" data-name="'+row.firstName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Customer" data-placement="bottom">Active</a>';
+                            }else{
+                                return '<a id="active" role="button" data-id="'+row.PkCustomerId+'" data-status="Deactive" data-name="'+row.firstName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active Customer" data-placement="bottom">Inactive</a>';
+                            }
+                        }
+                    }
+                },
+                { data: 'isBlcoked',
+                    render: function (data,type,row) {
+                        if(row.isDeleted == 1){
+                            if(row.isBlcoked == 1){
+                                return '<a id="block" role="button" data-id="'+row.PkCustomerId+'" data-status="Block" data-name="'+row.firstName+'" class=" badge bg-danger text-white "  data-toggle="tooltip" data-html="true" title="Click to Un Block Customer" data-placement="bottom">Block</a>';
+                            }else{
+                                return '<a id="unBlock" role="button" data-id="'+row.PkCustomerId+'" data-status="unBlock" data-name="'+row.firstName+'" class="badge bg-success text-white " data-toggle="tooltip" data-html="true" title="Click to Block Customer" data-placement="bottom">Un Block</a>';
+                            }
+                        } else{
+                            if(row.isBlcoked == 1){
+                                return '<a id="block" role="button" data-id="'+row.PkCustomerId+'" data-status="Block" data-name="'+row.firstName+'" class=" badge bg-danger text-white changeBlockStatus"  data-toggle="tooltip" data-html="true" title="Click to Un Block Customer" data-placement="bottom">Block</a>';
+                            }else{
+                                return '<a id="unBlock" role="button" data-id="'+row.PkCustomerId+'" data-status="unBlock" data-name="'+row.firstName+'" class="badge bg-success text-white changeBlockStatus" data-toggle="tooltip" data-html="true" title="Click to Block Customer" data-placement="bottom">Un Block</a>';
+                            }
+                        }
+                    }
+                },
                 { data: 'userName',
                     render: function(data, display, row) {
                         if (row.createdBy > 0) {
@@ -154,24 +188,6 @@
                     }   
                 },
                 { data: 'updatedDate'},
-                { data: 'isActive',
-                    render: function (data,type,row) {
-                        if(row.isActive == 1){
-                            return '<span id="deactive" data-id="'+row.PkCustomerId+'" data-status="Active" data-name="'+row.firstName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Customer" data-placement="bottom">Active</span>';
-                        }else{
-                            return '<span id="active" data-id="'+row.PkCustomerId+'" data-status="Deactive" data-name="'+row.firstName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active Customer" data-placement="bottom">Inactive</span>';
-                        }
-                    }
-                },
-                { data: 'isBlcoked',
-                    render: function (data,type,row) {
-                        if(row.isBlcoked == 1){
-                            return '<span id="block" data-id="'+row.PkCustomerId+'" data-status="Block" data-name="'+row.firstName+'" class=" badge bg-danger text-white changeBlockStatus"  data-toggle="tooltip" data-html="true" title="Click to Un Block Customer" data-placement="bottom">Block</span>';
-                        }else{
-                            return '<span id="unBlock" data-id="'+row.PkCustomerId+'" data-status="unBlock" data-name="'+row.firstName+'" class="badge bg-success text-white changeBlockStatus" data-toggle="tooltip" data-html="true" title="Click to Block Customer" data-placement="bottom">Un Block</span>';
-                        }
-                    }
-                },
                 { data: 'PkCustomerId',
                     /* render: function(data, type, row, meta)
                     {

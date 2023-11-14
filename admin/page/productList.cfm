@@ -9,7 +9,7 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h1>Product</h1>
+                    <h1>Products</h1>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -62,41 +62,41 @@
                                     <input type="hidden" id="PkProductId" value="" name="PkProductId">
                                     <div class="row g-3">
                                         <div class="col-md-12">
-                                            <lable class="fw-bold form-label" for="category">Category Name</lable>
+                                            <lable class="fw-bold form-label" for="category">Select Category <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                                 <select name="category" id="category" class="form-control" data-placeholder="Select Category">
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="productName">Product Name</lable>
+                                            <lable class="fw-bold form-label" for="productName">Product Name <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="text" class="form-control " id="productName" value="" name="productName"  placeholder="Enter Product Name"/>
+                                                <input type="text" class="form-control " id="productName" value="" name="productName"  placeholder="Enter product name"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-tag-fill"></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="productPrice">Product Price</lable>
+                                            <lable class="fw-bold form-label" for="productPrice">Product Price <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="number" class="form-control " id="productPrice" value="" name="productPrice"  placeholder="Enter Product Price"/>
+                                                <input type="number" class="form-control " id="productPrice" value="" name="productPrice"  placeholder="Enter product price"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-currency-rupee"></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="productQty">Product Qtuantity</lable>
+                                            <lable class="fw-bold form-label" for="productQty">Product Qtuantity <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                                <input type="number" class="form-control " id="productQty" value="" name="productQty"  placeholder="Enter Product Qty"/>
+                                                <input type="number" class="form-control " id="productQty" value="" name="productQty"  placeholder="Enter product quantity"/>
                                                 <div class="form-control-icon">
                                                     <i class="bi bi-plus-circle"></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <lable class="fw-bold form-label" for="productDescription">Product Description</lable>
+                                            <lable class="fw-bold form-label" for="productDescription">Product Description <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative has-icon-left mb-4 mt-2">
                                                 <textarea rows="1" cols="" class="form-control" id="productDescription" name="productDescription"></textarea>
                                                 <div class="form-control-icon">
@@ -105,7 +105,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <lable class="fw-bold form-label" for="productTags">Product Tags</lable>
+                                            <lable class="fw-bold form-label" for="productTags">Product Tags <span class="text-danger">*</span></lable>
                                             <div class="form-group">
                                                 <select name="productTags" id="productTags" class="form-control productTagMultiple" data-placeholder="Select Product Tags" multiple>
                                                     <option></option>
@@ -113,7 +113,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <lable class="fw-bold form-label text-center" for="productImage">Product Image</lable>
+                                            <lable class="fw-bold form-label text-center" for="productImage">Product Image <span class="text-danger">*</span></lable>
                                             <div class="form-group position-relative mb-4 mt-2">
                                                 <input type="file" class="form-control form-control-xl image-preview-filepond" multiple id="productImage" >
                                             </div>
@@ -127,11 +127,11 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                        <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">
                                             <!--- <i class="bx bx-x d-block d-sm-none"></i> --->
                                             <span class="d-block">Close</span>
                                         </button>
-                                        <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
+                                        <button type="submit" id="defaultSubmit" class="btn btn-primary" >
                                             <!--- <i class="bx bx-check d-block d-sm-none"></i> --->
                                             <span class="d-block">Submit</span>
                                         </button>
@@ -166,12 +166,12 @@
                                     <th>Category Name</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
+                                    <th>Status</th>
                                     <th>Create By</th>
+                                    <th>Action</th>
                                     <th>Create Date</th>
                                     <th>Update By</th>
                                     <th>Update Date</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -276,19 +276,24 @@
                 { data: 'categoryName' },
                 { data: 'productQty' },
                 { data: 'productPrice' },
-                { data: 'userName' },
-                { data: 'dateCreated' },
-                { data: 'userNameUpdate' },
-                { data: 'dateUpdated' },
                 { data: 'isActive',
                     render: function (data,type,row) {
-                        if(row.isActive == 1){
-                            return '<span id="deactive" data-id="'+row.PkProductId+'" data-status="Active" data-name="'+row.productName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Product" data-placement="bottom">Active</span>';
-                        }else{
-                            return '<span id="active" data-id="'+row.PkProductId+'" data-status="Deactive" data-name="'+row.productName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active product" data-placement="bottom">Inactive</span>';
+                        if(row.isDeleted == 1){
+                            if(row.isActive == 1){
+                                return '<a role="button" id="deactive" data-id="'+row.PkProductId+'" data-status="Active" data-name="'+row.productName+'" class=" badge bg-success text-white "  data-toggle="tooltip" data-html="true" title="Click to Deactive Product" data-placement="bottom">Active</a>';
+                            }else{
+                                return '<a role="button" id="active" data-id="'+row.PkProductId+'" data-status="Deactive" data-name="'+row.productName+'" class="badge bg-danger text-white " data-toggle="tooltip" data-html="true" title="Click to Active product" data-placement="bottom">Inactive</a>';
+                            }
+                        } else{
+                            if(row.isActive == 1){
+                                return '<a role="button" id="deactive" data-id="'+row.PkProductId+'" data-status="Active" data-name="'+row.productName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Product" data-placement="bottom">Active</a>';
+                            }else{
+                                return '<a role="button" id="active" data-id="'+row.PkProductId+'" data-status="Deactive" data-name="'+row.productName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active product" data-placement="bottom">Inactive</a>';
+                            }
                         }
                     }
                 },
+                { data: 'userName' },
                 { data: 'PkProductId',
                     render: function(data, type, row, meta)
                     {
@@ -301,6 +306,9 @@
                         return returnStr;
                     }
                 },
+                { data: 'dateCreated' },
+                { data: 'userNameUpdate' },
+                { data: 'dateUpdated' },
             ],
             rowCallback: function( row, data ) {
                 if ( data.isDeleted === 1 ) {
@@ -337,6 +345,9 @@
                 category: {
                     required: true
                 },
+                productTags: {
+                    required: true
+                },
                 productDescription: {
                     required: true
                 }
@@ -359,6 +370,9 @@
                 },
                 productDescription: {
                     required: "Please enter product description",                    
+                },
+                productTags: {
+                    required: "Please enter product tag",                    
                 },
             },
             ignore: [],

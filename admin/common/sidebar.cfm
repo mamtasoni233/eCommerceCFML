@@ -75,28 +75,22 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="sidebar-item <cfif pg EQ 'user'>active</cfif>">
-                        <a href="index.cfm?pg=user&s=userList" class="sidebar-link">
-                            <i class="fa fa-user"></i>
-                            <span>User</span>
+                    <li class="sidebar-item <cfif pg EQ 'customer'>active</cfif>">
+                        <a href="index.cfm?pg=customer&s=customerList" class="sidebar-link">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>Customers</span>
                         </a>
                     </li>
                     <li class="sidebar-item <cfif pg EQ 'category'>active</cfif>">
                         <a href="index.cfm?pg=category&s=categoryList" class="sidebar-link">
                             <i class="bi bi-grid-fill"></i>
-                            <span>Category</span>
+                            <span>Categories</span>
                         </a>
                     </li>
                     <li class="sidebar-item <cfif pg EQ 'product'>active</cfif>">
                         <a href="index.cfm?pg=product&s=productList" class="sidebar-link">
                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                            <span>Product</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item <cfif pg EQ 'customer'>active</cfif>">
-                        <a href="index.cfm?pg=customer&s=customerList" class="sidebar-link">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <span>Customer</span>
+                            <span>Products</span>
                         </a>
                     </li>
                     <li class="sidebar-item <cfif pg EQ 'productTag'>active</cfif>">
@@ -119,6 +113,12 @@
                             <!--- <i class="fas fa-gift"></i> --->
                             <i class="fas fa-percent"></i>
                             <span>Coupons </span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item <cfif pg EQ 'user'>active</cfif>">
+                        <a href="index.cfm?pg=user&s=userList" class="sidebar-link">
+                            <i class="fa fa-user"></i>
+                            <span>Users</span>
                         </a>
                     </li>
                 </ul>

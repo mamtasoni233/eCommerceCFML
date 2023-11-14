@@ -58,16 +58,16 @@
                                 <input type="hidden" id="PkTagId" value="" name="PkTagId">
                                 <div class="row g-3">
                                     <div class="col-md-12">
-                                        <lable class="fw-bold form-label" for="category">Category Name</lable>
+                                        <lable class="fw-bold form-label" for="category">Select Category <span class="text-danger">*</span></lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <select name="category" id="category" class="form-control" data-placeholder="Select Category">
+                                            <select name="category" id="category" class="form-control-xl" data-placeholder="Select Category">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <lable class="fw-bold form-label" for="tagName">Product Tag Name</lable>
+                                        <lable class="fw-bold form-label" for="tagName">Product Tag Name <span class="text-danger">*</span></lable>
                                         <div class="form-group position-relative has-icon-left mb-4 mt-2">
-                                            <input type="text" class="form-control form-control-xl" id="tagName" value="" name="tagName"  placeholder="Enter Product Tag Name"/>
+                                            <input type="text" class="form-control " id="tagName" value="" name="tagName"  placeholder="Enter product tag name"/>
                                             <div class="form-control-icon">
                                                 <i class="bi bi-tag-fill"></i>
                                             </div>
@@ -82,10 +82,10 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                    <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">
                                         <span class="d-block">Close</span>
                                     </button>
-                                    <button type="submit" id="defaultSubmit" class="btn btn-primary ms-1" >
+                                    <button type="submit" id="defaultSubmit" class="btn btn-primary" >
                                         <span class="d-block">Submit</span>
                                     </button>
                                 </div>
@@ -100,12 +100,12 @@
                                 <tr>
                                     <th>Product Tag Name</th>
                                     <th>Category Name</th>
+                                    <th>Status</th>
                                     <th>Create By</th>
                                     <th>Create Date</th>
                                     <th>Update By</th>
-                                    <th>Update Date</th>
-                                    <th>Status</th>
                                     <th>Action</th>
+                                    <th>Update Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -162,19 +162,26 @@
             columns: [
                 { data: 'tagName'},
                 { data: 'categoryName' },
-                { data: 'userName' },
-                { data: 'dateCreated' },
-                { data: 'userNameUpdate' },
-                { data: 'dateUpdated' },
                 { data: 'isActive',
                     render: function (data,type,row) {
-                        if(row.isActive == 1){
-                            return '<span id="deactive" data-id="'+row.PkTagId+'" data-status="Active" data-name="'+row.tagName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</span>';
-                        }else{
-                            return '<span id="active" data-id="'+row.PkTagId+'" data-status="Deactive" data-name="'+row.tagName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</span>';
+                        if(row.isDeleted == 1){
+                            if(row.isActive == 1){
+                                return '<a role="button" id="deactive" data-id="'+row.PkTagId+'" data-status="Active" data-name="'+row.tagName+'" class=" badge bg-success text-white"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</a>';
+                            }else{
+                                return '<a role="button" id="active" data-id="'+row.PkTagId+'" data-status="Deactive" data-name="'+row.tagName+'" class="badge bg-danger text-white" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</a>';
+                            } 
+                        } else{
+                            if(row.isActive == 1){
+                                return '<a role="button" id="deactive" data-id="'+row.PkTagId+'" data-status="Active" data-name="'+row.tagName+'" class=" badge bg-success text-white changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive Category" data-placement="bottom">Active</a>';
+                            }else{
+                                return '<a role="button" id="active" data-id="'+row.PkTagId+'" data-status="Deactive" data-name="'+row.tagName+'" class="badge bg-danger text-white changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active category" data-placement="bottom">Inactive</a>';
+                            }
                         }
                     }
                 },
+                { data: 'userName' },
+                { data: 'dateCreated' },
+                { data: 'userNameUpdate' },
                 { data: 'PkTagId',
                     render: function(data, type, row, meta)
                     {
@@ -187,6 +194,7 @@
                         return returnStr;
                     }
                 },
+                { data: 'dateUpdated' },
             ],
             rowCallback: function( row, data ) {
                 if ( data.isDeleted === 1 ) {
