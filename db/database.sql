@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 14, 2023 at 02:20 PM
+-- Generation Time: Nov 15, 2023 at 02:01 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -47,7 +47,9 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(431, 1, 20, '2', '2', 2000, 300, b'0', '2023-11-09 13:43:07', 1, '2023-11-14 17:21:31', 1);
+(438, 1, 15, '0', '2', 60, 0, b'0', '2023-11-15 15:24:08', 1, NULL, NULL),
+(439, 1, 6, '0', '1', 1000, 0, b'0', '2023-11-15 15:24:12', 1, NULL, NULL),
+(440, 1, 13, '0', '1', 500, 0, b'0', '2023-11-15 15:24:17', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -177,9 +179,9 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`PkCouponId`, `FkProductId`, `couponName`, `couponCode`, `discountValue`, `discountType`, `couponStartDate`, `couponExpDate`, `repeatRestriction`, `description`, `isActive`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(2, 0, '15 OFF DEP', '15OFFDEP', 15, 1, '2023-10-26', '2023-11-13', 1, 'Diwali festival: 15% off of all products', b'1', b'0', '2023-10-25 12:19:53', 1, '2023-11-14 18:40:25', 1),
-(3, 9, '20 Off Tea', '20OFFTEA', 20, 1, '2023-10-25', '2023-11-25', 1, '20% off tea products', b'1', b'0', '2023-10-25 12:37:54', 1, '2023-11-09 12:29:45', 1),
-(4, 0, 'test', 'APPFIRST', 200, 2, '2023-10-25', '2023-11-05', 1, 'For only test purpose\r\n', b'1', b'0', '2023-10-25 13:08:50', 1, '2023-10-25 17:04:26', 1);
+(2, 0, '15 OFF DEP', '15OFFDEP', 15, 1, '2023-11-13', '2023-11-17', 1, 'Diwali festival: 15% off of all products', b'1', b'0', '2023-10-25 12:19:53', 1, '2023-11-15 15:29:41', 1),
+(3, 9, '20 Off Tea', '20OFFTEA', 20, 1, '2023-10-25', '2023-11-15', 1, '20% off tea products', b'1', b'0', '2023-10-25 12:37:54', 1, '2023-11-15 16:07:13', 1),
+(4, 0, 'test', 'APPFIRST', 200, 2, '2023-10-25', '2023-11-14', 1, 'For only test purpose\r\n', b'1', b'0', '2023-10-25 13:08:50', 1, '2023-11-15 17:54:35', 1);
 
 -- --------------------------------------------------------
 
@@ -603,7 +605,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`PkUserId`, `firstName`, `token`, `lastName`, `email`, `mobile`, `dob`, `gender`, `password`, `image`, `isActive`, `isDeleted`, `createdBy`, `createdDate`, `updatedBy`, `updatedDate`) VALUES
-(1, 'Mamta', NULL, 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', '4.jpg', b'1', b'0', 0, '2023-11-02 11:08:46', 1, '2023-11-14 11:35:57'),
+(1, 'Mamta', NULL, 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', '1995-08-20', b'0', '$2a$10$NCjOVZ4f9CPrTLH5oXWa0ODhx63orLLmJsHo.pwaim3xNRo/IdfnK', 'funny-portrait-pretty-woman-playing-with-big-fluffy-teddy-bear-sweet-pastel-colors-holding-her-present-sending-kiss-making-funny-face-holidays-joy-childhood.jpg', b'1', b'0', 0, '2023-11-02 11:08:46', 1, '2023-11-15 05:32:46'),
 (2, 'Nanu', NULL, 'Soni', 'nanu@gmail.com', '8385079333', '2002-07-19', b'0', '$2a$10$WdZ3G3tt5EMuP609CM.QC.n1jhre89/ci52EocGlyuFelh4ZCjHKy', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', 1, '2023-11-14 12:48:11'),
 (3, 'gvedrfg', NULL, 'dftgd', 'admin@gmail.com', NULL, '1999-05-05', b'1', '$2a$10$93SlasObMG8s9J4NxYZHTOY34VzuCmuKxuTglyfM.EMjOA9L2ZvxO', '', b'1', b'1', 0, '2023-11-02 11:08:46', NULL, '2023-11-02 12:22:55'),
 (4, 'test', NULL, 'test', 'mamta@gmail.com', NULL, '1997-03-04', b'1', '$2a$10$SzIln4DQUbKx6pCW6iwEw.QlL6GQOievpKVlWjHHqOqSJQbV021vy', NULL, b'1', b'0', 0, '2023-11-02 11:08:46', NULL, NULL),
@@ -708,7 +710,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=435;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=441;
 
 --
 -- AUTO_INCREMENT for table `category`

@@ -4,6 +4,7 @@
 <cfparam name="productQty" default="" />
 <cfparam name="isDeleted" default="0" />
 <cfset customerId = session.customer.isLoggedIn>
+<cfset sessionCouponId = session.cart.couponId>
 <cfquery name="qryGetOrderDetail">
     SELECT FkCustomerId, firstName, lastName, email, mobile, address, state, zipCode, billingFirstName, billingLastName, billingMobile, billingAddress, billingState, billingZipCode, shipping, finalAmount, discountValue, paymentMethod, UPIID, creditCardName, creditCardNumber, cardExpieryDate, cvv
     FROM orders 
@@ -457,19 +458,25 @@
                                         <span class="text-orange  px-3 fw-bold">Apply Promo Code</span>
                                     </span> 
                                 </button>
-                                <cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId GT 0>
-                                    <button type="button" id="removeCoupon" class="btn btn-link btn-sm btn-light btn-outline-none text-danger btn-link p-0 my-3 fw-bold pe-auto">Remove Coupon</button>
+                                <cfif sessionCouponId GT 0>
+                                    <button type="button" id="removeCoupon" class="btn btn-link btn-sm btn-light btn-outline-none text-danger <!--- d-none ---> btn-link p-0 my-3 fw-bold pe-auto">Remove Coupon</button>
+                                <cfelse>
+                                    <button type="button" id="removeCoupon" class="btn btn-link btn-sm btn-light btn-outline-none text-danger d-none btn-link p-0 my-3 fw-bold pe-auto">Remove Coupon</button>
                                 </cfif>
                             </div>
                             <div class="collapse" id="couponContainer">
                                 <cfset checkFkProductId = arrayMap(session.cart.product, function(item) {
                                     return item.FkProductId
                                 })>
+                                <cfset currentDate = dateFormat(now(), 'yyyy-mm-dd')>
                                 <cfquery name="getCoupon">
-                                    SELECT PkCouponId, FkProductId, couponName, couponCode, description
-                                    FROM coupons
-                                    WHERE FkproductId IN (0,<cfqueryparam value="#checkFkProductId#" list="true">)
+                                    
+                                    SELECT PkCouponId, FkProductId, couponName, couponCode, description, couponStartDate, couponExpDate 
+                                    FROM coupons 
+                                    WHERE FkproductId IN (0,<cfqueryparam value="#checkFkProductId#" list="true">) 
+                                    AND couponStartDate <=<cfqueryparam value="#now()#" cfsqltype="cf_sql_date"> AND couponExpDate >=<cfqueryparam value="#now()#" cfsqltype="cf_sql_date">
                                 </cfquery>
+                                <cfdump  var="#getCoupon#">
                                 <cfquery name="qryGetCouponName" dbtype="query">
                                     SELECT *
                                     FROM getCoupon
@@ -480,6 +487,7 @@
                                         <input type="text" name="couponAppliedInput" id="couponAppliedInput" class="form-control couponAppliedInput" placeholder="Enter coupon" value="#qryGetCouponName.couponCode#" <!--- data-role="tagsinput" --->>
                                         <button type="button" class="btn btn-dark btn-sm px-4 text-center" id="couponAppliedBtn">Apply</button>
                                     </div>
+                                    <div id="alertDiv"></div>
                                     <div class="text-center mt-3"><h5>OR</h5></div>
                                     <div id="couponListContainer">
                                         <div class="">
@@ -493,7 +501,7 @@
                                                             <div class="small">(#getCoupon.description#)</div>
                                                         </div>
                                                         <div>
-                                                            <input class="btn btn-sm btn-orange text-center text-white mb-2 addCoupon <cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId EQ getCoupon.PkCouponId>disabled</cfif>" type="button" name="addCoupon" data-coupon="#getCoupon.couponCode#" data-cId="#getCoupon.PkCouponId#" id="addCoupon-#getCoupon.PkCouponId#" value="Apply">
+                                                            <input class="btn btn-sm btn-orange text-center text-white mb-2 addCoupon <cfif structKeyExists(session.cart, 'couponId') AND session.cart.couponId EQ getCoupon.PkCouponId>disabled</cfif>" type="button" name="addCoupon" data-coupon="#getCoupon.couponCode#" data-cid="#getCoupon.PkCouponId#" id="addCoupon-#getCoupon.PkCouponId#" value="Apply">
                                                         </div>
                                                     </div>
                                                 </div> 
@@ -521,6 +529,7 @@
     <script>
         var #toScript('#customerId#', 'customerId')#
         var #toScript('#finalAmount#', 'finalAmount')#
+        var #toScript('#sessionCouponId#', 'sessionCouponId')#
         var shippingValue = 0;
         var couponCode = '';
         /* let totalPrice = 0;
@@ -560,7 +569,7 @@
                 } else { */
                     // totalPrice = parseFloat(shippingValue) + parseFloat(grandTotal);
                /*  } */
-              /*   $('##grandTotal').html(totalPrice); */
+                /*   $('##grandTotal').html(totalPrice); */
                 /* grandTotal = totalPrice; */
                 parseFloat($('##shippingTotal').html(shippingValue));
                 /* grandTotal = parseFloat(shippingValue) + parseFloat(grandTotal); */
@@ -805,9 +814,15 @@
 
             $('.addCoupon').on('click', function () {
                 var coupon = $(this).data('coupon');
+                var cId = $(this).data('cid');
+                console.log(cId);
                 $('##couponAppliedInput').val(coupon);
-                // $('##couponAppliedInput').tagsinput('add', coupon);
-                //$('##couponAppliedInput').val(coupon).tagsinput();
+                $('.couponDetails').removeClass('text-decoration-line-through');
+                $('.addCoupon').removeClass('disabled');
+                $('##couponDetails-'+cId).addClass('text-decoration-line-through');
+                $('##addCoupon-'+cId).addClass('disabled');
+                $('##removeCoupon').removeClass('d-none');
+                $('##couponAppliedBtn').click();
             });
             
             $('##couponAppliedBtn').on('click', function() {
@@ -815,14 +830,14 @@
                 //let id = $('.couponDetails').attr('data-id');
                 //couponCode = $("##couponAppliedInput").tagsinput('items');
                 // console.log('couponCode', couponCode);
-                if(couponCode != ''){
+                ajaxAddCouponShipping(couponCode, shippingValue); 
+                /* if(couponCode != ''){
                     ajaxAddCouponShipping(couponCode, shippingValue); 
-                    $('.couponApplied').after('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-                    $('##removeCoupon').addClass('d-blcok');
-                    //$(".couponDetails").addClass('text-decoration-line-through');
+                    $('##alertDiv').html('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $('##removeCoupon').removeClass('d-none');
                 } else{
-                    $('.couponApplied').after('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>Please add coupon..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-                }
+                    $('##alertDiv').html('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>Please add coupon..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                } */
             });
             $('##removeCoupon').on('click', function (){
                 // $('##couponAppliedInput').val('');
@@ -889,6 +904,12 @@
                 success: function(result) {
                     console.log("result", result);
                     if (result.success) {
+                        if(couponCode != ''){
+                            $('##alertDiv').html('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>'+result.message+'!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                            $('##removeCoupon').removeClass('d-none');
+                        } else{
+                            $('##alertDiv').html('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>Please add coupon..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                        }
                         var discount = $('##totalDiscount').text(result.discountAmt);
                         var priceTotal = $('##grandTotal').html(result.priceTotal);
                         finalAmount = parseFloat(result.priceTotal);

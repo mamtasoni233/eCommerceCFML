@@ -79,13 +79,13 @@
             <title>Alpine | Bootstrap 5 Ecommerce HTML Template</title>
         </head>
         <body >
-            <cfif structKeyExists(session.customer, "saved") AND session.customer.saved EQ 1 >
+            <!---  <cfif structKeyExists(session.customer, "saved") AND session.customer.saved EQ 1 >
                 <div class="alert alert-success alert-dismissible show fade">
                     <i class="fa fa-check-circle"></i> #session.customer.firstName# #session.customer.lastName# Successfully Login!!!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <cfset StructDelete(session.customer,'saved')>
-            </cfif>
+            </cfif> --->
             <!-- Navbar -->
             <div class="position-relative z-index-30">
                 <!-- Navbar -->
@@ -94,7 +94,7 @@
             </div>
             <!-- / Navbar-->
             <!-- Main Section-->
-            <!--- <cfdump  var="#session#"> --->
+            <cfdump  var="#session#">
             <section class="mt-0 ">
                 <!-- Page Content Goes Here -->
                 <cfswitch expression="#pg#">
@@ -850,17 +850,27 @@
             <script src="./assets/js/theme.bundle.js?version=#createUUID()#"></script>
             <script src="./assets/common.js"></script>
 
-            <!---   <script> 
+            <script> 
                 var #toScript('#session.customer.saved#','saved')#;
                 var #toScript('#session.customer.firstName#','firstName')#;
                 var #toScript('#session.customer.lastName#','lastName')#;
+            </script>
+            <script>
                 $(document).ready( function () {    
                     if (saved === 1) {
                         successToast(firstName +' '+ lastName +' '+  "Successfully Login!!!");
-                        sessionStorage.removeItem('saved');
+                        $.ajax({  
+                            url: './ajaxAddToCart.cfm?removedLoginMessage=0', 
+                            type: 'GET',
+                            success: function(result) {
+                                if (result.success) {
+                                }
+                            },
+                        });
                     }
+                    
                 });
-            </script>    --->
+            </script>    
             <script>
                 var #toScript('#productIdURL#','ProductId')#;
                 function loadAjax() {
@@ -870,7 +880,9 @@
                         success: function(result) {
                             if (result.success) {
                                 $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
-                                $('##offcanvasCartBtn span.cartCounter').text(result.cartCountValue);
+                                $('##offcanvasCartBtn span.cartCounter').html(result.cartCountValue);
+                            } else{
+                                $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
                             }
                         },
                     }); 

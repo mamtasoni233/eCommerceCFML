@@ -150,10 +150,6 @@
                 transform: rotate(360deg); 
             }
         }
-        span.quickAddBtn:hover{
-            background: ##d75515 !important;
-            color: ##fff;
-        }
     </style>
     <cfset imagePath = "http://127.0.0.1:50847/assets/productImage/">
     <!-- Category Top Banner -->
@@ -539,7 +535,7 @@
                                                 </picture>
                                                 <div class="card-actions d-flex justify-content-center align-items-center">
                                                     <input type="hidden" name="quantity" value="1" id="productQuantity">
-                                                    <span class="btn btn-sm btn-outline-orange text-center small text-uppercase tracking-wide fw-bolder d-block quickAddBtn" data-id="#getProductPaging.PkProductId#">Quick Add</span>
+                                                    <span class="btn btn-sm btn-orange text-center small text-uppercase tracking-wide fw-bolder d-block quickAddBtn" data-id="#getProductPaging.PkProductId#">View Product</span>
                                                     <!--- <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
                                                         <button class="btn btn-outline-dark btn-sm mx-2">S</button>
                                                         <button class="btn btn-outline-dark btn-sm mx-2">M</button>
@@ -691,7 +687,8 @@
                     if ($(this).prop("checked") && $('##tagNameLi-' + $(this).val()).length === 0){
                         $('##tagNameLi-' + value).remove();
                     }
-                    /* $('##productTagContainer').addClass('d-none'); */
+                    // $('##productTagContainer').addClass('d-none');
+                    // $('##productTagContainer').removeClass('d-none');
                     setTimeout(function(){
                         showLoader();
                     }, 500);
@@ -713,7 +710,7 @@
                 $('##priceLi').remove();
             }
 
-            $('.quickAddBtn').on('click', function (e) {
+            /* $('.quickAddBtn').on('click', function (e) {
                 e.preventDefault();
                 var quantity = $('##productQuantity').val();
                 var productId = $(this).data('id');
@@ -740,7 +737,7 @@
                         }
                     },
                 });  
-            });
+            }); */
         });
         $(document).on("click", '##applyPriceFilter', function () {
             maxPrice = parseFloat($('##filterPriceMax').val());

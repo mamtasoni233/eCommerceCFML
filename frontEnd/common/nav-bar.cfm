@@ -230,10 +230,18 @@
                         >
                             <i class="ri-shopping-cart-2-line ri-lg align-middle position-relative z-index-10"></i>
                             
-                            <cfif StructKeyExists(session, "cart")> 
-                                <span
-                                    class="fs-xs fw-bolder f-w-5 f-h-5 bg-orange rounded-lg d-block lh-1 pt-1 position-absolute top-0 end-0 z-index-20 mt-2 text-white cartCounter"
+                            <!--- <cfif StructKeyExists(session, "cart") AND session.cart.len() GT 0> 
+                                <cfset display = 'd-none'>
+                            <cfelse>
+                                <cfset display = ''>
+                                <!--- <span
+                                    class="fs-xs fw-bolder f-w-5 f-h-5 bg-orange rounded-lg d-block lh-1 pt-1 position-absolute top-0 end-0 z-index-20 text-white cartCounter"
                                 >
+                                    <!---   #session.cart.cartCountValue# --->
+                                </span> --->
+                            </cfif> --->
+                            <cfif StructKeyExists(session, "cart") AND session.cart.len() GT 0> 
+                                <span class="fs-xs fw-bolder f-w-5 f-h-5 bg-orange rounded-lg d-block lh-1 pt-1 position-absolute top-0 end-0 z-index-20 text-white cartCounter" id="cartCounter">
                                     <!---   #session.cart.cartCountValue# --->
                                 </span>
                             </cfif>

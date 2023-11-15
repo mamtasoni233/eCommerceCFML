@@ -354,6 +354,9 @@
             AND FkProductId =  <cfqueryparam value = "#form.productId#" cfsqltype = "cf_sql_integer">
         </cfquery>
     </cfif>
+    <cfif structKeyExists(url, 'removedLoginMessage') AND url.removedLoginMessage EQ 0>
+        <cfset session.customer.saved = 0>
+    </cfif>
     <cfcatch>
         <cfset data['success'] = false>
         <cfset data['error'] = cfcatch>

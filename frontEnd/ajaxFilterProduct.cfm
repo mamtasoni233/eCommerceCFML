@@ -148,15 +148,11 @@
                                         <picture class="position-absolute z-index-20 start-0 top-0 hover-show bg-light">
                                             <img class="vh-25 img-fluid" title="" src="#imagePath##getProductImage.image#" alt="">
                                         </picture>
-                                    </cfloop> 
-                                    <div class="card-actions">
-                                        <span class="small text-uppercase tracking-wide fw-bolder text-center d-block">Quick Add</span>
-                                        <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
-                                            <button class="btn btn-outline-dark btn-sm mx-2">S</button>
-                                            <button class="btn btn-outline-dark btn-sm mx-2">M</button>
-                                            <button class="btn btn-outline-dark btn-sm mx-2">L</button>
+                                        <div class="card-actions d-flex justify-content-center align-items-center">
+                                            <input type="hidden" name="quantity" value="1" id="productQuantity">
+                                            <span class="btn btn-sm btn-orange text-center small text-uppercase tracking-wide fw-bolder d-block quickAddBtn" data-id="#getProductPaging.PkProductId#">View Product</span>
                                         </div>
-                                    </div>
+                                    </cfloop> 
                                 </div>
                                 <div class="card-body px-0 text-center">
                                     <div class="d-flex justify-content-center align-items-center mx-auto mb-1">

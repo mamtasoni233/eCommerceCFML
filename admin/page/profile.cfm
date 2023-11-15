@@ -5,11 +5,12 @@
         }
         .profileImg{
             opacity: 1;
-            width: 100%;
+            width: 220px;
+            height:220px;
             transition: .5s ease;
             backface-visibility: hidden;
         }
-        .middle{
+        /* .middle{
             transition: .5s ease;
             opacity: 0;
             position: absolute;
@@ -18,13 +19,13 @@
             transform: translate(-50%, -50%);
             -ms-transform: translate(-50%, -50%);
             text-align: center;
-        }
+        } */
         .img-container:hover .profileImg {
-            opacity: 0.4;
+            opacity: 0.7;
         }
-        .img-container:hover .middle {
+        /*  .img-container:hover .middle {
             opacity: 1;
-        }
+        } */
         .text {
             color: rgb(5, 5, 5);
             font-size: 1.2rem;
@@ -129,9 +130,12 @@
         <section class="section pt-5">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="card  p-4 ">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-end">
+                            <a role="button" id="OpenImgUpload" class="btn btn-sm btn-primary">Change Profile</a>
+                        </div>
                         <div class="card-body profile-card d-flex flex-column align-items-center">
-                            <div class="img-container" id="OpenImgUpload">
+                            <div class="img-container" <!--- id="OpenImgUpload" --->>
                                 <cfif listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile)>
                                     <img src="../assets/compiled/jpg/#session.user.profile#" class="rounded-circle profileImg" alt="Profile">
                                 <!--- <cfelse>
@@ -150,9 +154,9 @@
                                 <cfif NOT listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile) AND structKeyExists(session.user, 'profile') AND len(session.user.profile) GT 0>
                                     <img src="../assets/profileImage/#session.user.profile#" class="rounded-circle profileImg" alt="Profile">
                                 </cfif> --->
-                                <span class="middle text">
+                                <!--- <span class="middle text">
                                     Change Hover
-                                </span>
+                                </span> --->
                             </div>
                             <div class="modal fade text-left" id="imageFileUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
