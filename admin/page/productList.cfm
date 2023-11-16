@@ -60,6 +60,7 @@
                             <div class="modal-body">
                                 <form class="form p-3" id="addProductForm" method="POST" action="" enctype="multipart/form-data">
                                     <input type="hidden" id="PkProductId" value="" name="PkProductId">
+                                    <div id="alertDiv"></div>
                                     <div class="row g-3">
                                         <div class="col-md-12">
                                             <lable class="fw-bold form-label" for="category">Select Category <span class="text-danger">*</span></lable>
@@ -332,7 +333,7 @@
         var validator = $("#addProductForm").validate({
             rules: {
                 productName: {
-                    required: true
+                    required: true,
                 },
                 productPrice: {
                     required: true,
@@ -357,7 +358,7 @@
             },
             messages: {
                 productName: {
-                    required: "Please enter product name",                    
+                    required: "Please enter product name",            
                 },
                 category: {
                     required: "Please select category",                    
@@ -378,7 +379,6 @@
             ignore: [],
             errorElement: 'span',
             errorPlacement: function (error, element) {
-                console.log(element);
                 var elem = $(element);
                 if (elem.hasClass("select2-hidden-accessible")) {
                     element = element.siblings(".select2");
@@ -419,6 +419,7 @@
             validator.resetForm();
             $('.productImageContainer').addClass('d-none');
             $("#category").val(); 
+            $('#alertDiv').html('');
             $("#productTags").val('').trigger("change");
             FilePond.destroy(); 
         });
@@ -750,17 +751,22 @@
             contentType: false,
             processData: false,
             success: function(result) {
-                if ($('#PkProductId').val() > 0) {
-                    successToast("Product Updated!","Product Successfully Updated");
-                    if (result.json.defaultCounter == 0) {
+                if (result.success) {
+                    if ($('#PkProductId').val() > 0) {
+                        successToast("Product Updated!","Product Successfully Updated");
+                        if (result.json.defaultCounter == 0) {
+                            warnToast("Issue!","Default image is not selected!!!");
+                        }
+                    } else{
+                        successToast("Product Add!","Product Successfully Added");
                         warnToast("Issue!","Default image is not selected!!!");
                     }
+                    $("#addProductData").modal('hide');
+                    $('#productDataTable').DataTable().ajax.reload();   
+                    
                 } else{
-                    successToast("Product Add!","Product Successfully Added");
-                    warnToast("Issue!","Default image is not selected!!!");
+                    $('#alertDiv').html('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i> ' +result.message+'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
-                $("#addProductData").modal('hide');
-                $('#productDataTable').DataTable().ajax.reload();   
             }
         });
     }

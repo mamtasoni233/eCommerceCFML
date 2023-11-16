@@ -191,83 +191,93 @@
 </cfif>
 
 <cfif structKeyExists(form, "productName") AND len(trim(form.productName)) GT 0>
-    <cfif NOT structKeyExists(form, "isActive")>
-        <cfset isActive = 0>
+    <cfquery name="checkProductName">
+        SELECT PkProductId, productName FROM product 
+        WHERE productName = <cfqueryparam value="#trim(form.productName)#" cfsqltype="cf_sql_varchar"> AND 
+        PkProductId != <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+    <cfif checkProductName.recordCount GT 0>
+        <cfset data['success'] = false>
+        <cfset data['message'] = 'Product name already exist!'>
     <cfelse>
-        <cfset isActive = form.isActive>
-    </cfif>
-    <cfset productId = 0>
-    <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
-        <cfset productId = url.PkProductId>
-        <cfquery name="updateproductData">
-            UPDATE product SET
-            productName = <cfqueryparam value = "#form.productName#" cfsqltype = "cf_sql_varchar">
-            , FkCategoryId =  <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
-            , productPrice =  <cfqueryparam value = "#form.productPrice#" cfsqltype = "cf_sql_float">
-            , productQty =  <cfqueryparam value = "#form.productQty#" cfsqltype = "cf_sql_integer">
-            , productDescription =  <cfqueryparam value = "#form.productDescription#" cfsqltype = "cf_sql_text">
-            , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
-            , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
-            , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-            WHERE PkProductId = <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
-    <cfelse>
-        <cfquery result="addProductData">
-            INSERT INTO product (
-                productName
-                , FkCategoryId
-                , productPrice
-                , productQty
-                , productDescription
-                , isActive
-                , createdBy
-                , dateCreated
-            ) VALUES (
-                <cfqueryparam value = "#form.productName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
-                ,  <cfqueryparam value = "#form.productPrice#" cfsqltype = "cf_sql_float">
-                , <cfqueryparam value = "#form.productQty#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#form.productDescription#" cfsqltype = "cf_sql_text">
-                , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
-                , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-            )
-        </cfquery>
-        <cfset productId = addProductData.generatedKey>
-    </cfif>
-    <cfif structKeyExists(form, 'productTags') AND len(form.productTags) GT 0>
-        <cfquery name="updateproductData">
-            UPDATE product SET
-                product_tags = <cfqueryparam value = "#form.productTags#" cfsqltype = "cf_sql_text">
-            WHERE PkProductId = <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
-    </cfif>
-    <cfif structKeyExists(form, "filepond") AND arrayLen(form.filepond) GT 0>
-        <cfloop array="#form.filepond#" index="i">
-            <cfset txtproductImage = "">
-            <cffile action="upload" destination="#productImagePath#" fileField="#i#"  nameconflict="makeunique" result="dataImage">
-            <cfset txtproductImage = dataImage.serverfile>
-            <cfquery name="getImage">
-                SELECT PkImageId, image, isDefault FROM product_image 
-                WHERE FkProductId = <cfqueryparam value="#productId#" cfsqltype = "cf_sql_integer">
+        <cfif NOT structKeyExists(form, "isActive")>
+            <cfset isActive = 0>
+        <cfelse>
+            <cfset isActive = form.isActive>
+        </cfif>
+        <cfset productId = 0>
+        <cfif structKeyExists(url, "PkProductId") AND url.PkProductId GT 0>
+            <cfset productId = url.PkProductId>
+            <cfquery name="updateproductData">
+                UPDATE product SET
+                productName = <cfqueryparam value = "#form.productName#" cfsqltype = "cf_sql_varchar">
+                , FkCategoryId =  <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
+                , productPrice =  <cfqueryparam value = "#form.productPrice#" cfsqltype = "cf_sql_float">
+                , productQty =  <cfqueryparam value = "#form.productQty#" cfsqltype = "cf_sql_integer">
+                , productDescription =  <cfqueryparam value = "#form.productDescription#" cfsqltype = "cf_sql_text">
+                , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
+                , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                WHERE PkProductId = <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
             </cfquery>
-            <cfif len(txtproductImage)  GT 0>
-                <cfquery name="qryProductUpdateImg" result="qryResultProductUpdateImg">
-                    INSERT INTO product_image (
-                        image
-                        , FkProductId
-                        , createdBy
-                        , dateCreated
-                    ) VALUES (
-                        <cfqueryparam value="#txtproductImage#">
-                        , <cfqueryparam value = "#productId#" cfsqltype = "cf_sql_varchar">
-                        , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
-                        , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-                    )
+        <cfelse>
+            <cfquery result="addProductData">
+                INSERT INTO product (
+                    productName
+                    , FkCategoryId
+                    , productPrice
+                    , productQty
+                    , productDescription
+                    , isActive
+                    , createdBy
+                    , dateCreated  
+                ) VALUES (
+                    <cfqueryparam value = "#form.productName#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
+                    ,  <cfqueryparam value = "#form.productPrice#" cfsqltype = "cf_sql_float">
+                    , <cfqueryparam value = "#form.productQty#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#form.productDescription#" cfsqltype = "cf_sql_text">
+                    , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
+                    , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                )
+            </cfquery>
+            <cfset productId = addProductData.generatedKey>
+        </cfif>
+        <cfif structKeyExists(form, 'productTags') AND len(form.productTags) GT 0>
+            <cfquery name="updateproductData">
+                UPDATE product SET
+                    product_tags = <cfqueryparam value = "#form.productTags#" cfsqltype = "cf_sql_text">
+                WHERE PkProductId = <cfqueryparam value = "#url.PkProductId#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+        </cfif>
+        <cfif structKeyExists(form, "filepond") AND arrayLen(form.filepond) GT 0>
+            <cfloop array="#form.filepond#" index="i">
+                <cfset txtproductImage = "">
+                <cffile action="upload" destination="#productImagePath#" fileField="#i#"  nameconflict="makeunique" result="dataImage">
+                <cfset txtproductImage = dataImage.serverfile>
+                <cfquery name="getImage">
+                    SELECT PkImageId, image, isDefault FROM product_image 
+                    WHERE FkProductId = <cfqueryparam value="#productId#" cfsqltype = "cf_sql_integer">
                 </cfquery>
-            </cfif>
-        </cfloop>
-    </cfif>
+                <cfif len(txtproductImage)  GT 0>
+                    <cfquery name="qryProductUpdateImg" result="qryResultProductUpdateImg">
+                        INSERT INTO product_image (
+                            image
+                            , FkProductId
+                            , createdBy
+                            , dateCreated
+                        ) VALUES (
+                            <cfqueryparam value="#txtproductImage#">
+                            , <cfqueryparam value = "#productId#" cfsqltype = "cf_sql_varchar">
+                            , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                            , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                        )
+                    </cfquery>
+                </cfif>
+            </cfloop>
+        </cfif>
+    </cfif> 
 </cfif>
 <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
     <cfquery name="changeStatus">

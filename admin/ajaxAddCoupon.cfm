@@ -175,60 +175,70 @@
 </cfif>
 
 <cfif structKeyExists(form, "couponName") AND len(trim(form.couponName)) GT 0>
-    <cfif NOT structKeyExists(form, "isActive")>
-        <cfset isActive = 0>
+    <cfquery name="checkTagName">
+        SELECT PkCouponId, couponCode FROM coupons 
+        WHERE couponCode = <cfqueryparam value="#trim(form.couponCode)#" cfsqltype="cf_sql_varchar"> AND 
+        PkCouponId != <cfqueryparam value = "#url.PkCouponId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+    <cfif checkTagName.recordCount GT 0>
+        <cfset data['success'] = false>
+        <cfset data['message'] = 'PCoupon code already exist!'>
     <cfelse>
-        <cfset isActive = form.isActive>
-    </cfif>
-    <cfset productId = 0>
-    <cfif structKeyExists(url, "PkCouponId") AND url.PkCouponId GT 0>
-        <cfset productId = url.PkCouponId>
-        <cfquery name="updateCouponData">
-            UPDATE coupons SET
-            FkProductId = <cfqueryparam value = "#form.product#" cfsqltype = "cf_sql_integer">
-            , couponName = <cfqueryparam value = "#form.couponName#" cfsqltype = "cf_sql_varchar">
-            , couponCode = <cfqueryparam value = "#form.couponCode#" cfsqltype = "cf_sql_varchar">
-            , discountValue =  <cfqueryparam value = "#form.discountValue#" cfsqltype = "cf_sql_float">
-            , discountType =  <cfqueryparam value = "#form.discountType#" cfsqltype = "cf_sql_integer">
-            , couponStartDate =  <cfqueryparam value = "#form.couponStartDate#" cfsqltype = "cf_sql_date">
-            , couponExpDate =  <cfqueryparam value = "#form.couponExpDate#" cfsqltype = "cf_sql_date">
-            , repeatRestriction =  <cfqueryparam value = "#form.repeatRestriction#" cfsqltype = "cf_sql_integer">
-            , description =  <cfqueryparam value = "#form.description#" cfsqltype = "cf_sql_text">
-            , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
-            , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
-            , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-            WHERE PkCouponId = <cfqueryparam value = "#url.PkCouponId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
-    <cfelse>
-        <cfquery result="addProductData">
-            INSERT INTO coupons (
-                FkProductId
-                , couponName
-                , couponCode
-                , discountValue
-                , discountType
-                , couponStartDate
-                , couponExpDate
-                , repeatRestriction
-                , description
-                , isActive
-                , createdBy
-                , dateCreated
-            ) VALUES (
-                <cfqueryparam value = "#form.product#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#form.couponName#" cfsqltype = "cf_sql_varchar">
-                ,  <cfqueryparam value = "#form.couponCode#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.discountValue#" cfsqltype = "cf_sql_float">
-                , <cfqueryparam value = "#form.discountType#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#form.couponStartDate#" cfsqltype = "cf_sql_date">
-                , <cfqueryparam value = "#form.couponExpDate#" cfsqltype = "cf_sql_date">
-                , <cfqueryparam value = "#form.repeatRestriction#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#form.description#" cfsqltype = "cf_sql_text">
-                , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
-                , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-            )
-        </cfquery>
+        <cfif NOT structKeyExists(form, "isActive")>
+            <cfset isActive = 0>
+        <cfelse>
+            <cfset isActive = form.isActive>
+        </cfif>
+        <cfset productId = 0>
+        <cfif structKeyExists(url, "PkCouponId") AND url.PkCouponId GT 0>
+            <cfset productId = url.PkCouponId>
+            <cfquery name="updateCouponData">
+                UPDATE coupons SET
+                FkProductId = <cfqueryparam value = "#form.product#" cfsqltype = "cf_sql_integer">
+                , couponName = <cfqueryparam value = "#form.couponName#" cfsqltype = "cf_sql_varchar">
+                , couponCode = <cfqueryparam value = "#form.couponCode#" cfsqltype = "cf_sql_varchar">
+                , discountValue =  <cfqueryparam value = "#form.discountValue#" cfsqltype = "cf_sql_float">
+                , discountType =  <cfqueryparam value = "#form.discountType#" cfsqltype = "cf_sql_integer">
+                , couponStartDate =  <cfqueryparam value = "#form.couponStartDate#" cfsqltype = "cf_sql_date">
+                , couponExpDate =  <cfqueryparam value = "#form.couponExpDate#" cfsqltype = "cf_sql_date">
+                , repeatRestriction =  <cfqueryparam value = "#form.repeatRestriction#" cfsqltype = "cf_sql_integer">
+                , description =  <cfqueryparam value = "#form.description#" cfsqltype = "cf_sql_text">
+                , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
+                , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                WHERE PkCouponId = <cfqueryparam value = "#url.PkCouponId#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+        <cfelse>
+            <cfquery result="addProductData">
+                INSERT INTO coupons (
+                    FkProductId
+                    , couponName
+                    , couponCode
+                    , discountValue
+                    , discountType
+                    , couponStartDate
+                    , couponExpDate
+                    , repeatRestriction
+                    , description
+                    , isActive
+                    , createdBy
+                    , dateCreated
+                ) VALUES (
+                    <cfqueryparam value = "#form.product#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#form.couponName#" cfsqltype = "cf_sql_varchar">
+                    ,  <cfqueryparam value = "#form.couponCode#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.discountValue#" cfsqltype = "cf_sql_float">
+                    , <cfqueryparam value = "#form.discountType#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#form.couponStartDate#" cfsqltype = "cf_sql_date">
+                    , <cfqueryparam value = "#form.couponExpDate#" cfsqltype = "cf_sql_date">
+                    , <cfqueryparam value = "#form.repeatRestriction#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#form.description#" cfsqltype = "cf_sql_text">
+                    , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
+                    , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                )
+            </cfquery>
+        </cfif>
     </cfif>
 </cfif>
 <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>

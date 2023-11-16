@@ -56,6 +56,7 @@
                             </div>
                             <form class="form p-3" id="addProductTagForm" method="POST" action="" enctype="multipart/form-data">
                                 <input type="hidden" id="PkTagId" value="" name="PkTagId">
+                                <div id="alertDiv"></div>
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="category">Select Category <span class="text-danger">*</span></lable>
@@ -267,13 +268,17 @@
                     contentType: false,
                     processData: false,
                     success: function(result) {
-                        if ($('#PkTagId').val() > 0) {
-                            successToast("Product Tag Updated!","Product Tag Successfully Updated");
+                        if (result.success) {
+                            if ($('#PkTagId').val() > 0) {
+                                successToast("Product Tag Updated!","Product Tag Successfully Updated");
+                            } else{
+                                successToast("Product Tag Add!","Product Tag Successfully Added");
+                            }
+                            $("#addProductTagData").modal('hide');
+                            $('#productTagDataTable').DataTable().ajax.reload();
                         } else{
-                            successToast("Product Tag Add!","Product Tag Successfully Added");
+                            $('#alertDiv').html('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i> ' +result.message+'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                         }
-                        $("#addProductTagData").modal('hide');
-                        $('#productTagDataTable').DataTable().ajax.reload();   
                     }
                 });
             }, 
@@ -286,6 +291,7 @@
             validator.resetForm();
             $("#category").val(); 
             $(".modal-title").html("Add Product Tag");
+            ('#alertDiv').html('');
         });
         $("#productTagDataTable").on("click", ".editProductTag", function () { 
             var id = $(this).attr("data-id");

@@ -491,19 +491,19 @@
                         <p class="fs-xs fw-bold text-uppercase text-muted-hover p-0 m-0" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Sort By <i class="ri-arrow-drop-down-line ri-lg align-bottom"></i>
                         </p>
-                        <ul class="dropdown-menu" id="sortingFilterUl">
+                        <ul class="dropdown-menu px-2 py-3" id="sortingFilterUl">
                             <li class="dropdown-list-item">
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif sorting EQ 'P.productPrice DESC'>active</cfif>" data-order="P.productPrice DESC">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase p-1 text-muted-hover mb-2 sortingFilter <cfif sorting EQ 'P.productPrice DESC'>active</cfif>" data-order="P.productPrice DESC">
                                     Price: Hi Low
                                 </a>
                             </li>
                             <li class="dropdown-list-item">
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif sorting EQ 'P.productPrice ASC'>active</cfif>" data-order="P.productPrice ASC">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase p-1 text-muted-hover mb-2 sortingFilter <cfif sorting EQ 'P.productPrice ASC'>active</cfif>" data-order="P.productPrice ASC">
                                     Price: Low Hi
                                 </a>
                             </li>
                             <li class="dropdown-list-item">
-                                <a class="dropdown-item fs-xs fw-bold text-uppercase text-muted-hover mb-2 sortingFilter <cfif sorting EQ 'P.productName ASC'>active</cfif>" data-order="P.productName ASC">
+                                <a class="dropdown-item fs-xs fw-bold text-uppercase p-1 text-muted-hover mb-2 sortingFilter <cfif sorting EQ 'P.productName ASC'>active</cfif>" data-order="P.productName ASC">
                                     Name
                                 </a>
                             </li>
@@ -687,8 +687,13 @@
                     if ($(this).prop("checked") && $('##tagNameLi-' + $(this).val()).length === 0){
                         $('##tagNameLi-' + value).remove();
                     }
-                    // $('##productTagContainer').addClass('d-none');
-                    // $('##productTagContainer').removeClass('d-none');
+                    if (value === "" && minPrice === "" && maxPrice === ""){
+                        // minPrice = "";
+                        // maxPrice = "";
+                        $('##productTagContainer').addClass('d-none');
+                        priceSliders[0].noUiSlider.set([60, 950]);
+                    }
+                    /* $('##productTagContainer').addClass('d-none'); */
                     setTimeout(function(){
                         showLoader();
                     }, 500);

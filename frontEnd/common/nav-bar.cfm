@@ -229,7 +229,6 @@
                             id="offcanvasCartBtn"
                         >
                             <i class="ri-shopping-cart-2-line ri-lg align-middle position-relative z-index-10"></i>
-                            
                             <!--- <cfif StructKeyExists(session, "cart") AND session.cart.len() GT 0> 
                                 <cfset display = 'd-none'>
                             <cfelse>

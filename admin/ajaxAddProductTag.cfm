@@ -173,42 +173,50 @@
 
 
 <cfif structKeyExists(form, "tagName") AND len(form.tagName) GT 0>
-    <cfif NOT structKeyExists(form, "isActive")>
-        <cfset isActive = 0>
+    <cfquery name="checkTagName">
+        SELECT PkTagId, tagName FROM product_tags 
+        WHERE tagName = <cfqueryparam value="#trim(form.tagName)#" cfsqltype="cf_sql_varchar"> AND 
+        PkTagId != <cfqueryparam value = "#url.PkTagId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+    <cfif checkTagName.recordCount GT 0>
+        <cfset data['success'] = false>
+        <cfset data['message'] = 'Product tag name already exist!'>
     <cfelse>
-        <cfset isActive = form.isActive>
-    </cfif>
-    <cfset productId = 0>
-
-    <cfif structKeyExists(url, "PkTagId") AND url.PkTagId GT 0>
-        
-        <cfset productId = url.PkTagId>
-        <cfquery name="updateproductTagData">
-            UPDATE product_tags SET
-            tagName = <cfqueryparam value = "#form.tagName#" cfsqltype = "cf_sql_varchar">
-            , FkCategoryId =  <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
-            , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
-            , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
-            , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-            WHERE PkTagId = <cfqueryparam value = "#url.PkTagId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
-    <cfelse>
-        <cfquery result="addProductData">
-            INSERT INTO product_tags (
-                tagName
-                , FkCategoryId
-                , isActive
-                , createdBy
-                , dateCreated
-            ) VALUES (
-                <cfqueryparam value = "#form.tagName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
-                , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-            )
-        </cfquery>
-        <cfset productId = addProductData.generatedKey>
+        <cfif NOT structKeyExists(form, "isActive")>
+            <cfset isActive = 0>
+        <cfelse>
+            <cfset isActive = form.isActive>
+        </cfif>
+        <cfset productId = 0>
+        <cfif structKeyExists(url, "PkTagId") AND url.PkTagId GT 0>
+            <cfset productId = url.PkTagId>
+            <cfquery name="updateproductTagData">
+                UPDATE product_tags SET
+                tagName = <cfqueryparam value = "#form.tagName#" cfsqltype = "cf_sql_varchar">
+                , FkCategoryId =  <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
+                , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
+                , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                WHERE PkTagId = <cfqueryparam value = "#url.PkTagId#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+        <cfelse>
+            <cfquery result="addProductData">
+                INSERT INTO product_tags (
+                    tagName
+                    , FkCategoryId
+                    , isActive
+                    , createdBy
+                    , dateCreated
+                ) VALUES (
+                    <cfqueryparam value = "#form.tagName#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.category#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
+                    , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                )
+            </cfquery>
+            <cfset productId = addProductData.generatedKey>
+        </cfif>
     </cfif>
     
 </cfif>

@@ -476,7 +476,6 @@
                                     WHERE FkproductId IN (0,<cfqueryparam value="#checkFkProductId#" list="true">) 
                                     AND couponStartDate <=<cfqueryparam value="#now()#" cfsqltype="cf_sql_date"> AND couponExpDate >=<cfqueryparam value="#now()#" cfsqltype="cf_sql_date">
                                 </cfquery>
-                                <cfdump  var="#getCoupon#">
                                 <cfquery name="qryGetCouponName" dbtype="query">
                                     SELECT *
                                     FROM getCoupon
@@ -902,11 +901,14 @@
                 data: {"couponCode":couponCode, "shippingValue":shippingValue},
                 async: false,
                 success: function(result) {
-                    console.log("result", result);
                     if (result.success) {
                         if(couponCode != ''){
-                            $('##alertDiv').html('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>'+result.message+'!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-                            $('##removeCoupon').removeClass('d-none');
+                            if (result.couponChecked.success == true) {
+                                $('##alertDiv').html('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>'+result.message+'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                                $('##removeCoupon').removeClass('d-none');
+                            } else{
+                                $('##alertDiv').html('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>'+result.message+'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                            }
                         } else{
                             $('##alertDiv').html('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>Please add coupon..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                         }

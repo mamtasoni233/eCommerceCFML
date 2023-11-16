@@ -150,7 +150,7 @@
                                         </picture>
                                         <div class="card-actions d-flex justify-content-center align-items-center">
                                             <input type="hidden" name="quantity" value="1" id="productQuantity">
-                                            <span class="btn btn-sm btn-orange text-center small text-uppercase tracking-wide fw-bolder d-block quickAddBtn" data-id="#getProductPaging.PkProductId#">View Product</span>
+                                            <span class="btn btn-sm btn-orange text-center small text-uppercase tracking-wide fw-bolder d-block quickAddBtn" data-id="#getProductBaseedTag.PkProductId#">View Product</span>
                                         </div>
                                     </cfloop> 
                                 </div>

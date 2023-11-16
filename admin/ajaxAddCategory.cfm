@@ -180,88 +180,90 @@
 
 
 <cfif structKeyExists(form, "categoryName") AND len(form.categoryName) GT 0>
-    <cfif NOT structKeyExists(form, "isActive")>
-        <cfset isActive = 0>
+    <cfquery name="checkCategoryName">
+        SELECT PkCategoryId, categoryName FROM category 
+        WHERE categoryName = <cfqueryparam value="#trim(form.categoryName)#" cfsqltype="cf_sql_varchar"> AND 
+        PkCategoryId != <cfqueryparam value = "#url.PkCategoryId#" cfsqltype = "cf_sql_integer">
+    </cfquery>
+    <cfif checkCategoryName.recordCount GT 0>
+        <cfset data['success'] = false>
+        <cfset data['message'] = 'Category name already exist!'>
     <cfelse>
-        <cfset isActive = form.isActive>
-    </cfif>
-    <cfset catId = 0>
-
-    <cfif structKeyExists(url, "PkCategoryId") AND url.PkCategoryId GT 0>
-        <cfset catId = url.PkCategoryId>
-        <cfquery name="updateCategoryData">
-            UPDATE category SET
-            categoryName = <cfqueryparam value = "#form.categoryName#" cfsqltype = "cf_sql_varchar">
-            , parentCategoryId =  <cfqueryparam value = "#form.parentCategory#" cfsqltype = "cf_sql_integer">
-            , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
-            , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
-            , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-            WHERE PkCategoryId = <cfqueryparam value = "#url.PkCategoryId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
-    <cfelse>
-        <!--- <cfquery name="checkCategory">
-            SELECT PkCategoryId, categoryName FROM category 
-            WHERE categoryName = <cfqueryparam value="#trim(categoryName)#" cfsqltype="cf_sql_varchar"> AND 
-            PkCategoryId != <cfqueryparam value = "#form.PkCategoryId#" cfsqltype = "cf_sql_integer">
-        </cfquery>
-        <cfif checkCategory.recordCount GT 0>
-            <cflocation url="./categoryAdd.cfm?checkEmail=1" addtoken="false">
-        </cfif>   --->
-        <cfquery result="addCategoryData">
-            INSERT INTO category (
-                categoryName
-                , parentCategoryId
-                , isActive
-                , createdBy
-                , dateCreated
-            ) VALUES (
-                <cfqueryparam value = "#form.categoryName#" cfsqltype = "cf_sql_varchar">
-                , <cfqueryparam value = "#form.parentCategory#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
-                , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
-                , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
-            )
-        </cfquery>
-        <cfset catId = addCategoryData.generatedKey>
-    </cfif>
-    <cfif structKeyExists(form, "filepond") AND len(form.filepond) GT 0>
-        
-        <cfset txtcategoryImage = "">
-        <cffile action="upload" destination="#categoryImagePath#" fileField="filepond"  nameconflict="makeunique" result="dataImage">
-        <cfset txtcategoryImage = dataImage.serverfile>
-        <cfquery name="qryGetImageName">
-            SELECT categoryImage
-            FROM category
-            WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
-        </cfquery>
-        <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.categoryImage) GT 0>
-            <cfif fileExists("#categoryImagePath##qryGetImageName.categoryImage#")>
-                <cffile action="delete" file="#categoryImagePath##qryGetImageName.categoryImage#">
+        <cfif NOT structKeyExists(form, "isActive")>
+            <cfset isActive = 0>
+        <cfelse>
+            <cfset isActive = form.isActive>
+        </cfif>
+        <cfset catId = 0>
+    
+        <cfif structKeyExists(url, "PkCategoryId") AND url.PkCategoryId GT 0>
+            <cfset catId = url.PkCategoryId>
+            <cfquery name="updateCategoryData">
+                UPDATE category SET
+                categoryName = <cfqueryparam value = "#form.categoryName#" cfsqltype = "cf_sql_varchar">
+                , parentCategoryId =  <cfqueryparam value = "#form.parentCategory#" cfsqltype = "cf_sql_integer">
+                , isActive = <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
+                , updatedBy =  <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                , dateUpdated =  <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                WHERE PkCategoryId = <cfqueryparam value = "#url.PkCategoryId#" cfsqltype = "cf_sql_integer">
+            </cfquery>
+        <cfelse>
+            <cfquery result="addCategoryData">
+                INSERT INTO category (
+                    categoryName
+                    , parentCategoryId
+                    , isActive
+                    , createdBy
+                    , dateCreated
+                ) VALUES (
+                    <cfqueryparam value = "#form.categoryName#" cfsqltype = "cf_sql_varchar">
+                    , <cfqueryparam value = "#form.parentCategory#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#isActive#" cfsqltype = "cf_sql_bit">
+                    , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_datetime">
+                )
+            </cfquery>
+            <cfset catId = addCategoryData.generatedKey>
+        </cfif>
+        <cfif structKeyExists(form, "filepond") AND len(form.filepond) GT 0>
+            
+            <cfset txtcategoryImage = "">
+            <cffile action="upload" destination="#categoryImagePath#" fileField="filepond"  nameconflict="makeunique" result="dataImage">
+            <cfset txtcategoryImage = dataImage.serverfile>
+            <cfquery name="qryGetImageName">
+                SELECT categoryImage
+                FROM category
+                WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfif qryGetImageName.recordCount EQ 1 AND len(qryGetImageName.categoryImage) GT 0>
+                <cfif fileExists("#categoryImagePath##qryGetImageName.categoryImage#")>
+                    <cffile action="delete" file="#categoryImagePath##qryGetImageName.categoryImage#">
+                </cfif>
+            </cfif>
+            
+            <cfif len(txtcategoryImage) GT 0>
+                <cfquery name="qryCategoryUpdateImg" result="qryResultCategoryUpdateImg">
+                    UPDATE category SET
+                    categoryImage = <cfqueryparam value="#txtcategoryImage#" cfsqltype = "cf_sql_varchar">
+                    WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
+                </cfquery>
             </cfif>
         </cfif>
-        
-        <cfif len(txtcategoryImage) GT 0>
-            <cfquery name="qryCategoryUpdateImg" result="qryResultCategoryUpdateImg">
-                UPDATE category SET
-                categoryImage = <cfqueryparam value="#txtcategoryImage#" cfsqltype = "cf_sql_varchar">
+        <cfif structKeyExists(form, "removeImage")>
+            <cfquery name="qryGetImageNameForRemove">
+                SELECT categoryImage
+                FROM category
+                WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfif fileExists("#categoryImagePath##qryGetImageNameForRemove.categoryImage#")>
+                <cffile action="delete" file="#categoryImagePath##qryGetImageNameForRemove.categoryImage#">
+            </cfif>
+            <cfquery name="qryRemoveImage">
+                UPDATE category SET 
+                categoryImage = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
                 WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
             </cfquery>
         </cfif>
-    </cfif>
-    <cfif structKeyExists(form, "removeImage")>
-        <cfquery name="qryGetImageNameForRemove">
-            SELECT categoryImage
-            FROM category
-            WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
-        </cfquery>
-        <cfif fileExists("#categoryImagePath##qryGetImageNameForRemove.categoryImage#")>
-            <cffile action="delete" file="#categoryImagePath##qryGetImageNameForRemove.categoryImage#">
-        </cfif>
-        <cfquery name="qryRemoveImage">
-            UPDATE category SET 
-            categoryImage = <cfqueryparam value = "" cfsqltype = "cf_sql_varchar">
-            WHERE PkCategoryId = <cfqueryparam value="#catId#" cfsqltype="cf_sql_integer">
-        </cfquery>
     </cfif>
 </cfif>
 

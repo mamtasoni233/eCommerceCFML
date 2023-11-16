@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2023 at 02:01 PM
+-- Generation Time: Nov 16, 2023 at 01:53 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -47,9 +47,9 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(438, 1, 15, '0', '2', 60, 0, b'0', '2023-11-15 15:24:08', 1, NULL, NULL),
-(439, 1, 6, '0', '1', 1000, 0, b'0', '2023-11-15 15:24:12', 1, NULL, NULL),
-(440, 1, 13, '0', '1', 500, 0, b'0', '2023-11-15 15:24:17', 1, NULL, NULL);
+(438, 1, 15, '2', '2', 60, 9, b'0', '2023-11-15 15:24:08', 1, '2023-11-16 15:43:59', NULL),
+(439, 1, 6, '2', '1', 1000, 150, b'0', '2023-11-15 15:24:12', 1, '2023-11-16 15:43:59', NULL),
+(440, 1, 13, '2', '1', 500, 75, b'0', '2023-11-15 15:24:17', 1, '2023-11-16 15:43:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -147,7 +147,8 @@ INSERT INTO `category` (`PkCategoryId`, `parentCategoryId`, `categoryName`, `cat
 (79, 0, 'rtry', '1_aheksy692kfn.jpg', b'1', b'1', '2023-09-20 13:59:29', 1, '2023-09-21 10:32:02', NULL),
 (80, 0, 't6t54', '1.png', b'1', b'1', '2023-09-20 14:06:55', 1, '2023-09-21 10:32:04', NULL),
 (81, 0, 'fytr', '1_au8yxbmxivn1.png', b'1', b'1', '2023-09-20 14:43:50', 1, '2023-09-21 10:32:07', 1),
-(82, 0, 'ryrty', 'oreo_jrbfoqkg9rd6.jpeg', b'1', b'1', '2023-09-21 10:29:21', 1, '2023-09-21 10:30:24', NULL);
+(82, 0, 'ryrty', 'oreo_jrbfoqkg9rd6.jpeg', b'1', b'1', '2023-09-21 10:29:21', 1, '2023-09-21 10:30:24', NULL),
+(83, 0, 'Home & Furniture', '46b798_0412c5d3a7c7497c883a2dfdc7aed925_mv2_500x.webp', b'1', b'1', '2023-11-16 17:47:51', 1, '2023-11-16 17:55:27', NULL);
 
 -- --------------------------------------------------------
 
@@ -386,7 +387,7 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (6, 18, 'Cookie', '9', 1000, 4, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-11-09 17:37:00', 1),
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
-(9, 20, 'Taj Mahal Tea', '8', 100, 21, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-11-14 16:12:44', 1),
+(9, 20, 'Taj Mahal Tea 855', '8', 100, 21, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-11-16 17:45:32', 1),
 (10, 18, 'crack jack', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, 'Oreo', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-07 10:58:33', 1),
@@ -399,7 +400,13 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (19, 19, 'Bhujia Sev', '4,11', 150, 9, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-11-07 13:53:42', 7),
 (20, 20, 'Wagh bakri Chai', '8', 1000, 19, 'Waagbakri Chai', b'1', b'0', '2023-10-03 10:45:41', 1, '2023-11-09 13:41:42', 1),
 (21, 19, '5555555555', NULL, 55000, 20, 'ewe', b'1', b'0', '2023-10-03 12:43:57', 1, '2023-10-03 14:14:04', 1),
-(22, 20, 'werwer', NULL, 25, 15, 'werfwe', b'1', b'1', '2023-11-14 16:20:18', 1, '2023-11-14 16:20:31', NULL);
+(22, 20, 'werwer', NULL, 25, 15, 'werfwe', b'1', b'1', '2023-11-14 16:20:18', 1, '2023-11-14 16:20:31', NULL),
+(23, 20, 'Taj Mahal Tea', NULL, 100, 15, 'cf', b'1', b'0', '2023-11-16 15:49:57', 1, NULL, NULL),
+(24, 21, 'Meggie Pasta', '10', 100, 20, 'ewew', b'1', b'0', '2023-11-16 16:28:20', 1, '2023-11-16 17:46:17', 1),
+(25, 19, 'Taj Mahal Tea', NULL, 25, 15, 'y6rty7', b'1', b'1', '2023-11-16 16:30:57', 1, '2023-11-16 17:46:45', NULL),
+(26, 19, 'Taj Mahal Tea', NULL, 25, 25, '7657', b'1', b'1', '2023-11-16 16:32:08', 1, '2023-11-16 17:46:33', NULL),
+(27, 19, 'Taj Mahal Tea', NULL, 500, 20, 'sfsdf', b'1', b'1', '2023-11-16 16:32:45', 1, '2023-11-16 17:46:31', NULL),
+(28, 18, 'Taj Mahal Tea566', NULL, 100, 20, 'wqeqw', b'1', b'0', '2023-11-16 17:32:29', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -452,7 +459,13 @@ INSERT INTO `product_image` (`PkImageId`, `FkProductId`, `image`, `isDefault`, `
 (58, 14, '070417TeaShops01_ey82bknl49ky.jpg', b'0', b'1', '2023-10-05 14:15:39', 1),
 (61, 3, 'portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing-happy-cheerful-couple-sunglasses_ilkqjj831sgv.jpg', b'1', b'1', '2023-10-09 14:56:08', 1),
 (62, 15, 'anand-nmkieen.png', b'0', b'1', '2023-11-08 14:38:07', 1),
-(63, 22, '925036427-3444501-1_1xiyqqiuya1nb.jpg', b'0', b'1', '2023-11-14 16:20:18', 1);
+(63, 22, '925036427-3444501-1_1xiyqqiuya1nb.jpg', b'0', b'1', '2023-11-14 16:20:18', 1),
+(64, 23, 'wagh-bakri-tea_1sxi62wl7m48z.jpg', b'0', b'1', '2023-11-16 15:49:57', 1),
+(65, 24, '925036427-3444501-1_j8v4cwm3y99z.jpg', b'0', b'1', '2023-11-16 16:28:20', 1),
+(66, 25, 'wagh-bakri-tea_1p66r6ugube1a.jpg', b'0', b'1', '2023-11-16 16:30:57', 1),
+(67, 26, '925036427-3444501-1_mh4l04q4ll5b.jpg', b'0', b'1', '2023-11-16 16:32:08', 1),
+(68, 27, '070417TeaShops01_10fc9fsfugk59.jpg', b'0', b'1', '2023-11-16 16:32:45', 1),
+(69, 28, '925036427-3444501-1_1b72566j8pjko.jpg', b'0', b'1', '2023-11-16 17:32:30', 1);
 
 -- --------------------------------------------------------
 
@@ -484,7 +497,7 @@ INSERT INTO `product_tags` (`PkTagId`, `FkCategoryId`, `tagName`, `isActive`, `i
 (5, 41, 'sports', b'1', b'0', '2023-09-14 14:10:34', 1, NULL, NULL),
 (6, 17, 'camera', b'1', b'0', '2023-09-14 14:10:43', 1, '2023-09-14 16:36:31', 1),
 (7, 19, 'mixer', b'1', b'0', '2023-09-14 17:09:22', 1, NULL, NULL),
-(8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-11-14 16:33:06', 1),
+(8, 20, 'Green tea', b'1', b'0', '2023-09-14 17:09:32', 1, '2023-11-16 18:00:15', 1),
 (9, 18, 'butter buiscuit', b'1', b'0', '2023-09-14 18:11:51', 1, NULL, NULL),
 (10, 21, 'Noodles', b'1', b'0', '2023-09-15 15:14:51', 1, NULL, NULL),
 (11, 19, 'Sev', b'1', b'0', '2023-10-02 00:09:42', 7, '2023-10-11 12:43:00', NULL);
@@ -716,7 +729,7 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `PkCategoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `coupons`
@@ -746,13 +759,13 @@ ALTER TABLE `order_item`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `PkProductId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `product_image`
 --
 ALTER TABLE `product_image`
-  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `PkImageId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `product_tags`

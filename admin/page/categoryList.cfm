@@ -62,6 +62,7 @@
                             </div>
                             <form class="form p-3" id="addCategoryForm" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" id="PkCategoryId" value="" name="PkCategoryId">
+                                <div id="alertDiv"></div>
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <lable class="fw-bold form-label" for="parentCategory">Select Parent Category <span class="text-danger">*</span></lable>
@@ -372,6 +373,7 @@
             $("#parentCategory").val(0).trigger("change");  
             $('.removeImageContainer').addClass('d-none')
             $(".modal-title").html("Add Category");
+            $('#alertDiv').html('');
         }); 
         $("select").on("select2:close", function (e) {  
             $(this).valid(); 
@@ -556,23 +558,23 @@
             contentType: false,
             processData: false,
             success: function(result) {
-                if ($('#PkCategoryId').val() > 0) {
-                    successToast("Category Updated!","Category Successfully Updated");
+                if (result.success) {
+                    if ($('#PkCategoryId').val() > 0) {
+                        successToast("Category Updated!","Category Successfully Updated");
+                    } else{
+                        successToast("Category Add!","Category Successfully Added");
+                    }
+                    $("#addCategoryData").modal('hide');
+                    $('#addCategoryData').on('hidden.bs.modal', function () {
+                        $("#addCategoryForm").trigger('reset');
+                        $('#imgPreview').attr('src', '');
+                        $("#parentCategory").val('');
+                        FilePond.destroy();
+                    });
+                    $('#categoryDataTable').DataTable().ajax.reload();
                 } else{
-                    /* console.log($('#parentCategory').val());
-                    if ($('#parentCategory').val() == 0 && filepondImageObj.getFiles().length === 0) {
-                        dangerToast("Issue!","Please upload Atleast 1 image!!!");
-                    } */ 
-                    successToast("Category Add!","Category Successfully Added");
+                    $('#alertDiv').html('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i> ' +result.message+'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
-                $("#addCategoryData").modal('hide');
-                $('#addCategoryData').on('hidden.bs.modal', function () {
-                    $("#addCategoryForm").trigger('reset');
-                    $('#imgPreview').attr('src', '');
-                    $("#parentCategory").val('');
-                    FilePond.destroy();
-                });
-                $('#categoryDataTable').DataTable().ajax.reload();
             }
         });
     }

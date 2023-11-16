@@ -62,6 +62,7 @@
                             <div class="modal-body">
                                 <form class="form p-3" id="addCouponForm" method="POST" action="" enctype="multipart/form-data">
                                     <input type="hidden" id="PkCouponId" value="" name="PkCouponId">
+                                    <div id="alertDiv"></div>
                                     <div class="row g-3">
                                         <div class="col-md-12">
                                             <lable class="fw-bold form-label" for="product">Select Products <span class="text-danger">*</span></lable>
@@ -420,6 +421,7 @@
             validator.resetForm(); 
             $("#discountType").val('').trigger("change");
             $("#product").val('').trigger("change");
+            $('#alertDiv').html('');
         });
         $("select").on("select2:close", function (e) {  
             $(this).valid(); 
@@ -588,13 +590,17 @@
             contentType: false,
             processData: false,
             success: function(result) {
-                if ($('#PkCouponId').val() > 0) {
-                    successToast("Coupon Updated!","Coupon Successfully Updated");
+                if (result.success) {
+                    if ($('#PkCouponId').val() > 0) {
+                        successToast("Coupon Updated!","Coupon Successfully Updated");
+                    } else{
+                        successToast("Coupon Add!","Coupon Successfully Added");
+                    }
+                    $("#addCouponModal").modal('hide');
+                    $('#couponDataTable').DataTable().ajax.reload(); 
                 } else{
-                    successToast("Coupon Add!","Coupon Successfully Added");
+                    $('#alertDiv').html('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i> ' +result.message+'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
-                $("#addCouponModal").modal('hide');
-                $('#couponDataTable').DataTable().ajax.reload();   
             }
         });
     }
