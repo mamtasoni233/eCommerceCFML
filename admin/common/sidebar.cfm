@@ -121,6 +121,12 @@
                             <span>Users</span>
                         </a>
                     </li>
+                    <li class="sidebar-item <cfif pg EQ 'notification'>active</cfif>">
+                        <a href="index.cfm?pg=notification&s=notificationList" class="sidebar-link">
+                            <i class="fa fa-bell"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

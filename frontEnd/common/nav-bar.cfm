@@ -239,11 +239,11 @@
                                     <!---   #session.cart.cartCountValue# --->
                                 </span> --->
                             </cfif> --->
-                            <cfif StructKeyExists(session, "cart") AND session.cart.len() GT 0> 
-                                <span class="fs-xs fw-bolder f-w-5 f-h-5 bg-orange rounded-lg d-block lh-1 pt-1 position-absolute top-0 end-0 z-index-20 text-white cartCounter" id="cartCounter">
+                            <!--- <cfif StructKeyExists(session, "cart") AND session.cart.len() GT 0>  --->
+                                <span class="fs-xs d-none fw-bolder f-w-5 f-h-5 bg-orange rounded-lg d-block lh-1 pt-1 position-absolute top-0 end-0 z-index-20 text-white cartCounter" id="cartCounter">
                                     <!---   #session.cart.cartCountValue# --->
                                 </span>
-                            </cfif>
+                            <!--- </cfif> --->
                         </button>
                     </li>
                     <!-- /Navbar Cart-->

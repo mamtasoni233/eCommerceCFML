@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 16, 2023 at 01:53 PM
+-- Generation Time: Nov 17, 2023 at 02:07 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -41,15 +41,6 @@ CREATE TABLE `cart` (
   `dateUpdated` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `updatedBy` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`PkCartId`, `FkCustomerId`, `FkProductId`, `FkCouponId`, `quantity`, `price`, `discountValue`, `isDeleted`, `dateCreated`, `createdBy`, `dateUpdated`, `updatedBy`) VALUES
-(438, 1, 15, '2', '2', 60, 9, b'0', '2023-11-15 15:24:08', 1, '2023-11-16 15:43:59', NULL),
-(439, 1, 6, '2', '1', 1000, 150, b'0', '2023-11-15 15:24:12', 1, '2023-11-16 15:43:59', NULL),
-(440, 1, 13, '2', '1', 500, 75, b'0', '2023-11-15 15:24:17', 1, '2023-11-16 15:43:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -231,6 +222,30 @@ INSERT INTO `customer` (`PkCustomerId`, `firstName`, `token`, `lastName`, `email
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `PkNotificationId` int(11) UNSIGNED NOT NULL,
+  `FkOrderId` int(11) UNSIGNED NOT NULL,
+  `subject` varchar(100) NOT NULL,
+  `message` text NOT NULL,
+  `createdBy` int(10) UNSIGNED NOT NULL,
+  `createdDate` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`PkNotificationId`, `FkOrderId`, `subject`, `message`, `createdBy`, `createdDate`) VALUES
+(3, 43, 'New Order Placed 43', ' \'Vishal Kumar Khatri\' has placed a new order which is pending.', 11, '2023-11-17 10:08:09'),
+(4, 44, 'New Order Placed 44', ' \'Vishal Kumar Khatri\' has placed a new order which is pending.', 11, '2023-11-17 10:34:11'),
+(5, 45, 'New Order Placed 45', ' \'Mamta Soni\' has placed a new order which is pending.', 1, '2023-11-17 10:43:37');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `orders`
 --
 
@@ -302,8 +317,14 @@ INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `ema
 (29, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'courier', 2200, 200, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-09 08:06:23', NULL, NULL),
 (30, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'courier', 0, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-09 08:07:39', NULL, NULL),
 (31, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 2000, 300, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 1, '2023-11-09 08:11:42', NULL, NULL),
-(33, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 1030, 154.5, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-09 08:29:50', NULL, NULL),
-(34, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'courier', 3000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-09 12:07:00', NULL, NULL);
+(33, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 1030, 154.5, '0', 'cod', '', '', NULL, NULL, NULL, 1, b'1', b'0', 11, '2023-11-09 08:29:50', NULL, '2023-11-17 08:00:25'),
+(34, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'courier', 3000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 4, b'1', b'0', 11, '2023-11-09 12:07:00', NULL, '2023-11-17 08:15:17'),
+(40, 11, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 30, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-17 10:02:51', NULL, NULL),
+(41, 11, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 30, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-17 10:03:43', NULL, NULL),
+(42, 11, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 30, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-17 10:05:19', NULL, NULL),
+(43, 11, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 30, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-17 10:08:09', NULL, NULL),
+(44, 11, 'Vishal ', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Vishal ', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 789650, 'nextDay', 1000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-17 10:34:11', NULL, NULL),
+(45, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1560, 234, '0', 'cod', '', '', NULL, NULL, NULL, 1, b'1', b'0', 1, '2023-11-17 10:43:37', NULL, '2023-11-17 11:59:47');
 
 -- --------------------------------------------------------
 
@@ -347,10 +368,11 @@ INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`
 (22, 1, 29, 9, '4', 2, 200, '2023-11-09 13:36:23', 1, NULL, NULL),
 (23, 1, 29, 20, '4', 2, 2000, '2023-11-09 13:36:23', 1, NULL, NULL),
 (24, 1, 31, 20, '0', 2, 2000, '2023-11-09 13:41:42', 1, NULL, NULL),
-(25, 11, 33, 15, '0', 1, 30, '2023-11-09 13:59:50', 11, NULL, NULL),
-(26, 11, 33, 6, '2', 1, 1000, '2023-11-09 13:59:50', 11, NULL, NULL),
-(27, 11, 34, 6, '0', 2, 2000, '2023-11-09 17:37:00', 11, NULL, NULL),
-(28, 11, 34, 13, '0', 2, 1000, '2023-11-09 17:37:00', 11, NULL, NULL);
+(29, 11, 43, 15, '0', 1, 30, '2023-11-17 15:38:09', 11, NULL, NULL),
+(30, 11, 44, 20, '0', 1, 1000, '2023-11-17 16:04:11', 11, NULL, NULL),
+(31, 1, 45, 15, '2', 2, 60, '2023-11-17 16:13:37', 1, NULL, NULL),
+(32, 1, 45, 6, '2', 1, 1000, '2023-11-17 16:13:37', 1, NULL, NULL),
+(33, 1, 45, 13, '2', 1, 500, '2023-11-17 16:13:37', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -384,21 +406,21 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (3, 28, 'Puma Snikers', '1,2', 55000, 20, 'edfwe', b'1', b'0', '2023-09-13 18:01:45', 1, '2023-10-09 14:56:23', 1),
 (4, 41, 'T-SHIRT', '5', 850, 25, 'test', b'1', b'0', '2023-09-14 14:12:42', 1, '2023-10-11 12:37:30', 1),
 (5, 7, 'Samsung Z-fold ', '1,5', 1500000, 5, 'folding phone', b'1', b'0', '2023-09-14 14:35:24', 1, '2023-09-18 14:40:58', 1),
-(6, 18, 'Cookie', '9', 1000, 4, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-11-09 17:37:00', 1),
+(6, 18, 'Cookie', '9', 1000, 3, 'dased', b'1', b'0', '2023-09-14 14:59:19', 1, '2023-11-17 16:13:37', 1),
 (7, 21, 'Meggie', '10', 500, 20, 'meggie', b'1', b'0', '2023-09-15 15:14:31', 1, '2023-10-03 10:38:20', 1),
 (8, 19, 'Sona Namkeen', '4', 1500, 10, 'mixer', b'1', b'0', '2023-09-15 18:30:40', 1, '2023-10-11 16:45:21', 1),
-(9, 20, 'Taj Mahal Tea 855', '8', 100, 21, 'tea', b'1', b'0', '2023-09-18 11:23:48', 1, '2023-11-16 17:45:32', 1),
+(9, 20, 'Taj Mahal Tea 855', '8', 100, 21, 'tea', b'1', b'1', '2023-09-18 11:23:48', 1, '2023-11-16 18:48:11', 1),
 (10, 18, 'crack jack', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, 'Oreo', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-07 10:58:33', 1),
-(13, 18, 'test', '1,9', 500, 46, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-11-09 17:37:00', 1),
+(13, 18, 'test', '1,9', 500, 45, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-11-17 16:13:37', 1),
 (14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-05 14:15:39', 1),
-(15, 18, 'Britannia Good Day', '1', 30, 19, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-09 13:59:50', 1),
+(15, 18, 'Britannia Good Day', '1', 30, 16, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-17 16:13:37', 1),
 (16, 18, 'Oreo Pink Cream', '1,9', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:16:06', 1),
 (17, 18, 'Sunfest', '1', 500, 50, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-09-21 16:55:29', 1),
 (18, 18, 'Choco Lava Cake', '9', 850, 19, 'Choco Lava Cake', b'1', b'0', '2023-09-29 11:19:48', 1, '2023-10-31 13:15:26', 1),
 (19, 19, 'Bhujia Sev', '4,11', 150, 9, 'Haldiram\'s Bhujia is an authentic rendition of the classic, textured namkeen. Reach for a pack at teatime or top it on a steaming bowl of upma, poha or chaats.', b'1', b'0', '2023-10-01 22:45:57', 7, '2023-11-07 13:53:42', 7),
-(20, 20, 'Wagh bakri Chai', '8', 1000, 19, 'Waagbakri Chai', b'1', b'0', '2023-10-03 10:45:41', 1, '2023-11-09 13:41:42', 1),
+(20, 20, 'Wagh bakri Chai', '8', 1000, 18, 'Waagbakri Chai', b'1', b'0', '2023-10-03 10:45:41', 1, '2023-11-17 16:04:11', 1),
 (21, 19, '5555555555', NULL, 55000, 20, 'ewe', b'1', b'0', '2023-10-03 12:43:57', 1, '2023-10-03 14:14:04', 1),
 (22, 20, 'werwer', NULL, 25, 15, 'werfwe', b'1', b'1', '2023-11-14 16:20:18', 1, '2023-11-14 16:20:31', NULL),
 (23, 20, 'Taj Mahal Tea', NULL, 100, 15, 'cf', b'1', b'0', '2023-11-16 15:49:57', 1, NULL, NULL),
@@ -406,7 +428,7 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (25, 19, 'Taj Mahal Tea', NULL, 25, 15, 'y6rty7', b'1', b'1', '2023-11-16 16:30:57', 1, '2023-11-16 17:46:45', NULL),
 (26, 19, 'Taj Mahal Tea', NULL, 25, 25, '7657', b'1', b'1', '2023-11-16 16:32:08', 1, '2023-11-16 17:46:33', NULL),
 (27, 19, 'Taj Mahal Tea', NULL, 500, 20, 'sfsdf', b'1', b'1', '2023-11-16 16:32:45', 1, '2023-11-16 17:46:31', NULL),
-(28, 18, 'Taj Mahal Tea566', NULL, 100, 20, 'wqeqw', b'1', b'0', '2023-11-16 17:32:29', 1, NULL, NULL);
+(28, 18, 'Taj Mahal Tea566', NULL, 100, 20, 'wqeqw', b'1', b'1', '2023-11-16 17:32:29', 1, '2023-11-16 18:48:40', NULL);
 
 -- --------------------------------------------------------
 
@@ -535,6 +557,31 @@ INSERT INTO `product_wishlist` (`PkWishListId`, `FkProductId`, `FkCustomerId`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `send_notification`
+--
+
+CREATE TABLE `send_notification` (
+  `PkSendNotificationId` int(11) UNSIGNED NOT NULL,
+  `FkNotificationId` int(11) UNSIGNED NOT NULL,
+  `receiver_id` int(11) UNSIGNED NOT NULL,
+  `isRead` bit(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `send_notification`
+--
+
+INSERT INTO `send_notification` (`PkSendNotificationId`, `FkNotificationId`, `receiver_id`, `isRead`) VALUES
+(4, 3, 1, b'1'),
+(5, 3, 7, b'0'),
+(6, 4, 1, b'0'),
+(7, 4, 7, b'0'),
+(8, 5, 1, b'1'),
+(9, 5, 7, b'0');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `status_history`
 --
 
@@ -586,7 +633,27 @@ INSERT INTO `status_history` (`PkHistoryId`, `FkOrderId`, `status`, `comment`, `
 (41, 33, 0, NULL, 11, '2023-11-09 13:59:50'),
 (42, 4, 1, 'testing', 1, '2023-11-09 14:06:40'),
 (43, 4, 1, 'testing', 1, '2023-11-09 14:07:14'),
-(44, 34, 0, NULL, 11, '2023-11-09 17:37:00');
+(44, 34, 0, NULL, 11, '2023-11-09 17:37:00'),
+(45, 34, 1, '', 1, '2023-11-17 12:02:27'),
+(46, 33, 3, '', 1, '2023-11-17 13:29:55'),
+(47, 33, 5, '', 1, '2023-11-17 13:30:17'),
+(48, 33, 3, '', 1, '2023-11-17 13:30:22'),
+(49, 33, 1, '', 1, '2023-11-17 13:30:25'),
+(50, 34, 3, '', 1, '2023-11-17 13:42:41'),
+(51, 34, 3, '', 1, '2023-11-17 13:43:05'),
+(52, 34, 4, '', 1, '2023-11-17 13:45:17'),
+(53, 35, 0, NULL, 11, '2023-11-17 15:29:25'),
+(54, 36, 0, NULL, 11, '2023-11-17 15:29:29'),
+(55, 37, 0, NULL, 11, '2023-11-17 15:29:33'),
+(56, 38, 0, NULL, 11, '2023-11-17 15:30:24'),
+(57, 39, 0, NULL, 11, '2023-11-17 15:30:26'),
+(58, 40, 0, NULL, 11, '2023-11-17 15:32:51'),
+(59, 41, 0, NULL, 11, '2023-11-17 15:33:43'),
+(60, 42, 0, NULL, 11, '2023-11-17 15:35:19'),
+(61, 43, 0, NULL, 11, '2023-11-17 15:38:09'),
+(62, 44, 0, NULL, 11, '2023-11-17 16:04:11'),
+(63, 45, 0, NULL, 1, '2023-11-17 16:13:37'),
+(64, 45, 1, '', 1, '2023-11-17 17:29:47');
 
 -- --------------------------------------------------------
 
@@ -658,6 +725,13 @@ ALTER TABLE `customer`
   ADD PRIMARY KEY (`PkCustomerId`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`PkNotificationId`),
+  ADD KEY `FkOrderId` (`FkOrderId`);
+
+--
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
@@ -703,6 +777,13 @@ ALTER TABLE `product_wishlist`
   ADD KEY `FkCustomerId` (`FkCustomerId`);
 
 --
+-- Indexes for table `send_notification`
+--
+ALTER TABLE `send_notification`
+  ADD PRIMARY KEY (`PkSendNotificationId`),
+  ADD KEY `FkNotificationId` (`FkNotificationId`);
+
+--
 -- Indexes for table `status_history`
 --
 ALTER TABLE `status_history`
@@ -723,7 +804,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=441;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=451;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -744,16 +825,22 @@ ALTER TABLE `customer`
   MODIFY `PkCustomerId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `PkNotificationId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -780,10 +867,16 @@ ALTER TABLE `product_wishlist`
   MODIFY `PkWishListId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `send_notification`
+--
+ALTER TABLE `send_notification`
+  MODIFY `PkSendNotificationId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `status_history`
 --
 ALTER TABLE `status_history`
-  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -801,6 +894,12 @@ ALTER TABLE `users`
 ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`),
   ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`);
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`FkOrderId`) REFERENCES `orders` (`PkOrderId`);
 
 --
 -- Constraints for table `orders`
@@ -840,6 +939,12 @@ ALTER TABLE `product_tags`
 ALTER TABLE `product_wishlist`
   ADD CONSTRAINT `product_wishlist_ibfk_1` FOREIGN KEY (`FkProductId`) REFERENCES `product` (`PkProductId`),
   ADD CONSTRAINT `product_wishlist_ibfk_2` FOREIGN KEY (`FkCustomerId`) REFERENCES `customer` (`PkCustomerId`);
+
+--
+-- Constraints for table `send_notification`
+--
+ALTER TABLE `send_notification`
+  ADD CONSTRAINT `send_notification_ibfk_1` FOREIGN KEY (`FkNotificationId`) REFERENCES `notifications` (`PkNotificationId`);
 
 --
 -- Constraints for table `status_history`

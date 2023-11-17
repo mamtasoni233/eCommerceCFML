@@ -233,7 +233,7 @@
                                         <select name="orderStatus" id="orderStatus" class="form-control form-select">
                                             <option value="">Select Order Status..</option>
                                             <option value="0" <cfif getShippingStatusData.status EQ 0>selected</cfif>>Pending</option>
-                                            <option value="1" <cfif getShippingStatusData.status EQ 1>selected</cfif>>In-Progress</option>
+                                            <option value="1" <cfif getShippingStatusData.status EQ 1>selected</cfif>>In-Process</option>
                                             <option value="2" <cfif getShippingStatusData.status EQ 2>selected</cfif>>Dispatched</option>
                                             <option value="3" <cfif getShippingStatusData.status EQ 3>selected</cfif>>Shipped</option>
                                             <option value="4" <cfif getShippingStatusData.status EQ 4>selected</cfif>>Cancelled</option>
@@ -347,13 +347,13 @@
                     event.preventDefault();
                     var formData = new FormData($('##changeOrderStatusForm')[0]);
                     $.ajax({
-                        url: '../ajaxOrder.cfm?statusId='+id, 
+                        url: '../ajaxOrder.cfm?orderId='+id, 
                         data: formData,
                         type: 'POST',  
                         contentType: false,
                         processData: false,
                         success: function(data) {
-                            infoToast("Changed!","status Changed Be Sucessfully!");
+                            infoToast("Changed!","Status Changed Be Sucessfully!");
                             $('##shippingActivityDataTable').DataTable().ajax.reload();               
                         }, 
                     });
@@ -402,11 +402,15 @@
                         render: function (data,type,row) {
                             if(row.status  == 0){
                                 return '<span class="badge bg-primary">Pending</span>';
-                            }else if(row.status  == 1){
+                            } else if(row.status  == 1){
                                 return '<span class="badge bg-warning">In Process</span>';
-                            }else if(row.status  == 2){
+                            } else if(row.status  == 2){
                                 return '<span class="badge bg-info">Dispatched</span>';
-                            }else if(row.status  == 3){
+                            } else if(row.status  == 3){
+                                return '<span class="badge bg-primary">Shipped</span>';
+                            } else if(row.status  == 4){
+                                return '<span class="badge bg-danger">Cancelled</span>';
+                            } else if(row.status  == 5){
                                 return '<span class="badge bg-success">Delivered</span>';
                             } else{
                                 return '<span class="badge bg-primary">Pending</span>'

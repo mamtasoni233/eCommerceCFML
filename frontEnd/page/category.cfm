@@ -682,8 +682,10 @@
                 }
         
                 if (value.length === 0) {
-                    maxPrice = parseFloat($('##filterPriceMax').val());
-                    minPrice = parseFloat($('##filterPriceMin').val());
+                    if (maxPrice != '' && minPrice != '') {
+                        maxPrice = parseFloat($('##filterPriceMax').val());
+                        minPrice = parseFloat($('##filterPriceMin').val());
+                    }
                     if ($(this).prop("checked") && $('##tagNameLi-' + $(this).val()).length === 0){
                         $('##tagNameLi-' + value).remove();
                     }

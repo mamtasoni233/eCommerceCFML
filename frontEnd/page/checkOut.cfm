@@ -830,13 +830,6 @@
                 //couponCode = $("##couponAppliedInput").tagsinput('items');
                 // console.log('couponCode', couponCode);
                 ajaxAddCouponShipping(couponCode, shippingValue); 
-                /* if(couponCode != ''){
-                    ajaxAddCouponShipping(couponCode, shippingValue); 
-                    $('##alertDiv').html('<div class="mt-2 alert alert-success alert-dismissible show fade"><i class="bi bi-check-circle"></i>Coupon Succefully applied!!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-                    $('##removeCoupon').removeClass('d-none');
-                } else{
-                    $('##alertDiv').html('<div class="mt-2 alert alert-danger alert-dismissible show fade"><i class="bi bi-exclamation-circle"></i>Please add coupon..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-                } */
             });
             $('##removeCoupon').on('click', function (){
                 // $('##couponAppliedInput').val('');

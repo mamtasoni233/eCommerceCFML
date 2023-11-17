@@ -109,6 +109,9 @@
                             <cfcase value="user">
                                 <cfinclude template="./page/user.cfm">
                             </cfcase>
+                            <cfcase value="notification">
+                                <cfinclude template="./page/notification.cfm">
+                            </cfcase>
                         </cfswitch>
                         
                     </div>

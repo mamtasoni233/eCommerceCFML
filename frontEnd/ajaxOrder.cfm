@@ -135,16 +135,36 @@
                 , <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
             )
         </cfquery>
+        <cfquery result="addNotification">
+            INSERT INTO notifications (
+                FkOrderId 
+                , subject
+                , message
+                , createdBy
+            ) VALUES (
+                <cfqueryparam value = "#PkOrderId#" cfsqltype = "cf_sql_integer">
+                , <cfqueryparam value = "New Order Placed #PkOrderId#" cfsqltype = "cf_sql_varchar">
+                , <cfqueryparam value = " '#session.customer.firstName# #session.customer.lastName#' has placed a new order which is pending." cfsqltype = "cf_sql_text">
+                , <cfqueryparam value = "#session.customer.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            )
+        </cfquery>
+        <cfset PkNotificationId = addNotification.generatedKey>
+        <cfset receiverList = "1,7">
+        <cfloop list="#receiverList#" index="i">
+            <cfquery result="addNotification">
+                INSERT INTO send_notification (
+                    FkNotificationId 
+                    , receiver_id
+                    , isRead
+                ) VALUES (
+                    <cfqueryparam value = "#PkNotificationId#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "#i#" cfsqltype = "cf_sql_integer">
+                    , <cfqueryparam value = "0" cfsqltype = "cf_sql_bit">
+                )
+            </cfquery>
+        </cfloop>
         <cfif getOrderItemQry.recordCount EQ 0>
             <cfloop array="#session.cart.product#" item="item">
-                <!--- <cfset checkFkProductId = arrayMap(session.cart.product, function(item) {
-                    return item.FkProductId
-                })> 
-                <cfquery name="getProductQty">
-                    SELECT productQty, PkProductId 
-                    FROM product
-                    WHERE PkProductId  = <cfqueryparam value = "#item.FkProductId#" cfsqltype = "cf_sql_integer">
-                </cfquery> --->
                 <cfquery result="addOrderItem">
                     INSERT INTO order_item (
                         FkCustomerId

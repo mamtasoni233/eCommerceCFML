@@ -883,9 +883,14 @@
                                 type: 'GET',
                                 success: function(result) {
                                     if (result.success) {
-                                        $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
-                                        $('##offcanvasCartBtn > span.cartCounter').text(result.cartCountValue);
-                                    } else {
+                                        if (result.cartCountValue > 0) {
+                                            $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
+                                            $('##offcanvasCartBtn span.cartCounter').html(result.cartCountValue);
+                                        } else {
+                                            $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
+                                            $('##offcanvasCartBtn span.cartCounter').text('');
+                                        }
+                                    } else{
                                         $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
                                         $('##offcanvasCartBtn span.cartCounter').text('');
                                     }

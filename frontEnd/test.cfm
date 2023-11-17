@@ -33,4 +33,9 @@
         </cfif>
         <cfdump  var="#discountAmount#">
     </cfif>
+    <cfset receiverList = "1,7">
+    <cfdump var="#receiverList#">
+        <cfloop list="#receiverList#" index="i">
+            <cfdump  var="#i#">
+        </cfloop>
 

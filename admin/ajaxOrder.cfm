@@ -9,7 +9,7 @@
 <cfparam name="PkCategoryId" default="" />
 <cfparam name="totalQuantity" default="" />
 <cfparam name="totalCost" default="" />
-<cfparam name="statusId" default="" />
+<cfparam name="orderId" default="" />
 <cfparam name="formAction" default="" />
 
 <cffunction name="convertToObject" access="public" returntype="any" output="false"
@@ -77,7 +77,7 @@
                 O.updatedBy = userUpdate.PkUserId
             WHERE 1 = 1
             AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
-            <cfif structKeyExists(form, "status") AND form.status NEQ 6>
+            <cfif structKeyExists(form, "status") AND form.status NEQ ''>
                 AND O.status = <cfqueryparam value="#form.status#" cfsqltype = "cf_sql_integer">
             </cfif>
             <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
@@ -106,7 +106,7 @@
                 O.updatedBy = userUpdate.PkUserId
             WHERE 1 = 1
             AND O.isDeleted = <cfqueryparam value="0" cfsqltype = "cf_sql_bit">
-            <cfif structKeyExists(form, "status") AND form.status NEQ 6>
+            <cfif structKeyExists(form, "status") AND form.status NEQ ''>
                 AND O.status = <cfqueryparam value="#form.status#" cfsqltype = "cf_sql_integer">
             </cfif>
             <cfif structKeyExists(form, "search") AND len(form.search) GT 0>
@@ -180,7 +180,7 @@
         </cfloop>
     </cfif>
 
-    <cfif structKeyExists(url, "statusId") AND url.statusId GT 0>
+    <cfif structKeyExists(url, "orderId") AND url.orderId GT 0>
         <cfquery result="addStatus">
             INSERT INTO status_history (
                 FkOrderId 
@@ -188,7 +188,7 @@
                 , comment
                 , createdBy
             ) VALUES (
-                <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
+                <cfqueryparam value = "#url.orderId#" cfsqltype = "cf_sql_integer">
                 , <cfqueryparam value = "#form.orderStatus#" cfsqltype = "cf_sql_integer">
                 , <cfqueryparam value = "#form.comment#" cfsqltype = "cf_sql_text">
                 , <cfqueryparam value = "#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
@@ -197,7 +197,7 @@
         <cfquery name="changeStatus">
             UPDATE orders SET
             status = <cfqueryparam value = "#form.orderStatus#" cfsqltype = "cf_sql_integer">
-            WHERE PkOrderId = <cfqueryparam value = "#url.statusId#" cfsqltype = "cf_sql_integer">
+            WHERE PkOrderId = <cfqueryparam value = "#url.orderId#" cfsqltype = "cf_sql_integer">
         </cfquery>
     </cfif>
 

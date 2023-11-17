@@ -191,7 +191,7 @@
                 }
             }
         });
-        $('div.toolbar').after('<select id="status" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="6">Select All</option><option value="0" selected>Pending</option><option value="1">In-Progress</option><option value="2">Dispatched</option><option value="3">Shipped</option><option value="4">Cancelled</option><option value="4">Delivered</option></select>');
+        $('div.toolbar').after('<select id="status" class="form-select d-inline-block w-25 pl-1 form-select-sm"><option value="">Select All</option><option value="0" selected>Pending</option><option value="1">In-Progress</option><option value="2">Dispatched</option><option value="3">Shipped</option><option value="4">Cancelled</option><option value="5">Delivered</option></select>');
         
         $('#status').change(function () {
             $('#orderDataTable').DataTable().ajax.reload();

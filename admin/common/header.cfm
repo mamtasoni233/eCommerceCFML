@@ -1,3 +1,11 @@
+<cfquery name="getNotification">
+    SELECT COUNT(PkNotificationId) AS notificationCount, N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, SN.isRead, SN.FkNotificationId, SN.receiver_id
+    FROM notifications N LEFT JOIN send_notification SN ON N.PkNotificationId = SN.FkNotificationId
+    WHERE SN.isRead = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
+    AND SN.receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+    ORDER BY N.createdDate DESC
+    LIMIT 2
+</cfquery>
 <cfoutput>
     <header>
         <nav class="navbar navbar-expand navbar-light navbar-top">
@@ -5,7 +13,6 @@
                 <a href="##" class="burger-btn d-block">
                     <i class="bi bi-justify fs-3"></i>
                 </a>
-
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="##navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -27,45 +34,32 @@
                         <li class="nav-item dropdown me-3">
                             <a class="nav-link active dropdown-toggle text-gray-600" href="##" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" >
                                 <i class="bi bi-bell bi-sub fs-4"></i>
-                                <span class="badge badge-notification bg-danger">7</span>
+                                <span class="badge badge-notification bg-danger">#getNotification.notificationCount#</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="dropdownMenuButton">
                                 <li class="dropdown-header">
                                     <h6>Notifications</h6>
                                 </li>
-                                <li class="dropdown-item notification-item">
-                                    <a class="d-flex align-items-center" href="##">
-                                        <div class="notification-icon bg-primary">
-                                            <i class="bi bi-cart-check"></i>
-                                        </div>
-                                        <div class="notification-text ms-4">
-                                            <p class="notification-title font-bold">
-                                                Successfully check out
-                                            </p>
-                                            <p class="notification-subtitle font-thin text-sm">
-                                                Order ID ##256
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="dropdown-item notification-item">
-                                    <a class="d-flex align-items-center" href="##">
-                                        <div class="notification-icon bg-success">
-                                            <i class="bi bi-file-earmark-check"></i>
-                                        </div>
-                                        <div class="notification-text ms-4">
-                                            <p class="notification-title font-bold">
-                                                Homework submitted
-                                            </p>
-                                            <p class="notification-subtitle font-thin text-sm">
-                                                Algebra math homework
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
+                                <cfloop query="getNotification">
+                                    <li class="dropdown-item notification-item">
+                                        <a class="d-flex align-items-center" href="##">
+                                            <div class="notification-icon bg-primary">
+                                                <i class="bi bi-cart-check"></i>
+                                            </div>
+                                            <div class="notification-text ms-4">
+                                                <p class="notification-title font-bold">
+                                                    #getNotification.subject#
+                                                </p>
+                                                <p class="notification-subtitle font-thin text-sm">
+                                                    Order ID ###getNotification.FkOrderId#
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </cfloop>
                                 <li>
                                     <p class="text-center py-2 mb-0">
-                                        <a href="##">See all notification</a>
+                                        <a href="index.cfm?pg=notification&s=notificationList">See all notification</a>
                                     </p>
                                 </li>
                             </ul>
