@@ -132,35 +132,33 @@
                     });
                     $("##notificationDataTable").on("click", ".viewNotificationDetail", function () { 
                         var readValue = $('##readSubmit').attr('data-value');
-                        console.log(readValue);
                         var id = $(this).attr("data-id");
-                        console.log(id);
                         $("##viewnotificationModel").modal('show');
                         $('##PkSendNotificationId').val(id);
-                        if (readValue == 1) {
-                            $("##readSubmit").html("Mark As Unread").addClass('btn-danger');
-                        } else{
-                            $("##readSubmit").html("Mark As Read").addClass('btn-primary');
-                        }
                         $.ajax({
                             type: "GET",
                             url: "../ajaxNotification.cfm?PkSendNotificationId="+ id,
                             success: function(result) {
                                 if (result.success) {
-                                    console.log(result.json);
+                                    console.log("Notification Ajax Call", result.json);
                                     $("##PkSendNotificationId").val(result.json.PkSendNotificationId);
                                     $('##senderName').html(result.json.customerName);
                                     $('##notificationDate').html(result.json.createdDate);
                                     $('##notificationSubject').html(result.json.subject);
-                                    $('##notificationMsg').html(result.json.message); 
+                                    $('##notificationMsg').html(result.json.message);
                                     $('##readSubmit').attr('data-value', result.json.isRead);
-                                    $('##viewnotificationModel').on('hidden.bs.modal', function () {
+                                    if (result.json.isRead === 1) {
+                                        $("##readSubmit").html("Mark As Unread").removeClass('btn-primary').addClass('btn-danger');
+                                    } else{
+                                        $("##readSubmit").html("Mark As Read").removeClass('btn-danger').addClass('btn-primary');
+                                    }
+                                    /* $('##viewnotificationModel').on('hidden.bs.modal', function () {
                                         if (readValue == 0) {
                                             $("##readSubmit").html("Mark As Read").addClass('btn-primary');
                                         } else{
                                             $("##readSubmit").html("Mark As Unread").addClass('btn-danger');
                                         }
-                                    });
+                                    }); */
                                 }
                             }   
                         });

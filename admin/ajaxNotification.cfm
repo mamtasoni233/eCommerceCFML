@@ -140,8 +140,6 @@
     </cfif>
 
     <cfif structKeyExists(url, "updatePkNotificationId") AND url.updatePkNotificationId GT 0>
-        <!--- <cfdump  var="#url#">
-        <cfdump  var="#form#"><cfabort> --->
         <cfquery result="getNotificationDetailsById">
             UPDATE send_notification SET 
                 isRead  = !isRead
@@ -156,8 +154,6 @@
         </cfquery>
         <cfset data['notifyCount'] = getNotification.notificationCount>
     </cfif>
-
-
     
     <cfcatch>
         <cfset data['success'] = false>
