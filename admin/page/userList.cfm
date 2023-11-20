@@ -84,124 +84,16 @@
 </cfoutput>
 <script>
     $(document).ready( function () {
-        /* var table = $('#userDataTable').DataTable({
+        var table  = $('#userDataTable').DataTable({
             processing: true,
-            pageLength: 10,
-            pagination: 'datatablePagination',
-            order: [[0, 'asc']],
-            serverSide: true,
-            pagingType: "full_numbers",
-            dom: 'l<"toolbar">frtip',
-            responsive: true,
-                // scrollX: true,
-                // scrollCollapse: true,
-            autoWidth: false,
-            columnDefs: [
-                { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8,9,10,11,12] }
-            ],
-            ajax: {
-                url: "../ajaxAddUser.cfm?formAction=getRecord",
-                type :'post',
-                data: function(d){
-                    var sIdx = d.order[0].column;
-                    var m = {};
-                    m['draw'] = d.draw;
-                    m["start"] = d.start;
-                    m["length"] = d.length;
-                    m["search"] = d.search.value;
-                    m["order"] = d.columns[sIdx].data + ' ' + d.order[0].dir;
-                    if ($("#isDeleted").val() !== undefined) {
-                        m["isDeleted"] = $("#isDeleted").val();
-                    } else {
-                        m["isDeleted"] = 0;
-                    }
-                    return m;
-                }
-            },
-            columns: [
-                { data: 'PkUserId', },
-                { data: 'firstName', },
-                { data: 'lastName',  },
-                { data: 'email'},
-                { data: 'mobile'},
-                { data: 'gender', 
-                    render: function(data, display, row) {
-                        if (data > 0) {
-                            return '<span>Male</span>' 
-                        } else {
-                            return '<span>Female</span>' 
-                        }
-                    },
-                },
-                { data: 'dob'},
-                { data: 'isActive',
-                    render: function (data,type,row) {
-                        if(row.isDeleted == 1){
-                            if(row.isActive == 1){
-                                return '<a id="deactive" role="button" data-id="'+row.PkUserId+'" data-status="Active" data-name="'+row.firstName+'" class=" badge bg-success text-white cursor-pointer"  data-toggle="tooltip" data-html="true" title="Click to Deactive User" data-placement="bottom">Active</a>';
-                            }else{
-                                return '<a id="active" role="button" data-id="'+row.PkUserId+'" data-status="Deactive" data-name="'+row.firstName+'" class="border-none btn btn-sm btn-danger text-white cursor-pointer" data-toggle="tooltip" data-html="true" title="Click to Active User" data-placement="bottom">Inactive</a>';
-                            } 
-                        } else{
-                            if(row.isActive == 1){
-                                return '<a id="deactive" role="button" data-id="'+row.PkUserId+'" data-status="Active" data-name="'+row.firstName+'" class=" badge bg-success text-white cursor-pointer changeStatus"  data-toggle="tooltip" data-html="true" title="Click to Deactive User" data-placement="bottom">Active</a>';
-                            }else{
-                                return '<a id="active" role="button" data-id="'+row.PkUserId+'" data-status="Deactive" data-name="'+row.firstName+'" class="border-none btn btn-sm btn-danger text-white cursor-pointer changeStatus" data-toggle="tooltip" data-html="true" title="Click to Active User" data-placement="bottom">Inactive</a>';
-                            }
-                        }
-                    }
-                },
-                { data: 'PkUserId',
-                    render: function(data, type, row, meta)
-                    {
-                        var returnStr = '';
-                        if(row.isDeleted == 1){
-                            returnStr += '<a data-id="'+ row.PkUserId + '" data-name="'+row.firstName+'" id="restoreUser" class="border-none btn btn-sm btn-warning text-white mt-1 restoreUser"><i class="fas fa-undo"></i></a>'	
-                        } else{
-                            returnStr += '<a href="../index.cfm?pg=user&s=addUser&PkUserId='+row.PkUserId+'" data-id="'+row.PkUserId+'"  id="editUser" class="border-none btn btn-sm btn-success text-white mt-1 editUser" > <i class="bi bi-pen-fill"></i></a>  <a data-id="'+row.PkUserId+'" data-name="'+row.firstName+'" id="deleteUser" class="border-none btn btn-sm btn-danger text-white mt-1 deleteUser" > <i class="bi bi-trash"></i></a>'				
-                        }
-                        return returnStr;
-                    }
-                },
-                { data: 'userName',
-                    render: function(data, display, row) {
-                        if (row.createdBy > 0) {
-                            return '<span>'+row.userName+'</span>' 
-                        } else {
-                            return '<span>'+row.firstName+'</span>' 
-                        }
-                    }   
-                },
-                { data: 'createdDate' },
-                { data: 'userName',
-                    render: function(data, display, row) {
-                        if (row.createdBy > 0) {
-                            return '<span>'+row.userName+'</span>' 
-                        } else {
-                            return '<span>'+row.firstName+'</span>' 
-                        }
-                    }   
-                },
-                { data: 'updatedDate'},
-            ],
-            rowCallback: function( row, data ) {
-                if ( data.isDeleted === 1 ) {
-                    $(row).addClass('table-danger');
-                }
-            }
-        }); */
-
-        $('#userDataTable').DataTable({
-            processing: true,
-            destroy: true,
             pageLength: 10,
             pagination: 'datatablePagination',
             order: [[0, 'desc']],
             serverSide:true,
             responsive: true,
-            autoWidth: false,
+            autowidth: false,
             columnDefs: [
-                { "width": "30%", "targets": [0,1,2,3,4,5,6,7,8,9,10,11] }
+                { "width": "40%", "targets": [0,1,2,3,4,5,6,7,8,9,10,11] }
             ],
             pagingType: "full_numbers",
             dom: 'l<"toolbar">frtip',
@@ -280,6 +172,7 @@
                         return returnStr;
                     }
                 },
+                
                 { data: 'createdDate' },
                 { data: 'userName',
                     render: function(data, display, row) {

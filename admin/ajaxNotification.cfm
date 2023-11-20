@@ -140,8 +140,10 @@
     </cfif>
 
     <cfif structKeyExists(url, "updatePkNotificationId") AND url.updatePkNotificationId GT 0>
+        <!--- <cfdump  var="#url#">
+        <cfdump  var="#form#"><cfabort> --->
         <cfquery result="getNotificationDetailsById">
-            UPDATE send_notification SET
+            UPDATE send_notification SET 
                 isRead  = !isRead
                 WHERE PkSendNotificationId  = <cfqueryparam value = "#url.updatePkNotificationId#" cfsqltype = "cf_sql_integer">
                 AND receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">

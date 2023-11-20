@@ -172,7 +172,7 @@
                             $.ajax({
                                 type: "POST",
                                 url: "../ajaxNotification.cfm?updatePkNotificationId=" + $('##PkSendNotificationId').val(),
-                                data: {formData,},
+                                data: formData,
                                 contentType: false,
                                 processData: false,
                                 success: function(result) {
