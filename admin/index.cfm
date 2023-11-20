@@ -121,6 +121,72 @@
                 </div>
             </div>
 
+            <script>
+                $(document).ready( function () {    
+                    // open add view model
+                    $('##viewnotificationModel').on('hidden.bs.modal', function () {
+                        let readValue = $('##readSubmit').attr('data-value');
+                        if (readValue > 0) {
+                            $("##readSubmit").html("Mark As Unread").addClass('btn-danger');
+                        }
+                    });
+                    $("##notificationDataTable").on("click", ".viewNotificationDetail", function () { 
+                        var readValue = $('##readSubmit').attr('data-value');
+                        console.log(readValue);
+                        var id = $(this).attr("data-id");
+                        console.log(id);
+                        $("##viewnotificationModel").modal('show');
+                        $('##PkSendNotificationId').val(id);
+                        if (readValue == 1) {
+                            $("##readSubmit").html("Mark As Unread").addClass('btn-danger');
+                        } else{
+                            $("##readSubmit").html("Mark As Read").addClass('btn-primary');
+                        }
+                        $.ajax({
+                            type: "GET",
+                            url: "../ajaxNotification.cfm?PkSendNotificationId="+ id,
+                            success: function(result) {
+                                if (result.success) {
+                                    console.log(result.json);
+                                    $("##PkSendNotificationId").val(result.json.PkSendNotificationId);
+                                    $('##senderName').html(result.json.customerName);
+                                    $('##notificationDate').html(result.json.createdDate);
+                                    $('##notificationSubject').html(result.json.subject);
+                                    $('##notificationMsg').html(result.json.message); 
+                                    $('##readSubmit').attr('data-value', result.json.isRead);
+                                    $('##viewnotificationModel').on('hidden.bs.modal', function () {
+                                        if (readValue == 0) {
+                                            $("##readSubmit").html("Mark As Read").addClass('btn-primary');
+                                        } else{
+                                            $("##readSubmit").html("Mark As Unread").addClass('btn-danger');
+                                        }
+                                    });
+                                }
+                            }   
+                        });
+                    });
+                    $("##updateNotificationForm").validate({
+                        submitHandler: function (form) {
+                            let readValue = $('##readSubmit').attr('data-value');
+                            var formData = new FormData($('##updateNotificationForm')[0]);
+                            $.ajax({
+                                type: "POST",
+                                url: "../ajaxNotification.cfm?updatePkNotificationId=" + $('##PkSendNotificationId').val(),
+                                data: {formData,},
+                                contentType: false,
+                                processData: false,
+                                success: function(result) {
+                                    if (result.success) {
+                                        $('##notifyCount').html(result.notifyCount);
+                                        $("##viewnotificationModel").modal('hide');
+                                        $('##notificationDataTable').DataTable().ajax.reload();
+                                    }
+                                }
+                            });
+                        }, 
+                    }); 
+                });
+            </script>
             <!--- JS Script --->   
             <script src="./assets/compiled/js/app.js"></script>
             <script src="./assets/static/js/components/dark.js"></script>

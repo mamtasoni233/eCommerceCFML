@@ -545,7 +545,6 @@
                     });
                     $('#parentCategory').append(html);
                 }
-                
             }
         }); 
     }

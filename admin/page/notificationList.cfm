@@ -34,7 +34,7 @@
                                 </button>
                             </div>
                             <form class="form p-3" id="updateNotificationForm" method="POST">
-                                <input type="hidden" id="PkNotificationId" value="" name="PkNotificationId">
+                                <input type="hidden" id="PkSendNotificationId" value="" name="PkSendNotificationId">
                                 <div class="modal-body">
                                     <div class="row g-2">
                                         <div class="col-12 d-flex justify-content-between">
@@ -63,8 +63,8 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" id="defaultSubmit" class="btn btn-primary" >
-                                        <span class="d-block">Mark As Read</span>
+                                    <button type="submit" id="readSubmit" class="btn btn-primary" data-value="0">
+                                        Mark As Read
                                     </button>
                                 </div>
                             </form>
@@ -96,7 +96,6 @@
 <script>
 
     $(document).ready( function () {    
-
         $('#notificationDataTable').DataTable({
             processing: true,
             destroy: true,
@@ -107,7 +106,7 @@
             responsive: true,
             autoWidth: false,
             columnDefs: [
-                { "width": "30%", "targets": [0,1,2,3,] },
+                { "width": "30%", "targets": [0,1,2,3,4,]},
             ],
             pagingType: "full_numbers",
             dom: 'l<"toolbar">frtip',
@@ -148,51 +147,64 @@
                     }
                 },
                 { data: 'createdDate' },
-                { data: 'PkNotificationId',
+                { data: 'PkSendNotificationId',
                     render: function(data, type, row, meta)
                     {
-                        return '<a  data-id="'+ row.PkNotificationId + '" id="viewNotificationDetail" class="border-none btn btn-sm btn-primary text-white mt-1 viewNotificationDetail"><i class="fas fa-eye"></i></a>'	
+                        return '<a data-id="'+ row.PkSendNotificationId + '" id="viewNotificationDetail" class="border-none btn btn-sm btn-primary text-white mt-1 viewNotificationDetail"><i class="fas fa-eye"></i></a>'
                     }
                 },
             ],
+            rowCallback: function( row, data ) {
+                if ( data.isRead === 0 ) {
+                    $(row).addClass('fw-bold');
+                }
+            }
         });
-        // open add view model
-        $("#notificationDataTable").on("click", ".viewNotificationDetail", function () { 
-            var id = $(this).attr("data-id");
-            $("#viewnotificationModel").modal('show');
-            $('#PkNotificationId').val(id);
-            $.ajax({
-                type: "GET",
-                url: "../ajaxNotification.cfm?PkNotificationId="+ id,
-                success: function(result) {
-                    if (result.success) {
-                        $("#PkNotificationId").val(result.json.PkNotificationId);
-                        $('#senderName').html(result.json.customerName);
-                        $('#notificationDate').html(result.json.createdDate);
-                        $('#notificationSubject').html(result.json.subject);
-                        $('#notificationMsg').html(result.json.message); 
-                    }
-                }   
-            });
-        });
-        $("#updateNotificationForm").validate({
-            submitHandler: function (form) {
-                var formData = new FormData($('#updateNotificationForm')[0]);
-                $.ajax({
-                    type: "POST",
-                    url: "../ajaxNotification.cfm?updatePkNotificationId=" + $('#PkNotificationId').val(),
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(result) {
-                        if (result.success) {
-                            $("#viewnotificationModel").modal('hide');
-                            $('#notificationDataTable').DataTable().ajax.reload();
-                        }
-                    }
-                });
-            }, 
-        });
+        // // open add view model
+        // $("#notificationDataTable").on("click", ".viewNotificationDetail", function () { 
+        //     let readValue = $('#readSubmit').attr('data-value');
+        //     console.log(readValue);
+        //     var id = $(this).attr("data-id");
+        //     console.log(id);
+        //     $("#viewnotificationModel").modal('show');
+        //     $('#PkSendNotificationId').val(id);
+        //     if (readValue > 0) {
+        //         $("#readSubmit").html("Mark As Unread").addClass('btn-danger');
+        //     }
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "../ajaxNotification.cfm?PkNotificationId="+ id,
+        //         success: function(result) {
+        //             if (result.success) {
+        //                 console.log(result.json);
+        //                 $("#PkNotificationId").val(result.json.PkSendNotificationId);
+        //                 $('#senderName').html(result.json.customerName);
+        //                 $('#notificationDate').html(result.json.createdDate);
+        //                 $('#notificationSubject').html(result.json.subject);
+        //                 $('#notificationMsg').html(result.json.message); 
+        //                 $('#readSubmit').attr('data-value', result.json.isRead);
+        //             }
+        //         }   
+        //     });
+        // });
+        // $("#updateNotificationForm").validate({
+        //     submitHandler: function (form) {
+        //         var formData = new FormData($('#updateNotificationForm')[0]);
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "../ajaxNotification.cfm?updatePkNotificationId=" + $('#PkNotificationId').val(),
+        //             data: formData,
+        //             contentType: false,
+        //             processData: false,
+        //             success: function(result) {
+        //                 if (result.success) {
+        //                     $("#viewnotificationModel").modal('hide');
+        //                     $('#notificationDataTable').DataTable().ajax.reload();
+        //                 }
+        //             }
+        //         });
+        //     }, 
+        // });            
     });
     
 </script>

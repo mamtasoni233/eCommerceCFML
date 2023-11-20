@@ -59,9 +59,9 @@
     <cfif structKeyExists(url, "formAction") AND url.formAction EQ "getRecord">
         <cfquery name="getNotificationDataRows">
             SELECT
-                N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, SN.isRead, SN.FkNotificationId, SN.receiver_id, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, O.status
-            FROM notifications N 
-            LEFT JOIN send_notification SN ON N.PkNotificationId = SN.FkNotificationId
+                N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, SN.isRead, SN.PkSendNotificationId, SN.FkNotificationId, SN.receiver_id, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, O.status
+            FROM send_notification SN
+            LEFT JOIN notifications N  ON N.PkNotificationId = SN.FkNotificationId
             LEFT JOIN customer C ON N.createdBy = C.PkCustomerId
             LEFT JOIN orders O ON N.FkOrderId = O.PkOrderId
             WHERE SN.receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
@@ -79,9 +79,10 @@
         </cfquery>
         <cfquery name="getNotificationData">
             SELECT
-                N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, SN.isRead, SN.FkNotificationId, SN.receiver_id, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, O.status
-            FROM notifications N 
-            LEFT JOIN send_notification SN ON N.PkNotificationId = SN.FkNotificationId
+                N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, SN.isRead, 
+                SN.PkSendNotificationId, SN.FkNotificationId, SN.receiver_id, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, O.status
+            FROM send_notification SN 
+            LEFT JOIN notifications N ON SN.FkNotificationId = N.PkNotificationId    
             LEFT JOIN customer C ON N.createdBy = C.PkCustomerId
             LEFT JOIN orders O ON N.FkOrderId = O.PkOrderId
             WHERE SN.receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
@@ -105,6 +106,7 @@
         <cfloop query="getNotificationData">
             <cfset dataRecord = {}>
             <cfset dataRecord['PkNotificationId'] = getNotificationData.PkNotificationId>
+            <cfset dataRecord['PkSendNotificationId'] = getNotificationData.PkSendNotificationId>
             <cfset dataRecord['FkOrderId'] = getNotificationData.FkOrderId>
             <cfset dataRecord['subject'] = getNotificationData.subject>
             <cfset dataRecord['status'] = getNotificationData.status>
@@ -118,19 +120,21 @@
             <cfset arrayAppend(data['data'], dataRecord)>
         </cfloop>
     </cfif>
-    <cfif structKeyExists(url, "PkNotificationId") AND url.PkNotificationId GT 0>
+    <cfif structKeyExists(url, "PkSendNotificationId") AND url.PkSendNotificationId GT 0>
         <cfquery name="getNotificationDetailsById">
             SELECT
-                N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName
-            FROM notifications N 
+                N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, C.PkCustomerId, CONCAT_WS(" ", C.firstName, C.lastName) AS customerName, SN.isRead, SN.receiver_id, SN.PkSendNotificationId
+            FROM send_notification SN  
+            LEFT JOIN notifications N ON SN.FkNotificationId = N.PkNotificationId
             LEFT JOIN customer C ON N.createdBy = C.PkCustomerId
-            WHERE N.PkNotificationId = <cfqueryparam value="#url.PkNotificationId#" cfsqltype = "cf_sql_integer">
+            WHERE SN.PkSendNotificationId = <cfqueryparam value="#url.PkSendNotificationId#" cfsqltype = "cf_sql_integer">
         </cfquery>
         <cfset data['json'] = {}>
         <cfset data['json']['FkOrderId'] = getNotificationDetailsById.FkOrderId>
-        <cfset data['json']['PkNotificationId'] = getNotificationDetailsById.PkNotificationId>
+        <cfset data['json']['PkSendNotificationId'] = getNotificationDetailsById.PkSendNotificationId>
         <cfset data['json']['subject'] = getNotificationDetailsById.subject>
         <cfset data['json']['message'] = getNotificationDetailsById.message>
+        <cfset data['json']['isRead'] = getNotificationDetailsById.isRead>
         <cfset data['json']['customerName'] = getNotificationDetailsById.customerName>
         <cfset data['json']['createdDate'] = dateTimeFormat(getNotificationDetailsById.createdDate, 'dd-mmmm-yyyy hh:nn:ss tt')>
     </cfif>
@@ -138,10 +142,17 @@
     <cfif structKeyExists(url, "updatePkNotificationId") AND url.updatePkNotificationId GT 0>
         <cfquery result="getNotificationDetailsById">
             UPDATE send_notification SET
-                isRead  = <cfqueryparam value = "1" cfsqltype = "cf_sql_bit">
-                WHERE FkNotificationId  = <cfqueryparam value = "#url.updatePkNotificationId#" cfsqltype = "cf_sql_integer">
+                isRead  = !isRead
+                WHERE PkSendNotificationId  = <cfqueryparam value = "#url.updatePkNotificationId#" cfsqltype = "cf_sql_integer">
                 AND receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
         </cfquery>
+        <cfquery name="getNotification">
+            SELECT COUNT(PkNotificationId) AS notificationCount, SN.isRead, SN.receiver_id 
+            FROM notifications N LEFT JOIN send_notification SN ON N.PkNotificationId = SN.FkNotificationId
+            WHERE SN.isRead = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
+            AND SN.receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+        </cfquery>
+        <cfset data['notifyCount'] = getNotification.notificationCount>
     </cfif>
 
 

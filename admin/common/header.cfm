@@ -34,7 +34,7 @@
                         <li class="nav-item dropdown me-3">
                             <a class="nav-link active dropdown-toggle text-gray-600" href="##" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" >
                                 <i class="bi bi-bell bi-sub fs-4"></i>
-                                <span class="badge badge-notification bg-danger">#getNotification.notificationCount#</span>
+                                <span class="badge badge-notification bg-danger" id="notifyCount">#getNotification.notificationCount#</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="dropdownMenuButton">
                                 <li class="dropdown-header">
@@ -74,12 +74,12 @@
                                 <div class="user-img d-flex align-items-center">
                                     <div class="avatar avatar-md">
                                         <cfif listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile)>
-                                                <img src="./assets/compiled/jpg/#session.user.profile#" alt="Profile">
+                                            <img src="./assets/compiled/jpg/#session.user.profile#" alt="Profile">
                                         <!--- <cfelse>
                                             <img src="./assets/compiled/jpg/1.jpg" alt="Profile"> --->
                                         <!--- </cfif> --->
                                         <cfelseif NOT listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile) AND structKeyExists(session.user, 'profile') AND len(session.user.profile) GT 0>
-                                                <img src="./assets/profileImage/#session.user.profile#" alt="Profile">
+                                            <img src="./assets/profileImage/#session.user.profile#" alt="Profile">
                                         <cfelse>
                                             <img src="../assets/compiled/jpg/1.jpg" class="rounded-circle profileImg" alt="Profile">
                                         </cfif> 
@@ -105,16 +105,6 @@
                                     Profile
                                 </a>
                             </li>
-                            <!--- <li>
-                                <a class="dropdown-item" href="##">
-                                    <i class="icon-mid bi bi-gear me-2"></i> Settings
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="##">
-                                    <i class="icon-mid bi bi-wallet me-2"></i> Wallet
-                                </a>
-                            </li> --->
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>
