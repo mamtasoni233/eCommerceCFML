@@ -148,7 +148,8 @@
         </cfquery>
         <cfquery name="getNotification">
             SELECT COUNT(PkNotificationId) AS notificationCount, SN.isRead, SN.receiver_id 
-            FROM notifications N LEFT JOIN send_notification SN ON N.PkNotificationId = SN.FkNotificationId
+            FROM notifications N 
+            LEFT JOIN send_notification SN ON N.PkNotificationId = SN.FkNotificationId
             WHERE SN.isRead = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
             AND SN.receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
         </cfquery>

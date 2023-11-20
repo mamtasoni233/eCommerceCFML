@@ -113,7 +113,56 @@
                                 <cfinclude template="./page/notification.cfm">
                             </cfcase>
                         </cfswitch>
-                        
+                        <!--- notification model --->
+                        <div class="modal fade" id="viewnotificationModel" tabindex="-1" role="dialog" aria-labelledby="viewnotificationModel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                        <h5 class="modal-title white">
+                                            Message Details
+                                        </h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <i data-feather="x"></i>
+                                        </button>
+                                    </div>
+                                    <form class="form p-3" id="updateNotificationForm" method="POST">
+                                        <input type="hidden" id="PkSendNotificationId" value="" name="PkSendNotificationId">
+                                        <div class="modal-body">
+                                            <div class="row g-2">
+                                                <div class="col-12 d-flex justify-content-between">
+                                                    <div id="senderNameContainer">
+                                                        <div class="d-flex">
+                                                            <h6 class="fw-bold form-label" >From : </h6>
+                                                            <h6 class="fw-bold form-label text-info ms-2" id="senderName">mamta</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div id="dateContainer">
+                                                        <span class="badge bg-dark text-white rounded-3" id="notificationDate">132</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12" id="subjectContainer">
+                                                    <div class="d-flex">
+                                                        <h6 class="fw-bold form-label" >Subject : </h6>
+                                                        <h6 class="fw-bold form-label ms-2" id="notificationSubject">mamta</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12" id="msgContainer">
+                                                    <div class="d-flex">
+                                                        <h6 class="fw-bold form-label" >Message : </h6>
+                                                        <h6 class="fw-bold form-label ms-2" id="notificationMsg">mamta</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" id="readSubmit" class="btn btn-primary" data-value="0">
+                                                Mark As Read
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!--- start footer --->
                     <cfinclude template="./common/footer.cfm">
@@ -130,8 +179,18 @@
                             $("##readSubmit").html("Mark As Unread").addClass('btn-danger');
                         }
                     });
+                    if ($('.notification-item').length == 0) {
+                        $('.notification-item').html('');
+                        $('##notifyCount').html('0');
+                    }
+                    $('.viewNotificationDetail').on('click', function () {
+                        var id = $(this).attr("data-id");
+                        getNotificationData(id);
+                    });
                     $("##notificationDataTable").on("click", ".viewNotificationDetail", function () { 
-                        var readValue = $('##readSubmit').attr('data-value');
+                        var id = $(this).attr("data-id");
+                        getNotificationData(id);
+                        /* var readValue = $('##readSubmit').attr('data-value');
                         var id = $(this).attr("data-id");
                         $("##viewnotificationModel").modal('show');
                         $('##PkSendNotificationId').val(id);
@@ -152,16 +211,9 @@
                                     } else{
                                         $("##readSubmit").html("Mark As Read").removeClass('btn-danger').addClass('btn-primary');
                                     }
-                                    /* $('##viewnotificationModel').on('hidden.bs.modal', function () {
-                                        if (readValue == 0) {
-                                            $("##readSubmit").html("Mark As Read").addClass('btn-primary');
-                                        } else{
-                                            $("##readSubmit").html("Mark As Unread").addClass('btn-danger');
-                                        }
-                                    }); */
                                 }
                             }   
-                        });
+                        }); */
                     });
                     $("##updateNotificationForm").validate({
                         submitHandler: function (form) {
@@ -184,6 +236,42 @@
                         }, 
                     }); 
                 });
+                function getNotificationData(id) {
+                    var readValue = $('##readSubmit').attr('data-value');
+                    // var id = $(this).attr("data-id");
+                    $("##viewnotificationModel").modal('show');
+                    $('##PkSendNotificationId').val(id);
+                    $.ajax({
+                        type: "GET",
+                        url: "../ajaxNotification.cfm?PkSendNotificationId="+ id,
+                        success: function(result) {
+                            if (result.success) {
+                                console.log("Notification Ajax Call", result.json);
+                                $("##PkSendNotificationId").val(result.json.PkSendNotificationId);
+                                $('##senderName').html(result.json.customerName);
+                                $('##notificationDate').html(result.json.createdDate);
+                                $('##notificationSubject').html(result.json.subject);
+                                $('##notificationMsg').html(result.json.message);
+                                $('##readSubmit').attr('data-value', result.json.isRead);
+                                if (result.json.isRead === 1) {
+                                    $("##readSubmit").html("Mark As Unread").removeClass('btn-primary').addClass('btn-danger');
+                                } else{
+                                    $("##readSubmit").html("Mark As Read").removeClass('btn-danger').addClass('btn-primary');
+                                }
+                                $('##notification-title'+id).html(result.json.subject);
+                                $('##notification-subtitle-'+id).html(result.json.FkOrderId);
+                                // $('##notificationItem-'+id).html('<a class="d-flex align-items-center viewNotificationDetail" data-id="'+result.json.PkSendNotificationId+'" role="button"><div class="notification-icon bg-primary"><i class="bi bi-cart-check"></i> </div><div class="notification-text ms-4"><p class="notification-title font-bold" >'+result.json.subject+'</p><p class="notification-subtitle font-thin text-sm">Order ID ##'+result.json.FkOrderId+'</p></div></a>');
+                                /* if ($('.notification-item').length == 0) {
+                                    $('.notification-item').html('');
+                                    $('##notifyCount').html('0');
+                                } */
+                                $('##viewnotificationModel').on('hidden.bs.modal', function () {
+                                    $('##notificationItem-'+id).html('');
+                                });
+                            }
+                        }   
+                    });
+                }
             </script>
             <!--- JS Script --->   
             <script src="./assets/compiled/js/app.js"></script>

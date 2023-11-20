@@ -22,7 +22,7 @@
         <!-- Data Tables start -->
         <section class="section">
             <div class="card">
-                <div class="modal fade" id="viewnotificationModel" tabindex="-1" role="dialog" aria-labelledby="viewnotificationModel" aria-hidden="true">
+                <!--- <div class="modal fade" id="viewnotificationModel" tabindex="-1" role="dialog" aria-labelledby="viewnotificationModel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-primary">
@@ -70,7 +70,7 @@
                             </form>
                         </div>
                     </div>
-                </div>
+                </div> --->
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table nowrap" id="notificationDataTable">
@@ -101,7 +101,7 @@
             destroy: true,
             pageLength: 10,
             pagination: 'datatablePagination',
-            order: [[2, 'desc']],
+            order: [[3, 'desc']],
             serverSide:true,
             responsive: true,
             autoWidth: false,

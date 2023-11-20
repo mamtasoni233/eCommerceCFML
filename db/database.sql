@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2023 at 11:39 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Nov 20, 2023 at 02:06 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ecommerce`
+-- Database: `vishal_db`
 --
 
 -- --------------------------------------------------------
@@ -241,7 +241,8 @@ CREATE TABLE `notifications` (
 INSERT INTO `notifications` (`PkNotificationId`, `FkOrderId`, `subject`, `message`, `createdBy`, `createdDate`) VALUES
 (3, 43, 'New Order Placed 43', ' \'Vishal Kumar Khatri\' has placed a new order which is pending.', 11, '2023-11-17 10:08:09'),
 (4, 44, 'New Order Placed 44', ' \'Vishal Kumar Khatri\' has placed a new order which is pending.', 11, '2023-11-17 10:34:11'),
-(5, 45, 'New Order Placed 45', ' \'Mamta Soni\' has placed a new order which is pending.', 1, '2023-11-17 10:43:37');
+(5, 45, 'New Order Placed 45', ' \'Mamta Soni\' has placed a new order which is pending.', 1, '2023-11-17 10:43:37'),
+(6, 46, 'New Order Placed 46', ' \'Vishal Kumar Khatri\' has placed a new order which is pending.', 11, '2023-11-20 13:04:14');
 
 -- --------------------------------------------------------
 
@@ -324,7 +325,8 @@ INSERT INTO `orders` (`PkOrderId`, `FkCustomerId`, `firstName`, `lastName`, `ema
 (42, 11, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 30, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-17 10:05:19', NULL, NULL),
 (43, 11, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 30, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-17 10:08:09', NULL, NULL),
 (44, 11, 'Vishal ', 'Kumar Khatri', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Vishal ', 'Kumar Khatri', '8122891132', 'Chennai', 'TN', 789650, 'nextDay', 1000, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-17 10:34:11', NULL, NULL),
-(45, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1560, 234, '0', 'cod', '', '', NULL, NULL, NULL, 1, b'1', b'0', 1, '2023-11-17 10:43:37', NULL, '2023-11-17 11:59:47');
+(45, 1, 'Mamta', 'Soni', 'mamta.s@lucidsolutions.in', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'Mamta', 'Soni', '8385079333', 'Mane Street Barber Shop Station Road', 'RJ', 342001, 'free', 1560, 234, '0', 'cod', '', '', NULL, NULL, NULL, 1, b'1', b'0', 1, '2023-11-17 10:43:37', NULL, '2023-11-17 11:59:47'),
+(46, 11, 'Mamta', 'Soni', 'vishal.k@lucidsolutions.in', '8122891132', 'Chennai', 'TN', 789650, 'Mamta', 'Soni', '8122891132', 'Chennai', 'TN', 789650, 'free', 500, 0, '0', 'cod', '', '', NULL, NULL, NULL, 0, b'1', b'0', 11, '2023-11-20 13:04:14', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -372,7 +374,8 @@ INSERT INTO `order_item` (`PkItemId`, `FkCustomerId`, `FkOrderId`, `FkProductId`
 (30, 11, 44, 20, '0', 1, 1000, '2023-11-17 16:04:11', 11, NULL, NULL),
 (31, 1, 45, 15, '2', 2, 60, '2023-11-17 16:13:37', 1, NULL, NULL),
 (32, 1, 45, 6, '2', 1, 1000, '2023-11-17 16:13:37', 1, NULL, NULL),
-(33, 1, 45, 13, '2', 1, 500, '2023-11-17 16:13:37', 1, NULL, NULL);
+(33, 1, 45, 13, '2', 1, 500, '2023-11-17 16:13:37', 1, NULL, NULL),
+(34, 11, 46, 13, '0', 1, 500, '2023-11-20 18:34:14', 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -413,7 +416,7 @@ INSERT INTO `product` (`PkProductId`, `FkCategoryId`, `productName`, `product_ta
 (10, 18, 'crack jack', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:02:04', NULL),
 (11, 18, 'Hide & seek', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-09-18 16:54:04', 1),
 (12, 18, 'Oreo', '1', 30, 22, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-07 10:58:33', 1),
-(13, 18, 'test', '1,9', 500, 45, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-11-17 16:13:37', 1),
+(13, 18, 'test', '1,9', 500, 44, 'ertert', b'1', b'0', '2023-09-18 16:55:11', 1, '2023-11-20 18:34:14', 1),
 (14, 18, 'Monaco', '1', 30, 25, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-05 14:15:39', 1),
 (15, 18, 'Britannia Good Day', '1', 30, 16, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-11-17 16:13:37', 1),
 (16, 18, 'Oreo Pink Cream', '1,9', 30, 23, 'gretgf', b'1', b'0', '2023-09-18 16:51:22', 1, '2023-10-23 17:16:06', 1),
@@ -572,12 +575,14 @@ CREATE TABLE `send_notification` (
 --
 
 INSERT INTO `send_notification` (`PkSendNotificationId`, `FkNotificationId`, `receiver_id`, `isRead`) VALUES
-(4, 3, 1, b'1'),
+(4, 3, 1, b'0'),
 (5, 3, 7, b'0'),
 (6, 4, 1, b'0'),
 (7, 4, 7, b'0'),
 (8, 5, 1, b'1'),
-(9, 5, 7, b'0');
+(9, 5, 7, b'0'),
+(10, 6, 1, b'0'),
+(11, 6, 7, b'0');
 
 -- --------------------------------------------------------
 
@@ -653,7 +658,8 @@ INSERT INTO `status_history` (`PkHistoryId`, `FkOrderId`, `status`, `comment`, `
 (61, 43, 0, NULL, 11, '2023-11-17 15:38:09'),
 (62, 44, 0, NULL, 11, '2023-11-17 16:04:11'),
 (63, 45, 0, NULL, 1, '2023-11-17 16:13:37'),
-(64, 45, 1, '', 1, '2023-11-17 17:29:47');
+(64, 45, 1, '', 1, '2023-11-17 17:29:47'),
+(65, 46, 0, NULL, 11, '2023-11-20 18:34:14');
 
 -- --------------------------------------------------------
 
@@ -787,8 +793,7 @@ ALTER TABLE `send_notification`
 -- Indexes for table `status_history`
 --
 ALTER TABLE `status_history`
-  ADD PRIMARY KEY (`PkHistoryId`),
-  ADD KEY `FkOrderId` (`FkOrderId`);
+  ADD PRIMARY KEY (`PkHistoryId`);
 
 --
 -- Indexes for table `users`
@@ -804,7 +809,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=458;
+  MODIFY `PkCartId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=459;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -828,19 +833,19 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `PkNotificationId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `PkNotificationId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `PkOrderId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `PkItemId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -870,13 +875,13 @@ ALTER TABLE `product_wishlist`
 -- AUTO_INCREMENT for table `send_notification`
 --
 ALTER TABLE `send_notification`
-  MODIFY `PkSendNotificationId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `PkSendNotificationId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `status_history`
 --
 ALTER TABLE `status_history`
-  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `PkHistoryId` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -945,12 +950,6 @@ ALTER TABLE `product_wishlist`
 --
 ALTER TABLE `send_notification`
   ADD CONSTRAINT `send_notification_ibfk_1` FOREIGN KEY (`FkNotificationId`) REFERENCES `notifications` (`PkNotificationId`);
-
---
--- Constraints for table `status_history`
---
-ALTER TABLE `status_history`
-  ADD CONSTRAINT `status_history_ibfk_1` FOREIGN KEY (`FkOrderId`) REFERENCES `orders` (`PkOrderId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

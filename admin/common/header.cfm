@@ -1,6 +1,14 @@
 <cfquery name="getNotification">
-    SELECT COUNT(PkNotificationId) AS notificationCount, N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, SN.isRead, SN.FkNotificationId, SN.receiver_id
-    FROM notifications N LEFT JOIN send_notification SN ON N.PkNotificationId = SN.FkNotificationId
+    SELECT 
+        (
+            SELECT COUNT(PkSendNotificationId) 
+            FROM send_notification  
+            WHERE send_notification.isRead = <cfqueryparam value="0" cfsqltype="cf_sql_bit"> 
+            AND send_notification.receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer"> 
+        ) AS notificationCount, 
+        N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, SN.isRead, SN.FkNotificationId, SN.receiver_id, SN.PkSendNotificationId
+    FROM send_notification SN 
+    LEFT JOIN notifications N  ON SN.FkNotificationId = N.PkNotificationId
     WHERE SN.isRead = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
     AND SN.receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
     ORDER BY N.createdDate DESC
@@ -41,16 +49,16 @@
                                     <h6>Notifications</h6>
                                 </li>
                                 <cfloop query="getNotification">
-                                    <li class="dropdown-item notification-item">
-                                        <a class="d-flex align-items-center" href="##">
+                                    <li class="dropdown-item notification-item" id="notificationItem-#getNotification.PkSendNotificationId#">
+                                        <a class="d-flex align-items-center viewNotificationDetail" data-id="#getNotification.PkSendNotificationId#" role="button">
                                             <div class="notification-icon bg-primary">
                                                 <i class="bi bi-cart-check"></i>
                                             </div>
                                             <div class="notification-text ms-4">
-                                                <p class="notification-title font-bold">
+                                                <p class="notification-title font-bold" id="notification-title-#getNotification.PkSendNotificationId#">
                                                     #getNotification.subject#
                                                 </p>
-                                                <p class="notification-subtitle font-thin text-sm">
+                                                <p class="notification-subtitle font-thin text-sm" id="notification-subtitle-#getNotification.PkSendNotificationId#">
                                                     Order ID ###getNotification.FkOrderId#
                                                 </p>
                                             </div>
@@ -75,22 +83,11 @@
                                     <div class="avatar avatar-md">
                                         <cfif listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile)>
                                             <img src="./assets/compiled/jpg/#session.user.profile#" alt="Profile">
-                                        <!--- <cfelse>
-                                            <img src="./assets/compiled/jpg/1.jpg" alt="Profile"> --->
-                                        <!--- </cfif> --->
                                         <cfelseif NOT listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile) AND structKeyExists(session.user, 'profile') AND len(session.user.profile) GT 0>
                                             <img src="./assets/profileImage/#session.user.profile#" alt="Profile">
                                         <cfelse>
                                             <img src="../assets/compiled/jpg/1.jpg" class="rounded-circle profileImg" alt="Profile">
                                         </cfif> 
-                                        <!--- <img src="../../assets/categoryImage/1_1al79zoyr0rtd.png"/> --->
-                                        <!--- <cfif listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile)>
-                                            <img src="../assets/compiled/jpg/#session.user.profile#" alt="Profile">
-                                        <cfelseif NOT listFind("1.jpg,2.jpg,3.jpg,4.jpg,5.jpg,6.jpg", session.user.profile) AND structKeyExists(session.user, 'profile') AND len(session.user.profile) GT 0>
-                                            <img src="../assets/profileImage/#session.user.profile#" alt="Profile">
-                                        <cfelse>
-                                            <img src="../assets/compiled/jpg/1.jpg" alt="Profile">
-                                        </cfif> --->
                                     </div>
                                 </div>
                             </div>

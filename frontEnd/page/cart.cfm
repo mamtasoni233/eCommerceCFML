@@ -283,66 +283,15 @@
     </section>
 
     <script>
-        /* var #toScript('#productQty#', 'productQty')#
-        var #toScript('#productPrice#', 'productPrice')#
-        var #toScript('#productId#', 'productId')# */
         var #toScript('#customerId#', 'customerId')#
         $(document).ready( function () { 
-
             $('.removeCartProduct').on('click', function () {
                 var pId = $(this).attr('data-productId');
                 var name = $(this).attr('data-name');
-                /* Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'You want to delete this product ' + '"' +  name + '"',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: 'rgb(239 88 32)',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) { */
-                        setTimeout(function(){
-                            showLoader(pId);
-                        }, 1000);
-                        /* $.ajax({  
-                            url: './ajaxAddToCart.cfm?removeCartProduct=' + pId, 
-                            type: 'GET',
-                            async: false,
-                            success: function(result) {
-                                if (result.success) {
-                                    dangerToast("Your product is successfully deleted!");
-                                    showLoader(pId);
-                                    setTimeout(function(){
-                                        $('##rowProduct-'+pId).remove();
-                                    }, 1000);
-                                    if($('.rowProductclass').length === 0){
-                                        $('.cartHeading').text('Your Cart Is Empty');
-                                        $('##cartAllProductContainer').addClass('d-none');
-                                    } 
-                                    let priceVal=0;
-                                    $('.perProductPrice').each(function() {
-                                        priceVal += parseFloat($(this).html());
-                                    });
-                                    $('.priceSubtotal').html(priceVal);
-                                    $.ajax({  
-                                        url: './ajaxAddToCart.cfm?getCartCountValue=cartCounter', 
-                                        type: 'GET',
-                                        success: function(result) {
-                                            if (result.success) {
-                                                $('##offcanvasCartBtn span.cartCounter').removeClass('d-none');
-                                                $('##offcanvasCartBtn span.cartCounter').text(result.cartCountValue);
-                                            } else{
-                                                $('##offcanvasCartBtn span.cartCounter').addClass('d-none');
-                                                $('##offcanvasCartBtn span.cartCounter').text('');
-                                            }
-                                        },
-                                    });  
-                                }
-                            },
-                        }); */
-                        removeProduct(pId);
-                    /*  }
-                }); */
+                setTimeout(function(){
+                    showLoader(pId);
+                }, 1000);
+                removeProduct(pId);
             });
             $('##removeAllCartValue').on('click', function () {
                 Swal.fire({
@@ -400,22 +349,10 @@
                     value = productQty;
                     $(this).addClass('disabled');
                 }
-                /* setTimeout(function(){
-                    showLoader(productId);
-                }, 800);
-                setTimeout(function(){
-                    hideLoader(productId);
-                }, 500); */
                 setTimeout(function(){
                     $input.val(value);
                     addToCart(productId,value,price);
                 }, 500);
-                
-                /*  setTimeout(function(){
-                    // hideLoader(productId);
-                    // hideLoader(productId);
-                }, 500); */
-                
             });
             $('.minus-btn').on('click', function(e) {
                 // e.preventDefault();

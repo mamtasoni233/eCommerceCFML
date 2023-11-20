@@ -399,7 +399,6 @@
                         setTimeout(() => {
                             $('#parentCategory').val(parentId).trigger("change");
                         }, 150);
-                        
                         $("#PkCategoryId").val(result.json.PkCategoryId);
                         $('#categoryName').val(result.json.categoryName);
                         let imgSrc = '.../../assets/categoryImage/' + result.json.categoryImage;
