@@ -39,7 +39,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown me-3">
+                        <li class="nav-item dropdown me-3" >
                             <a class="nav-link active dropdown-toggle text-gray-600" href="##" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" >
                                 <i class="bi bi-bell bi-sub fs-4"></i>
                                 <span class="badge badge-notification bg-danger" id="notifyCount">#getNotification.notificationCount#</span>
@@ -48,23 +48,25 @@
                                 <li class="dropdown-header">
                                     <h6>Notifications</h6>
                                 </li>
-                                <cfloop query="getNotification">
-                                    <li class="dropdown-item notification-item" id="notificationItem-#getNotification.PkSendNotificationId#">
-                                        <a class="d-flex align-items-center viewNotificationDetail" data-id="#getNotification.PkSendNotificationId#" role="button">
-                                            <div class="notification-icon bg-primary">
-                                                <i class="bi bi-cart-check"></i>
-                                            </div>
-                                            <div class="notification-text ms-4">
-                                                <p class="notification-title font-bold" id="notification-title-#getNotification.PkSendNotificationId#">
-                                                    #getNotification.subject#
-                                                </p>
-                                                <p class="notification-subtitle font-thin text-sm" id="notification-subtitle-#getNotification.PkSendNotificationId#">
-                                                    Order ID ###getNotification.FkOrderId#
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </cfloop>
+                                <div id="notification">
+                                    <cfloop query="getNotification">
+                                        <li class="dropdown-item notification-item" id="notificationItem-#getNotification.PkSendNotificationId#">
+                                            <a class="d-flex align-items-center viewNotificationDetail" data-id="#getNotification.PkSendNotificationId#" role="button">
+                                                <div class="notification-icon bg-primary">
+                                                    <i class="bi bi-cart-check"></i>
+                                                </div>
+                                                <div class="notification-text ms-4">
+                                                    <p class="notification-title font-bold" id="notification-title-#getNotification.PkSendNotificationId#">
+                                                        #getNotification.subject#
+                                                    </p>
+                                                    <p class="notification-subtitle font-thin text-sm" id="notification-subtitle-#getNotification.PkSendNotificationId#">
+                                                        Order ID ###getNotification.FkOrderId#
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </cfloop>
+                                </div>
                                 <li>
                                     <p class="text-center py-2 mb-0">
                                         <a href="index.cfm?pg=notification&s=notificationList">See all notification</a>

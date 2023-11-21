@@ -163,6 +163,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!--- notification model --->
                     </div>
                     <!--- start footer --->
                     <cfinclude template="./common/footer.cfm">
@@ -173,22 +174,26 @@
             <script>
                 $(document).ready( function () {    
                     // open add view model
-                    $('##viewnotificationModel').on('hidden.bs.modal', function () {
+                    /*  $('##viewnotificationModel').on('hidden.bs.modal', function () {
                         let readValue = $('##readSubmit').attr('data-value');
                         if (readValue > 0) {
                             $("##readSubmit").html("Mark As Unread").addClass('btn-danger');
                         }
-                    });
+                    }); */
                     if ($('.notification-item').length == 0) {
                         $('.notification-item').html('');
                         $('##notifyCount').html('0');
                     }
                     $('.viewNotificationDetail').on('click', function () {
                         var id = $(this).attr("data-id");
+                        $("##viewnotificationModel").modal('show');
+                        $('##PkSendNotificationId').val(id);
                         getNotificationData(id);
                     });
                     $("##notificationDataTable").on("click", ".viewNotificationDetail", function () { 
                         var id = $(this).attr("data-id");
+                        $("##viewnotificationModel").modal('show');
+                        $('##PkSendNotificationId').val(id);
                         getNotificationData(id);
                         /* var readValue = $('##readSubmit').attr('data-value');
                         var id = $(this).attr("data-id");
@@ -214,39 +219,46 @@
                                 }
                             }   
                         }); */
+                        
                     });
-                    $("##updateNotificationForm").validate({
-                        submitHandler: function (form) {
-                            let readValue = $('##readSubmit').attr('data-value');
-                            var formData = new FormData($('##updateNotificationForm')[0]);
-                            $.ajax({
-                                type: "POST",
-                                url: "../ajaxNotification.cfm?updatePkNotificationId=" + $('##PkSendNotificationId').val(),
-                                data: formData,
-                                contentType: false,
-                                processData: false,
-                                success: function(result) {
-                                    if (result.success) {
-                                        $('##notifyCount').html(result.notifyCount);
-                                        $("##viewnotificationModel").modal('hide');
-                                        $('##notificationDataTable').DataTable().ajax.reload();
-                                    }
+                    $("##readSubmit").on("click", function () {
+                        event.preventDefault();
+                        let readValue = $('##readSubmit').attr('data-value');
+                        var formData = new FormData($('##updateNotificationForm')[0]);
+                        let id = $('##PkSendNotificationId').val();
+                        $.ajax({
+                            type: "POST",
+                            url: "../ajaxNotification.cfm?updatePkNotificationId=" + $('##PkSendNotificationId').val(),
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(result) {
+                                if (result.success) {
+                                    console.log('getResult',result);
+                                    $('##notifyCount').html(result.notifyCount);
+                                    // $('##notification-title'+id).html(result.subject);
+                                    // $('##notification-subtitle-'+id).html(result.FkOrderId);
+                                    /*  if (id != result.PkSendNotificationId) { */
+                                        $('##notification').html(result.html);
+                                    /*  } */
+                                    // $('##notificationItem-'+id).html('<a class="d-flex align-items-center viewNotificationDetail" data-id="'+result.PkSendNotificationId+'" role="button"><div class="notification-icon bg-primary"><i class="bi bi-cart-check"></i> </div><div class="notification-text ms-4"><p class="notification-title font-bold" >'+result.subject+'</p><p class="notification-subtitle font-thin text-sm">Order ID ##'+result.FkOrderId+'</p></div></a>');
+                                    $("##viewnotificationModel").modal('hide');
+                                    $('##notificationDataTable').DataTable().ajax.reload();
                                 }
-                            });
-                        }, 
+                            }
+                        });
                     }); 
                 });
                 function getNotificationData(id) {
                     var readValue = $('##readSubmit').attr('data-value');
                     // var id = $(this).attr("data-id");
-                    $("##viewnotificationModel").modal('show');
-                    $('##PkSendNotificationId').val(id);
+                    // $("##viewnotificationModel").modal('show');
+                    // $('##PkSendNotificationId').val(id);
                     $.ajax({
                         type: "GET",
                         url: "../ajaxNotification.cfm?PkSendNotificationId="+ id,
                         success: function(result) {
                             if (result.success) {
-                                console.log("Notification Ajax Call", result.json);
                                 $("##PkSendNotificationId").val(result.json.PkSendNotificationId);
                                 $('##senderName').html(result.json.customerName);
                                 $('##notificationDate').html(result.json.createdDate);
@@ -258,15 +270,15 @@
                                 } else{
                                     $("##readSubmit").html("Mark As Read").removeClass('btn-danger').addClass('btn-primary');
                                 }
-                                $('##notification-title'+id).html(result.json.subject);
-                                $('##notification-subtitle-'+id).html(result.json.FkOrderId);
+                                /* $('##notification-title'+id).html(result.json.subject);
+                                $('##notification-subtitle-'+id).html(result.json.FkOrderId); */
                                 // $('##notificationItem-'+id).html('<a class="d-flex align-items-center viewNotificationDetail" data-id="'+result.json.PkSendNotificationId+'" role="button"><div class="notification-icon bg-primary"><i class="bi bi-cart-check"></i> </div><div class="notification-text ms-4"><p class="notification-title font-bold" >'+result.json.subject+'</p><p class="notification-subtitle font-thin text-sm">Order ID ##'+result.json.FkOrderId+'</p></div></a>');
                                 /* if ($('.notification-item').length == 0) {
                                     $('.notification-item').html('');
                                     $('##notifyCount').html('0');
                                 } */
                                 $('##viewnotificationModel').on('hidden.bs.modal', function () {
-                                    $('##notificationItem-'+id).html('');
+                                    $('##notificationContainer-'+id).html('');
                                 });
                             }
                         }   

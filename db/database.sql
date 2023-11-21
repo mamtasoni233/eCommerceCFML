@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2023 at 02:06 PM
+-- Generation Time: Nov 21, 2023 at 11:39 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -577,11 +577,11 @@ CREATE TABLE `send_notification` (
 INSERT INTO `send_notification` (`PkSendNotificationId`, `FkNotificationId`, `receiver_id`, `isRead`) VALUES
 (4, 3, 1, b'0'),
 (5, 3, 7, b'0'),
-(6, 4, 1, b'0'),
+(6, 4, 1, b'1'),
 (7, 4, 7, b'0'),
-(8, 5, 1, b'1'),
+(8, 5, 1, b'0'),
 (9, 5, 7, b'0'),
-(10, 6, 1, b'0'),
+(10, 6, 1, b'1'),
 (11, 6, 7, b'0');
 
 -- --------------------------------------------------------

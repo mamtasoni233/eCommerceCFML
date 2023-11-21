@@ -147,13 +147,94 @@
                 AND receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
         </cfquery>
         <cfquery name="getNotification">
-            SELECT COUNT(PkNotificationId) AS notificationCount, SN.isRead, SN.receiver_id 
-            FROM notifications N 
-            LEFT JOIN send_notification SN ON N.PkNotificationId = SN.FkNotificationId
+            SELECT 
+                (
+                    SELECT COUNT(PkSendNotificationId) 
+                    FROM send_notification  
+                    WHERE send_notification.isRead = <cfqueryparam value="0" cfsqltype="cf_sql_bit"> 
+                    AND send_notification.receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer"> 
+                ) AS notificationCount, 
+                N.FkOrderId, N.subject, N.PkNotificationId, N.message, N.createdBy, N.createdDate, SN.isRead, SN.FkNotificationId, SN.receiver_id, SN.PkSendNotificationId
+            FROM send_notification SN 
+            LEFT JOIN notifications N  ON SN.FkNotificationId = N.PkNotificationId
             WHERE SN.isRead = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
             AND SN.receiver_id = <cfqueryparam value="#session.user.isLoggedIn#" cfsqltype = "cf_sql_integer">
+            ORDER BY N.createdDate DESC
+            LIMIT 2
         </cfquery>
         <cfset data['notifyCount'] = getNotification.notificationCount>
+        <cfsavecontent  variable="data['html']">
+            <cfoutput>
+                <cfloop query="getNotification">
+                    <li class="dropdown-item notification-item" id="notificationItem-#getNotification.PkSendNotificationId#">
+                        <a class="d-flex align-items-center viewNotificationDetail" data-id="#getNotification.PkSendNotificationId#" role="button">
+                            <div class="notification-icon bg-primary">
+                                <i class="bi bi-cart-check"></i>
+                            </div>
+                            <div class="notification-text ms-4">
+                                <p class="notification-title font-bold" id="notification-title-#getNotification.PkSendNotificationId#">
+                                    #getNotification.subject#
+                                </p>
+                                <p class="notification-subtitle font-thin text-sm" id="notification-subtitle-#getNotification.PkSendNotificationId#">
+                                    Order ID ###getNotification.FkOrderId#
+                                </p>
+                            </div>
+                        </a>
+                    </li>
+                </cfloop>
+                <!--- <!--- notification model --->
+                <div class="modal fade" id="viewnotificationModel" tabindex="-1" role="dialog" aria-labelledby="viewnotificationModel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary">
+                                <h5 class="modal-title white">
+                                    Message Details
+                                </h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <i data-feather="x"></i>
+                                </button>
+                            </div>
+                            <form class="form p-3" id="updateNotificationForm" method="POST">
+                                <input type="hidden" id="PkSendNotificationId" value="#getNotification.PkSendNotificationId#" name="PkSendNotificationId">
+                                <div class="modal-body">
+                                    <div class="row g-2">
+                                        <div class="col-12 d-flex justify-content-between">
+                                            <div id="senderNameContainer">
+                                                <div class="d-flex">
+                                                    <h6 class="fw-bold form-label" >From : </h6>
+                                                    <h6 class="fw-bold form-label text-info ms-2" id="senderName">mamta</h6>
+                                                </div>
+                                            </div>
+                                            <div id="dateContainer">
+                                                <span class="badge bg-dark text-white rounded-3" id="notificationDate">132</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12" id="subjectContainer">
+                                            <div class="d-flex">
+                                                <h6 class="fw-bold form-label" >Subject : </h6>
+                                                <h6 class="fw-bold form-label ms-2" id="notificationSubject">mamta</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-12" id="msgContainer">
+                                            <div class="d-flex">
+                                                <h6 class="fw-bold form-label" >Message : </h6>
+                                                <h6 class="fw-bold form-label ms-2" id="notificationMsg">mamta</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" id="readSubmit" class="btn btn-primary" data-value="0">
+                                        Mark As Read
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--- notification model ---> --->
+            </cfoutput>
+        </cfsavecontent>
     </cfif>
     
     <cfcatch>
