@@ -182,57 +182,6 @@
                         </a>
                     </li>
                 </cfloop>
-                <!--- <!--- notification model --->
-                <div class="modal fade" id="viewnotificationModel" tabindex="-1" role="dialog" aria-labelledby="viewnotificationModel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary">
-                                <h5 class="modal-title white">
-                                    Message Details
-                                </h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <i data-feather="x"></i>
-                                </button>
-                            </div>
-                            <form class="form p-3" id="updateNotificationForm" method="POST">
-                                <input type="hidden" id="PkSendNotificationId" value="#getNotification.PkSendNotificationId#" name="PkSendNotificationId">
-                                <div class="modal-body">
-                                    <div class="row g-2">
-                                        <div class="col-12 d-flex justify-content-between">
-                                            <div id="senderNameContainer">
-                                                <div class="d-flex">
-                                                    <h6 class="fw-bold form-label" >From : </h6>
-                                                    <h6 class="fw-bold form-label text-info ms-2" id="senderName">mamta</h6>
-                                                </div>
-                                            </div>
-                                            <div id="dateContainer">
-                                                <span class="badge bg-dark text-white rounded-3" id="notificationDate">132</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-12" id="subjectContainer">
-                                            <div class="d-flex">
-                                                <h6 class="fw-bold form-label" >Subject : </h6>
-                                                <h6 class="fw-bold form-label ms-2" id="notificationSubject">mamta</h6>
-                                            </div>
-                                        </div>
-                                        <div class="col-12" id="msgContainer">
-                                            <div class="d-flex">
-                                                <h6 class="fw-bold form-label" >Message : </h6>
-                                                <h6 class="fw-bold form-label ms-2" id="notificationMsg">mamta</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" id="readSubmit" class="btn btn-primary" data-value="0">
-                                        Mark As Read
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!--- notification model ---> --->
             </cfoutput>
         </cfsavecontent>
     </cfif>
